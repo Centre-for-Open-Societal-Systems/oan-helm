@@ -45,7 +45,9 @@ def digest(path):
 
 def fingerprint(chart):
     h = hashlib.sha256()
-    for path in sorted(chart.rglob("*")):
+    # pathlib uses platform-specific ordering (Windows compares case-insensitively).
+    # Hash portable relative strings so a fresh Linux checkout has the same seal.
+    for path in sorted(chart.rglob("*"), key=lambda p: p.relative_to(chart).as_posix()):
         if path.is_file():
             h.update(path.relative_to(chart).as_posix().encode() + b"\0" + path.read_bytes() + b"\0")
     return h.hexdigest()
