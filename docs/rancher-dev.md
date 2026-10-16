@@ -17,7 +17,7 @@ cluster deployment or ownership migration has been performed.
    The preview uses the same relative archive paths. GitHub Pages is not required.
    Enter the raw directory URL, not GitHub's HTML `tree`/`blob` URL or the index filename.
 3. Confirm `/index.yaml` and its `.tgz` archive URLs are available, refresh the
-   repository, and select exact version **`1.0.0-dev.2`**, including its prerelease
+   repository, and select exact version **`1.0.0-dev.3`**, including its prerelease
    suffix. Version `1.0.0-dev.1` is retained for history and has old URL defaults.
 
 ## New releases
@@ -83,7 +83,7 @@ An equivalent CLI upgrade, once those checks are complete, is:
 
 ```sh
 helm upgrade farmer-registry coss/openg2p-farmer-registry \
-  --namespace farmer --version 1.0.0-dev.2 \
+  --namespace farmer --version 1.0.0-dev.3 \
   --reuse-values -f /private/reviewed-changes.yaml \
   -f environments/dev/values/farmer.yaml --wait --timeout 15m
 ```
@@ -113,3 +113,26 @@ the existing app's rollback action only after assessing compatibility.
 **Helm rollback does not reverse database migrations, seed-data changes, external
 IAM changes or ownership transfers.** Restore data only through the separately
 prepared recovery procedure.
+
+## OAN names and GitHub sources in Rancher
+
+Refresh the repository and select exact version `1.0.0-dev.3` to see the OAN
+metadata and embedded README. Older versions retain their original metadata.
+Rancher may show either a display name or the Helm identifier depending on its
+view; the chart Home, Sources and README link directly to the COSS repositories.
+
+| OAN display name | Retained Helm chart identifier |
+| --- | --- |
+| OAN Farmer Registry | `openg2p-farmer-registry` |
+| OAN Crop Sown Registry | `openg2p-cropsown-registry` |
+| OAN Livestock Registry | `openg2p-livestock-registry` |
+| OAN DA Registry | `openg2p-da-registry` |
+| OAN Commons Services (Consent Manager & Aggregation) | `openg2p-commons-services` |
+
+Consent Manager's dependency URL continues to point to OpenG2P because those
+are the reused Helm templates. Its OAN application source is
+[COSS/consent-management](https://github.com/Centre-for-Open-Societal-Systems/consent-management).
+Aggregation is a template in the Commons chart, with source
+[COSS/oan-aggregation-api](https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api).
+Changing these labels does not enable Aggregation or select newer candidate
+images. Use the explicit candidate overlays only after the prerequisites.

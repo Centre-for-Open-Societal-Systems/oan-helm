@@ -1,5 +1,5 @@
 {
-  "chartVersion": "1.0.0-dev.2",
+  "chartVersion": "1.0.0-dev.3",
   "status": "prepared",
   "sources": [
     {
@@ -235,12 +235,12 @@
     {
       "repository": "https://github.com/Centre-for-Open-Societal-Systems/consent-management",
       "commit": "d6ce86b9e3f904ee668d913fd06835e8f70e7f64",
-      "use": "runtime/reference only; images retain their recorded develop-5361069 source tag"
+      "use": "Candidate API/UI/sanity images published at this source revision; explicit image-only override. Chart runtime defaults retain develop-5361069."
     },
     {
       "repository": "https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api",
       "commit": "8fe3bf97030bb0b3f6283c2123ad58026af6cc50",
-      "use": "Aggregation port/configuration prerequisites"
+      "use": "Published Aggregation candidate image and exact source-owned local integration scenarios; workload remains opt-in."
     }
   ],
   "initialChartVersion": "1.0.0-dev.1",
@@ -250,5 +250,11 @@
     "sourceCommitsUnchanged": true,
     "historicalArchivesRetained": true,
     "configurationChanges": "Canonical URLs and namespace-qualified service calls; no guessed endpoints; unconfirmed browser surfaces disabled/unset; service catalog documents every included COSS service."
+  },
+  "oanBranding": {
+    "chartVersion": "1.0.0-dev.3",
+    "owner": "OpenAgriNet (OAN) / COSS",
+    "scope": "Rancher display names, chart home/sources, embedded README and app-readme; original Helm/dependency names and upstream provenance retained",
+    "runtimeChangesFromDev2": false
   }
 }

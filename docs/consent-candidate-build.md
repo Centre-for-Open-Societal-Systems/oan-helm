@@ -48,7 +48,8 @@ checked that these tags were unused and did not overwrite existing images.
 
 Aggregation's already-published candidate uses a different framework commit,
 `2926e24b19fb04dba31b40d326d6ad59b2ad30b7`. Each container carries its own runtime;
-framework pins need not match, but their HTTP integration still needs testing.
+framework pins need not match. The exact published pair subsequently passed
+[30 isolated HTTP/database checks](consent-aggregation-local-check.md).
 
 ## Verification and remaining work
 
@@ -63,10 +64,12 @@ Checks in disposable containers without networking passed:
 - Sanity image collection of seven tests. Those tests were **not executed**
   against services.
 
-ECR `DescribeImages` digests match each local image manifest. These checks do not
-prove database migrations, authentication/authorization, receipt verification by
-consumers, withdrawal handling or the complete Consent/Aggregation HTTP flow.
-Prepare an isolated integration test using these exact image digests before a
-shared rollout. Keep Aggregation disabled and complete
+ECR `DescribeImages` digests match each local image manifest. The subsequent
+[local pair check](consent-aggregation-local-check.md) ran fresh-database migrations,
+approval, OTP, filtering, withdrawal, denial and replay scenarios: **30/30 passed**.
+It used authentication disabled, an all-audience Consent API and source-owned
+PM/registry/callback stand-ins. Existing-database upgrades, Keycloak authorization,
+split routing and live service interoperability remain unverified.
+Keep Aggregation disabled and complete
 [runtime prerequisites](consent-aggregation-prerequisites.md). Pull access is
 being handled separately by the environment owner; it has not been reverified.

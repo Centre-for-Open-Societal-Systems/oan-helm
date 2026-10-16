@@ -9,14 +9,16 @@ deploy workloads, create identities or run database migrations.
 | Item | Evidence / remaining work |
 | --- | --- |
 | COSS Consent images | New candidate API/UI/sanity `dev-d6ce86b9e3f9` images published and digest-verified; [image overlay](../examples/dev/consent-image-values.yaml), [build adjustments/checks](consent-candidate-build.md). Immutable chart defaults retain `develop-5361069` |
-| Aggregation image | Candidate `oan/commons/aggregation-api:dev-8fe3bf97030b` published to the existing ECR account; digest verified, 96 unit tests passed. [Image values](../examples/dev/aggregation-image.yaml) and [build evidence](../releases/aggregation-candidate.json). Runtime integration remains unverified |
-| Consent/Aggregation compatibility | New Consent candidate has the required settings and endpoint schema; authenticated HTTP/database integration with Aggregation is **not established**. Old default `develop-5361069` lacks the subject-consent settings required by Aggregation `8fe3bf9` |
+| Aggregation image | Candidate `oan/commons/aggregation-api:dev-8fe3bf97030b` published to the existing ECR account; digest verified, 96 unit tests passed. [Image values](../examples/dev/aggregation-image.yaml) and [build evidence](../releases/aggregation-candidate.json). [Local image-pair checks](consent-aggregation-local-check.md) passed 30/30 with fresh databases and source-owned stand-ins |
+| Consent/Aggregation compatibility | Exact candidate API pair passed 30/30 isolated HTTP/database scenarios with auth disabled and all-audience CM; authenticated split routing and existing-database upgrades are **not established**. Old default `develop-5361069` lacks the subject-consent settings required by Aggregation `8fe3bf9` |
 | Consent API routing | Current chart serves staff and partner APIs separately; beneficiary API is disabled. Aggregation has one `cm_base_url` for all required CM paths |
 | Aggregation public route | Unconfirmed; chart creates only a ClusterIP Service |
 | Aggregation pull access | Existing cluster `ecr-pull-secret` can read the Consent repository but receives HTTP 403 `DENIED` for the new repository. Pull role is `openg2p-dev-sandbox-dns`; AWS reports a missing identity-based allow. [Prepared policy and IAM steps](ecr-pull-access.md); no IAM or Secret changes have been applied |
 
 Image availability is not proof that these versions work together. Prepare the
-published Consent candidate overlay and test the exact image pair before enabling Aggregation.
+published Consent candidate overlay and verify it against real environment dependencies before enabling Aggregation.
+The [local pair check](consent-aggregation-local-check.md) proves the recorded
+auth-disabled profile against stand-ins; it does not validate the current split routing.
 Confirm the required endpoints and response fields against that exact image.
 Setting an environment variable cannot add behavior missing from an older image.
 Changing the shared Consent build requires migration and existing-client review.
@@ -64,8 +66,9 @@ only; strict subject-consent flags require a separate reviewed values change.
    Use the digest in [aggregation-image.yaml](../examples/dev/aggregation-image.yaml).
    The framework build argument was pinned to commit
    `2926e24b19fb04dba31b40d326d6ad59b2ad30b7`. The existing unit suite passed
-   96 tests in a container without networking; this does not establish
-   Consent/database integration compatibility. The image serves port `8100`.
+   96 tests in a container without networking. The subsequent exact-image local pair
+   check passed 30/30 using fresh databases; authenticated/live integration and
+   upgrade migrations remain separate prerequisites. The image serves port `8100`.
    No application CI or cluster deployment changes were made.
 2. **Provision its own database/user.** It can use the existing PostgreSQL
    server, but must have a separate database and credentials. It must not use

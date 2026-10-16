@@ -60,7 +60,7 @@
       }
     ]
   },
-  "classification": "Published candidate images; shared database migration, authenticated end-to-end flow and Aggregation integration remain unverified.",
+  "classification": "Published candidate; local auth-disabled exact-image integration passed 30/30. Shared database upgrades, authenticated split routing, live PM/registry and environment pull access remain to be verified.",
   "platform": "linux/amd64",
   "applicationCiChanges": false,
   "chartDefaultsChanged": false,
@@ -96,5 +96,6 @@
     "greenlet": "3.5.6",
     "applicationSourceChanged": false
   },
-  "buildRecipe": "docs/consent-candidate-build.md"
+  "buildRecipe": "docs/consent-candidate-build.md",
+  "localPairIntegration": "releases/consent-aggregation-integration.json"
 }

@@ -1,4 +1,4 @@
-# COSS Helm repository
+# OpenAgriNet (OAN) Helm repository
 
 Start with the [service catalog](docs/service-catalog.md): it maps every included
 COSS service to its chart, source/configuration and enablement status. The
@@ -13,8 +13,10 @@ New [Consent candidate images](docs/consent-candidate-build.md) and the
 [Aggregation image override](examples/dev/aggregation-image.yaml) are recorded
 separately from the immutable chart defaults.
 
-Current chart version is **`1.0.0-dev.2`**, with the migrated new-dev URLs.
-The original `1.0.0-dev.1` packages remain available unchanged. Component versions
+Current chart version is **`1.0.0-dev.3`**, with OAN Rancher display names,
+direct COSS GitHub source links and embedded component READMEs in all five charts.
+It retains the migrated new-dev URLs and runtime settings from `1.0.0-dev.2`.
+Both earlier versions remain available unchanged. Component versions
 and image digests are separate; automatic build-number synchronization is deferred.
 
 | Location | Contents |
@@ -51,8 +53,10 @@ disabled state in the inspected dev release; notifications await confirmed route
 Follow the [Consent and Aggregation prerequisites](docs/consent-aggregation-prerequisites.md)
 before enabling Aggregation. The pinned Consent build predates the inspected
 Aggregation version's subject-consent requirements. The new candidate overlay
-provides the required settings and endpoint schema; full integration remains
-unverified. Available images alone do not establish compatibility.
+provides the required settings and endpoint schema. The exact published API pair
+passed [30 local integration checks](docs/consent-aggregation-local-check.md)
+against source-owned stand-ins. Authenticated split routing and existing-database
+upgrades still require environment verification.
 
 Commons Services was imported from the latest published OpenG2P package at
 verification time, `2.3.4-rc.247`, with its published SHA-256 verified. All registry

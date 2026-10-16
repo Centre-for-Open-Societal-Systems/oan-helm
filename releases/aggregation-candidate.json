@@ -23,7 +23,7 @@
   "ecrImageTagMutability": "IMMUTABLE",
   "publicationVerification": "ECR DescribeImages digest matches local Docker image manifest",
   "deployed": false,
-  "classification": "Candidate; Consent/database integration remains unverified",
+  "classification": "Published candidate; local auth-disabled exact-image integration passed 30/30. Shared database upgrades, authenticated split routing, live PM/registry and environment pull access remain to be verified.",
   "unitTests": {
     "passed": 96,
     "exitCode": 0,
@@ -40,5 +40,6 @@
     "existingConsentRepositoryControlHttpStatus": 200,
     "tokenExpirationIndicated": false,
     "iamOrSecretChangesApplied": false
-  }
+  },
+  "localPairIntegration": "releases/consent-aggregation-integration.json"
 }

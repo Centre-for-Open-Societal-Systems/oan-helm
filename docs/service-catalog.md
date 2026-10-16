@@ -1,4 +1,4 @@
-# Included services and their Helm owners
+# OAN services and their Helm owners
 
 Start with the editable sources in [`charts/`](../charts/). This repository has
 five charts. Each registry owns its domain services; Commons Services owns the
@@ -134,3 +134,16 @@ Commons Base remains upstream and separate. Connectors, the existing shared
 charts. Existing independent Helm owners are retained. See the
 [readiness table](readiness.md), [URL migration](dev-urls.md) and
 [Rancher guide](rancher-dev.md) for manual use.
+
+## OAN chart identity and GitHub navigation
+
+Version `1.0.0-dev.3` labels all four registries and Commons Services as OAN in
+Rancher display metadata. Each chart includes COSS application repositories in
+`home`/`sources`, plus an embedded `README.md` and Rancher `app-readme.md` with
+direct links. Commons explicitly lists OAN Consent Manager and OAN Aggregation.
+Original `openg2p-*` Helm identifiers and upstream dependency pins are retained
+for compatibility with existing releases.
+
+The exact new Consent/Aggregation candidate pair passed
+[30 isolated checks](consent-aggregation-local-check.md). Candidate image overlays
+remain explicit, Aggregation remains disabled, and production prerequisites still apply.

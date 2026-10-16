@@ -30,6 +30,28 @@ HELM = os.environ.get("HELM", "helm")
 CHARTS = sorted((ROOT / "charts").glob("*/Chart.yaml"))
 EXPECTED = {f"openg2p-{x}-registry" for x in ["farmer", "cropsown", "livestock", "da"]} | {"openg2p-commons-services"}
 SYNTHETIC_IMAGE = {"repository": "example.invalid/render-only", "digest": "sha256:" + "a" * 64}
+COSS = "https://github.com/Centre-for-Open-Societal-Systems/"
+APPLICATION_SOURCES = {
+    "openg2p-farmer-registry": [COSS + "farmer-registry"],
+    "openg2p-cropsown-registry": [COSS + "cropsown-regsitry"],
+    "openg2p-livestock-registry": [COSS + "livestock-registry"],
+    "openg2p-da-registry": [COSS + "da-registry"],
+    "openg2p-commons-services": [COSS + "consent-management", COSS + "oan-aggregation-api"],
+}
+
+
+def check_oan_metadata(info, chart):
+    annotations = info["annotations"]
+    assert annotations["catalog.cattle.io/display-name"].startswith("OAN ")
+    assert annotations["oan.org/owner"] == "OpenAgriNet (OAN) / COSS"
+    assert annotations["oan.org/chart-source"] == COSS + "oan-helm/tree/main/charts/" + chart.name
+    assert info["home"].startswith(COSS)
+    assert "OAN" in info["description"]
+    for url in APPLICATION_SOURCES[chart.name]:
+        assert url in info["sources"], "Application GitHub source missing"
+        for filename in ["README.md", "app-readme.md"]:
+            content = (chart / filename).read_text(encoding="utf-8")
+            assert content.startswith("# OAN ") and url in content
 
 
 def run(*args, env=None):
@@ -261,6 +283,11 @@ def package(report):
                 assert secret_refs(packaged_docs) == secret_refs(source_docs)
             with tarfile.open(archive) as tar:
                 assert not any(Path(member.name).name in {"values-live.yaml", "values-dev.yaml", "values-new-dev.yaml"} or Path(member.name).name.startswith(("private-values", ".env")) for member in tar.getmembers()), "Private/environment capture in package"
+                packaged_info = yaml.safe_load(tar.extractfile(chart.name + "/Chart.yaml").read())
+                assert packaged_info["annotations"] == info["annotations"]
+                assert packaged_info["sources"] == info["sources"]
+                for filename in ["README.md", "app-readme.md"]:
+                    assert tar.extractfile(chart.name + "/" + filename).read() == (chart / filename).read_bytes()
         old_index = public / "index.yaml"
         if old_index.exists():
             previous = temp / "index.yaml"
@@ -312,6 +339,7 @@ def main():
             chart = metadata.parent
             info = read(metadata)
             assert info["version"] == CURRENT_VERSION
+            check_oan_metadata(info, chart)
             values = read(chart / "values.yaml")
             run("lint", chart, "--strict")
             example_name = "commons-services" if chart.name == "openg2p-commons-services" else chart.name.removeprefix("openg2p-").removesuffix("-registry")

@@ -1,4 +1,4 @@
-# Editable chart sources
+# OAN editable chart sources
 
 **Commons COSS components:** [Consent image overrides](openg2p-commons-services/values.yaml)
 use the retained `openg2p-consent-manager` dependency; [Aggregation's Deployment/Service](openg2p-commons-services/templates/aggregation-api.yaml)
@@ -17,3 +17,6 @@ See [the inclusion details](../docs/service-catalog.md#where-are-coss-consent-ma
 repository and shared service to its chart, values key, source and enablement.
 Pinned dependencies under each chart's `charts/` directory contain reused
 upstream templates. Rancher downloads the generated archives under `repository/`.
+
+Every chart embeds an OAN README with direct COSS GitHub links. Version `1.0.0-dev.3`
+adds OAN Rancher display names while retaining existing Helm names for upgrades.

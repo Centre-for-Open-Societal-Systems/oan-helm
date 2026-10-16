@@ -31,7 +31,7 @@ merge; client/GitHub caching may delay visibility. Select the exact chart versio
 ```sh
 helm repo add coss https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/
 helm repo update coss
-helm show chart coss/openg2p-commons-services --version 1.0.0-dev.2
+helm show chart coss/openg2p-commons-services --version 1.0.0-dev.3
 ```
 
 For preview, substitute the fork URL. Future releases must commit their new
@@ -43,6 +43,8 @@ Installation prerequisites are recorded separately: publishing does not make DA
 or unavailable optional images ready to run. Follow the
 [readiness table](readiness.md) and [Rancher guide](rancher-dev.md).
 
-The current version comes from `releases/current.yaml`. `1.0.0-dev.2` adds migrated
-new-dev endpoints; `1.0.0-dev.1` archives/checksums remain unchanged in the index.
+The current version comes from `releases/current.yaml`. `1.0.0-dev.3` adds OAN
+display names, COSS GitHub links and embedded component READMEs. Runtime settings
+and new-dev URLs are unchanged from `1.0.0-dev.2`; both previous versions remain
+unchanged in the cumulative index.
 Use the [service catalog](service-catalog.md) to review the five-chart scope.

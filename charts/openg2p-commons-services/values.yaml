@@ -582,6 +582,8 @@ partner-management:
       helm.sh/hook: null
       helm.sh/hook-weight: null
       helm.sh/hook-delete-policy: null
+# OAN Consent Manager application: https://github.com/Centre-for-Open-Societal-Systems/consent-management
+# The retained openg2p-consent-manager name selects compatible upstream templates.
 openg2p-consent-manager:
   enabled: true
   global:
@@ -708,6 +710,8 @@ keycloak-init:
         clientRoleMappings:
           openg2p-superset:
           - Admin
+# OAN Aggregation API: https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
+# Implemented locally by templates/aggregation-api.yaml; enable only after prerequisites.
 aggregationApi:
   enabled: false
   nameOverride: ''
