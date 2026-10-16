@@ -1,0 +1,260 @@
+{
+  "chartVersion": "1.0.0-dev.3",
+  "status": "prepared",
+  "sources": [
+    {
+      "chart": "openg2p-farmer-registry",
+      "repository": "https://github.com/Centre-for-Open-Societal-Systems/farmer-registry.git",
+      "commit": "90811b61a59fef107178341f753693cf9c62749e",
+      "path": "helm/openg2p-farmer-registry",
+      "dependencies": [
+        {
+          "name": "openg2p-registry",
+          "alias": "registry",
+          "version": "1.2.2-rc.544",
+          "repository": "https://openg2p.github.io/openg2p-helm"
+        }
+      ],
+      "originalFileSha256": {
+        ".gitignore": "12f2b10d21d5d2032c077a65ee85a08915772573e53de217d3099f205bea0626",
+        ".helmignore": "bb987e6a8ef45a99255d1d632812482d5f0f3255ea841520b4d90342df5fe2b3",
+        "Chart.lock": "83c82be77734c5d6f2f7f9bb82979beb480a243c83cc5b74b176079a0b6c8a4c",
+        "Chart.yaml": "5d5c7d68dbc2f4b8cd099b63b8e88f4a3cb1ca2d8c35255e3fc23178a98b1485",
+        "app-readme.md": "46f24c189e0b146f569863c1842e23ed92d17378c446583ed6ec318a061ba1e8",
+        "files/fr-dashboards.zip": "52cf99c294bc594554e335489f1b410984293eb0c59657f88d6d43a36569355a",
+        "files/maps/pages/index.md": "cf9aa002fa49ade744a310401ca7c235df95486b3e114745c098493e64046d94",
+        "files/maps/sources/level1_summary.sql": "95fc3d0f5c96d0e787f243df418e64d62701c65dfdf1150e21cd60ed88166a4a",
+        "files/maps/sources/level2_commodities.sql": "ab57942f3f5f1630c59158d94a036951bc45688c8ffab16cc0e52cdc21a6ed89",
+        "files/maps/sources/level2_summary.sql": "70ae19fe766085c88961042ebda4d9d8f84b641a8fd6be4111196d453ed76aed",
+        "files/maps/sources/level3_summary.sql": "82a0a02d1077e6d17af8a86d20a6a22e8e472d08195bb42fefa176fa8f580a0e",
+        "files/pdf-templates/farmer-card.svg": "b75ae04b2ab63389e1a399facbadfab11e2effede8dca3bdda0484963e1ffd22",
+        "questions.own.yaml": "a19185dd252011adabcffe702e83d500ef03783792bb2b44ba00c474d143d994",
+        "templates/_maps-content.tpl": "ae3e9e4a9b4827b3da3ed645c74773c59ab1fbc00dd5a37ebc57037f01f91a75",
+        "templates/_mds-api-env.tpl": "de90defbf828736af729fd00d0ab64e237061f7da13e1de9e2d3fe9c12861368",
+        "templates/analytics-jobs.yaml": "069bcb6d343a3206893e2eb58c4fe446353cbb3419937595b0fd7a49605d7b11",
+        "templates/dashboard-api.yaml": "4ccfd3d1356620fb8637848af398a08063bc712a8dbe04923b78cddd119912e2",
+        "templates/dashboard-bundle-configmap.yaml": "7e232d93f9bd77bef47050b3ac0eb2d2d7586d9b36cfc8ec3e5755d389247d5e",
+        "templates/maps-content-configmap.yaml": "f7c5d4274ea8e445b43c20d61deac118758290c3cdf6203adc67b600af8610ad",
+        "templates/reporting-views-refresh.yaml": "a3e02c36b2257c8dd510992a56975cbd283c4bc8a3d506d42bcf7c619a4e36a6",
+        "templates/staff-ui-public.yaml": "bc0eabd179763b9e415d9aef577bd8bf897cbff0c811940f002fcbe1c3aafe6c",
+        "templates/superset-service-account-secret.yaml": "9e709985e01dbf6c50678e80a6f8dfa3589ba06df7e898582aaff329356ab580",
+        "templates/vc-card-templates-configmap.yaml": "d6da1735f1ff398c41d7d1a7dbd2ae53dc5e4ea3060bbc1c2b5406bf2d4ed066",
+        "values.yaml": "53217d0928e9aa84760410d7eda3d83b3145b12671a456d9f7cac760e9d0381a"
+      },
+      "omittedEnvironmentCaptures": []
+    },
+    {
+      "chart": "openg2p-cropsown-registry",
+      "repository": "https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry.git",
+      "commit": "f5be6d22a6b9947e3a62aaaf207adff74253e91e",
+      "path": "helm/openg2p-cropsown-registry",
+      "dependencies": [
+        {
+          "name": "openg2p-registry",
+          "alias": "registry",
+          "version": "1.2.2-rc.544",
+          "repository": "https://openg2p.github.io/openg2p-helm"
+        }
+      ],
+      "originalFileSha256": {
+        ".gitignore": "a0f57c781d2526b8d901bfcec47a3026c22e7e45e32ba8fc40e82866d53f1d48",
+        ".helmignore": "bb987e6a8ef45a99255d1d632812482d5f0f3255ea841520b4d90342df5fe2b3",
+        "Chart.yaml": "99d1adeac61c1f5424b221efb6d84d0328d534f7fd2cb5fac7040f2cc7701a75",
+        "app-readme.md": "1491b32175967100aa45bbb63635e6335eaa9c18842aa46baa0567271d9dfb95",
+        "files/reporting-views-refresh.sh": "844d19e3c07172f46a9a0486bd39d2938fe5670eef77dd1b7eec9b626c5f71b5",
+        "templates/_reporting.tpl": "14cd24ebf11a5154f5f9b67474007f4b41fe004b06b83512500dbe71cbbcb198",
+        "templates/dashboard-api.yaml": "d8387b64417af49bc0d57d82ee8d6bf83817193835c1d4b3439ba5fae07a03ea",
+        "templates/reporting-views-refresh.yaml": "fd96280c336087d83a051de34dc7f5a0fb93d220c45dfe27072ab309caf015a4",
+        "templates/reporting-views.yaml": "1ea1714bddcd3a17e84ea6e67c630312599eeb77ef7b804e6f2e258465030b7a",
+        "values.yaml": "17b3e45c28e1ddf48bc48cf3cf0a3b87cbde60127cbcaf8380b416eb179d2489"
+      },
+      "omittedEnvironmentCaptures": []
+    },
+    {
+      "chart": "openg2p-livestock-registry",
+      "repository": "https://github.com/Centre-for-Open-Societal-Systems/livestock-registry.git",
+      "commit": "bf78e69a5fd60786b8d1852c69b4fefdd70dffc1",
+      "path": "helm/openg2p-livestock-registry",
+      "dependencies": [
+        {
+          "name": "openg2p-registry",
+          "alias": "registry",
+          "version": "1.2.2-rc.544",
+          "repository": "https://openg2p.github.io/openg2p-helm"
+        }
+      ],
+      "originalFileSha256": {
+        ".gitignore": "a0f57c781d2526b8d901bfcec47a3026c22e7e45e32ba8fc40e82866d53f1d48",
+        ".helmignore": "bb987e6a8ef45a99255d1d632812482d5f0f3255ea841520b4d90342df5fe2b3",
+        "Chart.yaml": "14f0a27ef18fee114d981b687a070aea985629236f5f5f93a39c66fed98d84da",
+        "README-dev.md": "f80c720c2c205bae42703d6cc4f64cbcce4b7e5c971d7c02cb1e777e6f95d49e",
+        "app-readme.md": "54b47c3caf44599cf77c887889b3d19efa0c0374ab2794bd851c63df7036cd57",
+        "files/reporting-views-refresh.sh": "844d19e3c07172f46a9a0486bd39d2938fe5670eef77dd1b7eec9b626c5f71b5",
+        "templates/_reporting.tpl": "c22d273883efd0ca873675e0ef08d7eb3ed53fc44d73f6df4a520c482d188551",
+        "templates/dashboard-api.yaml": "55356e7bf1837d50c22c3a5e9bc77278ae964b2120194fdbc8c94f507ed8454d",
+        "templates/reporting-views-refresh.yaml": "28a37ef78412a9f267267c9b08a2987cf84b5447fd70db8b98d99bcc1b484724",
+        "templates/reporting-views.yaml": "3aa0feba1c7687f1f57c21a3b633ea087ce33fd7d538fcdd6feec2596fbbc49b",
+        "values.yaml": "e02f9f8f1719e319ddde293863b7f932994943a61b4815cf6aeee2d3e6020a7c"
+      },
+      "omittedEnvironmentCaptures": [
+        "values-live.yaml",
+        "values-new-dev.yaml"
+      ]
+    },
+    {
+      "chart": "openg2p-commons-services",
+      "repository": "https://github.com/OpenG2P/commons",
+      "commit": "32638189178ca451d354316a099918574c6730a5",
+      "upstreamVersion": "2.3.4-rc.247",
+      "archive": "https://openg2p.github.io/openg2p-helm/openg2p-commons-services-2.3.4-rc.247.tgz",
+      "archiveSha256": "96ab00f327652a4cc3d511525e1ac5260813d744a11620054e2491b698206272",
+      "verification": "Downloaded latest published package and verified SHA256 against fresh index on 2026-10-16",
+      "dependencies": [
+        {
+          "alias": "master-data",
+          "condition": "master-data.enabled",
+          "name": "openg2p-master-data",
+          "repository": "https://openg2p.github.io/openg2p-helm",
+          "version": "1.1.4-rc.106"
+        },
+        {
+          "condition": "artifactory.enabled",
+          "name": "artifactory",
+          "repository": "https://openg2p.github.io/openg2p-helm",
+          "version": "12.0.3"
+        },
+        {
+          "condition": "keymanager.enabled",
+          "name": "keymanager",
+          "repository": "https://openg2p.github.io/openg2p-helm",
+          "version": "12.1.1"
+        },
+        {
+          "condition": "superset.enabled",
+          "name": "superset",
+          "repository": "https://apache.github.io/superset",
+          "version": "0.12.11"
+        },
+        {
+          "condition": "esignet.enabled",
+          "name": "esignet",
+          "repository": "https://openg2p.github.io/openg2p-helm",
+          "version": "1.4.3"
+        },
+        {
+          "condition": "mock-identity-system.enabled",
+          "name": "mock-identity-system",
+          "repository": "https://openg2p.github.io/openg2p-helm",
+          "version": "0.0.0-develop.9"
+        },
+        {
+          "condition": "odk-central.enabled",
+          "name": "odk-central",
+          "repository": "https://openg2p.github.io/openg2p-helm",
+          "version": "v2025.2.2"
+        },
+        {
+          "condition": "openg2p-iam-service.enabled",
+          "name": "openg2p-iam-service",
+          "repository": "https://openg2p.github.io/openg2p-helm",
+          "version": "1.4.4-rc.125"
+        },
+        {
+          "condition": "openg2p-inji-certify.enabled",
+          "name": "openg2p-inji-certify",
+          "repository": "https://openg2p.github.io/openg2p-helm",
+          "version": "0.0.0-develop.14"
+        },
+        {
+          "condition": "openg2p-audit-manager.enabled",
+          "name": "openg2p-audit-manager",
+          "repository": "https://openg2p.github.io/openg2p-helm",
+          "version": "1.2.0"
+        },
+        {
+          "condition": "openg2p-staff-portal-ui.enabled",
+          "name": "openg2p-staff-portal-ui",
+          "repository": "https://openg2p.github.io/openg2p-helm",
+          "version": "1.2.0"
+        },
+        {
+          "condition": "openg2p-awe.enabled",
+          "name": "openg2p-awe",
+          "repository": "https://openg2p.github.io/openg2p-helm",
+          "version": "1.2.2"
+        },
+        {
+          "condition": "partner-management.enabled",
+          "name": "partner-management",
+          "repository": "https://openg2p.github.io/openg2p-helm",
+          "version": "1.0.2"
+        },
+        {
+          "condition": "openg2p-consent-manager.enabled",
+          "name": "openg2p-consent-manager",
+          "repository": "https://openg2p.github.io/openg2p-helm",
+          "version": "1.0.2"
+        },
+        {
+          "condition": "keycloak-init.enabled",
+          "name": "keycloak-init",
+          "repository": "https://openg2p.github.io/openg2p-helm",
+          "version": "1.2.0"
+        }
+      ]
+    },
+    {
+      "chart": "openg2p-da-registry",
+      "repository": "https://github.com/Centre-for-Open-Societal-Systems/da-registry",
+      "commit": "9714c3c5307a7e61f4379b613229837a4b76e952",
+      "path": "helm/openg2p-da-registry",
+      "dependencies": [
+        {
+          "name": "openg2p-registry",
+          "alias": "registry",
+          "version": "1.2.2-rc.544",
+          "repository": "https://openg2p.github.io/openg2p-helm"
+        }
+      ],
+      "originalFileSha256": {
+        ".gitignore": "df1e5c5cd42f987e3c7e17cf01c8f6d54227363e48e7e89f0037007da0697ab2",
+        ".helmignore": "c5a9bd139c9e10545d48e9a9637e2eeb16777918f97b69e193b429026dce8235",
+        "app-readme.md": "cce18e09323972db4d366d51966df3567491213605dc5464747f8bddc8e2b983",
+        "Chart.yaml": "5cb7c6bd584252c2db2c6a9c6e135614457a5636aa5a2c59a1b7f752d3fe9c7d",
+        "values.yaml": "ac0571bd207196229d874375dce21b642bb327217d7c181b7dbbd5563ccb33e2"
+      },
+      "verification": "Full Git chart tree verified at exact develop commit on 2026-10-16"
+    }
+  ],
+  "registryDependency": {
+    "archive": "openg2p-registry-1.2.2-rc.544.tgz",
+    "sha256": "0be9beab7702f00ae6fdce9859d07804f8b0eac94d111ea90deb35863bbb2044",
+    "verification": "SHA256 matches fresh published OpenG2P index on 2026-10-16"
+  },
+  "relatedSources": [
+    {
+      "repository": "https://github.com/Centre-for-Open-Societal-Systems/consent-management",
+      "commit": "d6ce86b9e3f904ee668d913fd06835e8f70e7f64",
+      "use": "Candidate API/UI/sanity images published at this source revision; explicit image-only override. Chart runtime defaults retain develop-5361069."
+    },
+    {
+      "repository": "https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api",
+      "commit": "8fe3bf97030bb0b3f6283c2123ad58026af6cc50",
+      "use": "Published Aggregation candidate image and exact source-owned local integration scenarios; workload remains opt-in."
+    }
+  ],
+  "initialChartVersion": "1.0.0-dev.1",
+  "devEndpointMigration": {
+    "inventory": "environments/dev/endpoints.yaml",
+    "overlays": "environments/dev/values",
+    "sourceCommitsUnchanged": true,
+    "historicalArchivesRetained": true,
+    "configurationChanges": "Canonical URLs and namespace-qualified service calls; no guessed endpoints; unconfirmed browser surfaces disabled/unset; service catalog documents every included COSS service."
+  },
+  "oanBranding": {
+    "chartVersion": "1.0.0-dev.3",
+    "owner": "OpenAgriNet (OAN) / COSS",
+    "scope": "Rancher display names, chart home/sources, embedded README and app-readme; original Helm/dependency names and upstream provenance retained",
+    "runtimeChangesFromDev2": false
+  }
+}

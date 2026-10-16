@@ -1,0 +1,259 @@
+{
+  "checkedAt": "2026-10-16",
+  "method": "Read-only public DNS and HTTPS HEAD with normal TLS verification; redirects not followed; status codes are routing evidence, not service readiness.",
+  "expectedServer": "13.201.58.55",
+  "results": [
+    {
+      "service": "keycloak",
+      "hostname": "keycloak-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 302,
+      "tls": "verified"
+    },
+    {
+      "service": "iam",
+      "hostname": "staff-iam-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 404,
+      "tls": "verified"
+    },
+    {
+      "service": "agentIam",
+      "hostname": "agent-iam-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 404,
+      "tls": "verified"
+    },
+    {
+      "service": "staffPortal",
+      "hostname": "staff-portal-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 307,
+      "tls": "verified"
+    },
+    {
+      "service": "iamUi",
+      "hostname": "iam-staff-ui-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 307,
+      "tls": "verified"
+    },
+    {
+      "service": "awe",
+      "hostname": "awe-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 200,
+      "tls": "verified"
+    },
+    {
+      "service": "masterData",
+      "hostname": "master-data-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 404,
+      "tls": "verified"
+    },
+    {
+      "service": "masterDataUi",
+      "hostname": "master-data-ui-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 307,
+      "tls": "verified"
+    },
+    {
+      "service": "consent",
+      "hostname": "consent-manager-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 200,
+      "tls": "verified"
+    },
+    {
+      "service": "consentPartner",
+      "hostname": "consent-manager-partner-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 404,
+      "tls": "verified"
+    },
+    {
+      "service": "partnerManagement",
+      "hostname": "partner-management-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 200,
+      "tls": "verified"
+    },
+    {
+      "service": "partnerManagementApi",
+      "hostname": "partner-management-partner-api-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 404,
+      "tls": "verified"
+    },
+    {
+      "service": "odk",
+      "hostname": "odk-central-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 200,
+      "tls": "verified"
+    },
+    {
+      "service": "minio",
+      "hostname": "minio-farmer-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 400,
+      "tls": "verified"
+    },
+    {
+      "service": "minioConsole",
+      "hostname": "minio-console-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 200,
+      "tls": "verified"
+    },
+    {
+      "service": "audit",
+      "hostname": "auditmanager-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 404,
+      "tls": "verified"
+    },
+    {
+      "service": "esignet",
+      "hostname": "esignet-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 200,
+      "tls": "verified"
+    },
+    {
+      "service": "farmer",
+      "hostname": "farmer-registry-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 307,
+      "tls": "verified"
+    },
+    {
+      "service": "farmerStaff",
+      "hostname": "staff-farmer-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 404,
+      "tls": "verified"
+    },
+    {
+      "service": "farmerPartner",
+      "hostname": "partner-farmer-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 404,
+      "tls": "verified"
+    },
+    {
+      "service": "farmerId",
+      "hostname": "idgenerator-farmer-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 404,
+      "tls": "verified"
+    },
+    {
+      "service": "cropsown",
+      "hostname": "crop-registry-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 307,
+      "tls": "verified"
+    },
+    {
+      "service": "cropsownStaff",
+      "hostname": "staff-crop-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 404,
+      "tls": "verified"
+    },
+    {
+      "service": "cropsownPartner",
+      "hostname": "partner-crop-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 404,
+      "tls": "verified"
+    },
+    {
+      "service": "livestock",
+      "hostname": "livestock-registry-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 307,
+      "tls": "verified"
+    },
+    {
+      "service": "livestockStaff",
+      "hostname": "staff-livestock-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 404,
+      "tls": "verified"
+    },
+    {
+      "service": "livestockPartner",
+      "hostname": "partner-livestock-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 404,
+      "tls": "verified"
+    },
+    {
+      "service": "livestockId",
+      "hostname": "idgenerator-livestock-development.oanstaging.com",
+      "addresses": [
+        "13.201.58.55"
+      ],
+      "httpStatus": 404,
+      "tls": "verified"
+    }
+  ]
+}

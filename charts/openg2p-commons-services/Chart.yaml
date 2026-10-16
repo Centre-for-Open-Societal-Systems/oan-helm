@@ -1,0 +1,101 @@
+annotations:
+  catalog.cattle.io/display-name: OAN Commons Services (Consent Manager & Aggregation)
+  catalog.cattle.io/release-name: commons-services
+  openg2p.org/add-to-rancher: openg2p.org/add-to-rancher
+  org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+  coss.org/upstream-version: 2.3.4-rc.247
+  oan.org/owner: OpenAgriNet (OAN) / COSS
+  oan.org/consent-manager-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
+  oan.org/aggregation-source: https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
+  oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-commons-services
+  coss.org/upstream-source: https://github.com/OpenG2P/commons
+  coss.org/upstream-source-revision: 32638189178ca451d354316a099918574c6730a5
+apiVersion: v2
+appVersion: 2.3.4-rc.247
+dependencies:
+- alias: master-data
+  condition: master-data.enabled
+  name: openg2p-master-data
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.1.4-rc.106
+- condition: artifactory.enabled
+  name: artifactory
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 12.0.3
+- condition: keymanager.enabled
+  name: keymanager
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 12.1.1
+- condition: superset.enabled
+  name: superset
+  repository: https://apache.github.io/superset
+  version: 0.12.11
+- condition: esignet.enabled
+  name: esignet
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.4.3
+- condition: mock-identity-system.enabled
+  name: mock-identity-system
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 0.0.0-develop.9
+- condition: odk-central.enabled
+  name: odk-central
+  repository: https://openg2p.github.io/openg2p-helm
+  version: v2025.2.2
+- condition: openg2p-iam-service.enabled
+  name: openg2p-iam-service
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.4.4-rc.125
+- condition: openg2p-inji-certify.enabled
+  name: openg2p-inji-certify
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 0.0.0-develop.14
+- condition: openg2p-audit-manager.enabled
+  name: openg2p-audit-manager
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.2.0
+- condition: openg2p-staff-portal-ui.enabled
+  name: openg2p-staff-portal-ui
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.2.0
+- condition: openg2p-awe.enabled
+  name: openg2p-awe
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.2.2
+- condition: partner-management.enabled
+  name: partner-management
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.0.2
+- condition: openg2p-consent-manager.enabled
+  name: openg2p-consent-manager
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.0.2
+- condition: keycloak-init.enabled
+  name: keycloak-init
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.2.0
+description: OAN Commons Services including OAN Consent Manager and Aggregation API
+  from COSS repositories, with pinned OpenG2P shared-service dependencies.
+icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+name: openg2p-commons-services
+type: application
+version: 1.0.0-dev.3
+home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+sources:
+- https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+- https://github.com/Centre-for-Open-Societal-Systems/consent-management
+- https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
+- https://github.com/OpenG2P/commons
+keywords:
+- oan
+- openagrinet
+- coss
+- consent-manager
+- aggregation
+maintainers:
+- name: OpenAgriNet (OAN) / COSS
+  url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+
+# openg2p-consent-manager is the retained upstream template dependency name.
+# OAN Consent images/values come from the COSS consent-management repository.
+# OAN Aggregation is templates/aggregation-api.yaml, configured by aggregationApi.

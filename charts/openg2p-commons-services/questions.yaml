@@ -1,0 +1,353 @@
+questions:
+
+# General
+- variable: global.baseDomain
+  description: >-
+    Base domain for all services. All service hostnames are derived as
+    <service>.baseDomain (e.g., superset.example.openg2p.org).
+  type: string
+  label: Base Domain
+  required: true
+  group: General
+
+# Keycloak
+- variable: global.keycloakBaseUrl
+  description: Keycloak Base URL used in all components (e.g. https://keycloak.openg2p.org)
+  type: string
+  label: Keycloak Base URL
+  group: Keycloak
+
+- variable: global.keycloakAdminSecret
+  description: >-
+    Name of the K8s secret holding the Keycloak admin password (created by the
+    commons-base chart). Default assumes base release is 'commons'. Set this if
+    your base release has a different name (e.g. <base-release>-keycloak).
+  type: string
+  label: Keycloak Admin Secret Name
+  group: Keycloak
+
+- variable: global.keycloakAdminUser
+  description: Keycloak admin username (default 'admin').
+  type: string
+  label: Keycloak Admin User
+  group: Keycloak
+
+# Service hostnames (used both for service deployments and Keycloak redirect URIs)
+- variable: global.supersetHostname
+  description: >-
+    Hostname for Superset. Defaults to superset.<baseDomain>.
+  type: string
+  label: Superset Hostname
+  group: Service Hostnames
+
+- variable: global.odkHostname
+  description: >-
+    Hostname for ODK Central. Defaults to odk.<baseDomain>.
+  type: string
+  label: ODK Central Hostname
+  group: Service Hostnames
+
+- variable: global.iamHostname
+  description: >-
+    Hostname for the IAM service. Defaults to iam.<baseDomain>.
+  type: string
+  label: IAM Hostname
+  group: Service Hostnames
+
+- variable: global.staffPortalApiHostname
+  description: >-
+    Hostname of the IAM staff portal API. Defaults to staff-iam.<baseDomain>.
+    Used by both the IAM deployment and the Keycloak staff-portal client
+    redirect URI — keeping them in sync.
+  type: string
+  label: Staff Portal API Hostname
+  group: Service Hostnames
+
+# Staff Portal UI
+- variable: global.staffPortalHostname
+  description: >-
+    Hostname for the Staff Portal UI. Defaults to staff-portal.<baseDomain>.
+    Override if your environment uses a different convention
+    (e.g. staff-portal.<env>.openg2p.org).
+  type: string
+  label: Staff Portal Hostname
+  group: Staff Portal UI
+
+- variable: global.staffPortalCookieDomain
+  description: >-
+    Cookie domain shared between Staff Portal UI and the IAM API.
+    Should be the parent domain so cookies are accessible to both.
+    Defaults to .<baseDomain>.
+  type: string
+  label: Staff Portal Cookie Domain
+  group: Staff Portal UI
+
+- variable: openg2p-staff-portal-ui.enabled
+  description: Install OpenG2P Staff Portal UI
+  type: boolean
+  label: Install Staff Portal UI?
+  group: Staff Portal UI
+
+# Infrastructure references (from openg2p-commons-base)
+- variable: global.postgresqlHost
+  description: >-
+    Hostname or IP address of PostgreSQL. For embedded PG set to <base-release-name>-postgresql.
+    For external PostgreSQL, set to the hostname or IP of the external server.
+  type: string
+  label: PostgreSQL Hostname
+  required: true
+  group: Infrastructure
+
+- variable: global.postgresqlSecret
+  description: >-
+    Name of the Kubernetes secret containing the PostgreSQL superuser password.
+    For embedded PG, set to <base-release-name>-postgresql. For external PG,
+    pre-create the secret manually and set its name here.
+  type: string
+  label: PostgreSQL Superuser Secret Name
+  group: Infrastructure
+
+- variable: global.postgresqlSecretKey
+  description: >-
+    Key inside the superuser secret that holds the password. Defaults to
+    'postgres-password'. Change if your external secret uses a different key.
+  type: string
+  label: PostgreSQL Superuser Secret Key
+  group: Infrastructure
+
+- variable: global.redisInstallationName
+  description: >-
+    Redis service name from the base chart. Set to <base-release-name>-redis.
+  type: string
+  label: Redis Hostname
+  group: Infrastructure
+
+- variable: global.redisAuthInstallationName
+  description: >-
+    Redis (auth-enabled) service name from the base chart. Set to <base-release-name>-redis-auth.
+  type: string
+  label: Redis Auth Hostname
+  group: Infrastructure
+
+- variable: global.minioInstallationName
+  description: >-
+    MinIO service name from the base chart. Set to <base-release-name>-minio.
+  type: string
+  label: MinIO Hostname
+  group: Infrastructure
+
+- variable: global.mailInstallationName
+  description: >-
+    Mail service name from the base chart. Set to <base-release-name>-mail.
+  type: string
+  label: Mail Server Hostname
+  group: Infrastructure
+
+- variable: global.kafkaInstallationName
+  description: >-
+    Kafka service name from the base chart. Set to <base-release-name>-kafka.
+  type: string
+  label: Kafka Hostname
+  group: Infrastructure
+
+- variable: global.softhsmInstallationName
+  description: >-
+    SoftHSM service name from the base chart. Set to <base-release-name>-softhsm.
+  type: string
+  label: SoftHSM Hostname
+  group: Infrastructure
+
+# Logging is handled cluster-wide by OpenTelemetry + Loki at the infra layer;
+# no per-service logging configuration is needed here anymore.
+
+# Master data
+- variable: master-data.enabled
+  type: boolean
+  label: Enable Master Data service
+  group: Master Data
+
+# The country pack. This is the ONE place an environment declares which country
+# it serves — registries read the geography, code lists and sample people from
+# Master Data and name no country of their own.
+- variable: master-data.geoSeed.countryPack
+  description: "Directory name of the pack to seed, from packs/ in github.com/openg2p/openg2p-data — ETH (Ethiopia) or XKM (Kamuntu, fictitious, for demos). Any other pack in that folder works; use its exact directory name."
+  type: string
+  default: XKM
+  label: Country Pack
+  group: Master Data
+  show_if: master-data.enabled=true
+
+- variable: master-data.geoSeed.load.codelists
+  description: "Seed the country's code lists (gender, education level, water source, ...) and their semantic role tags. Registries copy these into their own tables at install; with this off, each falls back to the values its extension ships and the role tags are absent entirely — nothing else provides them."
+  type: boolean
+  default: true
+  label: Seed Country Code Lists
+  group: Master Data
+  show_if: master-data.enabled=true
+
+- variable: master-data.geoSeed.load.samples
+  description: "Seed the pack's sample people — a couple of dozen, coherent with the geography and the code lists — so a fresh install shows something rather than an empty registry. Not bulk analytics data, which each registry generates for itself."
+  type: boolean
+  default: true
+  label: Seed Sample People
+  group: Master Data
+  show_if: master-data.enabled=true
+
+- variable: master-data.geoSeed.domains
+  description: "Domain code lists to seed on top of the core ones, comma-separated. Use 'agriculture' (crops, livestock) when a Farmer Registry will use this environment; a social registry never reads them. Leave empty otherwise."
+  type: string
+  default: ""
+  label: Domain Code Lists
+  group: Master Data
+  show_if: master-data.enabled=true
+
+# ODK
+- variable: odk-central.enabled
+  description: This installs ODK Central
+  type: boolean
+  label: Install ODK Central?
+  group: ODK
+
+# Keymanager
+- variable: keymanager.enabled
+  description: This installs Keymanager.
+  type: boolean
+  label: Install Keymanager?
+  group: Keymanager
+
+- variable: keymanager.istio.enabled
+  label: Expose Keymanager APIs
+  description: >-
+    Enable this to manually download/upload certificates to Keymanager.
+    This exposes Keymanager APIs publicly outside Kubernetes.
+  type: boolean
+  group: Keymanager
+
+- variable: keymanager.keystoreType
+  label: Keystore Type
+  description: PKCS11 for HSM. PKCS12 for storing into local p12 file.
+  type: enum
+  options:
+    - PKCS11
+    - PKCS12
+  group: Keymanager
+
+- variable: keymanager.persistence.enabled
+  label: Persistence Enabled
+  description: Enable this if Keystore Type is PKCS12.
+  type: boolean
+  group: Keymanager
+
+# Superset
+- variable: superset.enabled
+  description: Install Superset
+  type: boolean
+  label: Install Superset?
+  group: Superset
+
+# eSignet
+- variable: esignet.enabled
+  description: This installs eSignet for mocking user authentication
+  type: boolean
+  label: Install eSignet?
+  group: eSignet
+
+# Mock Identity Settings
+- variable: mock-identity-system.enabled
+  description: This installs Mock Identity System. Install only when eSignet is installed
+  type: boolean
+  label: Install Mock Identity System?
+  group: eSignet
+
+# AWE (Approval Workflow Engine)
+- variable: openg2p-awe.enabled
+  description: >-
+    Install the shared Approval Workflow Engine. Registries (NSR, Farmer
+    Registry) consume this one instance instead of installing their own.
+  type: boolean
+  label: Install AWE?
+  group: AWE
+
+- variable: global.aweHostname
+  description: >-
+    Hostname for the shared AWE. Defaults to awe.<baseDomain>. Registries must
+    point their AWE base URL at https://<this hostname>.
+  type: string
+  label: AWE Hostname
+  group: AWE
+
+# Partner Management
+- variable: partner-management.enabled
+  description: >-
+    Install Partner Management — the central registry of partner public keys
+    (onboarding, approval & key rotation, plus the key-fetch API other modules
+    use). Deployed as commons-services-pm-*.
+  type: boolean
+  label: Install Partner Management?
+  group: Partner Management
+
+- variable: partner-management.global.staffPortalUiHostname
+  description: >-
+    Hostname for the Partner Management admin portal (UI). Defaults to
+    partner-management.<baseDomain>.
+  type: string
+  label: Partner Management Portal Hostname
+  group: Partner Management
+  show_if: partner-management.enabled=true
+
+# Consent Manager
+- variable: openg2p-consent-manager.enabled
+  description: >-
+    Install the Consent Manager — the Policy Decision Point that verifies
+    partner-signed consent objects for outbound data sharing (the /validate PDP,
+    receipts, JWKS, admin UI). OFF by default. Requires Partner Management
+    (source of partner keys). Deployed as commons-services-cm-*.
+  type: boolean
+  default: false
+  label: Install Consent Manager?
+  group: Consent Manager
+
+- variable: openg2p-consent-manager.global.consentManagerHostname
+  description: >-
+    Hostname for the Consent Manager admin portal (UI + staff API). Defaults to
+    consent-manager.<baseDomain>.
+  type: string
+  label: Consent Manager Portal Hostname
+  group: Consent Manager
+  show_if: openg2p-consent-manager.enabled=true
+
+- variable: openg2p-consent-manager.sanity.runE2e
+  description: >-
+    Run the full end-to-end sanity (signed /validate round-trip) on each
+    install/upgrade. This seeds a persistent test partner into Partner
+    Management first. Leave off for production; the smoke + contract checks
+    still run either way.
+  type: boolean
+  label: Run Consent Manager E2E Sanity?
+  group: Consent Manager
+  show_if: openg2p-consent-manager.enabled=true
+
+# ---------------------------------------------------------------------------
+# Inji Certify — the verifiable credential issuer.
+# ---------------------------------------------------------------------------
+- variable: openg2p-inji-certify.enabled
+  description: "Issue and sign verifiable credentials. One issuer per environment; the registries' agent portals push claims here. Turning it off leaves an environment unable to produce a credential at all."
+  type: boolean
+  default: true
+  label: Enable Inji Certify
+  group: Verifiable Credentials
+
+- variable: global.certifyHostname
+  description: "Public hostname of the issuer. It also determines the issuer DID (did:web:<hostname>) that every credential is signed under, and the audience Certify accepts on incoming proofs — so a registry issuing credentials must be given the SAME value. Default: certify.<namespace>.openg2p.org."
+  type: string
+  label: Certify Hostname
+  group: Verifiable Credentials
+  show_if: openg2p-inji-certify.enabled=true
+
+- variable: openg2p-inji-certify.certify.appConfig.issuerDisplay[0].name
+  description: "Name of the issuing authority, published in the issuer metadata — this is what a wallet or verifier shows as 'issued by'. Set it to the department or agency that owns the credentials."
+  type: string
+  default: OpenG2P
+  label: Issuing Authority Name
+  group: Verifiable Credentials
+  show_if: openg2p-inji-certify.enabled=true

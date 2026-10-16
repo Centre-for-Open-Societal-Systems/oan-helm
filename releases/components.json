@@ -1,0 +1,249 @@
+{
+  "checkedAt": "2026-10-16",
+  "method": "Initial chart defaults verified by read-only ECR inventory; subsequent manual Consent/Aggregation candidate builds and publication are recorded separately. No cluster deployments.",
+  "images": [
+    {
+      "valuesPath": "openg2p-farmer-registry.registry.staffApi.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/staff-api",
+      "tag": "90811b61a59f",
+      "digest": "sha256:b8116e52f51c85d228d26ab97113b75cf293a9dfba120a062c16d97727039ed5",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-farmer-registry.registry.staffUi.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/staff-ui",
+      "tag": "90811b61a59f",
+      "digest": "sha256:e7e5c7d8d0935f8e2957019afe68cad168de8d08f34b52cffc8c91fe92d7cbc4",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-farmer-registry.registry.partnerApi.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/partner-api",
+      "tag": "90811b61a59f",
+      "digest": "sha256:800b7b097a4fd8bf7a09ef0e24969ed374e0126933d9aa79c47e186644f4315c",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-farmer-registry.registry.celeryWorker.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/celery",
+      "tag": "90811b61a59f",
+      "digest": "sha256:15273f1e29b54f02df09b0bb69c5cf21d68432c1c34f0dd6521a1fbfe64b49c2",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-farmer-registry.registry.celeryBeat.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/celery",
+      "tag": "90811b61a59f",
+      "digest": "sha256:15273f1e29b54f02df09b0bb69c5cf21d68432c1c34f0dd6521a1fbfe64b49c2",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-farmer-registry.registry.dbSeed.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/db-seed",
+      "tag": "90811b61a59f",
+      "digest": "sha256:0b48d9f90be2734a131bcea08219c79cb9251307f13b422ead94f56fb7a00cd9",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-farmer-registry.registry.sanity.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/sanity-tests",
+      "tag": "90811b61a59f",
+      "digest": "sha256:baceebd88b20c4eefc9ed85473f1f9fe21a2ed86c9ee776da05e6ae47ed4e95d",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-farmer-registry.dashboardApi.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/dashboard-api",
+      "tag": "85fd0a3c2518",
+      "digest": "sha256:66934adc8a6f5effb3334c8bd80d5afa7eed76486ad8b0ceaf1638a24bc6e6c2",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-cropsown-registry.registry.staffApi.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/staff-api",
+      "tag": "develop-88",
+      "digest": "sha256:4132c53e98e1082ec38e2694efb8aa6f4c1a1abd76011842e60d797254773f83",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-cropsown-registry.registry.staffUi.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/staff-ui",
+      "tag": "develop-88",
+      "digest": "sha256:c9c2ddd36b9679d5abc16c90a989c0bcbef4c844892bf779d89f0e129a18b5e8",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-cropsown-registry.registry.partnerApi.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/partner-api",
+      "tag": "develop-88",
+      "digest": "sha256:36f3bd02e1d7f7160791b0a8fe1a3290ae4d85c5cc613f69b857b2301eb99662",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-cropsown-registry.registry.celeryWorker.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/celery",
+      "tag": "develop-88",
+      "digest": "sha256:dab5d392746d1580402a1ff02c61af7ed8e2dcfd317bcae166705d81e4cf625b",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-cropsown-registry.registry.celeryBeat.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/celery",
+      "tag": "develop-88",
+      "digest": "sha256:dab5d392746d1580402a1ff02c61af7ed8e2dcfd317bcae166705d81e4cf625b",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-cropsown-registry.registry.dbSeed.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/db-seed",
+      "tag": "develop-88",
+      "digest": "sha256:2c05fd28022a844e00f93e4c7b14470315c62fe5ea25f29d4f9f93bce88b05c5",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-cropsown-registry.registry.sanity.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/sanity-tests",
+      "tag": "develop-88",
+      "digest": "sha256:82a90a27d571712cf8f8aa92e851c847f871ff8b1246112f499b4e6827e5a7b3",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-cropsown-registry.dashboardApi.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/cropsown-registry/dashboard-api",
+      "tag": "develop-88",
+      "digest": "sha256:397cef051fa9e4dc67262986363edbc91844ef23b85dceefd1024b3f4d15a782",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-livestock-registry.registry.staffApi.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/staff-api",
+      "tag": "bf78e69a5fd6",
+      "digest": "sha256:189809772e28eafdeea66070dddfbe92d7ea840b2633dbc068a6f4fb85ae5ed2",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-livestock-registry.registry.staffUi.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/staff-ui",
+      "tag": "bf78e69a5fd6",
+      "digest": "sha256:07905855fdbc7dd452e92a36d7076eaddc86c17cc7b339332bf6fe2b2ddf4166",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-livestock-registry.registry.partnerApi.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/partner-api",
+      "tag": "bf78e69a5fd6",
+      "digest": "sha256:99c37673cb62b52476a408531ffb73fa92d8d06d5ba0e61ea8790d116297f785",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-livestock-registry.registry.celeryWorker.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/celery",
+      "tag": "bf78e69a5fd6",
+      "digest": "sha256:982e8272993305d90d34ea5a449f915c5ad21689ba0788c48806fd003b1c143a",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-livestock-registry.registry.celeryBeat.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/celery",
+      "tag": "bf78e69a5fd6",
+      "digest": "sha256:982e8272993305d90d34ea5a449f915c5ad21689ba0788c48806fd003b1c143a",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-livestock-registry.registry.dbSeed.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/db-seed",
+      "tag": "bf78e69a5fd6",
+      "digest": "sha256:6ba640c81fc5a6eb19b4a81ae2b6b86ce78cd76dc64dc67723de26cffc5efae3",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-livestock-registry.registry.sanity.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/sanity-tests",
+      "tag": "bf78e69a5fd6",
+      "digest": "sha256:4bf827ba97d8af32315021bec0fad2d4910e53c3c0a1fa449aa37058d66ddcdc",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-livestock-registry.dashboardApi.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/dashboard-api",
+      "tag": "bf78e69a5fd6",
+      "digest": "sha256:f105a023e2cf38149ae194eefae91d9d9a9d8ab8c6839a5b8d8c3a2d40958ce9",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-commons-services.openg2p-consent-manager.consentManagerApi.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api",
+      "tag": "develop-5361069",
+      "digest": "sha256:67180496e5f9d5edb5afb9727d9da4501e96599166c1712e4e24dbf1f6fa2a77",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-commons-services.openg2p-consent-manager.ui.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-ui",
+      "tag": "develop-5361069",
+      "digest": "sha256:1ae7cc25b094e9c72ea9262a8d920480d2049b13d1505f2a9a2aeeeff8abf92d",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-commons-services.openg2p-consent-manager.sanity.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-sanity",
+      "tag": "develop-5361069",
+      "digest": "sha256:1af320db949eb1c641dec5533b3f7352980483de45774b16e310cca996a0f330",
+      "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-commons-services.aggregationApi.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/aggregation-api",
+      "tag": "dev-8fe3bf97030b",
+      "digest": "sha256:09f28f9a92058cbdd34383c899ea48d3ab8bd7eb32319ee316be0e881a5ec6b7",
+      "verifiedBy": "Manual pinned-source build; 96 existing unit tests passed; ECR DescribeImages digest matches local manifest, 2026-10-16",
+      "status": "Candidate; disabled pending compatible Consent and runtime configuration; source defaults unchanged",
+      "evidence": "aggregation-candidate.json"
+    },
+    {
+      "valuesPath": "openg2p-commons-services.openg2p-consent-manager.consentManagerApi.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api",
+      "tag": "dev-d6ce86b9e3f9",
+      "digest": "sha256:21f1ab4c8483ded3906353f855a210dd30b9ea5044ce60307d5402b10ac878e4",
+      "verifiedBy": "ECR DescribeImages matches local image manifest, 2026-10-16",
+      "status": "Published candidate override; immutable chart defaults retain develop-5361069; integration unverified",
+      "evidence": "consent-candidate.json"
+    },
+    {
+      "valuesPath": "openg2p-commons-services.openg2p-consent-manager.ui.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-ui",
+      "tag": "dev-d6ce86b9e3f9",
+      "digest": "sha256:b69eac8965b66e47d5b5fd34d43f40cac461551e86f6de5cde0e714c2a772ecf",
+      "verifiedBy": "ECR DescribeImages matches local image manifest, 2026-10-16",
+      "status": "Published candidate override; immutable chart defaults retain develop-5361069; integration unverified",
+      "evidence": "consent-candidate.json"
+    },
+    {
+      "valuesPath": "openg2p-commons-services.openg2p-consent-manager.sanity.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-sanity",
+      "tag": "dev-d6ce86b9e3f9",
+      "digest": "sha256:76047a5ca2c7eaeeefaffa2b43b6bfda42b238d128b4de0a9e78cff4bf713e43",
+      "verifiedBy": "ECR DescribeImages matches local image manifest, 2026-10-16",
+      "status": "Published candidate override; immutable chart defaults retain develop-5361069; integration unverified",
+      "evidence": "consent-candidate.json"
+    }
+  ],
+  "unavailable": [
+    {
+      "component": "Farmer dashboard UI",
+      "evidence": "openg2p/farmer-registry/dashboard-ui repository has no tagged images"
+    },
+    {
+      "component": "Crop standalone dashboard UI",
+      "evidence": "No oan_cropsown_dashboard image found; legacy gen2/cropsown-registry/dashboard-ui exists but reads DB directly and is not substituted for the current IAM dashboard"
+    },
+    {
+      "component": "Livestock standalone dashboard UI",
+      "evidence": "No matching tagged image repository found"
+    },
+    {
+      "component": "DA core/dashboard images",
+      "evidence": "No matching backend/dashboard repositories found; da-registry-frontend is a different application and is not substituted"
+    }
+  ]
+}

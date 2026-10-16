@@ -1,0 +1,45 @@
+{
+  "sourceRepository": "https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api",
+  "sourceCommit": "8fe3bf97030bb0b3f6283c2123ad58026af6cc50",
+  "fastapiCommonRevision": "2926e24b19fb04dba31b40d326d6ad59b2ad30b7",
+  "image": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/aggregation-api:dev-8fe3bf97030b",
+  "localImageId": "sha256:09f28f9a92058cbdd34383c899ea48d3ab8bd7eb32319ee316be0e881a5ec6b7",
+  "importVerification": {
+    "applicationVersion": "0.1.0",
+    "frameworkVersion": "1.1.5",
+    "sqlalchemyVersion": "2.0.54",
+    "greenletImport": true,
+    "catalogRegistries": [
+      "FARMER_REGISTRY",
+      "LIVESTOCK_REGISTRY",
+      "CROPSOWN_REGISTRY"
+    ],
+    "configurationImport": true
+  },
+  "publishedAtUtc": "2026-10-16T09:25:01.048626+00:00",
+  "ecrRepository": "oan/commons/aggregation-api",
+  "ecrDigest": "sha256:09f28f9a92058cbdd34383c899ea48d3ab8bd7eb32319ee316be0e881a5ec6b7",
+  "publishedReference": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/aggregation-api@sha256:09f28f9a92058cbdd34383c899ea48d3ab8bd7eb32319ee316be0e881a5ec6b7",
+  "ecrImageTagMutability": "IMMUTABLE",
+  "publicationVerification": "ECR DescribeImages digest matches local Docker image manifest",
+  "deployed": false,
+  "classification": "Published candidate; local auth-disabled exact-image integration passed 30/30. Shared database upgrades, authenticated split routing, live PM/registry and environment pull access remain to be verified.",
+  "unitTests": {
+    "passed": 96,
+    "exitCode": 0,
+    "networkAccess": false
+  },
+  "buildPlatform": "linux/amd64",
+  "authentication": "Existing Jenkins AWS credential; authorization token passed to Docker via stdin; temporary local Docker credentials removed after push",
+  "applicationCiChanges": false,
+  "chartDefaultsChanged": false,
+  "clusterPullAccess": {
+    "secretName": "ecr-pull-secret",
+    "newRepositoryManifestHttpStatus": 403,
+    "registryErrorCode": "DENIED",
+    "existingConsentRepositoryControlHttpStatus": 200,
+    "tokenExpirationIndicated": false,
+    "iamOrSecretChangesApplied": false
+  },
+  "localPairIntegration": "releases/consent-aggregation-integration.json"
+}

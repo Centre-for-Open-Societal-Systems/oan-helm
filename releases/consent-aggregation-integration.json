@@ -1,0 +1,33 @@
+{
+  "checkedAtUtc": "2026-10-16T09:55:53.452635+00:00",
+  "consentImage": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api@sha256:21f1ab4c8483ded3906353f855a210dd30b9ea5044ce60307d5402b10ac878e4",
+  "aggregationImage": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/aggregation-api@sha256:09f28f9a92058cbdd34383c899ea48d3ab8bd7eb32319ee316be0e881a5ec6b7",
+  "postgresImage": "postgres@sha256:1a6ab3f5345eb6dbe04a1349529caabdb0ab09293a09590fad07b2246bfa4b54",
+  "sourceFixturesCommit": "8fe3bf97030bb0b3f6283c2123ad58026af6cc50",
+  "environment": "disposable local Docker network/databases",
+  "authenticationEnabled": false,
+  "aweEnabled": false,
+  "kafkaEnabled": false,
+  "fixtureSource": "COSS oan-aggregation-api test/e2e/fakes.py; owner-provided local fixture reused",
+  "postmanSimulation": "postman/simulations/consent-aggregation.sim.yaml",
+  "clusterChanges": false,
+  "productionServicesContacted": false,
+  "status": "passed",
+  "logDirectory": ".build/oan-pair-0e5d8c84e4",
+  "checksPassed": 30,
+  "checksTotal": 30,
+  "simulationDependencyRequests": 14,
+  "suiteSha256": "1177fbdaa1af5028048f1025672d1e79826b890e439e61aafaf8623747cc7430",
+  "limits": "Local auth-disabled/all-audience/in-process profile; source-owned PM/registry/callback fixtures. No Keycloak, Istio split routing, AWE, Kafka, live data or production database migration test.",
+  "consentSourceCommit": "d6ce86b9e3f904ee668d913fd06835e8f70e7f64",
+  "checksCovered": [
+    "discovery and invalid-query/subject/section guard rails",
+    "OTP approval, registry search and schema-valid bene360 callback",
+    "scope and field filtering, allowed registry hop and held grant",
+    "new consent request, approval polling and scope narrowing",
+    "withdrawal cancels pending OTP",
+    "denied consent rejects aggregation",
+    "replay-window expiry rejects late approval and permits a new seek"
+  ],
+  "initialHarnessCorrection": "The first run passed 28/30. Harness YAML serialization reordered scope entries; preserving source catalog order without changing the source scenarios produced 30/30 on fresh databases."
+}

@@ -1,0 +1,736 @@
+global:
+  baseDomain: oanstaging.com
+  keycloakBaseUrl: https://keycloak-development.oanstaging.com
+  keycloakInternalUrl: http://commons-keycloak.commons.svc.cluster.local:80
+  keycloakRealm: staff
+  keycloakIssuerUrl: http://commons-keycloak.commons.svc.cluster.local:80/realms/staff
+  keycloakExternalIssuerUrl: https://keycloak-development.oanstaging.com/realms/staff
+  postgresqlHost: commons-postgresql
+  postgresqlSecret: commons-postgresql
+  postgresqlSecretKey: postgres-password
+  mailInstallationName: commons-mail
+  minioInstallationName: commons-minio
+  sysAdminEmail: admin@openg2p.sandbox.org
+  redisInstallationName: commons-redis
+  redisAuthInstallationName: commons-redis-auth
+  kafkaInstallationName: commons-kafka
+  softhsmInstallationName: commons-softhsm
+  supersetHostname: ''
+  odkHostname: odk-central-development.oanstaging.com
+  iamHostname: staff-iam-development.oanstaging.com
+  staffPortalApiHostname: staff-iam-development.oanstaging.com
+  agentPortalApiHostname: agent-iam-development.oanstaging.com
+  agentPortalHostname: ''
+  certifyHostname: ''
+  staffPortalHostname: staff-portal-development.oanstaging.com
+  staffPortalCookieDomain: .oanstaging.com
+  iamServiceUrl: http://commons-services-iam-staff-portal-api.commons.svc.cluster.local
+  keycloakAdminSecret: commons-keycloak
+  keycloakAdminSecretKey: admin-password
+  keycloakAdminUser: admin
+  aweHostname: awe-development.oanstaging.com
+  aweDB: awe
+  aweDBPort: 5432
+  aweDBUser: awe_user
+  aweDBSecret: awe-db-user
+  aweDBUserPasswordKey: awe-db-user-password
+  authCookieDomain: .oanstaging.com
+  cookieDomain: .oanstaging.com
+  iamUrl: https://staff-iam-development.oanstaging.com
+  masterDataHostname: master-data-development.oanstaging.com
+  masterDataUiHostname: master-data-ui-development.oanstaging.com
+  masterDataApiUrl: http://commons-services-master-data-api.commons.svc.cluster.local
+  aweBaseUrl: http://commons-services-awe.commons.svc.cluster.local
+master-data:
+  enabled: true
+  global:
+    masterDataHostname: master-data-development.oanstaging.com
+    masterDataDB: master_data
+    masterDataDBUser: master_data_user
+    masterDataDBSecret: master-data-db-user
+    masterDataDBUserPasswordKey: master-data-db-user-password
+    masterDataUiHostname: master-data-ui-development.oanstaging.com
+  geoSeed:
+    countryPack: ETH
+    load:
+      geo: true
+      codelists: true
+      samples: true
+    domains: []
+  masterDataApi:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 512Mi
+  postgres-init:
+    serviceAccount:
+      name: master-data-postgres-init
+    job: {}
+  keycloak-init:
+    nameOverride: master-data-kc-init
+  masterDataUi:
+    iamPublicUrl: https://staff-iam-development.oanstaging.com
+    envVars:
+      COOKIE_DOMAIN: .oanstaging.com
+odk-central:
+  enabled: true
+  hostname: '{{ tpl .Values.global.odkHostname $ }}'
+  postgresqlInstallationName: '{{ tpl .Values.global.postgresqlHost $ }}'
+  minioInstallationName: '{{ tpl .Values.global.minioInstallationName $ }}'
+  mailInstallationName: '{{ tpl .Values.global.mailInstallationName $ }}'
+  oidcClientId: openg2p-odk
+  oidcClientSecret: '{{ tpl .Values.oidcClientId $ }}'
+  oidcClientSecretKey: client_secret
+  s3BlobsEnabled: true
+  s3ServerUrl: http://{{ tpl .Values.global.minioInstallationName $ }}:9000
+  odk-central-enketo:
+    enabled: true
+    resources:
+      requests:
+        cpu: 50m
+        memory: 512Mi
+    envVars:
+      REDIS_MAIN_HOST: '{{ tpl .Values.global.redisInstallationName $ }}-master'
+      REDIS_CACHE_HOST: '{{ tpl .Values.global.redisInstallationName $ }}-master'
+  pyxform:
+    resources:
+      requests:
+        cpu: 20m
+        memory: 128Mi
+  frontend:
+    resources:
+      requests:
+        cpu: 20m
+        memory: 32Mi
+  backend:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 512Mi
+    initContainers:
+    - name: wait-for-minio
+      image: busybox:1.36
+      imagePullPolicy: IfNotPresent
+      command:
+      - sh
+      - -c
+      - "until nc -zv {{ tpl .Values.global.minioInstallationName $ }} 9000; do\n\
+        \  echo \"Waiting for MinIO...\"\n  sleep 2\ndone\n"
+    envVars:
+      OIDC_ENABLED: true
+      OIDC_ISSUER_URL: https://keycloak-development.oanstaging.com/realms/staff
+      OIDC_CLIENT_ID: '{{ tpl .Values.oidcClientId $ }}'
+    envVarsFrom:
+      DB_PASSWORD:
+        secretKeyRef:
+          name: odk-db-user
+          key: odk-db-user-password
+      OIDC_CLIENT_SECRET:
+        secretKeyRef:
+          name: '{{ tpl .Values.oidcClientSecret $ }}'
+          key: '{{ tpl .Values.oidcClientSecretKey $ }}'
+artifactory:
+  enabled: true
+  image:
+    repository: mosipid/artifactory-server
+    tag: 1.4.1-ES
+  resources:
+    requests:
+      cpu: 20m
+      memory: 32Mi
+keymanager:
+  enabled: true
+  hostname: keymanager.{{ tpl .Values.global.baseDomain $ }}
+  resources:
+    requests:
+      cpu: 100m
+      memory: 1Gi
+  authEnabled: false
+  keystoreType: PKCS12
+  p12KeystorePass: ''
+  skipPostgresInitCheck: false
+  skipKeygenCheck: true
+  postgresqlInstallationName: '{{ tpl .Values.global.postgresqlHost $ }}'
+  softhsmInstallationName: '{{ tpl .Values.global.softhsmInstallationName $ }}'
+  artifactoryInstallationName: '{{ .Release.Name }}-artifactory'
+  istio:
+    enabled: false
+  springConfig:
+    names: application,kernel
+    profile: default
+    gitRepo:
+      enabled: true
+      repoUrl: https://github.com/openg2p/mosip-config
+      branch: master
+    rawConfig: ''
+  envVars:
+    JDK_JAVA_OPTIONS: -XX:-UseContainerSupport -Dspring.jmx.enabled=false -Dcom.sun.management.jmxremote=false
+    auth_server_admin_allowed_audience: openg2p-registry,openg2p-registry-{{ .Release.Namespace
+      }},openg2p-pbms,openg2p-pbms-{{ .Release.Namespace }},openg2p-spar,openg2p-spar-{{
+      .Release.Namespace }},openg2p-g2p-bridge,openg2p-g2p-bridge-{{ .Release.Namespace
+      }}
+    keycloak_internal_url: '{{ tpl .Values.global.keycloakInternalUrl $ }}'
+    keycloak_external_url: '{{ tpl .Values.global.keycloakBaseUrl $ }}'
+  envVarsFrom:
+    db_dbuser_password:
+      secretKeyRef:
+        name: keymgr-db-user
+        key: keymgr-db-user-password
+  postgresInit:
+    enabled: true
+    commonAnnotations:
+      helm.sh/hook: null
+      helm.sh/hook-weight: null
+      helm.sh/hook-delete-policy: null
+    envVars:
+      DB_USER: keymgruser
+    envVarsFrom:
+      SU_USER_PWD:
+        secretKeyRef:
+          name: '{{ tpl .Values.global.postgresqlSecret $ }}'
+          key: '{{ tpl .Values.global.postgresqlSecretKey $ }}'
+      DBUSER_PWD:
+        secretKeyRef:
+          name: keymgr-db-user
+          key: keymgr-db-user-password
+  keygen:
+    enabled: true
+    commonAnnotations:
+      helm.sh/hook: null
+      helm.sh/hook-weight: null
+      helm.sh/hook-delete-policy: null
+    appIdsList:
+    - OPENG2P_SR
+    - OPENG2P_SR_NID
+    - OPENG2P_SPAR
+    - OPENG2P_SPAR_NID
+    - OPENG2P_PBMS
+    - OPENG2P_PBMS_NID
+    - OPENG2P_BRIDGE
+    - OPENG2P_BRIDGE_NID
+    baseKeysList:
+    - OPENG2P_SR:ENCRYPT
+    - OPENG2P_SR_NID:ENCRYPT
+    - OPENG2P_SPAR:ENCRYPT
+    - OPENG2P_SPAR_NID:ENCRYPT
+    - OPENG2P_PBMS:ENCRYPT
+    - OPENG2P_PBMS_NID:ENCRYPT
+    - OPENG2P_BRIDGE:ENCRYPT
+    - OPENG2P_BRIDGE_NID:ENCRYPT
+    envVars:
+      JDK_JAVA_OPTIONS: -XX:-UseContainerSupport -Dspring.jmx.enabled=false -Dcom.sun.management.jmxremote=false
+  persistence:
+    enabled: true
+superset:
+  enabled: false
+  hostname: '{{ tpl .Values.global.supersetHostname $ }}'
+  oidcIssuerUrl: '{{ tpl .Values.global.keycloakIssuerUrl $ }}'
+  oidcClientId: openg2p-superset
+  supersetSecretKey: ''
+  envFromSecrets:
+  - openg2p-superset
+  extraEnvRaw:
+  - name: DB_PASS
+    valueFrom:
+      secretKeyRef:
+        name: superset-db-user
+        key: superset-db-user-password
+  init:
+    createAdmin: false
+    jobAnnotations:
+      helm.sh/hook: post-install,post-upgrade
+      helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+  postgresql:
+    enabled: false
+  redis:
+    enabled: false
+  supersetNode:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 512Mi
+    connections:
+      redis_host: '{{ tpl .Values.global.redisInstallationName $ }}-master'
+      db_host: '{{ tpl .Values.global.postgresqlHost $ }}'
+      db_pass: ''
+  supersetWorker:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 768Mi
+  bootstrapScript: '#!/bin/bash
+
+    pip install authlib==1.3.0
+
+    '
+  configOverrides:
+    enable_oauth: "import os\nSECRET_KEY = '{{ tpl .Values.supersetSecretKey $ }}'\
+      \ or 'OPENG2P_SUPER_SECRET_KEY'\n\n# This will make sure the redirect_uri is\
+      \ properly computed, even with SSL offloading\nENABLE_PROXY_FIX = True\n\nfrom\
+      \ flask_appbuilder.security.manager import AUTH_OAUTH\nAUTH_TYPE = AUTH_OAUTH\n\
+      OAUTH_PROVIDERS = [\n  {\n    \"name\": \"keycloak\",\n    \"icon\": \"fa-key\"\
+      ,\n    \"token_key\": \"access_token\",\n    \"remote_app\": {\n      \"client_id\"\
+      : \"{{ tpl .Values.oidcClientId $ }}\",\n      \"client_secret\": os.getenv(\"\
+      client_secret\"),\n      \"api_base_url\": \"{{ tpl .Values.oidcIssuerUrl $\
+      \ }}/protocol/openid-connect\",\n      \"client_kwargs\": {\"scope\": \"email\
+      \ profile openid\"},\n      \"access_token_url\": \"{{ tpl .Values.oidcIssuerUrl\
+      \ $ }}/protocol/openid-connect/token\",\n      \"jwks_uri\": \"{{ tpl .Values.oidcIssuerUrl\
+      \ $ }}/protocol/openid-connect/certs\",\n      \"authorize_url\": \"{{ tpl .Values.global.keycloakExternalIssuerUrl\
+      \ $ }}/protocol/openid-connect/auth\",\n      \"request_token_url\": None\n\
+      \    },\n  }\n]\n\n# Map Authlib roles to superset roles\nAUTH_ROLES_MAPPING\
+      \ = {\n  \"Public\": [\"Public\"],\n  \"Admin\": [\"Admin\"],\n}\n\nAUTH_ROLES_SYNC_AT_LOGIN\
+      \ = True\n\n# Will allow user self registration, allowing to create Flask users\
+      \ from Authorized User\nAUTH_USER_REGISTRATION = True\n\n# The default user\
+      \ self registration role\n# AUTH_USER_REGISTRATION_ROLE = \"Public\"\n\nfrom\
+      \ superset.security import SupersetSecurityManager\nclass CustomSsoSecurityManager(SupersetSecurityManager):\n\
+      \  def oauth_user_info(self, provider, response=None):\n    if provider == \"\
+      keycloak\":\n      me = self.appbuilder.sm.oauth_remotes[provider].get(\n  \
+      \      \"openid-connect/userinfo\"\n      )\n      me.raise_for_status()\n \
+      \     data = me.json()\n      return {\n        \"username\": data.get(\"preferred_username\"\
+      , \"\"),\n        \"first_name\": data.get(\"given_name\", \"\"),\n        \"\
+      last_name\": data.get(\"family_name\", \"\"),\n        \"email\": data.get(\"\
+      email\", \"\"),\n        \"role_keys\": data.get(\"client_roles\", []),\n  \
+      \    }\n    return {}\n\nCUSTOM_SECURITY_MANAGER = CustomSsoSecurityManager\n\
+      SESSION_COOKIE_HTTPONLY = True\nSESSION_COOKIE_SECURE = True\nSESSION_COOKIE_SAMESITE\
+      \ = None\nTALISMAN_ENABLED = False\n\n# Embedded dashboards. G2P Insights shows\
+      \ Superset dashboards inside its\n# own shell, which loads /embedded/<uuid>\
+      \ in an iframe â€” a route Superset\n# only registers when this flag is on.\n\
+      #\n# Without it the failure is silent in an unhelpful way: the REST call that\n\
+      # mints an embedded UUID still succeeds, the guest token is still issued\n#\
+      \ and looks valid, so every check passes and only the iframe 404s. It reads\n\
+      # as a broken client, not a missing feature flag.\nFEATURE_FLAGS = {\"EMBEDDED_SUPERSET\"\
+      : True}\n\n# The role a guest token carries. Gamma can read the dashboards it\
+      \ is\n# granted and nothing else, which is what an embedded viewer needs.\n\
+      GUEST_ROLE_NAME = \"Gamma\"\n"
+  istio:
+    enabled: true
+    virtualservice:
+      enabled: true
+      host: ''
+      gateway: internal
+      destination: '{{ include "superset.fullname" . }}'
+      destinationPort: '{{ .Values.service.port }}'
+    gateway:
+      enabled: false
+      host: ''
+      ingressController:
+        istio: ingressgateway
+      httpTlsRedirect: true
+      httpEnabled: true
+      httpsEnabled: false
+      tls:
+        mode: SIMPLE
+        credentialName: ''
+esignet:
+  enabled: true
+  hostname: esignet-development.oanstaging.com
+  resources:
+    requests:
+      cpu: 100m
+      memory: 2Gi
+  captchaEnabled: false
+  envVars:
+    esignet_captcha_site_key: ''
+    esignet_captcha_secret_key: ''
+    JDK_JAVA_OPTIONS: -XX:-UseContainerSupport -Dspring.jmx.enabled=false
+    keycloak_internal_url: '{{ tpl .Values.global.keycloakInternalUrl $ }}'
+    keycloak_external_url: '{{ tpl .Values.global.keycloakBaseUrl $ }}'
+  artifactoryInstallationName: '{{ .Release.Name }}-artifactory'
+  redisInstallationName: '{{ tpl .Values.global.redisAuthInstallationName $ }}'
+  kafkaInstallationName: '{{ tpl .Values.global.kafkaInstallationName $ }}'
+  mockIdentitySystemInstallationName: '{{ .Release.Name }}-mock-identity-system'
+  softhsmInstallationName: '{{ tpl .Values.global.softhsmInstallationName $ }}'
+  postgresqlInstallationName: '{{ tpl .Values.global.postgresqlHost $ }}'
+  envVarsFrom:
+    db_dbuser_password:
+      secretKeyRef:
+        name: esignet-db-user
+        key: esignet-db-user-password
+    spring_redis_password:
+      secretKeyRef:
+        name: '{{ tpl .Values.redisInstallationName $ }}'
+        key: redis-password
+  postgresInit:
+    enabled: false
+  springConfig:
+    names: application,esignet
+    profile: default
+    gitRepo:
+      enabled: true
+      repoUrl: https://github.com/openg2p/mosip-config
+      branch: master
+    rawConfig: ''
+mock-identity-system:
+  enabled: true
+  hostname: esignet-development.oanstaging.com
+  resources:
+    requests:
+      cpu: 50m
+      memory: 1Gi
+  softhsmInstallationName: '{{ tpl .Values.global.softhsmInstallationName $ }}'
+  artifactoryInstallationName: '{{ .Release.Name }}-artifactory'
+  envVars:
+    JDK_JAVA_OPTIONS: -XX:-UseContainerSupport -Dspring.jmx.enabled=false
+  envVarsFrom:
+    db_dbuser_password:
+      secretKeyRef:
+        name: mockid-db-user
+        key: mockid-db-user-password
+  postgresqlInstallationName: '{{ tpl .Values.global.postgresqlHost $ }}'
+  postgresInit:
+    enabled: false
+  springConfig:
+    names: application,mock-identity-system
+    profile: default
+    gitRepo:
+      enabled: true
+      repoUrl: https://github.com/openg2p/mosip-config
+      branch: master
+    rawConfig: ''
+openg2p-inji-certify:
+  enabled: false
+  global:
+    certifyHostname: '{{ tpl .Values.global.certifyHostname $ }}'
+    vcIssuerDid: did:web:{{ tpl .Values.global.certifyHostname $ }}
+    postgresqlHost: '{{ tpl .Values.global.postgresqlHost $ }}'
+    certifyDB: inji_certify
+    certifyDBUser: inji_certify_user
+    certifyDBSecret: inji-certify
+    certifyDBUserPasswordKey: inji-certify-db-user
+  certify:
+    appConfig:
+      issuerDisplay:
+      - name: OpenG2P
+        locale: en
+    p12:
+      enabled: true
+  postgres-init:
+    enabled: true
+    nameOverride: certify-pg-init
+    postgresql:
+      host: '{{ tpl .Values.global.postgresqlHost $ }}'
+      existingSecret: '{{ tpl .Values.global.postgresqlSecret $ }}'
+      existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey
+        $ }}'
+openg2p-iam-service:
+  enabled: true
+  iamStaffPortalApi:
+    hostname: '{{ tpl .Values.global.staffPortalApiHostname $ }}'
+    resources:
+      requests:
+        cpu: 50m
+        memory: 256Mi
+  iamAgentPortalApi:
+    hostname: '{{ tpl .Values.global.agentPortalApiHostname $ }}'
+    resources:
+      requests:
+        cpu: 50m
+        memory: 256Mi
+  global:
+    iamHostname: '{{ tpl .Values.global.iamHostname $ }}'
+    postgresqlHost: '{{ tpl .Values.global.postgresqlHost $ }}'
+    iamDB: iam
+    iamDBUser: iam_user
+    iamDBSecret: iam
+    iamDBUserPasswordKey: iam-db-user
+    staffPortalDefaultRedirectUri: https://staff-portal-development.oanstaging.com
+    agentPortalDefaultRedirectUri: ''
+    keycloakApplicationUrl: https://keycloak-development.oanstaging.com
+    registryApplicationUrl: https://farmer-registry-development.oanstaging.com
+    minioApplicationUrl: https://minio-console-development.oanstaging.com
+    supersetApplicationUrl: ''
+    iamStaffUiApplicationUrl: https://iam-staff-ui-development.oanstaging.com
+    masterDataApplicationUrl: https://master-data-development.oanstaging.com
+    aweApplicationUrl: https://awe-development.oanstaging.com
+  postgres-init:
+    enabled: true
+    nameOverride: iam-pg-init
+    commonAnnotations:
+      helm.sh/hook: null
+      helm.sh/hook-weight: null
+      helm.sh/hook-delete-policy: null
+    postgresql:
+      host: '{{ tpl .Values.global.postgresqlHost $ }}'
+      port: 5432
+      existingSecret: '{{ tpl .Values.global.postgresqlSecret $ }}'
+      existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey
+        $ }}'
+  iamStaffUi:
+    hostname: iam-staff-ui-development.oanstaging.com
+    envVars:
+      COOKIE_DOMAIN: .oanstaging.com
+      BACKEND_API_URL: https://staff-iam-development.oanstaging.com
+openg2p-audit-manager:
+  enabled: true
+  global:
+    auditManagerHostname: auditmanager-development.oanstaging.com
+    postgresqlHost: '{{ tpl .Values.global.postgresqlHost $ }}'
+    auditManagerDB: audit_manager
+    auditManagerDBUser: audit_manager_user
+    auditManagerDBSecret: audit-manager
+    auditManagerDBUserPasswordKey: audit-manager-db-user
+    kafkaBootstrapServers: commons-kafka:9092
+  postgres-init:
+    enabled: true
+    nameOverride: audit-pg-init
+    commonAnnotations:
+      helm.sh/hook: null
+      helm.sh/hook-weight: null
+      helm.sh/hook-delete-policy: null
+    postgresql:
+      host: '{{ tpl .Values.global.postgresqlHost $ }}'
+      port: 5432
+      existingSecret: '{{ tpl .Values.global.postgresqlSecret $ }}'
+      existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey
+        $ }}'
+  auditManager:
+    enabled: true
+    nameOverride: auditmanager
+    replicaCount: 1
+    autoscaling:
+      enabled: false
+    resources:
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    topicInit:
+      enabled: true
+      commonAnnotations:
+        helm.sh/hook: null
+        helm.sh/hook-weight: null
+        helm.sh/hook-delete-policy: null
+openg2p-staff-portal-ui:
+  enabled: true
+  global:
+    staffPortalHostname: '{{ tpl .Values.global.staffPortalHostname $ }}'
+    cookieDomain: '{{ tpl .Values.global.staffPortalCookieDomain $ }}'
+    keycloakBaseUrl: '{{ tpl .Values.global.keycloakBaseUrl $ }}'
+    keycloakRealm: '{{ tpl .Values.global.keycloakRealm $ }}'
+    iamServiceUrl: '{{ tpl .Values.global.iamServiceUrl $ }}'
+  staffPortalUi:
+    enabled: true
+    nameOverride: staff-portal-ui
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+    envVars:
+      COOKIE_DOMAIN: .oanstaging.com
+      IAM_URL: https://staff-iam-development.oanstaging.com
+openg2p-awe:
+  enabled: true
+  awe:
+    appConfig:
+      keycloak:
+        issuer: '{{ tpl .Values.global.keycloakExternalIssuerUrl $ }}'
+  postgres-init:
+    enabled: true
+    nameOverride: awe-pg-init
+  keycloak-init:
+    enabled: true
+    nameOverride: awe-kc-init
+partner-management:
+  enabled: true
+  global:
+    pmDB: partner_management
+    pmDBUser: partner_management_user
+    pmDBSecret: partner-management-db
+    pmDBUserPasswordKey: partner-management-db-user
+    staffPortalUiHostname: partner-management-development.oanstaging.com
+    staffPortalApiHostname: partner-management-staff-portal-api.{{ tpl .Values.global.baseDomain
+      $ }}
+    partnerApiHostname: partner-management-partner-api-development.oanstaging.com
+    cookieDomain: .{{ tpl .Values.global.baseDomain $ }}
+  staffPortalApi:
+    nameOverride: pm-staff-portal-api
+    istio:
+      virtualservice:
+        destination: '{{ .Release.Name }}-pm-staff-portal-api'
+    envVars:
+      COMMON_AUTH_DEFAULT_ISSUERS: '["{{ tpl .Values.global.keycloakExternalIssuerUrl
+        $ }}"]'
+      COMMON_AUTH_DEFAULT_JWKS_URLS: '["{{ tpl .Values.global.keycloakIssuerUrl $
+        }}/protocol/openid-connect/certs"]'
+  partnerApi:
+    nameOverride: pm-partner-api
+    istio:
+      virtualservice:
+        destination: '{{ .Release.Name }}-pm-partner-api'
+  staffPortalUi:
+    nameOverride: pm-staff-portal-ui
+    istio:
+      virtualservice:
+        destination: '{{ .Release.Name }}-pm-staff-portal-ui'
+    envVars:
+      STAFF_PORTAL_API_URL: http://{{ .Release.Name }}-pm-staff-portal-api
+      IAM_URL: https://staff-iam-development.oanstaging.com
+      KEYCLOAK_LOGOUT_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/logout
+  postgres-init:
+    enabled: true
+    nameOverride: pm-pg-init
+    commonAnnotations:
+      helm.sh/hook: null
+      helm.sh/hook-weight: null
+      helm.sh/hook-delete-policy: null
+  keycloak-init:
+    enabled: true
+    nameOverride: pm-kc-init
+  keycloakServiceAccountRole:
+    enabled: true
+    annotations:
+      helm.sh/hook: null
+      helm.sh/hook-weight: null
+      helm.sh/hook-delete-policy: null
+# OAN Consent Manager application: https://github.com/Centre-for-Open-Societal-Systems/consent-management
+# The retained openg2p-consent-manager name selects compatible upstream templates.
+openg2p-consent-manager:
+  enabled: true
+  global:
+    consentDB: consent_manager
+    consentDBUser: consent_manager_user
+    consentDBSecret: consent-manager-db
+    consentDBUserPasswordKey: consent-manager-db-user
+    consentManagerHostname: consent-manager-development.oanstaging.com
+    consentManagerPartnerHostname: consent-manager-partner-development.oanstaging.com
+    consentManagerBeneHostname: ''
+    partnerManagementApiUrl: http://commons-services-pm-partner-api
+    partnerManagementAdminApiUrl: http://commons-services-pm-staff-portal-api
+    pmSeedClientId: commons-services-staff-portal
+  consentManagerApi:
+    nameOverride: cm-api
+    istio:
+      virtualservice:
+        destination: '{{ .Release.Name }}-cm-api'
+    envVars:
+      CONSENT_MANAGER_AUTH_ISSUER: '{{ tpl .Values.global.keycloakExternalIssuerUrl
+        $ }}'
+      CONSENT_MANAGER_AUTH_JWKS_URL: '{{ tpl .Values.global.keycloakIssuerUrl $ }}/protocol/openid-connect/certs'
+      CONSENT_MANAGER_AWE_CALLBACK_URL: http://{{ .Release.Name }}-cm-api.{{ .Release.Namespace
+        }}.svc.cluster.local/consent/v1/awe/webhooks/decision
+    image:
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api
+      tag: develop-5361069@sha256:67180496e5f9d5edb5afb9727d9da4501e96599166c1712e4e24dbf1f6fa2a77
+  extraApis:
+  - enabled: true
+    nameOverride: cm-partner-api
+    apiAudience: partner
+    authEnabled: 'false'
+    signingKeyMounted: true
+    hostname: '{{ tpl .Values.global.consentManagerPartnerHostname $ }}'
+    openapiRootPath: /api/consent-manager-partner
+    istio:
+      enabled: true
+      virtualservice:
+        enabled: true
+        host: '{{ tpl .Values.global.consentManagerPartnerHostname $ }}'
+        gateway: internal
+        destination: '{{ .Release.Name }}-cm-partner-api'
+        destinationPort: 80
+        prefix: /api/consent-manager-partner/
+        rewriteUri: /
+      gateway:
+        enabled: false
+  - enabled: false
+    nameOverride: cm-bene-api
+    apiAudience: beneficiary
+    authEnabled: 'true'
+    signingKeyMounted: false
+    hostname: '{{ tpl .Values.global.consentManagerBeneHostname $ }}'
+    openapiRootPath: /api/consent-manager-bene
+    istio:
+      enabled: true
+      virtualservice:
+        enabled: true
+        host: '{{ tpl .Values.global.consentManagerBeneHostname $ }}'
+        gateway: internal
+        destination: '{{ .Release.Name }}-cm-bene-api'
+        destinationPort: 80
+        prefix: /api/consent-manager-bene/
+        rewriteUri: /
+      gateway:
+        enabled: false
+  ui:
+    nameOverride: cm-ui
+    istio:
+      virtualservice:
+        destination: '{{ .Release.Name }}-cm-ui'
+    image:
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-ui
+      tag: develop-5361069@sha256:1ae7cc25b094e9c72ea9262a8d920480d2049b13d1505f2a9a2aeeeff8abf92d
+  postgres-init:
+    enabled: true
+    nameOverride: cm-pg-init
+    commonAnnotations:
+      helm.sh/hook: null
+      helm.sh/hook-weight: null
+      helm.sh/hook-delete-policy: null
+  keycloak-init:
+    enabled: true
+    nameOverride: cm-kc-init
+  sanity:
+    runE2e: false
+    nameOverride: cm
+    baseUrl: http://{{ .Release.Name }}-cm-api
+    partnerBaseUrl: http://{{ .Release.Name }}-cm-partner-api
+    image:
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-sanity
+      tag: develop-5361069@sha256:1af320db949eb1c641dec5533b3f7352980483de45774b16e310cca996a0f330
+keycloak-init:
+  enabled: true
+  keycloak:
+    url: '{{ tpl .Values.global.keycloakInternalUrl $ }}'
+    user: admin
+    password: ''
+    existingSecret: '{{ tpl .Values.global.keycloakAdminSecret $ }}'
+    existingSecretKey: admin-password
+  job:
+    backoffLimit: 3
+    ttlSecondsAfterFinished: 86400
+  realms:
+    staff:
+      clients:
+      - clientId: openg2p-superset
+        name: Superset
+        redirectUris: []
+        clientRoles:
+        - Admin
+      - clientId: openg2p-odk
+        name: ODK
+        redirectUris:
+        - https://{{ tpl .Values.global.odkHostname $ }}/*
+      - clientId: staff-portal
+        name: Staff Portal
+        redirectUris:
+        - https://{{ tpl .Values.global.staffPortalApiHostname $ }}/*
+        - https://{{ tpl .Values.global.staffPortalHostname $ }}/*
+      users:
+      - username: admin
+        email: admin@your.domain.com
+        clientRoleMappings:
+          openg2p-superset:
+          - Admin
+# OAN Aggregation API: https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
+# Implemented locally by templates/aggregation-api.yaml; enable only after prerequisites.
+aggregationApi:
+  enabled: false
+  nameOverride: ''
+  image:
+    repository: ''
+    tag: ''
+    digest: ''
+    pullPolicy: IfNotPresent
+  imagePullSecrets: []
+  replicas: 1
+  containerPort: 8100
+  servicePort: 80
+  env: []
+  envFrom: []
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 768Mi
+  volumes: []
+  volumeMounts: []

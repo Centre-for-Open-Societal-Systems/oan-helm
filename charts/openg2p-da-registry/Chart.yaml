@@ -1,0 +1,34 @@
+apiVersion: v2
+name: openg2p-da-registry
+description: OAN DA Registry for OpenAgriNet (OAN), developed in COSS repositories;
+  reuses pinned OpenG2P platform templates. Component images have independent versions.
+type: application
+version: 1.0.0-dev.3
+appVersion: develop
+keywords:
+- oan
+- openagrinet
+- coss
+- openg2p
+- registry
+- da-registry
+home: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+sources:
+- https://github.com/Centre-for-Open-Societal-Systems/da-registry
+- https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+dependencies:
+- name: openg2p-registry
+  alias: registry
+  version: 1.2.2-rc.544
+  repository: https://openg2p.github.io/openg2p-helm
+annotations:
+  coss.org/source-commit: 9714c3c5307a7e61f4379b613229837a4b76e952
+  catalog.cattle.io/display-name: OAN DA Registry
+  oan.org/owner: OpenAgriNet (OAN) / COSS
+  oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+  oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-da-registry
+  org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+maintainers:
+- name: OpenAgriNet (OAN) / COSS
+  url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm

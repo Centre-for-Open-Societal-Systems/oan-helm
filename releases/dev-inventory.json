@@ -1,0 +1,272 @@
+{
+  "checkedAt": "2026-10-16",
+  "method": "Read-only Kubernetes/Helm inspection; highest deployed revision selected; no raw values or Secret payloads in Git.",
+  "releases": [
+    {
+      "name": "commons-services",
+      "namespace": "commons",
+      "revision": 13,
+      "chart": "openg2p-commons-services",
+      "chartVersion": "2.3.4-rc.245",
+      "appVersion": "2.3.4-rc.245"
+    },
+    {
+      "name": "commons",
+      "namespace": "commons",
+      "revision": 3,
+      "chart": "openg2p-commons-base",
+      "chartVersion": "2.3.3",
+      "appVersion": "2.3.3"
+    },
+    {
+      "name": "oan-dashboards",
+      "namespace": "commons",
+      "revision": 1,
+      "chart": "oan-dashboards",
+      "chartVersion": "0.1.0",
+      "appVersion": "0.1.0"
+    },
+    {
+      "name": "cropsown-connector",
+      "namespace": "crop",
+      "revision": 1,
+      "chart": "openg2p-connector",
+      "chartVersion": "0.1.0",
+      "appVersion": "kif"
+    },
+    {
+      "name": "cropsown-registry",
+      "namespace": "crop",
+      "revision": 10,
+      "chart": "openg2p-cropsown-registry",
+      "chartVersion": "0.0.0-develop",
+      "appVersion": "develop"
+    },
+    {
+      "name": "farmer-connector-credentials",
+      "namespace": "farmer",
+      "revision": 2,
+      "chart": "farmer-connector-credentials",
+      "chartVersion": "0.1.0",
+      "appVersion": null
+    },
+    {
+      "name": "farmer-registry-connector",
+      "namespace": "farmer",
+      "revision": 10,
+      "chart": "openg2p-connector",
+      "chartVersion": "0.1.0",
+      "appVersion": "0.1.0"
+    },
+    {
+      "name": "farmer-registry",
+      "namespace": "farmer",
+      "revision": 28,
+      "chart": "openg2p-farmer-registry",
+      "chartVersion": "0.0.0-rc.0",
+      "appVersion": "1.2.2-rc.544"
+    },
+    {
+      "name": "livestock-connector",
+      "namespace": "livestock",
+      "revision": 2,
+      "chart": "openg2p-connector",
+      "chartVersion": "0.1.0",
+      "appVersion": "kif"
+    },
+    {
+      "name": "livestock-registry",
+      "namespace": "livestock",
+      "revision": 12,
+      "chart": "openg2p-livestock-registry",
+      "chartVersion": "1.2.0+bf78e69",
+      "appVersion": "1.2.2-rc.544"
+    }
+  ],
+  "componentOwners": [
+    {
+      "kind": "Deployment",
+      "name": "commons-services-cm-api",
+      "namespace": "commons",
+      "helmOwner": {
+        "meta.helm.sh/release-name": "commons-services",
+        "meta.helm.sh/release-namespace": "commons"
+      }
+    },
+    {
+      "kind": "Deployment",
+      "name": "commons-services-cm-partner-api",
+      "namespace": "commons",
+      "helmOwner": {
+        "meta.helm.sh/release-name": "commons-services",
+        "meta.helm.sh/release-namespace": "commons"
+      }
+    },
+    {
+      "kind": "Deployment",
+      "name": "commons-services-cm-ui",
+      "namespace": "commons",
+      "helmOwner": {
+        "meta.helm.sh/release-name": "commons-services",
+        "meta.helm.sh/release-namespace": "commons"
+      }
+    },
+    {
+      "kind": "Deployment",
+      "name": "oan-dashboards",
+      "namespace": "commons",
+      "helmOwner": {
+        "meta.helm.sh/release-name": "oan-dashboards",
+        "meta.helm.sh/release-namespace": "commons"
+      }
+    },
+    {
+      "kind": "Deployment",
+      "name": "cropsown-registry-dashboard-api",
+      "namespace": "crop",
+      "helmOwner": {
+        "meta.helm.sh/release-name": "cropsown-registry",
+        "meta.helm.sh/release-namespace": "crop"
+      }
+    },
+    {
+      "kind": "Deployment",
+      "name": "farmer-registry-dashboard-api",
+      "namespace": "farmer",
+      "helmOwner": {
+        "meta.helm.sh/release-name": "farmer-registry",
+        "meta.helm.sh/release-namespace": "farmer"
+      }
+    },
+    {
+      "kind": "CronJob",
+      "name": "commons-services-cm-api-expire",
+      "namespace": "commons",
+      "helmOwner": {
+        "meta.helm.sh/release-name": "commons-services",
+        "meta.helm.sh/release-namespace": "commons"
+      }
+    }
+  ],
+  "secretKeyChecks": [
+    {
+      "workload": "Deployment/commons-services-cm-api",
+      "namespace": "commons",
+      "references": [
+        {
+          "secret": "commons-services-awe-callback-hmac",
+          "key": "hmac-secret",
+          "present": false,
+          "optional": true
+        },
+        {
+          "secret": "consent-manager",
+          "key": "client_secret",
+          "present": true,
+          "optional": true
+        },
+        {
+          "secret": "consent-manager-signing",
+          "key": "password",
+          "present": true,
+          "optional": true
+        },
+        {
+          "secret": "consent-manager-db",
+          "key": "consent-manager-db-user",
+          "present": true,
+          "optional": false
+        }
+      ]
+    },
+    {
+      "workload": "Deployment/commons-services-cm-partner-api",
+      "namespace": "commons",
+      "references": [
+        {
+          "secret": "commons-services-awe-callback-hmac",
+          "key": "hmac-secret",
+          "present": false,
+          "optional": true
+        },
+        {
+          "secret": "consent-manager",
+          "key": "client_secret",
+          "present": true,
+          "optional": true
+        },
+        {
+          "secret": "consent-manager-signing",
+          "key": "password",
+          "present": true,
+          "optional": true
+        },
+        {
+          "secret": "consent-manager-db",
+          "key": "consent-manager-db-user",
+          "present": true,
+          "optional": false
+        }
+      ]
+    },
+    {
+      "workload": "Deployment/commons-services-cm-ui",
+      "namespace": "commons",
+      "references": []
+    },
+    {
+      "workload": "Deployment/cropsown-registry-dashboard-api",
+      "namespace": "crop",
+      "references": [
+        {
+          "secret": "cropsown-registry",
+          "key": "cropsown-registry-db-user",
+          "present": true,
+          "optional": false
+        }
+      ]
+    },
+    {
+      "workload": "Deployment/farmer-registry-dashboard-api",
+      "namespace": "farmer",
+      "references": [
+        {
+          "secret": "farmer-registry",
+          "key": "farmer-registry-db-user",
+          "present": true,
+          "optional": false
+        }
+      ]
+    },
+    {
+      "workload": "CronJob/commons-services-cm-api-expire",
+      "namespace": "commons",
+      "references": [
+        {
+          "secret": "commons-services-awe-callback-hmac",
+          "key": "hmac-secret",
+          "present": false,
+          "optional": true
+        },
+        {
+          "secret": "consent-manager",
+          "key": "client_secret",
+          "present": true,
+          "optional": true
+        },
+        {
+          "secret": "consent-manager-signing",
+          "key": "password",
+          "present": true,
+          "optional": true
+        },
+        {
+          "secret": "consent-manager-db",
+          "key": "consent-manager-db-user",
+          "present": true,
+          "optional": false
+        }
+      ]
+    }
+  ]
+}
