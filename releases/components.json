@@ -1,6 +1,6 @@
 {
   "checkedAt": "2026-10-16",
-  "method": "Read-only AWS ECR DescribeRepositories and DescribeImages; no pushes/builds/deployments",
+  "method": "Initial images verified with read-only ECR inventory; Aggregation candidate manually built/published subsequently, see aggregation-candidate.json. No cluster deployments.",
   "images": [
     {
       "valuesPath": "openg2p-farmer-registry.registry.staffApi.image",
@@ -190,6 +190,15 @@
       "tag": "develop-5361069",
       "digest": "sha256:1af320db949eb1c641dec5533b3f7352980483de45774b16e310cca996a0f330",
       "verifiedBy": "AWS ECR DescribeImages (read-only), 2026-10-16"
+    },
+    {
+      "valuesPath": "openg2p-commons-services.aggregationApi.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/aggregation-api",
+      "tag": "dev-8fe3bf97030b",
+      "digest": "sha256:09f28f9a92058cbdd34383c899ea48d3ab8bd7eb32319ee316be0e881a5ec6b7",
+      "verifiedBy": "Manual pinned-source build; 96 existing unit tests passed; ECR DescribeImages digest matches local manifest, 2026-10-16",
+      "status": "Candidate; disabled pending compatible Consent and runtime configuration; source defaults unchanged",
+      "evidence": "aggregation-candidate.json"
     }
   ],
   "unavailable": [
@@ -208,10 +217,6 @@
     {
       "component": "DA core/dashboard images",
       "evidence": "No matching backend/dashboard repositories found; da-registry-frontend is a different application and is not substituted"
-    },
-    {
-      "component": "Aggregation API",
-      "evidence": "No matching tagged image repository found; configured port 8100 from source Dockerfile"
     }
   ]
 }

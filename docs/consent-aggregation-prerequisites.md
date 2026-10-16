@@ -9,10 +9,11 @@ deploy workloads, create identities or run database migrations.
 | Item | Evidence / remaining work |
 | --- | --- |
 | COSS Consent images | API/UI/sanity `develop-5361069` images are verified and digest-pinned in Commons values; pull access and runtime compatibility still need checking |
-| Aggregation image | No published image was verified during preparation; publish an approved build and record its source revision and digest |
+| Aggregation image | Candidate `oan/commons/aggregation-api:dev-8fe3bf97030b` published to the existing ECR account; digest verified, 96 unit tests passed. [Image values](../examples/dev/aggregation-image.yaml) and [build evidence](../releases/aggregation-candidate.json). Runtime integration remains unverified |
 | Consent/Aggregation compatibility | **Not established.** The pinned Consent source `536106974a7f6d67501a45dfc02cb9da95348f37` lacks the `subject_consent_enabled` / `subject_consent_required` settings required by the Aggregation contract inspected at `8fe3bf97030bb0b3f6283c2123ad58026af6cc50` |
 | Consent API routing | Current chart serves staff and partner APIs separately; beneficiary API is disabled. Aggregation has one `cm_base_url` for all required CM paths |
 | Aggregation public route | Unconfirmed; chart creates only a ClusterIP Service |
+| Aggregation pull access | Existing cluster `ecr-pull-secret` can read the Consent repository but receives HTTP 403 `DENIED` for the new `oan/commons/aggregation-api` repository. Review the pull identity's IAM/repository permissions before rollout; no IAM or Secret changes have been applied |
 
 Image availability is not proof that these versions work together. Select and
 publish compatible Consent API/UI images before enabling the Aggregation flow.
@@ -56,10 +57,15 @@ make the currently pinned image compatible.
 
 ## 2. Prepare Aggregation resources outside Helm values
 
-1. **Publish the image.** Use the approved Aggregation source revision and pin
-   the framework dependency during the build. Supply its real repository and
-   digest through `aggregationApi.image`. The application image serves port
-   `8100`; no image build or application CI changes are part of this PR.
+1. **Select the published candidate image.** A manual build from source
+   `8fe3bf97030bb0b3f6283c2123ad58026af6cc50` was published to
+   `379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/aggregation-api`.
+   Use the digest in [aggregation-image.yaml](../examples/dev/aggregation-image.yaml).
+   The framework build argument was pinned to commit
+   `2926e24b19fb04dba31b40d326d6ad59b2ad30b7`. The existing unit suite passed
+   96 tests in a container without networking; this does not establish
+   Consent/database integration compatibility. The image serves port `8100`.
+   No application CI or cluster deployment changes were made.
 2. **Provision its own database/user.** It can use the existing PostgreSQL
    server, but must have a separate database and credentials. It must not use
    the Consent database as its store. Store credentials in a Secret in `commons`.

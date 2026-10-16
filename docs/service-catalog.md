@@ -13,7 +13,7 @@ no separately named `coss-consent-manager` or `coss-aggregator` child charts.
 | Component | Helm implementation | Configuration | Default state |
 | --- | --- | --- | --- |
 | COSS Consent Manager | Pinned upstream `openg2p-consent-manager:1.0.2` child chart, with COSS image overrides | [`openg2p-consent-manager` in Commons values](../charts/openg2p-commons-services/values.yaml); API image at `consentManagerApi.image`, UI at `ui.image`, sanity at `sanity.image` | Enabled; verified COSS API/UI/sanity digests |
-| COSS Aggregation API | Local [Deployment and Service template](../charts/openg2p-commons-services/templates/aggregation-api.yaml) inside the Commons parent chart | [`aggregationApi` in Commons values](../charts/openg2p-commons-services/values.yaml) | Disabled; image and runtime prerequisites outstanding |
+| COSS Aggregation API | Local [Deployment and Service template](../charts/openg2p-commons-services/templates/aggregation-api.yaml) inside the Commons parent chart | [`aggregationApi` in Commons values](../charts/openg2p-commons-services/values.yaml) | Published candidate [image override](../examples/dev/aggregation-image.yaml); disabled pending Consent compatibility and runtime configuration |
 
 This dependency entry in Commons `Chart.yaml` selects the reused Consent
 templates, not the application image publisher:
@@ -70,7 +70,7 @@ Aggregation's subject-consent requirements. See the
 | `oan_cropsown_dashboard` | Crop dashboard UI | [UI template](../charts/openg2p-cropsown-registry/templates/dashboard-ui.yaml), `dashboardUi.*` | Configurable workload included; current published image unavailable; disabled; legacy database-based UI is not substituted |
 | `oan_livestock_dashboard` | Livestock dashboard UI | [UI template](../charts/openg2p-livestock-registry/templates/dashboard-ui.yaml), `dashboardUi.*` | Configurable workload included; matching published image unavailable; disabled |
 | `consent-management` | Consent staff API, partner API, UI, expiry CronJob, seed/sanity and initialization | [Commons values](../charts/openg2p-commons-services/values.yaml), `openg2p-consent-manager.*`; bundled `openg2p-consent-manager:1.0.2` templates | COSS `develop-5361069` API/UI/sanity images verified and pinned to separate digests; beneficiary API remains disabled |
-| `oan-aggregation-api` | Aggregation API Deployment and ClusterIP Service | [Aggregation template](../charts/openg2p-commons-services/templates/aggregation-api.yaml), `aggregationApi.*` in Commons values | Port 8100, env/Secret/config/key mounts included; disabled pending image, DB, catalog, bindings and route |
+| `oan-aggregation-api` | Aggregation API Deployment and ClusterIP Service | [Aggregation template](../charts/openg2p-commons-services/templates/aggregation-api.yaml), `aggregationApi.*` in Commons values | Candidate ECR image published, 96 unit tests passed; disabled pending compatible Consent, DB, key, catalog, bindings and route |
 | No DA dashboard repository identified | Optional DA API/UI workload definitions | [DA templates](../charts/openg2p-da-registry/templates/), `dashboardApi.*`, `dashboardUi.*` | Explicit placeholders for future verified components; disabled; no source/image equivalence claimed |
 
 Application source code stays in those repositories. These charts configure
