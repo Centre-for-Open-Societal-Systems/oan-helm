@@ -13,7 +13,7 @@ deploy workloads, create identities or run database migrations.
 | Consent/Aggregation compatibility | **Not established.** The pinned Consent source `536106974a7f6d67501a45dfc02cb9da95348f37` lacks the `subject_consent_enabled` / `subject_consent_required` settings required by the Aggregation contract inspected at `8fe3bf97030bb0b3f6283c2123ad58026af6cc50` |
 | Consent API routing | Current chart serves staff and partner APIs separately; beneficiary API is disabled. Aggregation has one `cm_base_url` for all required CM paths |
 | Aggregation public route | Unconfirmed; chart creates only a ClusterIP Service |
-| Aggregation pull access | Existing cluster `ecr-pull-secret` can read the Consent repository but receives HTTP 403 `DENIED` for the new `oan/commons/aggregation-api` repository. Review the pull identity's IAM/repository permissions before rollout; no IAM or Secret changes have been applied |
+| Aggregation pull access | Existing cluster `ecr-pull-secret` can read the Consent repository but receives HTTP 403 `DENIED` for the new repository. Pull role is `openg2p-dev-sandbox-dns`; AWS reports a missing identity-based allow. [Prepared policy and IAM steps](ecr-pull-access.md); no IAM or Secret changes have been applied |
 
 Image availability is not proof that these versions work together. Select and
 publish compatible Consent API/UI images before enabling the Aggregation flow.
