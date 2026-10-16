@@ -25,14 +25,15 @@ and image digests are separate; automatic build-number synchronization is deferr
 | `docs/` | Readable service catalog, URL migration and Rancher guides |
 | `scripts/validate.py` | Dependency, render, packaging and repository validation |
 
-Rancher repository URLs after Pages activation:
+Rancher repository URLs served directly by GitHub:
 
-- COSS: `https://centre-for-open-societal-systems.github.io/oan-helm/`
-- Fork preview: `https://asmitonweb.github.io/oan-helm/`
+- COSS after merge: `https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/`
+- Current fork preview: `https://raw.githubusercontent.com/asmitonweb/oan-helm/feat/coss-rancher-charts/repository/`
 
-Enable **GitHub Pages → Source: GitHub Actions** before Rancher can consume
-either URL. PR workflows validate only. Pages publication runs on `main` after
-merge; this change does not activate Pages, merge the PR or deploy to Kubernetes.
+GitHub serves the committed `repository/index.yaml` and archives directly;
+GitHub Pages is not required. Validation runs on PRs and pushes. Merging the
+reviewed files into `main` makes the COSS URL available; this change does not
+merge the PR or deploy to Kubernetes.
 
 Use the [Rancher guide](docs/rancher-dev.md) and
 [new-dev URL migration guide](docs/dev-urls.md), plus the
@@ -43,6 +44,11 @@ workloads and Aggregation remain disabled pending images or configuration.
 Private registry pull credentials and live values stay outside Git.
 Unconfirmed public endpoints stay unset. Superset/Certify defaults match their
 disabled state in the inspected dev release; notifications await confirmed routes.
+
+Follow the [Consent and Aggregation prerequisites](docs/consent-aggregation-prerequisites.md)
+before enabling Aggregation. The pinned Consent build predates the inspected
+Aggregation version's subject-consent requirements; available images alone do
+not establish compatibility.
 
 Commons Services was imported from the latest published OpenG2P package at
 verification time, `2.3.4-rc.247`, with its published SHA-256 verified. All registry

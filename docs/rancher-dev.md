@@ -1,19 +1,21 @@
 # Manual Rancher installation and upgrade
 
 Complete [readiness prerequisites](readiness.md) for components being enabled.
+For Consent/Aggregation, follow the [component preparation guide](consent-aggregation-prerequisites.md).
 Use the five packages after repository publication. No
 cluster deployment or ownership migration has been performed.
 
 ## Add the repository
 
-1. After the upstream PR is merged and publication is ready, enable Pages with
-   **GitHub Actions** as the source. Check the Pages workflow succeeds.
+1. After the upstream PR is merged, confirm the committed
+   `repository/index.yaml` and archives are readable from GitHub's raw URLs.
 2. Open the intended Rancher cluster and **Apps → Repositories → Create**.
    Use the Helm repository URL
-   `https://centre-for-open-societal-systems.github.io/oan-helm/`.
-   For a fork preview, enable Pages on the fork and use
-   `https://asmitonweb.github.io/oan-helm/`. The preview uses the same relative
-   archive paths. Do not enter the GitHub source repository URL here.
+   `https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/`.
+   For the current fork preview, use
+   `https://raw.githubusercontent.com/asmitonweb/oan-helm/feat/coss-rancher-charts/repository/`.
+   The preview uses the same relative archive paths. GitHub Pages is not required.
+   Enter the raw directory URL, not GitHub's HTML `tree`/`blob` URL or the index filename.
 3. Confirm `/index.yaml` and its `.tgz` archive URLs are available, refresh the
    repository, and select exact version **`1.0.0-dev.2`**, including its prerelease
    suffix. Version `1.0.0-dev.1` is retained for history and has old URL defaults.

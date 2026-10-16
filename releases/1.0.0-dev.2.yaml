@@ -45,7 +45,9 @@ installationPrerequisites:
 - Prepare reporting/schema/seed and shared-platform changes separately.
 - Retain current release names/namespaces and existing Helm owners.
 - DA namespace/images/initialization are not ready; component set is disabled.
-- Enable Pages after reviewed merge before Rancher consumption.
+- Merge reviewed index/packages; consume the raw GitHub repository URL from Rancher.
+- Aggregation also requires a compatible Consent build and reviewed split API routing;
+  pinned develop-5361069 predates the inspected subject-consent requirements.
 changes:
 - Canonical new-dev public hosts, public IAM/logout URLs and cookie domain.
 - Explicit cross-namespace service URLs and correct Consent callback Service.
@@ -53,4 +55,4 @@ changes:
   dev release; notifications disabled pending routes.
 - Historical 1.0.0-dev.1 archives retained unchanged.
 - Five-chart service catalog and source navigation; docs are readable Markdown, repository/
-  contains Pages/Rancher artifacts.
+  contains GitHub-served Rancher artifacts.

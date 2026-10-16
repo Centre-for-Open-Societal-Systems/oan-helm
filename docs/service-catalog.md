@@ -41,7 +41,9 @@ already part of the Commons parent chart. `aggregationApi.enabled: false`
 renders no Aggregation resources. Enabling it requires a verified image,
 database/migrations, registry catalog, persistent signing key and Consent/Partner
 Management/auth configuration. Inclusion of this workload template does not
-mean the component is ready to install. See [readiness](readiness.md).
+mean the component is ready to install. The pinned Consent build also predates
+Aggregation's subject-consent requirements. See the
+[prerequisites and compatibility guide](consent-aggregation-prerequisites.md).
 
 ## Five installable chart entries
 

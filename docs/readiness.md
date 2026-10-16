@@ -15,7 +15,7 @@ Rendering does not prove runtime compatibility or migration safety.
 | Registry dashboard UI | Configurable Deployment/ClusterIP Service in every registry | Disabled; current standalone dashboard images unavailable. Confirm IAM URL/domain/provider/client roles/Secrets and routing |
 | DA dashboard API/UI | Optional configurable workloads included | Disabled pending images and confirmed runtime/database contracts |
 | COSS Consent API/UI/sanity | `develop-5361069` images verified and pinned to individual digests | API image also serves partner API and expiry job. Preserve Secret/configuration names; verify schema/runtime compatibility before shared upgrade |
-| Aggregation API | Dockerfile/config inspected at `8fe3bf9`; port `8100`, Secret/config mounts supported | Disabled: no published image found. Provision its own DB, signing key, registry catalog, consent/partner binding and authentication settings |
+| Aggregation API | Dockerfile/config inspected at `8fe3bf9`; port `8100`, Secret/config mounts supported | Disabled: no published image found; pinned Consent build predates required subject-consent settings. Resolve compatible images, split CM routing/beneficiary API, own DB, key, catalog, bindings and auth; see [preparation guide](consent-aggregation-prerequisites.md) |
 | Connectors / shared OAN dashboard | Existing independent releases confirmed in dev | Remain outside these five charts; keep current owners |
 | Commons Base | New preparation pin `2.3.4-rc.245`; dev currently `commons/commons` at `2.3.3` | Install directly from OpenG2P under existing owner; infrastructure upgrade is separate work |
 
