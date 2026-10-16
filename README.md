@@ -8,7 +8,10 @@ DA and Commons Services, which contains COSS Consent and Aggregation.
 For those two components, start at
 [where COSS Consent Manager and Aggregation are included](docs/service-catalog.md#where-are-coss-consent-manager-and-aggregation).
 Consent reuses the `openg2p-consent-manager` child chart with COSS image overrides;
-Aggregation is a local Commons template, disabled pending its image and configuration.
+Aggregation is a local Commons template, disabled pending runtime preparation.
+New [Consent candidate images](docs/consent-candidate-build.md) and the
+[Aggregation image override](examples/dev/aggregation-image.yaml) are recorded
+separately from the immutable chart defaults.
 
 Current chart version is **`1.0.0-dev.2`**, with the migrated new-dev URLs.
 The original `1.0.0-dev.1` packages remain available unchanged. Component versions
@@ -47,8 +50,9 @@ disabled state in the inspected dev release; notifications await confirmed route
 
 Follow the [Consent and Aggregation prerequisites](docs/consent-aggregation-prerequisites.md)
 before enabling Aggregation. The pinned Consent build predates the inspected
-Aggregation version's subject-consent requirements; available images alone do
-not establish compatibility.
+Aggregation version's subject-consent requirements. The new candidate overlay
+provides the required settings and endpoint schema; full integration remains
+unverified. Available images alone do not establish compatibility.
 
 Commons Services was imported from the latest published OpenG2P package at
 verification time, `2.3.4-rc.247`, with its published SHA-256 verified. All registry

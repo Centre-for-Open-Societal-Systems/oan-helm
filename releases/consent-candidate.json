@@ -1,0 +1,100 @@
+{
+  "sourceCommit": "d6ce86b9e3f904ee668d913fd06835e8f70e7f64",
+  "sourceRepository": "https://github.com/Centre-for-Open-Societal-Systems/consent-management",
+  "fastapiCommonRevision": "164f07f7e7f38944b60cb1528d2582d025b830b5",
+  "frameworkPinReason": "COSS Consent imports openg2p_fastapi_common.utils.crypto, absent in the Dockerfile default 1.2.0 revision. The recorded develop revision supplies that import; candidate image checked before publication.",
+  "tag": "dev-d6ce86b9e3f9",
+  "publishedAtUtc": "2026-10-16T09:42:06.057541+00:00",
+  "deployed": false,
+  "existingImagesOverwritten": false,
+  "repositorySettingsChanged": false,
+  "verification": {
+    "checkedAtUtc": "2026-10-16T09:40:54.280662+00:00",
+    "networkAccess": false,
+    "apiContractExecution": false,
+    "databaseIntegrationTest": false,
+    "api": {
+      "applicationVersion": "0.1.0",
+      "frameworkVersion": "1.1.5",
+      "sqlalchemyVersion": "2.0.54",
+      "greenletImport": true,
+      "strictSubjectConsentSetting": true,
+      "subjectConsentEnabledSetting": true,
+      "requiredAggregationRoutesInSchema": [
+        "/consent/v1/consent-requests",
+        "/consent/v1/consent-requests/{request_id}",
+        "/consent/v1/consents/{consent_id}/status",
+        "/consent/v1/partners",
+        "/consent/v1/partners/{partner_id}/policy",
+        "/consent/v1/validate"
+      ],
+      "otpFieldsPresent": true,
+      "signingOperationAndJwksGenerated": true,
+      "apiAudience": "all"
+    },
+    "ui": {
+      "compiledIndexPresent": true,
+      "nginxConfigurationValid": true,
+      "typecheckAndBuildPassed": true
+    },
+    "sanity": {
+      "testCollectionPassed": true,
+      "testsExecutedAgainstServices": false,
+      "testsCollected": 7
+    },
+    "audienceSchemaChecks": [
+      {
+        "audience": "staff",
+        "expectedRoutePresent": true,
+        "otherAudienceRouteAbsent": true
+      },
+      {
+        "audience": "partner",
+        "expectedRoutePresent": true,
+        "otherAudienceRouteAbsent": true
+      },
+      {
+        "audience": "beneficiary",
+        "expectedRoutePresent": true,
+        "otherAudienceRouteAbsent": true
+      }
+    ]
+  },
+  "classification": "Published candidate images; shared database migration, authenticated end-to-end flow and Aggregation integration remain unverified.",
+  "platform": "linux/amd64",
+  "applicationCiChanges": false,
+  "chartDefaultsChanged": false,
+  "images": [
+    {
+      "component": "consent-manager-api",
+      "repository": "openg2p/commons/consent-manager-api",
+      "tag": "dev-d6ce86b9e3f9",
+      "ecrDigest": "sha256:21f1ab4c8483ded3906353f855a210dd30b9ea5044ce60307d5402b10ac878e4",
+      "publishedReference": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api@sha256:21f1ab4c8483ded3906353f855a210dd30b9ea5044ce60307d5402b10ac878e4",
+      "digestVerifiedBy": "ECR DescribeImages matches local image manifest"
+    },
+    {
+      "component": "consent-manager-ui",
+      "repository": "openg2p/commons/consent-manager-ui",
+      "tag": "dev-d6ce86b9e3f9",
+      "ecrDigest": "sha256:b69eac8965b66e47d5b5fd34d43f40cac461551e86f6de5cde0e714c2a772ecf",
+      "publishedReference": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-ui@sha256:b69eac8965b66e47d5b5fd34d43f40cac461551e86f6de5cde0e714c2a772ecf",
+      "digestVerifiedBy": "ECR DescribeImages matches local image manifest"
+    },
+    {
+      "component": "consent-manager-sanity",
+      "repository": "openg2p/commons/consent-manager-sanity",
+      "tag": "dev-d6ce86b9e3f9",
+      "ecrDigest": "sha256:76047a5ca2c7eaeeefaffa2b43b6bfda42b238d128b4de0a9e78cff4bf713e43",
+      "publishedReference": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-sanity@sha256:76047a5ca2c7eaeeefaffa2b43b6bfda42b238d128b4de0a9e78cff4bf713e43",
+      "digestVerifiedBy": "ECR DescribeImages matches local image manifest"
+    }
+  ],
+  "apiRuntimeBuildAdjustment": {
+    "reason": "Explicit async SQLAlchemy dependencies required by the application runtime",
+    "SQLAlchemy": "2.0.54",
+    "greenlet": "3.5.6",
+    "applicationSourceChanged": false
+  },
+  "buildRecipe": "docs/consent-candidate-build.md"
+}

@@ -47,6 +47,8 @@ installationPrerequisites:
 - Merge reviewed index/packages; consume the raw GitHub repository URL from Rancher.
 - Aggregation also requires a compatible Consent build and reviewed split API routing;
   pinned develop-5361069 predates the inspected subject-consent requirements.
+- New Consent candidate image overrides are in examples/dev/consent-image-values.yaml;
+  image schema checks pass but authenticated integration/migrations remain unverified.
 - Aggregation candidate is published; use examples/dev/aggregation-image.yaml only after
   runtime prerequisites are prepared. Immutable chart defaults remain disabled.
 changes:

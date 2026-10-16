@@ -34,6 +34,11 @@ are in [`components.json`](../releases/components.json). The partner API
 and expiry CronJob reuse the API image. Keeping the dependency and workload
 names preserves existing Helm resource ownership and saved values.
 
+Newer COSS source `d6ce86b` is now published as candidate tag `dev-d6ce86b9e3f9`.
+Select it explicitly with the [image-only overlay](../examples/dev/consent-image-values.yaml);
+see [its build adjustments and verification](consent-candidate-build.md).
+The immutable chart defaults continue to select `develop-5361069`.
+
 Aggregation configures the COSS
 [`oan-aggregation-api`](https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api)
 application. It has no `Chart.yaml` dependency entry because its template is

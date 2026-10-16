@@ -1,6 +1,6 @@
 {
   "checkedAt": "2026-10-16",
-  "method": "Initial images verified with read-only ECR inventory; Aggregation candidate manually built/published subsequently, see aggregation-candidate.json. No cluster deployments.",
+  "method": "Initial chart defaults verified by read-only ECR inventory; subsequent manual Consent/Aggregation candidate builds and publication are recorded separately. No cluster deployments.",
   "images": [
     {
       "valuesPath": "openg2p-farmer-registry.registry.staffApi.image",
@@ -199,6 +199,33 @@
       "verifiedBy": "Manual pinned-source build; 96 existing unit tests passed; ECR DescribeImages digest matches local manifest, 2026-10-16",
       "status": "Candidate; disabled pending compatible Consent and runtime configuration; source defaults unchanged",
       "evidence": "aggregation-candidate.json"
+    },
+    {
+      "valuesPath": "openg2p-commons-services.openg2p-consent-manager.consentManagerApi.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api",
+      "tag": "dev-d6ce86b9e3f9",
+      "digest": "sha256:21f1ab4c8483ded3906353f855a210dd30b9ea5044ce60307d5402b10ac878e4",
+      "verifiedBy": "ECR DescribeImages matches local image manifest, 2026-10-16",
+      "status": "Published candidate override; immutable chart defaults retain develop-5361069; integration unverified",
+      "evidence": "consent-candidate.json"
+    },
+    {
+      "valuesPath": "openg2p-commons-services.openg2p-consent-manager.ui.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-ui",
+      "tag": "dev-d6ce86b9e3f9",
+      "digest": "sha256:b69eac8965b66e47d5b5fd34d43f40cac461551e86f6de5cde0e714c2a772ecf",
+      "verifiedBy": "ECR DescribeImages matches local image manifest, 2026-10-16",
+      "status": "Published candidate override; immutable chart defaults retain develop-5361069; integration unverified",
+      "evidence": "consent-candidate.json"
+    },
+    {
+      "valuesPath": "openg2p-commons-services.openg2p-consent-manager.sanity.image",
+      "repository": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-sanity",
+      "tag": "dev-d6ce86b9e3f9",
+      "digest": "sha256:76047a5ca2c7eaeeefaffa2b43b6bfda42b238d128b4de0a9e78cff4bf713e43",
+      "verifiedBy": "ECR DescribeImages matches local image manifest, 2026-10-16",
+      "status": "Published candidate override; immutable chart defaults retain develop-5361069; integration unverified",
+      "evidence": "consent-candidate.json"
     }
   ],
   "unavailable": [

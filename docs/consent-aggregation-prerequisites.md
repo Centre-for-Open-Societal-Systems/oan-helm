@@ -8,15 +8,15 @@ deploy workloads, create identities or run database migrations.
 
 | Item | Evidence / remaining work |
 | --- | --- |
-| COSS Consent images | API/UI/sanity `develop-5361069` images are verified and digest-pinned in Commons values; pull access and runtime compatibility still need checking |
+| COSS Consent images | New candidate API/UI/sanity `dev-d6ce86b9e3f9` images published and digest-verified; [image overlay](../examples/dev/consent-image-values.yaml), [build adjustments/checks](consent-candidate-build.md). Immutable chart defaults retain `develop-5361069` |
 | Aggregation image | Candidate `oan/commons/aggregation-api:dev-8fe3bf97030b` published to the existing ECR account; digest verified, 96 unit tests passed. [Image values](../examples/dev/aggregation-image.yaml) and [build evidence](../releases/aggregation-candidate.json). Runtime integration remains unverified |
-| Consent/Aggregation compatibility | **Not established.** The pinned Consent source `536106974a7f6d67501a45dfc02cb9da95348f37` lacks the `subject_consent_enabled` / `subject_consent_required` settings required by the Aggregation contract inspected at `8fe3bf97030bb0b3f6283c2123ad58026af6cc50` |
+| Consent/Aggregation compatibility | New Consent candidate has the required settings and endpoint schema; authenticated HTTP/database integration with Aggregation is **not established**. Old default `develop-5361069` lacks the subject-consent settings required by Aggregation `8fe3bf9` |
 | Consent API routing | Current chart serves staff and partner APIs separately; beneficiary API is disabled. Aggregation has one `cm_base_url` for all required CM paths |
 | Aggregation public route | Unconfirmed; chart creates only a ClusterIP Service |
 | Aggregation pull access | Existing cluster `ecr-pull-secret` can read the Consent repository but receives HTTP 403 `DENIED` for the new repository. Pull role is `openg2p-dev-sandbox-dns`; AWS reports a missing identity-based allow. [Prepared policy and IAM steps](ecr-pull-access.md); no IAM or Secret changes have been applied |
 
-Image availability is not proof that these versions work together. Select and
-publish compatible Consent API/UI images before enabling the Aggregation flow.
+Image availability is not proof that these versions work together. Prepare the
+published Consent candidate overlay and test the exact image pair before enabling Aggregation.
 Confirm the required endpoints and response fields against that exact image.
 Setting an environment variable cannot add behavior missing from an older image.
 Changing the shared Consent build requires migration and existing-client review.
@@ -47,13 +47,14 @@ If a signing Secret is currently Helm-managed, changing its management mode or
 replacing the key needs a separate retention/rotation plan. Do not switch modes
 blindly: an upgrade can remove a resource that disappears from the chart.
 
-For the eventual compatible Consent image, verify subject-consent narrowing,
+For the published Consent candidate, verify subject-consent narrowing,
 strict subject consent, withdrawal handling and OTP behavior required by the
 Aggregation contract. Configure `CONSENT_MANAGER_SUBJECT_CONSENT_ENABLED=true`
 and `CONSENT_MANAGER_SUBJECT_CONSENT_REQUIRED=true` only after reviewing their
 effect on all existing registry/partner clients. Both belong under
 `openg2p-consent-manager.consentManagerApi.envVars`; these flags alone do not
-make the currently pinned image compatible.
+make the old default image compatible. The candidate overlay changes images
+only; strict subject-consent flags require a separate reviewed values change.
 
 ## 2. Prepare Aggregation resources outside Helm values
 
