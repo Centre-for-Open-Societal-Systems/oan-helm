@@ -1,5 +1,10 @@
 # Editable chart sources
 
+**Commons COSS components:** [Consent image overrides](openg2p-commons-services/values.yaml)
+use the retained `openg2p-consent-manager` dependency; [Aggregation's Deployment/Service](openg2p-commons-services/templates/aggregation-api.yaml)
+is a local template controlled by `aggregationApi.enabled` (default `false`).
+See [the inclusion details](../docs/service-catalog.md#where-are-coss-consent-manager-and-aggregation).
+
 | Chart | Source metadata | Runtime configuration | Local workload templates |
 | --- | --- | --- | --- |
 | Farmer | [Chart.yaml](openg2p-farmer-registry/Chart.yaml) | [values.yaml](openg2p-farmer-registry/values.yaml) | [templates/](openg2p-farmer-registry/templates/) |

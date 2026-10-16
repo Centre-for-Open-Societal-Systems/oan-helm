@@ -5,6 +5,46 @@ five charts. Each registry owns its domain services; Commons Services owns the
 shared applications. `repository/*.tgz` are the packaged downloads used by Rancher.
 They are generated from these sources, not replacements for the source trees.
 
+## Where are COSS Consent Manager and Aggregation?
+
+Both belong to Commons Services, but they are included differently. There are
+no separately named `coss-consent-manager` or `coss-aggregator` child charts.
+
+| Component | Helm implementation | Configuration | Default state |
+| --- | --- | --- | --- |
+| COSS Consent Manager | Pinned upstream `openg2p-consent-manager:1.0.2` child chart, with COSS image overrides | [`openg2p-consent-manager` in Commons values](../charts/openg2p-commons-services/values.yaml); API image at `consentManagerApi.image`, UI at `ui.image`, sanity at `sanity.image` | Enabled; verified COSS API/UI/sanity digests |
+| COSS Aggregation API | Local [Deployment and Service template](../charts/openg2p-commons-services/templates/aggregation-api.yaml) inside the Commons parent chart | [`aggregationApi` in Commons values](../charts/openg2p-commons-services/values.yaml) | Disabled; image and runtime prerequisites outstanding |
+
+This dependency entry in Commons `Chart.yaml` selects the reused Consent
+templates, not the application image publisher:
+
+```yaml
+- condition: openg2p-consent-manager.enabled
+  name: openg2p-consent-manager
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.0.2
+```
+
+The parent values override those templates with images verified for the COSS
+[`consent-management`](https://github.com/Centre-for-Open-Societal-Systems/consent-management)
+source revision `536106974a7f6d67501a45dfc02cb9da95348f37`. The ECR image paths
+also retain the `openg2p/commons/` prefix. Names alone do not identify which
+application source built the container; the recorded image tags and digests
+are in [`components.json`](../releases/components.json). The partner API
+and expiry CronJob reuse the API image. Keeping the dependency and workload
+names preserves existing Helm resource ownership and saved values.
+
+Aggregation configures the COSS
+[`oan-aggregation-api`](https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api)
+application. It has no `Chart.yaml` dependency entry because its template is
+already part of the Commons parent chart. `aggregationApi.enabled: false`
+renders no Aggregation resources. Enabling it requires a verified image,
+database/migrations, registry catalog, persistent signing key and Consent/Partner
+Management/auth configuration. Inclusion of this workload template does not
+mean the component is ready to install. See [readiness](readiness.md).
+
+## Five installable chart entries
+
 | Chart source | What it installs | Existing dev release / namespace |
 | --- | --- | --- |
 | [Farmer](../charts/openg2p-farmer-registry/) | Farmer APIs/UI, workers, registry seed/test jobs, reporting, configurable dashboard API/UI | `farmer-registry` / `farmer` |

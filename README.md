@@ -5,6 +5,11 @@ COSS service to its chart, source/configuration and enablement status. The
 [five editable source charts](charts/README.md) are Farmer, Crop Sown, Livestock,
 DA and Commons Services, which contains COSS Consent and Aggregation.
 
+For those two components, start at
+[where COSS Consent Manager and Aggregation are included](docs/service-catalog.md#where-are-coss-consent-manager-and-aggregation).
+Consent reuses the `openg2p-consent-manager` child chart with COSS image overrides;
+Aggregation is a local Commons template, disabled pending its image and configuration.
+
 Current chart version is **`1.0.0-dev.2`**, with the migrated new-dev URLs.
 The original `1.0.0-dev.1` packages remain available unchanged. Component versions
 and image digests are separate; automatic build-number synchronization is deferred.
