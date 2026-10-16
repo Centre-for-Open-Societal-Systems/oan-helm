@@ -1,0 +1,168 @@
+global:
+  registryVariant: cropsown-registry
+  registryHostname: crop-registry-development.oanstaging.com
+  keycloakBaseUrl: https://keycloak.{{ .Release.Namespace }}.openg2p.test
+  minioHost: minio-api.{{ .Release.Namespace }}.openg2p.test
+  idGeneratorHostname: idgenerator-{{ .Release.Name }}.{{ .Release.Namespace }}.openg2p.test
+  aweHostname: awe.{{ .Release.Namespace }}.openg2p.test
+  aweBaseUrl: http://{{ .Values.global.aweReleaseName }}-awe.{{ .Release.Namespace
+    }}.svc.cluster.local
+  aweDefaultCallbackUrl: http://{{ .Release.Name }}-staff-portal-api.{{ .Release.Namespace
+    }}.svc.cluster.local/awe/webhooks/decision
+registry:
+  staffApi:
+    image:
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/staff-api
+      tag: develop-88@sha256:4132c53e98e1082ec38e2694efb8aa6f4c1a1abd76011842e60d797254773f83
+    envVars:
+      APPROVER_RESOLVER_SECRET: cropsown-approver-resolver-secret
+      KEYCLOAK_BASE_URL: '{{ tpl .Values.global.keycloakBaseUrl $ }}'
+      KEYCLOAK_REALM: '{{ tpl (default "staff" .Values.global.keycloakRealm) $ }}'
+      AUTH_CLIENT_ID: '{{ tpl (default (printf "%s-staff-portal" .Release.Name) .Values.global.authClientId)
+        $ }}'
+    envVarsFrom:
+      AUTH_CLIENT_SECRET:
+        secretKeyRef:
+          name: '{{ tpl (default (printf "%s-staff-portal" .Release.Name) .Values.global.authClientSecret)
+            $ }}'
+          key: '{{ tpl (default "client_secret" .Values.global.authClientSecretKey)
+            $ }}'
+    hostname: staff-crop-development.oanstaging.com
+    istio:
+      virtualservice:
+        host: staff-crop-development.oanstaging.com
+  partnerApi:
+    image:
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/partner-api
+      tag: develop-88@sha256:36f3bd02e1d7f7160791b0a8fe1a3290ae4d85c5cc613f69b857b2301eb99662
+    hostname: partner-crop-development.oanstaging.com
+    istio:
+      virtualservice:
+        host: partner-crop-development.oanstaging.com
+  celeryWorker:
+    image:
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/celery
+      tag: develop-88@sha256:dab5d392746d1580402a1ff02c61af7ed8e2dcfd317bcae166705d81e4cf625b
+    envVars:
+      REGISTRY_CELERY_WORKERS_MASTER_DATA_DB_HOSTNAME: commons-postgresql
+      CELERY_OPTS: worker -Q registry_worker_queue --concurrency=8 --loglevel=info
+  celeryBeat:
+    image:
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/celery
+      tag: develop-88@sha256:dab5d392746d1580402a1ff02c61af7ed8e2dcfd317bcae166705d81e4cf625b
+    envVars:
+      CELERY_OPTS: worker --beat --concurrency=2 --loglevel=info --schedule=/tmp/celery-beat-schedule.db
+  dbSeed:
+    image:
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/db-seed
+      tag: develop-88@sha256:2c05fd28022a844e00f93e4c7b14470315c62fe5ea25f29d4f9f93bce88b05c5
+    envVars:
+      APPROVER_RESOLVER_SECRET: cropsown-approver-resolver-secret
+    loadGeoData: false
+    loadSampleData: false
+    loadImages: true
+    loadTemplates: true
+  iamRegister:
+    applicationDescription: Crop Sown Registry
+  idgenerator:
+    idGenerator:
+      appConfig:
+        idTypes:
+          cropsown:
+            idLength: 5
+          production:
+            idLength: 5
+          cluster:
+            idLength: 5
+          infestation:
+            idLength: 5
+  staffUi:
+    iamPublicUrl: https://staff-iam-development.oanstaging.com
+    partnerIngestUrl: https://partner-crop-development.oanstaging.com/partner/ingest_data?data_model=dcivc
+    envVars:
+      COOKIE_DOMAIN: .oanstaging.com
+    image:
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/staff-ui
+      tag: develop-88@sha256:c9c2ddd36b9679d5abc16c90a989c0bcbef4c844892bf779d89f0e129a18b5e8
+  sanity:
+    enabled: true
+    image:
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/sanity-tests
+      tag: develop-88@sha256:82a90a27d571712cf8f8aa92e851c847f871ff8b1246112f499b4e6827e5a7b3
+    regType: CropSown
+    regRecordType: spdci-extensions-dci:CropSown
+    searchText: SANITY-CROPSOWN-0001
+    dataScopes: crop_sown_details
+    deniedScopes: farm_details,crop_production_details,infestation_details,cluster_details
+    farmerRegisterId: 6b06a95a-9a6c-5a33-a33d-c1625716c59c
+    crTabId: cropsown_cropsown_tab
+    crSectionId: cropsown_cropsown_record_section_01
+reporting:
+  db:
+    host: ''
+    port: 5432
+    name: '{{ .Release.Name | replace "-" "_" }}'
+    user: '{{ printf "%s_user" .Release.Name | replace "-" "_" }}'
+    secret: '{{ .Release.Name }}'
+    passwordKey: '{{ .Release.Name }}-db-user'
+  image:
+    repository: ''
+    tag: ''
+  views:
+    enabled: false
+    waitForSchemaSeconds: 600
+    refreshSchedule: '*/30 * * * *'
+    refreshLog:
+      enabled: true
+      retentionDays: 90
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 512Mi
+dashboardApi:
+  enabled: false
+  image:
+    digest: sha256:397cef051fa9e4dc67262986363edbc91844ef23b85dceefd1024b3f4d15a782
+    repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/cropsown-registry/dashboard-api
+    tag: develop-88
+  replicas: 1
+  workers: 2
+  dbPool:
+    minSize: 1
+    maxSize: 5
+  allowedOrigins: []
+  env: {}
+  virtualService:
+    enabled: false
+    host: ''
+    gateway: ''
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 512Mi
+  imagePullSecrets: []
+  envFrom: []
+dashboardUi:
+  enabled: false
+  nameOverride: ''
+  image:
+    repository: ''
+    tag: ''
+    digest: ''
+    pullPolicy: IfNotPresent
+  imagePullSecrets: []
+  replicas: 1
+  containerPort: 3000
+  servicePort: 80
+  env: []
+  envFrom: []
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 768Mi

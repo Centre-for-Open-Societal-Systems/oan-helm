@@ -1,0 +1,33 @@
+apiVersion: v2
+name: openg2p-farmer-registry
+description: COSS farmer registry with pinned upstream registry services and disabled
+  optional dashboard API/UI workloads. Images retain independent versions.
+type: application
+version: 1.0.0-dev.1
+appVersion: 1.2.2-rc.544
+keywords:
+- openg2p
+- registry
+- farmer-registry
+home: https://openg2p.org
+icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+sources:
+- https://github.com/OpenG2P/farmer-registry
+- https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+- https://github.com/Centre-for-Open-Societal-Systems/oan_farmerregistry_dashboard
+- https://github.com/Centre-for-Open-Societal-Systems/farmer-registry-dashboard-api
+- https://github.com/OpenG2P/registry-connector
+maintainers:
+- name: OpenG2P
+  email: info@openg2p.org
+dependencies:
+- name: openg2p-registry
+  alias: registry
+  version: 1.2.2-rc.544
+  repository: https://openg2p.github.io/openg2p-helm
+annotations:
+  catalog.cattle.io/display-name: OpenG2P Farmer Registry
+  catalog.cattle.io/certified: partner
+  catalog.cattle.io/kube-version: '>=1.23.0-0'
+  openg2p.org/add-to-rancher: ''
+  coss.org/source-commit: 90811b61a59fef107178341f753693cf9c62749e

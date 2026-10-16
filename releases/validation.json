@@ -1,0 +1,164 @@
+{
+  "helm": "v3.19.0+g3d8990f",
+  "clusterAccess": false,
+  "charts": {
+    "openg2p-commons-services": {
+      "lint": "strict passed",
+      "resources": 174,
+      "namespaces": [
+        "verify-a",
+        "verify-b"
+      ],
+      "preservation": "upstream resource identities, selectors and Secret references match baseline",
+      "baselineScope": "pinned original source",
+      "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
+      "defaultImageReferences": [
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api:develop-5361069@sha256:67180496e5f9d5edb5afb9727d9da4501e96599166c1712e4e24dbf1f6fa2a77",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-sanity:develop-5361069@sha256:1af320db949eb1c641dec5533b3f7352980483de45774b16e310cca996a0f330",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-ui:develop-5361069@sha256:1ae7cc25b094e9c72ea9262a8d920480d2049b13d1505f2a9a2aeeeff8abf92d",
+        "alpine/k8s:1.31.0",
+        "apache/kafka:3.7.2",
+        "apache/superset:dockerize",
+        "apachesuperset.docker.scarf.sh/apache/superset:4.0.1",
+        "busybox:1.36",
+        "curlimages/curl:8.11.0",
+        "curlimages/curl:8.11.1",
+        "docker.io/alpine:3.20",
+        "ghcr.io/enketo/enketo:7.5.1",
+        "ghcr.io/getodk/central-nginx:v2025.2.1",
+        "ghcr.io/getodk/pyxform-http:v3.1.0",
+        "injistack/inji-certify-with-plugins:0.14.0",
+        "jbergknoff/postgresql-client:latest",
+        "mosipid/artifactory-server:1.4.1-ES",
+        "mosipid/esignet:1.4.1",
+        "mosipid/kernel-keymanager-service:1.2.1.0",
+        "mosipid/keys-generator:1.2.1.0",
+        "mosipid/mock-identity-system:0.9.3",
+        "mosipid/oidc-ui:1.4.1",
+        "mosipid/postgres-init:1.2.0.1-B4",
+        "mosipid/postgres-init:1.2.0.2",
+        "openg2p/iam-agent-portal-api:1.4.4-rc.125",
+        "openg2p/iam-staff-portal-api:1.4.4-rc.125",
+        "openg2p/iam-staff-ui:1.4.4-rc.125",
+        "openg2p/keycloak-init:1.2.0",
+        "openg2p/master-data-api:1.1.4-rc.106",
+        "openg2p/master-data-db-seed:1.1.4-rc.106",
+        "openg2p/master-data-ui:1.1.4-rc.106",
+        "openg2p/odk-central-backend:v2025.2.1",
+        "openg2p/openg2p-audit-manager:1.2.0",
+        "openg2p/openg2p-awe-ui:1.2.2",
+        "openg2p/openg2p-awe:1.2.2",
+        "openg2p/openg2p-staff-portal-ui:1.2.0",
+        "openg2p/partner-management-partner-api:1.0.2",
+        "openg2p/partner-management-staff-portal-api:1.0.2",
+        "openg2p/partner-management-staff-portal-ui:1.0.2",
+        "openg2p/postgres-init:1.2.0",
+        "openg2p/postgres-init:develop",
+        "postgres:15-alpine"
+      ],
+      "devExample": "examples\\dev\\commons-services.yaml: strict lint and render passed"
+    },
+    "openg2p-cropsown-registry": {
+      "lint": "strict passed",
+      "resources": 39,
+      "namespaces": [
+        "verify-a",
+        "verify-b"
+      ],
+      "preservation": "upstream resource identities, selectors and Secret references match baseline",
+      "baselineScope": "pinned original source",
+      "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
+      "defaultImageReferences": [
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/celery:develop-88@sha256:dab5d392746d1580402a1ff02c61af7ed8e2dcfd317bcae166705d81e4cf625b",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/db-seed:develop-88@sha256:2c05fd28022a844e00f93e4c7b14470315c62fe5ea25f29d4f9f93bce88b05c5",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/partner-api:develop-88@sha256:36f3bd02e1d7f7160791b0a8fe1a3290ae4d85c5cc613f69b857b2301eb99662",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/sanity-tests:develop-88@sha256:82a90a27d571712cf8f8aa92e851c847f871ff8b1246112f499b4e6827e5a7b3",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/staff-api:develop-88@sha256:4132c53e98e1082ec38e2694efb8aa6f4c1a1abd76011842e60d797254773f83",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/staff-ui:develop-88@sha256:c9c2ddd36b9679d5abc16c90a989c0bcbef4c844892bf779d89f0e129a18b5e8",
+        "busybox:1.36",
+        "curlimages/curl:8.11.1",
+        "docker.io/openg2p/redis:7.2.5-debian-12-r4",
+        "jbergknoff/postgresql-client:latest",
+        "openg2p/keycloak-init:1.2.0",
+        "openg2p/openg2p-id-generator:1.1.2",
+        "openg2p/postgres-init:1.2.0",
+        "openg2p/postgres-init:develop"
+      ],
+      "devExample": "examples\\dev\\cropsown.yaml: strict lint and render passed"
+    },
+    "openg2p-da-registry": {
+      "lint": "strict passed",
+      "resources": 5,
+      "namespaces": [
+        "verify-a",
+        "verify-b"
+      ],
+      "preservation": "upstream resource identities, selectors and Secret references match baseline",
+      "baselineScope": "pinned source with DA unavailable component set disabled",
+      "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
+      "defaultImageReferences": [],
+      "devExample": "examples\\dev\\da.yaml: strict lint and render passed"
+    },
+    "openg2p-farmer-registry": {
+      "lint": "strict passed",
+      "resources": 45,
+      "namespaces": [
+        "verify-a",
+        "verify-b"
+      ],
+      "preservation": "upstream resource identities, selectors and Secret references match baseline",
+      "baselineScope": "pinned original source",
+      "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
+      "defaultImageReferences": [
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/celery:90811b61a59f@sha256:15273f1e29b54f02df09b0bb69c5cf21d68432c1c34f0dd6521a1fbfe64b49c2",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/db-seed:90811b61a59f@sha256:0b48d9f90be2734a131bcea08219c79cb9251307f13b422ead94f56fb7a00cd9",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/partner-api:90811b61a59f@sha256:800b7b097a4fd8bf7a09ef0e24969ed374e0126933d9aa79c47e186644f4315c",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/sanity-tests:90811b61a59f@sha256:baceebd88b20c4eefc9ed85473f1f9fe21a2ed86c9ee776da05e6ae47ed4e95d",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/staff-api:90811b61a59f@sha256:b8116e52f51c85d228d26ab97113b75cf293a9dfba120a062c16d97727039ed5",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/staff-ui:90811b61a59f@sha256:e7e5c7d8d0935f8e2957019afe68cad168de8d08f34b52cffc8c91fe92d7cbc4",
+        "apachesuperset.docker.scarf.sh/apache/superset:4.0.1",
+        "busybox:1.36",
+        "curlimages/curl:8.11.1",
+        "docker.io/openg2p/redis:7.2.5-debian-12-r4",
+        "jbergknoff/postgresql-client:latest",
+        "openg2p/keycloak-init:1.2.0",
+        "openg2p/openg2p-id-generator:1.1.2",
+        "openg2p/postgres-init:1.2.0",
+        "openg2p/postgres-init:develop"
+      ],
+      "devExample": "examples\\dev\\farmer.yaml: strict lint and render passed"
+    },
+    "openg2p-livestock-registry": {
+      "lint": "strict passed",
+      "resources": 39,
+      "namespaces": [
+        "verify-a",
+        "verify-b"
+      ],
+      "preservation": "upstream resource identities, selectors and Secret references match baseline",
+      "baselineScope": "pinned original source",
+      "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
+      "defaultImageReferences": [
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/celery:bf78e69a5fd6@sha256:982e8272993305d90d34ea5a449f915c5ad21689ba0788c48806fd003b1c143a",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/db-seed:bf78e69a5fd6@sha256:6ba640c81fc5a6eb19b4a81ae2b6b86ce78cd76dc64dc67723de26cffc5efae3",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/partner-api:bf78e69a5fd6@sha256:99c37673cb62b52476a408531ffb73fa92d8d06d5ba0e61ea8790d116297f785",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/sanity-tests:bf78e69a5fd6@sha256:4bf827ba97d8af32315021bec0fad2d4910e53c3c0a1fa449aa37058d66ddcdc",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/staff-api:bf78e69a5fd6@sha256:189809772e28eafdeea66070dddfbe92d7ea840b2633dbc068a6f4fb85ae5ed2",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/staff-ui:bf78e69a5fd6@sha256:07905855fdbc7dd452e92a36d7076eaddc86c17cc7b339332bf6fe2b2ddf4166",
+        "busybox:1.36",
+        "curlimages/curl:8.11.1",
+        "docker.io/openg2p/redis:7.2.5-debian-12-r4",
+        "jbergknoff/postgresql-client:latest",
+        "openg2p/keycloak-init:1.2.0",
+        "openg2p/openg2p-id-generator:1.1.2",
+        "openg2p/postgres-init:1.2.0",
+        "openg2p/postgres-init:develop"
+      ],
+      "devExample": "examples\\dev\\livestock.yaml: strict lint and render passed"
+    }
+  },
+  "upstreamResolution": "not attempted",
+  "offlineResolution": "All five locks resolved from dependencies bundled with verified source packages",
+  "packages": 5,
+  "index": "Relative URLs, SHA-256, HTTP download, exact Helm version selection and repository-based renders verified against loopback server"
+}

@@ -1,0 +1,48 @@
+chartVersion: 1.0.0-dev.1
+status: prepared
+readyForPublication: true
+versionPolicy: Immutable after publication; component images retain independent versions.
+charts:
+- name: openg2p-farmer-registry
+  release: farmer-registry
+  namespace: farmer
+  sourceCommit: 90811b61a59fef107178341f753693cf9c62749e
+  platformVersion: 1.2.2-rc.544
+- name: openg2p-cropsown-registry
+  release: cropsown-registry
+  namespace: crop
+  sourceCommit: f5be6d22a6b9947e3a62aaaf207adff74253e91e
+  platformVersion: 1.2.2-rc.544
+- name: openg2p-livestock-registry
+  release: livestock-registry
+  namespace: livestock
+  sourceCommit: bf78e69a5fd60786b8d1852c69b4fefdd70dffc1
+  platformVersion: 1.2.2-rc.544
+- name: openg2p-da-registry
+  release: da-registry
+  namespace: null
+  sourceCommit: 9714c3c5307a7e61f4379b613229837a4b76e952
+  platformVersion: 1.2.2-rc.544
+- name: openg2p-commons-services
+  release: commons-services
+  namespace: commons
+  upstreamVersion: 2.3.4-rc.247
+  sourceCommit: 32638189178ca451d354316a099918574c6730a5
+  upstreamArchiveSha256: 96ab00f327652a4cc3d511525e1ac5260813d744a11620054e2491b698206272
+commonsBase:
+  repository: https://openg2p.github.io/openg2p-helm
+  chart: openg2p-commons-base
+  version: 2.3.4-rc.245
+  archiveSha256: 09969e54f5e48594ce2038ffa258d4b9bfe431b2b3e311172df2d241a9319e2b
+  policy: Install directly from OpenG2P under its existing owner; not bundled here.
+componentsAwaitingImages:
+- Current standalone registry dashboard UIs (legacy Crop UI is not substituted).
+- DA backend/dashboard workloads; da-registry-frontend is a different app.
+- Aggregation API; runtime port confirmed as 8100.
+publicationBlockers: []
+installationPrerequisites:
+- Reconcile private live values, namespace-local Secrets and ECR pull credentials.
+- Prepare reporting/schema/seed and shared-platform changes separately.
+- Retain current release names/namespaces and existing Helm owners.
+- DA namespace/images/initialization are not ready; component set is disabled.
+- Enable Pages after reviewed merge before Rancher consumption.

@@ -1,0 +1,2794 @@
+{
+  "openg2p-farmer-registry": {
+    "sourceCommit": "90811b61a59fef107178341f753693cf9c62749e",
+    "scope": "pinned original source",
+    "resourceIdentities": [
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-celery-beat-producer"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-celery-worker"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-id-generator"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-partner-api"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-staff-portal-api"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-staff-portal-ui"
+      ],
+      [
+        "apps/v1",
+        "StatefulSet",
+        "verify-a",
+        "verify-redis-master"
+      ],
+      [
+        "batch/v1",
+        "CronJob",
+        "verify-a",
+        "verify-fr-reporting-views-refresh"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-db-seed"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-fr-dashboards"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-fr-reporting-views"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-idgen-pg-init-verify-idgenerator"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-keycloak-init-1-6b42e8f2"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-postgres-init-verify"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-registry-iam-register-1"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-sanity"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-id-generator"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-partner-api"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-staff-portal-api"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-staff-portal-ui"
+      ],
+      [
+        "networking.k8s.io/v1",
+        "NetworkPolicy",
+        "verify-a",
+        "verify-redis"
+      ],
+      [
+        "policy/v1",
+        "PodDisruptionBudget",
+        "verify-a",
+        "verify-redis-master"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-fr-dashboard-bundle"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-id-generator-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-keycloak-init-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-maps-content"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-redis-configuration"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-redis-health"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-redis-scripts"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-registry-iam-register-payload"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "openg2p-insights-superset-svc"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-awe-callback-hmac"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-idgenerator"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-staff-portal"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-bene-portal-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-id-generator"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-partner-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-redis-headless"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-redis-master"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-staff-portal-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-staff-portal-ui"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-idgen-pg-init"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-postgres-init"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-redis-master"
+      ]
+    ],
+    "secretKeyReferences": [
+      [
+        "audit-manager",
+        "audit-manager-db-user"
+      ],
+      [
+        "awe-db-user",
+        "awe-db-user-password"
+      ],
+      [
+        "commons-keycloak",
+        "admin-password"
+      ],
+      [
+        "commons-minio",
+        "readonly-password"
+      ],
+      [
+        "commons-minio",
+        "readonly-user"
+      ],
+      [
+        "commons-minio",
+        "root-password"
+      ],
+      [
+        "commons-minio",
+        "root-user"
+      ],
+      [
+        "commons-novu",
+        "api-key"
+      ],
+      [
+        "commons-novu",
+        "novu-secret-key"
+      ],
+      [
+        "commons-postgresql",
+        "postgres-password"
+      ],
+      [
+        "commons-services-staff-portal",
+        "client_secret"
+      ],
+      [
+        "consent-manager",
+        "client_secret"
+      ],
+      [
+        "master-data-db-user",
+        "master-data-db-user-password"
+      ],
+      [
+        "openg2p-insights-superset-svc",
+        "password"
+      ],
+      [
+        "superset-db-user",
+        "superset-db-user-password"
+      ],
+      [
+        "verify",
+        "verify-db-user"
+      ],
+      [
+        "verify-awe-callback-hmac",
+        "hmac-secret"
+      ],
+      [
+        "verify-idgenerator",
+        "verify-idgenerator-db-user"
+      ],
+      [
+        "verify-staff-portal",
+        "client_secret"
+      ]
+    ],
+    "selectors": {
+      "Service/verify-id-generator": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "idgenerator",
+        "app.kubernetes.io/component": "id-generator"
+      },
+      "Service/verify-redis-headless": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "redis"
+      },
+      "Service/verify-redis-master": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "redis",
+        "app.kubernetes.io/component": "master"
+      },
+      "Service/verify-bene-portal-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "registry",
+        "app.kubernetes.io/component": "bene-portal-api"
+      },
+      "Service/verify-partner-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "registry",
+        "app.kubernetes.io/component": "partner-api"
+      },
+      "Service/verify-staff-portal-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "registry",
+        "app.kubernetes.io/component": "staff-portal-api"
+      },
+      "Service/verify-staff-portal-ui": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "registry",
+        "app.kubernetes.io/component": "staff-portal-ui"
+      },
+      "Deployment/verify-id-generator": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "idgenerator",
+          "app.kubernetes.io/component": "id-generator"
+        }
+      },
+      "Deployment/verify-celery-beat-producer": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "registry",
+          "app.kubernetes.io/component": "celery-beat-producer"
+        }
+      },
+      "Deployment/verify-celery-worker": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "registry",
+          "app.kubernetes.io/component": "celery-worker"
+        }
+      },
+      "Deployment/verify-partner-api": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "registry",
+          "app.kubernetes.io/component": "partner-api"
+        }
+      },
+      "Deployment/verify-staff-portal-api": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "registry",
+          "app.kubernetes.io/component": "staff-portal-api"
+        }
+      },
+      "Deployment/verify-staff-portal-ui": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "registry",
+          "app.kubernetes.io/component": "staff-portal-ui"
+        }
+      },
+      "StatefulSet/verify-redis-master": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "redis",
+          "app.kubernetes.io/component": "master"
+        }
+      }
+    }
+  },
+  "openg2p-cropsown-registry": {
+    "sourceCommit": "f5be6d22a6b9947e3a62aaaf207adff74253e91e",
+    "scope": "pinned original source",
+    "resourceIdentities": [
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-celery-beat-producer"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-celery-worker"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-id-generator"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-partner-api"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-staff-portal-api"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-staff-portal-ui"
+      ],
+      [
+        "apps/v1",
+        "StatefulSet",
+        "verify-a",
+        "verify-redis-master"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-db-seed"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-idgen-pg-init-verify-idgenerator"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-keycloak-init-1-6b42e8f2"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-postgres-init-verify"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-registry-iam-register-1"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-sanity"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-id-generator"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-partner-api"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-staff-portal-api"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-staff-portal-ui"
+      ],
+      [
+        "networking.k8s.io/v1",
+        "NetworkPolicy",
+        "verify-a",
+        "verify-redis"
+      ],
+      [
+        "policy/v1",
+        "PodDisruptionBudget",
+        "verify-a",
+        "verify-redis-master"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-id-generator-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-keycloak-init-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-redis-configuration"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-redis-health"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-redis-scripts"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-registry-iam-register-payload"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-awe-callback-hmac"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-idgenerator"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-staff-portal"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-bene-portal-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-id-generator"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-partner-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-redis-headless"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-redis-master"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-staff-portal-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-staff-portal-ui"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-idgen-pg-init"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-postgres-init"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-redis-master"
+      ]
+    ],
+    "secretKeyReferences": [
+      [
+        "audit-manager",
+        "audit-manager-db-user"
+      ],
+      [
+        "awe-db-user",
+        "awe-db-user-password"
+      ],
+      [
+        "commons-keycloak",
+        "admin-password"
+      ],
+      [
+        "commons-minio",
+        "readonly-password"
+      ],
+      [
+        "commons-minio",
+        "readonly-user"
+      ],
+      [
+        "commons-minio",
+        "root-password"
+      ],
+      [
+        "commons-minio",
+        "root-user"
+      ],
+      [
+        "commons-novu",
+        "api-key"
+      ],
+      [
+        "commons-novu",
+        "novu-secret-key"
+      ],
+      [
+        "commons-postgresql",
+        "postgres-password"
+      ],
+      [
+        "commons-services-staff-portal",
+        "client_secret"
+      ],
+      [
+        "consent-manager",
+        "client_secret"
+      ],
+      [
+        "master-data-db-user",
+        "master-data-db-user-password"
+      ],
+      [
+        "verify",
+        "verify-db-user"
+      ],
+      [
+        "verify-awe-callback-hmac",
+        "hmac-secret"
+      ],
+      [
+        "verify-idgenerator",
+        "verify-idgenerator-db-user"
+      ],
+      [
+        "verify-staff-portal",
+        "client_secret"
+      ]
+    ],
+    "selectors": {
+      "Service/verify-id-generator": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "idgenerator",
+        "app.kubernetes.io/component": "id-generator"
+      },
+      "Service/verify-redis-headless": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "redis"
+      },
+      "Service/verify-redis-master": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "redis",
+        "app.kubernetes.io/component": "master"
+      },
+      "Service/verify-bene-portal-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "registry",
+        "app.kubernetes.io/component": "bene-portal-api"
+      },
+      "Service/verify-partner-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "registry",
+        "app.kubernetes.io/component": "partner-api"
+      },
+      "Service/verify-staff-portal-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "registry",
+        "app.kubernetes.io/component": "staff-portal-api"
+      },
+      "Service/verify-staff-portal-ui": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "registry",
+        "app.kubernetes.io/component": "staff-portal-ui"
+      },
+      "Deployment/verify-id-generator": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "idgenerator",
+          "app.kubernetes.io/component": "id-generator"
+        }
+      },
+      "Deployment/verify-celery-beat-producer": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "registry",
+          "app.kubernetes.io/component": "celery-beat-producer"
+        }
+      },
+      "Deployment/verify-celery-worker": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "registry",
+          "app.kubernetes.io/component": "celery-worker"
+        }
+      },
+      "Deployment/verify-partner-api": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "registry",
+          "app.kubernetes.io/component": "partner-api"
+        }
+      },
+      "Deployment/verify-staff-portal-api": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "registry",
+          "app.kubernetes.io/component": "staff-portal-api"
+        }
+      },
+      "Deployment/verify-staff-portal-ui": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "registry",
+          "app.kubernetes.io/component": "staff-portal-ui"
+        }
+      },
+      "StatefulSet/verify-redis-master": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "redis",
+          "app.kubernetes.io/component": "master"
+        }
+      }
+    }
+  },
+  "openg2p-livestock-registry": {
+    "sourceCommit": "bf78e69a5fd60786b8d1852c69b4fefdd70dffc1",
+    "scope": "pinned original source",
+    "resourceIdentities": [
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-celery-beat-producer"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-celery-worker"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-id-generator"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-partner-api"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-staff-portal-api"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-staff-portal-ui"
+      ],
+      [
+        "apps/v1",
+        "StatefulSet",
+        "verify-a",
+        "verify-redis-master"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-db-seed"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-idgen-pg-init-verify-idgenerator"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-keycloak-init-1-6b42e8f2"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-postgres-init-verify"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-registry-iam-register-1"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-sanity"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-id-generator"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-partner-api"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-staff-portal-api"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-staff-portal-ui"
+      ],
+      [
+        "networking.k8s.io/v1",
+        "NetworkPolicy",
+        "verify-a",
+        "verify-redis"
+      ],
+      [
+        "policy/v1",
+        "PodDisruptionBudget",
+        "verify-a",
+        "verify-redis-master"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-id-generator-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-keycloak-init-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-redis-configuration"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-redis-health"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-redis-scripts"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-registry-iam-register-payload"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-awe-callback-hmac"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-idgenerator"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-staff-portal"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-bene-portal-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-id-generator"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-partner-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-redis-headless"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-redis-master"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-staff-portal-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-staff-portal-ui"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-idgen-pg-init"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-postgres-init"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-redis-master"
+      ]
+    ],
+    "secretKeyReferences": [
+      [
+        "audit-manager",
+        "audit-manager-db-user"
+      ],
+      [
+        "awe-db-user",
+        "awe-db-user-password"
+      ],
+      [
+        "commons-keycloak",
+        "admin-password"
+      ],
+      [
+        "commons-minio",
+        "readonly-password"
+      ],
+      [
+        "commons-minio",
+        "readonly-user"
+      ],
+      [
+        "commons-minio",
+        "root-password"
+      ],
+      [
+        "commons-minio",
+        "root-user"
+      ],
+      [
+        "commons-novu",
+        "api-key"
+      ],
+      [
+        "commons-novu",
+        "novu-secret-key"
+      ],
+      [
+        "commons-postgresql",
+        "postgres-password"
+      ],
+      [
+        "commons-services-staff-portal",
+        "client_secret"
+      ],
+      [
+        "consent-manager",
+        "client_secret"
+      ],
+      [
+        "master-data-db-user",
+        "master-data-db-user-password"
+      ],
+      [
+        "verify",
+        "verify-db-user"
+      ],
+      [
+        "verify-awe-callback-hmac",
+        "hmac-secret"
+      ],
+      [
+        "verify-idgenerator",
+        "verify-idgenerator-db-user"
+      ],
+      [
+        "verify-staff-portal",
+        "client_secret"
+      ]
+    ],
+    "selectors": {
+      "Service/verify-id-generator": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "idgenerator",
+        "app.kubernetes.io/component": "id-generator"
+      },
+      "Service/verify-redis-headless": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "redis"
+      },
+      "Service/verify-redis-master": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "redis",
+        "app.kubernetes.io/component": "master"
+      },
+      "Service/verify-bene-portal-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "registry",
+        "app.kubernetes.io/component": "bene-portal-api"
+      },
+      "Service/verify-partner-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "registry",
+        "app.kubernetes.io/component": "partner-api"
+      },
+      "Service/verify-staff-portal-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "registry",
+        "app.kubernetes.io/component": "staff-portal-api"
+      },
+      "Service/verify-staff-portal-ui": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "registry",
+        "app.kubernetes.io/component": "staff-portal-ui"
+      },
+      "Deployment/verify-id-generator": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "idgenerator",
+          "app.kubernetes.io/component": "id-generator"
+        }
+      },
+      "Deployment/verify-celery-beat-producer": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "registry",
+          "app.kubernetes.io/component": "celery-beat-producer"
+        }
+      },
+      "Deployment/verify-celery-worker": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "registry",
+          "app.kubernetes.io/component": "celery-worker"
+        }
+      },
+      "Deployment/verify-partner-api": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "registry",
+          "app.kubernetes.io/component": "partner-api"
+        }
+      },
+      "Deployment/verify-staff-portal-api": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "registry",
+          "app.kubernetes.io/component": "staff-portal-api"
+        }
+      },
+      "Deployment/verify-staff-portal-ui": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "registry",
+          "app.kubernetes.io/component": "staff-portal-ui"
+        }
+      },
+      "StatefulSet/verify-redis-master": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "redis",
+          "app.kubernetes.io/component": "master"
+        }
+      }
+    }
+  },
+  "openg2p-commons-services": {
+    "sourceCommit": "32638189178ca451d354316a099918574c6730a5",
+    "scope": "pinned original source",
+    "resourceIdentities": [
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-artifactory"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-auditmanager"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-awe"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-awe-ui"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-cm-api"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-cm-partner-api"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-cm-ui"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-esignet"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-esignet-oidc-ui"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-iam-agent-portal-api"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-iam-staff-portal-api"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-iam-staff-ui"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-inji-certify"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-keymanager"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-master-data-api"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-master-data-ui"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-mock-identity-system"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-odk-central-backend"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-odk-central-enketo"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-odk-central-frontend"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-odk-central-pyxform"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-pm-partner-api"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-pm-staff-portal-api"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-pm-staff-portal-ui"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-staff-portal-ui"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-superset"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-superset-worker"
+      ],
+      [
+        "batch/v1",
+        "CronJob",
+        "verify-a",
+        "verify-cm-api-expire"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "commons-services-esignet-schema-init"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "commons-services-mock-identity-system-schema-init"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-audit-pg-init-audit-manager"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-auditmanager-topic-init"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-awe-kc-init-1-54a07b7f"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-awe-pg-init-awe"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-certify-pg-init-inji-certify"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-client-secrets-sync-1"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-cm-kc-init-1-c9435ed8"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-cm-pg-init-consent-manager"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-cm-sanity"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-db-password-sync"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-iam-kc-init-1-f05f53db"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-iam-pg-init-iam"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-kc-sa-role-1"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-keycloak-init-1-52417914"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-master-data-geo-seed"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-master-data-iam-register-1"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-master-data-kc-init-1-427027bd"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-mock-identity-system-identity-seed"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-openg2p-awe-iam-register-1"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-partner-management-iam-register-1"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-pm-kc-init-1-4e5a623f"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-pm-pg-init-partner-management"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-postgres-init-master-data"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-superset-init-db"
+      ],
+      [
+        "monitoring.coreos.com/v1",
+        "ServiceMonitor",
+        "verify-a",
+        "verify-esignet"
+      ],
+      [
+        "monitoring.coreos.com/v1",
+        "ServiceMonitor",
+        "verify-a",
+        "verify-keymanager"
+      ],
+      [
+        "monitoring.coreos.com/v1",
+        "ServiceMonitor",
+        "verify-a",
+        "verify-mock-identity-system"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-auditmanager"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-awe"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-certify"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-cm-partner-api"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-console"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-esignet-oidc-ui"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-iam-agent-portal-api"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-iam-staff-portal-api"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-iam-staff-ui"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-master-data-api"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-master-data-ui"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-mock-identity-system"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-odk-central"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-pm-partner-api"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-pm-staff-portal-api"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-pm-staff-portal-ui"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-staff-portal-ui"
+      ],
+      [
+        "networking.istio.io/v1alpha3",
+        "VirtualService",
+        "verify-a",
+        "verify-superset"
+      ],
+      [
+        "rbac.authorization.k8s.io/v1",
+        "Role",
+        "verify-a",
+        "verify-client-secrets-sync"
+      ],
+      [
+        "rbac.authorization.k8s.io/v1",
+        "Role",
+        "verify-a",
+        "verify-inji-certify-p12-backup"
+      ],
+      [
+        "rbac.authorization.k8s.io/v1",
+        "RoleBinding",
+        "verify-a",
+        "verify-client-secrets-sync"
+      ],
+      [
+        "rbac.authorization.k8s.io/v1",
+        "RoleBinding",
+        "verify-a",
+        "verify-inji-certify-p12-backup"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-artifactory-share"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-auditmanager-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-awe-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-awe-kc-init-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-awe-ui-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-certify-db-init-sql"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-client-secrets-sync"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-cm-kc-init-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-cm-ui-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-esignet-oidc-ui-nginx-cm"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-esignet-startup"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-iam-kc-init-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-inji-certify-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-keycloak-init-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-keymanager-keygen"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-keymanager-postgres-init"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-keymanager-startup"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-master-data-iam-register-payload"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-master-data-kc-init-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-mock-identity-system-startup"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-odk-central-backend"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-odk-central-enketo"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-odk-central-frontend"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-openg2p-awe-iam-register-payload"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-partner-management-iam-register-payload"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-pm-kc-init-config"
+      ],
+      [
+        "v1",
+        "PersistentVolumeClaim",
+        "verify-a",
+        "verify-inji-certify-p12"
+      ],
+      [
+        "v1",
+        "PersistentVolumeClaim",
+        "verify-a",
+        "verify-keymanager"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "audit-manager"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "awe-admin-resolver"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "awe-db-user"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "consent-manager"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "consent-manager-db"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "consent-manager-signing"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "iam"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "inji-certify"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "master-data"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "master-data-db-user"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "openg2p-odk"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "openg2p-superset"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "partner-management-db"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "staff-portal"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-esignet-git-config-secret"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-iam-agent-portal-api-login-providers"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-iam-staff-portal-api-login-providers"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-keymanager"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-keymanager-git-config-secret"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-mock-identity-system-git-config-secret"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-odk-central-enketo"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-staff-portal"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-superset-config"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-superset-env"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-artifactory"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-auditmanager"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-awe"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-awe-ui"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-cm-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-cm-partner-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-cm-ui"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-esignet"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-esignet-oidc-ui"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-iam-agent-portal-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-iam-staff-portal-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-iam-staff-ui"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-inji-certify"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-keymanager"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-master-data-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-master-data-ui"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-mock-identity-system"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-odk-central-backend"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-odk-central-enketo"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-odk-central-frontend"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-odk-central-pyxform"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-pm-partner-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-pm-staff-portal-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-pm-staff-portal-ui"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-staff-portal-ui"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-superset"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "master-data-postgres-init"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-artifactory-foo"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-audit-pg-init"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-awe-pg-init"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-certify-pg-init"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-client-secrets-sync"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-cm-pg-init"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-esignet"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-iam-pg-init"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-inji-certify"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-keymanager"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-mock-identity-system"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-odk-central"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-pm-partner-api"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-pm-pg-init"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-pm-staff-portal-api"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-pm-staff-portal-ui"
+      ]
+    ],
+    "secretKeyReferences": [
+      [
+        "agent-portal",
+        "client_secret"
+      ],
+      [
+        "audit-manager",
+        "audit-manager-db-user"
+      ],
+      [
+        "awe-admin-resolver",
+        "client_secret"
+      ],
+      [
+        "awe-db-user",
+        "awe-db-user-password"
+      ],
+      [
+        "commons-keycloak",
+        "admin-password"
+      ],
+      [
+        "commons-minio",
+        "root-password"
+      ],
+      [
+        "commons-minio",
+        "root-user"
+      ],
+      [
+        "commons-postgresql",
+        "postgres-password"
+      ],
+      [
+        "commons-redis-auth",
+        "redis-password"
+      ],
+      [
+        "commons-services-staff-portal",
+        "client_secret"
+      ],
+      [
+        "commons-softhsm",
+        "security-pin"
+      ],
+      [
+        "consent-manager",
+        "client_secret"
+      ],
+      [
+        "consent-manager-db",
+        "consent-manager-db-user"
+      ],
+      [
+        "consent-manager-signing",
+        "password"
+      ],
+      [
+        "esignet-db-user",
+        "esignet-db-user-password"
+      ],
+      [
+        "iam",
+        "iam-db-user"
+      ],
+      [
+        "inji-certify",
+        "inji-certify-db-user"
+      ],
+      [
+        "keymgr-db-user",
+        "keymgr-db-user-password"
+      ],
+      [
+        "master-data",
+        "client_secret"
+      ],
+      [
+        "master-data-db-user",
+        "master-data-db-user-password"
+      ],
+      [
+        "mockid-db-user",
+        "mockid-db-user-password"
+      ],
+      [
+        "odk-db-user",
+        "odk-db-user-password"
+      ],
+      [
+        "openg2p-odk",
+        "client_secret"
+      ],
+      [
+        "partner-management-db",
+        "partner-management-db-user"
+      ],
+      [
+        "staff-portal",
+        "client_secret"
+      ],
+      [
+        "superset-db-user",
+        "superset-db-user-password"
+      ],
+      [
+        "verify-awe-callback-hmac",
+        "hmac-secret"
+      ],
+      [
+        "verify-esignet-git-config-secret",
+        "branch"
+      ],
+      [
+        "verify-esignet-git-config-secret",
+        "repoUrl"
+      ],
+      [
+        "verify-keymanager",
+        "p12-keystore-pass"
+      ],
+      [
+        "verify-keymanager-git-config-secret",
+        "branch"
+      ],
+      [
+        "verify-keymanager-git-config-secret",
+        "repoUrl"
+      ],
+      [
+        "verify-mock-identity-system-git-config-secret",
+        "branch"
+      ],
+      [
+        "verify-mock-identity-system-git-config-secret",
+        "repoUrl"
+      ],
+      [
+        "verify-odk-central-enketo",
+        "enketo-api-key"
+      ],
+      [
+        "verify-odk-central-enketo",
+        "enketo-less-secret"
+      ],
+      [
+        "verify-odk-central-enketo",
+        "enketo-secret"
+      ],
+      [
+        "verify-staff-portal",
+        "client_secret"
+      ]
+    ],
+    "selectors": {
+      "Service/verify-artifactory": {
+        "app.kubernetes.io/name": "artifactory",
+        "app.kubernetes.io/instance": "verify"
+      },
+      "Service/verify-esignet-oidc-ui": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "esignet-oidc-ui"
+      },
+      "Service/verify-esignet": {
+        "app.kubernetes.io/name": "esignet",
+        "app.kubernetes.io/instance": "verify"
+      },
+      "Service/verify-keymanager": {
+        "app.kubernetes.io/name": "keymanager",
+        "app.kubernetes.io/instance": "verify"
+      },
+      "Service/verify-master-data-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "master-data",
+        "app.kubernetes.io/component": "master-data-api"
+      },
+      "Service/verify-master-data-ui": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "master-data",
+        "app.kubernetes.io/component": "master-data-ui"
+      },
+      "Service/verify-mock-identity-system": {
+        "app.kubernetes.io/name": "mock-identity-system",
+        "app.kubernetes.io/instance": "verify"
+      },
+      "Service/verify-odk-central-enketo": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "odk-central-enketo"
+      },
+      "Service/verify-odk-central-pyxform": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "odk-central-pyxform"
+      },
+      "Service/verify-odk-central-backend": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "odk-central-backend"
+      },
+      "Service/verify-odk-central-frontend": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "odk-central-frontend"
+      },
+      "Service/verify-auditmanager": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "openg2p-audit-manager",
+        "app.kubernetes.io/component": "audit-manager"
+      },
+      "Service/verify-awe-ui": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "openg2p-awe",
+        "app.kubernetes.io/component": "awe-ui"
+      },
+      "Service/verify-awe": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "openg2p-awe",
+        "app.kubernetes.io/component": "awe"
+      },
+      "Service/verify-cm-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "openg2p-consent-manager",
+        "app.kubernetes.io/component": "consent-manager-cm-api"
+      },
+      "Service/verify-cm-partner-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "openg2p-consent-manager",
+        "app.kubernetes.io/component": "consent-manager-cm-partner-api"
+      },
+      "Service/verify-cm-ui": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "openg2p-consent-manager",
+        "app.kubernetes.io/component": "consent-manager-ui"
+      },
+      "Service/verify-iam-agent-portal-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "openg2p-iam-service",
+        "app.kubernetes.io/component": "iam-agent-portal-api"
+      },
+      "Service/verify-iam-staff-portal-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "openg2p-iam-service",
+        "app.kubernetes.io/component": "iam-staff-portal-api"
+      },
+      "Service/verify-iam-staff-ui": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "openg2p-iam-service",
+        "app.kubernetes.io/component": "iam-staff-ui"
+      },
+      "Service/verify-inji-certify": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "openg2p-inji-certify",
+        "app.kubernetes.io/component": "certify"
+      },
+      "Service/verify-staff-portal-ui": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "openg2p-staff-portal-ui",
+        "app.kubernetes.io/component": "staff-portal-ui"
+      },
+      "Service/verify-pm-partner-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "partner-management",
+        "app.kubernetes.io/component": "partner-management-partner-api"
+      },
+      "Service/verify-pm-staff-portal-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "partner-management",
+        "app.kubernetes.io/component": "partner-management-staff-portal-api"
+      },
+      "Service/verify-pm-staff-portal-ui": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "partner-management",
+        "app.kubernetes.io/component": "partner-management-staff-portal-ui"
+      },
+      "Service/verify-superset": {
+        "app": "superset",
+        "release": "verify"
+      },
+      "Deployment/verify-artifactory": {
+        "matchLabels": {
+          "app.kubernetes.io/name": "artifactory",
+          "app.kubernetes.io/instance": "verify"
+        }
+      },
+      "Deployment/verify-esignet": {
+        "matchLabels": {
+          "app.kubernetes.io/name": "esignet",
+          "app.kubernetes.io/instance": "verify"
+        }
+      },
+      "Deployment/verify-esignet-oidc-ui": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "esignet-oidc-ui"
+        }
+      },
+      "Deployment/verify-keymanager": {
+        "matchLabels": {
+          "app.kubernetes.io/name": "keymanager",
+          "app.kubernetes.io/instance": "verify"
+        }
+      },
+      "Deployment/verify-master-data-api": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "master-data",
+          "app.kubernetes.io/component": "master-data-api"
+        }
+      },
+      "Deployment/verify-master-data-ui": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "master-data",
+          "app.kubernetes.io/component": "master-data-ui"
+        }
+      },
+      "Deployment/verify-mock-identity-system": {
+        "matchLabels": {
+          "app.kubernetes.io/name": "mock-identity-system",
+          "app.kubernetes.io/instance": "verify"
+        }
+      },
+      "Deployment/verify-odk-central-enketo": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "odk-central-enketo"
+        }
+      },
+      "Deployment/verify-odk-central-pyxform": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "odk-central-pyxform"
+        }
+      },
+      "Deployment/verify-odk-central-backend": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "odk-central-backend"
+        }
+      },
+      "Deployment/verify-odk-central-frontend": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "odk-central-frontend"
+        }
+      },
+      "Deployment/verify-auditmanager": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "openg2p-audit-manager",
+          "app.kubernetes.io/component": "audit-manager"
+        }
+      },
+      "Deployment/verify-awe-ui": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "openg2p-awe",
+          "app.kubernetes.io/component": "awe-ui"
+        }
+      },
+      "Deployment/verify-awe": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "openg2p-awe",
+          "app.kubernetes.io/component": "awe"
+        }
+      },
+      "Deployment/verify-cm-api": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "openg2p-consent-manager",
+          "app.kubernetes.io/component": "consent-manager-cm-api"
+        }
+      },
+      "Deployment/verify-cm-partner-api": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "openg2p-consent-manager",
+          "app.kubernetes.io/component": "consent-manager-cm-partner-api"
+        }
+      },
+      "Deployment/verify-cm-ui": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "openg2p-consent-manager",
+          "app.kubernetes.io/component": "consent-manager-ui"
+        }
+      },
+      "Deployment/verify-iam-agent-portal-api": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "openg2p-iam-service",
+          "app.kubernetes.io/component": "iam-agent-portal-api"
+        }
+      },
+      "Deployment/verify-iam-staff-portal-api": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "openg2p-iam-service",
+          "app.kubernetes.io/component": "iam-staff-portal-api"
+        }
+      },
+      "Deployment/verify-iam-staff-ui": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "openg2p-iam-service",
+          "app.kubernetes.io/component": "iam-staff-ui"
+        }
+      },
+      "Deployment/verify-inji-certify": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "openg2p-inji-certify",
+          "app.kubernetes.io/component": "certify"
+        }
+      },
+      "Deployment/verify-staff-portal-ui": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "openg2p-staff-portal-ui",
+          "app.kubernetes.io/component": "staff-portal-ui"
+        }
+      },
+      "Deployment/verify-pm-partner-api": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "partner-management",
+          "app.kubernetes.io/component": "partner-management-partner-api"
+        }
+      },
+      "Deployment/verify-pm-staff-portal-api": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "partner-management",
+          "app.kubernetes.io/component": "partner-management-staff-portal-api"
+        }
+      },
+      "Deployment/verify-pm-staff-portal-ui": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "partner-management",
+          "app.kubernetes.io/component": "partner-management-staff-portal-ui"
+        }
+      },
+      "Deployment/verify-superset-worker": {
+        "matchLabels": {
+          "app": "superset-worker",
+          "release": "verify"
+        }
+      },
+      "Deployment/verify-superset": {
+        "matchLabels": {
+          "app": "superset",
+          "release": "verify"
+        }
+      }
+    }
+  },
+  "openg2p-da-registry": {
+    "sourceCommit": "9714c3c5307a7e61f4379b613229837a4b76e952",
+    "scope": "pinned source with DA unavailable component set disabled",
+    "resourceIdentities": [
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "verify-awe-callback-hmac"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-bene-portal-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-partner-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-staff-portal-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-staff-portal-ui"
+      ]
+    ],
+    "secretKeyReferences": [],
+    "selectors": {
+      "Service/verify-bene-portal-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "registry",
+        "app.kubernetes.io/component": "bene-portal-api"
+      },
+      "Service/verify-partner-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "registry",
+        "app.kubernetes.io/component": "partner-api"
+      },
+      "Service/verify-staff-portal-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "registry",
+        "app.kubernetes.io/component": "staff-portal-api"
+      },
+      "Service/verify-staff-portal-ui": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "registry",
+        "app.kubernetes.io/component": "staff-portal-ui"
+      }
+    }
+  }
+}

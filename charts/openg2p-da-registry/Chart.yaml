@@ -1,0 +1,23 @@
+apiVersion: v2
+name: openg2p-da-registry
+description: COSS da registry with pinned upstream registry services and disabled
+  optional dashboard API/UI workloads. Images retain independent versions.
+type: application
+version: 1.0.0-dev.1
+appVersion: develop
+keywords:
+- openg2p
+- registry
+- da-registry
+home: https://openg2p.org
+icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+sources:
+- https://github.com/Centre-for-Open-Societal-Systems/DA-registry-backend
+- https://github.com/Centre-for-Open-Societal-Systems/da-registry
+dependencies:
+- name: openg2p-registry
+  alias: registry
+  version: 1.2.2-rc.544
+  repository: https://openg2p.github.io/openg2p-helm
+annotations:
+  coss.org/source-commit: 9714c3c5307a7e61f4379b613229837a4b76e952

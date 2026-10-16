@@ -1,0 +1,1 @@
+- Refer to [docs](https://docs.openg2p.org/deployment/concepts/openg2p-commons-helm-chart)

@@ -1,0 +1,76 @@
+annotations:
+  catalog.cattle.io/display-name: OpenG2P Commons Services
+  catalog.cattle.io/release-name: commons-services
+  openg2p.org/add-to-rancher: openg2p.org/add-to-rancher
+  org.opencontainers.image.revision: 32638189178ca451d354316a099918574c6730a5
+  org.opencontainers.image.source: https://github.com/OpenG2P/commons
+  coss.org/upstream-version: 2.3.4-rc.247
+apiVersion: v2
+appVersion: 2.3.4-rc.247
+dependencies:
+- alias: master-data
+  condition: master-data.enabled
+  name: openg2p-master-data
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.1.4-rc.106
+- condition: artifactory.enabled
+  name: artifactory
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 12.0.3
+- condition: keymanager.enabled
+  name: keymanager
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 12.1.1
+- condition: superset.enabled
+  name: superset
+  repository: https://apache.github.io/superset
+  version: 0.12.11
+- condition: esignet.enabled
+  name: esignet
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.4.3
+- condition: mock-identity-system.enabled
+  name: mock-identity-system
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 0.0.0-develop.9
+- condition: odk-central.enabled
+  name: odk-central
+  repository: https://openg2p.github.io/openg2p-helm
+  version: v2025.2.2
+- condition: openg2p-iam-service.enabled
+  name: openg2p-iam-service
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.4.4-rc.125
+- condition: openg2p-inji-certify.enabled
+  name: openg2p-inji-certify
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 0.0.0-develop.14
+- condition: openg2p-audit-manager.enabled
+  name: openg2p-audit-manager
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.2.0
+- condition: openg2p-staff-portal-ui.enabled
+  name: openg2p-staff-portal-ui
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.2.0
+- condition: openg2p-awe.enabled
+  name: openg2p-awe
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.2.2
+- condition: partner-management.enabled
+  name: partner-management
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.0.2
+- condition: openg2p-consent-manager.enabled
+  name: openg2p-consent-manager
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.0.2
+- condition: keycloak-init.enabled
+  name: keycloak-init
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.2.0
+description: Helm chart for OpenG2P Commons application services
+icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+name: openg2p-commons-services
+type: application
+version: 1.0.0-dev.1
