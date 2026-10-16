@@ -1,11 +1,7 @@
-# INCOMPLETE public checklist, not an upgrade overlay or a full install values file.
-# Images are verified in chart defaults; merge private environment settings.
 global:
-  registryHostname: registry.farmer-dev.oanstaging.com
+  registryHostname: farmer-registry-development.oanstaging.com
   postgresqlHost: commons-postgresql.commons.svc.cluster.local
 dashboardApi:
   enabled: true
 dashboardUi:
   enabled: false
-# Reporting jobs and their existing Secret references remain owned by the registry.
-# Confirm migrations and image compatibility before changing analytics settings.

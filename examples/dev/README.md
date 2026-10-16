@@ -12,9 +12,12 @@ has a verified API image but remains disabled until reporting/schema preparation
 DA backend/dashboard components, all current standalone dashboard UIs and
 Aggregation remain disabled because appropriate images are unavailable.
 
-The three public hosts match the recorded 16 October 2026 dev route inventory.
+The examples use the canonical `*-development.oanstaging.com` hosts confirmed
+on the new server. [The complete endpoint map](../../guides/dev-urls.md) includes
+IAM, cookie, storage, API and callback settings. For an upgrade, apply the
+explicit URL overlay in `environments/dev/values/`; examples here remain checklists.
 Shared PostgreSQL is an example; confirm saved private values. DA's host and
-namespace remain unconfirmed. Reconcile actual DB/IAM/AWE endpoints privately.
+namespace remain unconfirmed. Reconcile private settings before applying changes.
 
 Optional workloads support `image.digest`, `imagePullSecrets`, resources,
 `envFrom` and runtime configuration. UI/DA/Aggregation `env` uses Kubernetes

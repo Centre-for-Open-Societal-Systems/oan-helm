@@ -15,8 +15,8 @@ cluster deployment or ownership migration has been performed.
    `https://asmitonweb.github.io/oan-helm/`. The preview uses the same relative
    archive paths. Do not enter the GitHub source repository URL here.
 3. Confirm `/index.yaml` and its `.tgz` archive URLs are available, refresh the
-   repository, and select exact version **`1.0.0-dev.1`**, including its prerelease
-   suffix. Never substitute an unspecified latest version.
+   repository, and select exact version **`1.0.0-dev.2`**, including its prerelease
+   suffix. Version `1.0.0-dev.1` is retained for history and has old URL defaults.
 
 ## New releases
 
@@ -67,6 +67,10 @@ version. Preserve the current private values and enabled-service settings, then
 apply only reviewed changes. Public examples are incomplete and are not upgrade
 overlays. Do not install a second release over existing resource names.
 
+For this URL migration, explicitly merge the matching public overlay under
+`environments/dev/values/`; saved literal URLs otherwise override new defaults.
+See [the URL migration guide](dev-urls.md) for canonical hosts and list handling.
+
 Before upgrade, record the current release name, namespace, chart/version and
 Helm revision; retain its package and privately exported values. Back up affected
 databases and storage. Review schema/seed jobs, platform version changes,
@@ -77,8 +81,9 @@ An equivalent CLI upgrade, once those checks are complete, is:
 
 ```sh
 helm upgrade farmer-registry coss/openg2p-farmer-registry \
-  --namespace farmer --version 1.0.0-dev.1 \
-  --reuse-values -f /private/reviewed-changes.yaml --wait --timeout 15m
+  --namespace farmer --version 1.0.0-dev.2 \
+  --reuse-values -f /private/reviewed-changes.yaml \
+  -f environments/dev/values/farmer.yaml --wait --timeout 15m
 ```
 
 Substitute the **actual current** release/namespace from the installed app. This

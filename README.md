@@ -1,17 +1,23 @@
 # COSS Helm repository
 
-Five versioned charts for manual Rancher installation and upgrades: Farmer,
-Crop Sown, Livestock, DA and customized Commons Services. Initial chart version
-is `1.0.0-dev.1`. Component versions and verified image digests are recorded
-separately; automatic build-number synchronization is deferred.
+Start with the [service catalog](docs/service-catalog.md): it maps every included
+COSS service to its chart, source/configuration and enablement status. The
+[five editable source charts](charts/README.md) are Farmer, Crop Sown, Livestock,
+DA and Commons Services, which contains COSS Consent and Aggregation.
+
+Current chart version is **`1.0.0-dev.2`**, with the migrated new-dev URLs.
+The original `1.0.0-dev.1` packages remain available unchanged. Component versions
+and image digests are separate; automatic build-number synchronization is deferred.
 
 | Location | Contents |
 | --- | --- |
-| `charts/` | Chart sources and bundled locked dependencies |
+| `charts/` | Five editable source trees; start at [charts/README.md](charts/README.md) |
+| `docs/service-catalog.md` | Every included service, its COSS repository, owning chart and status |
+| `environments/dev/` | Canonical endpoint inventory and public URL migration overlays |
 | `examples/dev/` | Public dev configuration checklists; no private live values |
 | `releases/` | Release manifest, provenance, deployment comparison and validation evidence |
-| `docs/` | Five archives, SHA256SUMS and cumulative Helm index for Pages |
-| `guides/` | Rancher installation, upgrades and component prerequisites |
+| `repository/` | Generated Rancher downloads, SHA256SUMS and cumulative Helm index, including historical versions |
+| `docs/` | Readable service catalog, URL migration and Rancher guides |
 | `scripts/validate.py` | Dependency, render, packaging and repository validation |
 
 Rancher repository URLs after Pages activation:
@@ -23,12 +29,15 @@ Enable **GitHub Pages → Source: GitHub Actions** before Rancher can consume
 either URL. PR workflows validate only. Pages publication runs on `main` after
 merge; this change does not activate Pages, merge the PR or deploy to Kubernetes.
 
-Use the [Rancher guide](guides/rancher-dev.md) and
-[readiness table](guides/readiness.md). Published COSS core/Consent images are
+Use the [Rancher guide](docs/rancher-dev.md) and
+[new-dev URL migration guide](docs/dev-urls.md), plus the
+[readiness table](docs/readiness.md). Published COSS core/Consent images are
 pinned by digest. Optional dashboard APIs also have verified images but remain
 opt-in for reporting/identity preparation. Dashboard UIs, DA backend/dashboard
 workloads and Aggregation remain disabled pending images or configuration.
 Private registry pull credentials and live values stay outside Git.
+Unconfirmed public endpoints stay unset. Superset/Certify defaults match their
+disabled state in the inspected dev release; notifications await confirmed routes.
 
 Commons Services was imported from the latest published OpenG2P package at
 verification time, `2.3.4-rc.247`, with its published SHA-256 verified. All registry

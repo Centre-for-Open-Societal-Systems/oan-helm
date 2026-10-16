@@ -1,25 +1,23 @@
 {
   "helm": "v3.19.0+g3d8990f",
+  "chartVersion": "1.0.0-dev.2",
   "clusterAccess": false,
   "charts": {
     "openg2p-commons-services": {
       "lint": "strict passed",
-      "resources": 174,
+      "resources": 155,
       "namespaces": [
         "verify-a",
         "verify-b"
       ],
       "preservation": "upstream resource identities, selectors and Secret references match baseline",
-      "baselineScope": "pinned original source",
+      "baselineScope": "original 1.0.0-dev.1 resource names/selectors/Secret references; Commons Superset and Certify disabled to match inspected dev configuration",
       "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
       "defaultImageReferences": [
         "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api:develop-5361069@sha256:67180496e5f9d5edb5afb9727d9da4501e96599166c1712e4e24dbf1f6fa2a77",
         "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-sanity:develop-5361069@sha256:1af320db949eb1c641dec5533b3f7352980483de45774b16e310cca996a0f330",
         "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-ui:develop-5361069@sha256:1ae7cc25b094e9c72ea9262a8d920480d2049b13d1505f2a9a2aeeeff8abf92d",
-        "alpine/k8s:1.31.0",
         "apache/kafka:3.7.2",
-        "apache/superset:dockerize",
-        "apachesuperset.docker.scarf.sh/apache/superset:4.0.1",
         "busybox:1.36",
         "curlimages/curl:8.11.0",
         "curlimages/curl:8.11.1",
@@ -27,7 +25,6 @@
         "ghcr.io/enketo/enketo:7.5.1",
         "ghcr.io/getodk/central-nginx:v2025.2.1",
         "ghcr.io/getodk/pyxform-http:v3.1.0",
-        "injistack/inji-certify-with-plugins:0.14.0",
         "jbergknoff/postgresql-client:latest",
         "mosipid/artifactory-server:1.4.1-ES",
         "mosipid/esignet:1.4.1",
@@ -53,10 +50,10 @@
         "openg2p/partner-management-staff-portal-api:1.0.2",
         "openg2p/partner-management-staff-portal-ui:1.0.2",
         "openg2p/postgres-init:1.2.0",
-        "openg2p/postgres-init:develop",
         "postgres:15-alpine"
       ],
-      "devExample": "examples\\dev\\commons-services.yaml: strict lint and render passed"
+      "devExample": "examples\\dev\\commons-services.yaml: strict lint and render passed",
+      "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-cropsown-registry": {
       "lint": "strict passed",
@@ -66,7 +63,7 @@
         "verify-b"
       ],
       "preservation": "upstream resource identities, selectors and Secret references match baseline",
-      "baselineScope": "pinned original source",
+      "baselineScope": "original 1.0.0-dev.1 resource names/selectors/Secret references; Commons Superset and Certify disabled to match inspected dev configuration",
       "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
       "defaultImageReferences": [
         "379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/celery:develop-88@sha256:dab5d392746d1580402a1ff02c61af7ed8e2dcfd317bcae166705d81e4cf625b",
@@ -84,7 +81,8 @@
         "openg2p/postgres-init:1.2.0",
         "openg2p/postgres-init:develop"
       ],
-      "devExample": "examples\\dev\\cropsown.yaml: strict lint and render passed"
+      "devExample": "examples\\dev\\cropsown.yaml: strict lint and render passed",
+      "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-da-registry": {
       "lint": "strict passed",
@@ -94,10 +92,11 @@
         "verify-b"
       ],
       "preservation": "upstream resource identities, selectors and Secret references match baseline",
-      "baselineScope": "pinned source with DA unavailable component set disabled",
+      "baselineScope": "original 1.0.0-dev.1 resource names/selectors/Secret references; Commons Superset and Certify disabled to match inspected dev configuration",
       "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
       "defaultImageReferences": [],
-      "devExample": "examples\\dev\\da.yaml: strict lint and render passed"
+      "devExample": "examples\\dev\\da.yaml: strict lint and render passed",
+      "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-farmer-registry": {
       "lint": "strict passed",
@@ -107,7 +106,7 @@
         "verify-b"
       ],
       "preservation": "upstream resource identities, selectors and Secret references match baseline",
-      "baselineScope": "pinned original source",
+      "baselineScope": "original 1.0.0-dev.1 resource names/selectors/Secret references; Commons Superset and Certify disabled to match inspected dev configuration",
       "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
       "defaultImageReferences": [
         "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/celery:90811b61a59f@sha256:15273f1e29b54f02df09b0bb69c5cf21d68432c1c34f0dd6521a1fbfe64b49c2",
@@ -126,7 +125,8 @@
         "openg2p/postgres-init:1.2.0",
         "openg2p/postgres-init:develop"
       ],
-      "devExample": "examples\\dev\\farmer.yaml: strict lint and render passed"
+      "devExample": "examples\\dev\\farmer.yaml: strict lint and render passed",
+      "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-livestock-registry": {
       "lint": "strict passed",
@@ -136,7 +136,7 @@
         "verify-b"
       ],
       "preservation": "upstream resource identities, selectors and Secret references match baseline",
-      "baselineScope": "pinned original source",
+      "baselineScope": "original 1.0.0-dev.1 resource names/selectors/Secret references; Commons Superset and Certify disabled to match inspected dev configuration",
       "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
       "defaultImageReferences": [
         "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/celery:bf78e69a5fd6@sha256:982e8272993305d90d34ea5a449f915c5ad21689ba0788c48806fd003b1c143a",
@@ -154,11 +154,14 @@
         "openg2p/postgres-init:1.2.0",
         "openg2p/postgres-init:develop"
       ],
-      "devExample": "examples\\dev\\livestock.yaml: strict lint and render passed"
+      "devExample": "examples\\dev\\livestock.yaml: strict lint and render passed",
+      "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     }
   },
-  "upstreamResolution": "not attempted",
+  "upstreamResolution": "passed",
   "offlineResolution": "All five locks resolved from dependencies bundled with verified source packages",
-  "packages": 5,
+  "packages": 10,
+  "currentPackages": 5,
+  "historicalPackages": 5,
   "index": "Relative URLs, SHA-256, HTTP download, exact Helm version selection and repository-based renders verified against loopback server"
 }

@@ -1,45 +1,154 @@
 global:
-  baseDomain: '{{ .Release.Namespace }}.openg2p.org'
+  baseDomain: oanstaging.com
   registryVariant: farmer-registry
-  registryHostname: '{{ .Release.Name }}.{{ tpl .Values.global.baseDomain $ }}'
-  minioHost: commons-minio:9000
-  minioSecure: false
-  postgresqlHost: commons-postgresql
+  registryHostname: farmer-registry-development.oanstaging.com
+  minioHost: minio-farmer-development.oanstaging.com
+  minioSecure: true
+  postgresqlHost: commons-postgresql.commons.svc.cluster.local
   registryDB: '{{ printf "%s" .Release.Name | replace "-" "_" }}'
   registryDBPort: 5432
   registryDBUser: '{{ printf "%s_user" .Release.Name | replace "-" "_" }}'
   registryDBSecret: '{{ .Release.Name }}'
   registryDBUserPasswordKey: '{{ .Release.Name }}-db-user'
-  keycloakBaseUrl: https://keycloak.{{ tpl .Values.global.baseDomain $ }}
+  keycloakBaseUrl: https://keycloak-development.oanstaging.com
   keycloakRealm: staff
-  keycloakIssuerUrl: '{{ tpl .Values.global.keycloakBaseUrl $ }}/realms/{{ tpl .Values.global.keycloakRealm
-    $ }}'
-  masterDataApiUrl: http://commons-services-master-data-api
-  masterDataTokenUrl: '{{ tpl .Values.global.keycloakIssuerUrl $ }}/protocol/openid-connect/token'
+  keycloakIssuerUrl: https://keycloak-development.oanstaging.com/realms/staff
+  masterDataApiUrl: http://commons-services-master-data-api.commons.svc.cluster.local
+  masterDataTokenUrl: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/token
   authClientId: '{{ .Release.Name }}-staff-portal'
   authClientSecret: '{{ .Release.Name }}-staff-portal'
   authClientSecretKey: client_secret
+  keycloakInternalUrl: http://commons-keycloak.commons.svc.cluster.local:80
+  keycloakExternalIssuerUrl: https://keycloak-development.oanstaging.com/realms/staff
+  iamServiceUrl: http://commons-services-iam-staff-portal-api.commons.svc.cluster.local
+  partnerManagementApiUrl: http://commons-services-pm-partner-api.commons.svc.cluster.local
+  partnerManagementAdminApiUrl: http://commons-services-pm-staff-portal-api.commons.svc.cluster.local
+  consentManagerUrl: http://commons-services-cm-partner-api.commons.svc.cluster.local
+  consentManagerStaffUrl: http://commons-services-cm-api.commons.svc.cluster.local
+  auditManagerUrl: http://commons-services-auditmanager.commons.svc.cluster.local:80
+  aweHostname: awe-development.oanstaging.com
+  aweBaseUrl: http://commons-services-awe.commons.svc.cluster.local
+  aweDefaultCallbackUrl: http://{{ .Release.Name }}-staff-portal-api.{{ .Release.Namespace
+    }}.svc.cluster.local/awe/webhooks/decision
+  idGeneratorInternalUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace
+    }}.svc.cluster.local/v1
+  idGeneratorApiUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace
+    }}.svc.cluster.local/v1
+  notificationEnabled: false
+  notificationApiHostname: ''
+  notificationWsHostname: ''
+  notificationBackendUrl: ''
+  notificationWebsocketUrl: ''
+  notificationProviderUrl: ''
+  staffPortalBaseUrl: https://farmer-registry-development.oanstaging.com
+  idGeneratorHostname: idgenerator-farmer-development.oanstaging.com
 registry:
   staffUi:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/staff-ui
       tag: 90811b61a59f@sha256:e7e5c7d8d0935f8e2957019afe68cad168de8d08f34b52cffc8c91fe92d7cbc4
+    iamPublicUrl: https://staff-iam-development.oanstaging.com
+    envVars:
+      COOKIE_DOMAIN: .oanstaging.com
+      IAM_URL: https://staff-iam-development.oanstaging.com
+      KEYCLOAK_LOGOUT_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/logout
+      APP_URL: https://farmer-registry-development.oanstaging.com
+      REDIRECT_URL: https://farmer-registry-development.oanstaging.com
+      VERIFY_SERVICE_URL: https://farmer-registry-development.oanstaging.com/v1/verify
+      CSP_SRC_IMG: 'self blob: data: https://minio-farmer-development.oanstaging.com'
+      MASTERDATA_BACKEND_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
+      PARTNER_INGEST_URL: https://partner-farmer-development.oanstaging.com/partner/ingest_data?data_model=dcivc
+      NOTIFICATION_BACKEND_URL: ''
+      NOTIFICATION_WEBSOCKET_URL: ''
+    partnerIngestUrl: https://partner-farmer-development.oanstaging.com/partner/ingest_data?data_model=dcivc
+    hostname: farmer-registry-development.oanstaging.com
+    istio:
+      virtualservice:
+        host: farmer-registry-development.oanstaging.com
+      gateway:
+        host: farmer-registry-development.oanstaging.com
   staffApi:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/staff-api
       tag: 90811b61a59f@sha256:b8116e52f51c85d228d26ab97113b75cf293a9dfba120a062c16d97727039ed5
+    envVars:
+      REGISTRY_STAFF_PORTAL_API_AUTH_REDIS_URL: redis://commons-redis-master.commons.svc.cluster.local:6379/0
+      REGISTRY_STAFF_PORTAL_API_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_STAFF_PORTAL_API_MASTER_DATA_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
+      REGISTRY_STAFF_PORTAL_API_MASTER_DATA_TOKEN_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/token
+      REGISTRY_STAFF_PORTAL_API_PARTNER_MGMT_API_URL: http://commons-services-pm-partner-api.commons.svc.cluster.local
+      REGISTRY_STAFF_PORTAL_API_PARTNER_MGMT_ADMIN_API_URL: http://commons-services-pm-staff-portal-api.commons.svc.cluster.local
+      REGISTRY_STAFF_PORTAL_API_PARTNER_MGMT_ADMIN_TOKEN_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/token
+      REGISTRY_STAFF_PORTAL_API_AWE_BASE_URL: http://commons-services-awe.commons.svc.cluster.local
+      REGISTRY_STAFF_PORTAL_API_AWE_DEFAULT_CALLBACK_URL: http://{{ .Release.Name
+        }}-staff-portal-api.{{ .Release.Namespace }}.svc.cluster.local/awe/webhooks/decision
+      REGISTRY_STAFF_PORTAL_API_AUDIT_MANAGER_URL: http://commons-services-auditmanager.commons.svc.cluster.local:80
+      COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      NOTIFICATION_ENABLED: 'false'
+      NOTIFICATION_PROVIDER_URL: ''
+      KEYCLOAK_BASE_URL: https://keycloak-development.oanstaging.com
+      REGISTRY_STAFF_PORTAL_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CORE_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+    hostname: staff-farmer-development.oanstaging.com
+    istio:
+      virtualservice:
+        host: staff-farmer-development.oanstaging.com
+      gateway:
+        host: staff-farmer-development.oanstaging.com
   partnerApi:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/partner-api
       tag: 90811b61a59f@sha256:800b7b097a4fd8bf7a09ef0e24969ed374e0126933d9aa79c47e186644f4315c
+    envVars:
+      REGISTRY_PARTNER_API_KEYMANAGER_API_BASE_URL: http://commons-services-keymanager.commons.svc.cluster.local/v1/keymanager
+      REGISTRY_PARTNER_API_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_PARTNER_API_MASTER_DATA_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
+      REGISTRY_PARTNER_API_MASTER_DATA_TOKEN_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/token
+      REGISTRY_PARTNER_API_PARTNER_MGMT_API_URL: http://commons-services-pm-partner-api.commons.svc.cluster.local
+      REGISTRY_PARTNER_API_PARTNER_MGMT_ADMIN_API_URL: http://commons-services-pm-staff-portal-api.commons.svc.cluster.local
+      REGISTRY_PARTNER_API_PARTNER_MGMT_ADMIN_TOKEN_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/token
+      REGISTRY_PARTNER_API_AUDIT_MANAGER_URL: http://commons-services-auditmanager.commons.svc.cluster.local:80
+      COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      NOTIFICATION_ENABLED: 'false'
+      NOTIFICATION_PROVIDER_URL: ''
+      KEYCLOAK_BASE_URL: https://keycloak-development.oanstaging.com
+      REGISTRY_PARTNER_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+    hostname: partner-farmer-development.oanstaging.com
+    istio:
+      virtualservice:
+        host: partner-farmer-development.oanstaging.com
+      gateway:
+        host: partner-farmer-development.oanstaging.com
   celeryWorker:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/celery
       tag: 90811b61a59f@sha256:15273f1e29b54f02df09b0bb69c5cf21d68432c1c34f0dd6521a1fbfe64b49c2
+    envVars:
+      REGISTRY_CELERY_WORKERS_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CELERY_WORKERS_MASTER_DATA_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
+      REGISTRY_CELERY_WORKERS_MASTER_DATA_TOKEN_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/token
+      REGISTRY_CELERY_WORKERS_PARTNER_MGMT_API_URL: http://commons-services-pm-partner-api.commons.svc.cluster.local
+      REGISTRY_CELERY_WORKERS_PARTNER_MGMT_ADMIN_API_URL: http://commons-services-pm-staff-portal-api.commons.svc.cluster.local
+      REGISTRY_CELERY_WORKERS_PARTNER_MGMT_ADMIN_TOKEN_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/token
+      REGISTRY_CELERY_WORKERS_AWE_BASE_URL: http://commons-services-awe.commons.svc.cluster.local
+      REGISTRY_CELERY_WORKERS_AWE_DEFAULT_CALLBACK_URL: http://{{ .Release.Name }}-staff-portal-api.{{
+        .Release.Namespace }}.svc.cluster.local/awe/webhooks/decision
+      REGISTRY_CELERY_WORKERS_AWE_TOKEN_ISSUER_BASE_URL: https://keycloak-development.oanstaging.com
+      REGISTRY_CELERY_WORKERS_AWE_TOKEN_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/token
+      COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      NOTIFICATION_ENABLED: 'false'
+      NOTIFICATION_PROVIDER_URL: ''
+      REGISTRY_CELERY_WORKERS_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
   celeryBeat:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/celery
       tag: 90811b61a59f@sha256:15273f1e29b54f02df09b0bb69c5cf21d68432c1c34f0dd6521a1fbfe64b49c2
+    envVars:
+      COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      NOTIFICATION_ENABLED: 'false'
+      NOTIFICATION_PROVIDER_URL: ''
+      REGISTRY_CELERY_BEAT_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CELERY_BEAT_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
   dbSeed:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/db-seed
@@ -64,6 +173,15 @@ registry:
             idLength: 12
           household:
             idLength: 10
+      hostname: '{{ tpl .Values.global.idGeneratorHostname $ }}'
+      istio:
+        virtualservice:
+          host: '{{ tpl .Values.global.idGeneratorHostname $ }}'
+        gateway:
+          host: '{{ tpl .Values.global.idGeneratorHostname $ }}'
+    postgres-init:
+      postgresql:
+        host: commons-postgresql.commons.svc.cluster.local
   sanity:
     enabled: true
     image:
@@ -81,6 +199,12 @@ registry:
     enabled: false
   agentPortalUi:
     enabled: false
+  keycloak-init:
+    keycloak:
+      url: http://commons-keycloak.commons.svc.cluster.local:80
+  postgres-init:
+    postgresql:
+      host: commons-postgresql.commons.svc.cluster.local
 analytics:
   image:
     repository: ''
@@ -112,7 +236,7 @@ analytics:
       key: password
     supersetDatabaseName: FR
     superset:
-      url: http://commons-services-superset:8088
+      url: http://commons-services-superset.commons.svc.cluster.local:8088
       required: false
       waitAttempts: 60
       waitSeconds: 5

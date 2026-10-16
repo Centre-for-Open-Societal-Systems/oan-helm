@@ -5,12 +5,14 @@ against it checks Helm's locks without claiming a fresh upstream download.
 Use --online to also resolve the locks against their original repositories.
 """
 import argparse
+import base64
 from contextlib import contextmanager
 import functools
 import hashlib
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -18,10 +20,12 @@ import tarfile
 import threading
 import uuid
 from urllib.request import urlopen
+from urllib.parse import urlsplit
 
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
+CURRENT_VERSION = yaml.safe_load((ROOT / "releases/current.yaml").read_text())["chartVersion"]
 HELM = os.environ.get("HELM", "helm")
 CHARTS = sorted((ROOT / "charts").glob("*/Chart.yaml"))
 EXPECTED = {f"openg2p-{x}-registry" for x in ["farmer", "cropsown", "livestock", "da"]} | {"openg2p-commons-services"}
@@ -124,6 +128,66 @@ def secret_refs(docs):
     return refs
 
 
+def stable_identities(identities):
+    # Upstream includes a settings hash in Keycloak initialization Job names.
+    # URL changes intentionally change that hash; stable workload owners do not.
+    return {(api, kind, namespace, re.sub(r"(-keycloak-init-\d+)-[a-f0-9]{8}$", r"\1-<settings-hash>", name) if kind == "Job" else name) for api, kind, namespace, name in identities}
+
+
+def check_dev_endpoints(docs):
+    policy = read(ROOT / "environments/dev/endpoints.yaml")
+    allowed = set(policy["publicHosts"].values())
+    texts = [json.dumps(docs)]
+    for doc in docs:
+        if doc["kind"] == "Secret":
+            for value in doc.get("data", {}).values():
+                try:
+                    texts.append(base64.b64decode(value).decode("utf-8"))
+                except (ValueError, UnicodeDecodeError):
+                    pass
+    bad = set()
+    for text in texts:
+        for url in re.findall(r'https?://[^\s"\'<>\\]+', text):
+            host = urlsplit(url).hostname or ""
+            if host.endswith((".openg2p.org", ".openg2p.test", ".commons-dev.oanstaging.com", ".farmer-dev.oanstaging.com", ".crop-dev.oanstaging.com", ".livestock-dev.oanstaging.com")):
+                bad.add(host)
+            if host.endswith(".oanstaging.com") and host not in allowed:
+                bad.add(host)
+    # Report hostnames only, never decoded Secret contents.
+    assert not bad, "Unmigrated or unconfirmed dev endpoint hostnames: " + ", ".join(sorted(bad))
+    for doc in docs:
+        if doc["kind"] == "VirtualService":
+            assert all(not host.endswith((".openg2p.org", ".openg2p.test")) for host in doc["spec"]["hosts"])
+
+
+def deployment_env(docs, name):
+    deployment = next(x for x in docs if x["kind"] == "Deployment" and x["metadata"]["name"] == name)
+    return {item["name"]: item.get("value") for container in deployment["spec"]["template"]["spec"]["containers"] for item in container.get("env", [])}
+
+
+def check_url_contract(chart, docs):
+    hosts = read(ROOT / "environments/dev/endpoints.yaml")["publicHosts"]
+    if chart.name in {"openg2p-farmer-registry", "openg2p-cropsown-registry", "openg2p-livestock-registry"}:
+        name = chart.name.removeprefix("openg2p-").removesuffix("-registry")
+        env = deployment_env(docs, "verify-staff-portal-ui")
+        assert env["APP_URL"] == "https://" + hosts[name]
+        assert env["IAM_URL"] == "https://" + hosts["iam"]
+        assert env["COOKIE_DOMAIN"] == ".oanstaging.com"
+        assert env["KEYCLOAK_LOGOUT_URL"] == "https://" + hosts["keycloak"] + "/realms/staff/protocol/openid-connect/logout"
+        env = deployment_env(docs, "verify-staff-portal-api")
+        assert env["REGISTRY_STAFF_PORTAL_API_AWE_BASE_URL"] == "http://commons-services-awe.commons.svc.cluster.local"
+        env = deployment_env(docs, "verify-partner-api")
+        assert env["REGISTRY_PARTNER_API_CONSENT_MANAGER_URL"] == "http://commons-services-cm-partner-api.commons.svc.cluster.local"
+    elif chart.name == "openg2p-commons-services":
+        env = deployment_env(docs, "verify-cm-api")
+        assert env["CONSENT_MANAGER_AUTH_ISSUER"] == "https://" + hosts["keycloak"] + "/realms/staff"
+        assert env["CONSENT_MANAGER_AUTH_JWKS_URL"] == "http://commons-keycloak.commons.svc.cluster.local:80/realms/staff/protocol/openid-connect/certs"
+        assert env["CONSENT_MANAGER_AWE_CALLBACK_URL"] == "http://verify-cm-api.verify-a.svc.cluster.local/consent/v1/awe/webhooks/decision"
+        env = deployment_env(docs, "verify-pm-staff-portal-ui")
+        assert env["IAM_URL"] == "https://" + hosts["iam"]
+        assert env["KEYCLOAK_LOGOUT_URL"] == "https://" + hosts["keycloak"] + "/realms/staff/protocol/openid-connect/logout"
+
+
 def offline_resolution(build):
     mirror = build / "mirror"
     mirror.mkdir()
@@ -171,7 +235,7 @@ def offline_resolution(build):
 
 
 def package(report):
-    public = ROOT / "docs"
+    public = ROOT / "repository"
     public.mkdir(exist_ok=True)
     recorded = ROOT / "releases/artifacts.json"
     prior = json.loads(recorded.read_text()) if recorded.exists() else {}
@@ -225,6 +289,8 @@ def package(report):
     recorded.write_text(json.dumps(prior, indent=2) + "\n")
     (public / "SHA256SUMS").write_text("".join(f"{digest(p)}  {p.name}\n" for p in sorted(public.glob("*.tgz"))), encoding="utf-8")
     report["packages"] = len(list(public.glob("*.tgz")))
+    report["currentPackages"] = len(CHARTS)
+    report["historicalPackages"] = report["packages"] - len(CHARTS)
     report["index"] = "Relative URLs, SHA-256, HTTP download, exact Helm version selection and repository-based renders verified against loopback server"
 
 
@@ -237,28 +303,43 @@ def main():
     assert {m.parent.name for m in CHARTS} == EXPECTED
     build_root = ROOT / ".build"
     build_root.mkdir(exist_ok=True)
-    report = {"helm": run("version", "--short").strip(), "clusterAccess": False, "charts": {}, "upstreamResolution": "not attempted"}
-    baselines = json.loads((ROOT / "releases/resource-baselines.json").read_text())
+    report = {"helm": run("version", "--short").strip(), "chartVersion": CURRENT_VERSION, "clusterAccess": False, "charts": {}, "upstreamResolution": "not attempted"}
+    baselines = json.loads((ROOT / f"releases/resource-baselines-{CURRENT_VERSION}.json").read_text())
     with build_directory() as build:
         offline_resolution(build)
         report["offlineResolution"] = "All five locks resolved from dependencies bundled with verified source packages"
         for metadata in CHARTS:
             chart = metadata.parent
             info = read(metadata)
-            assert info["version"] == "1.0.0-dev.1"
+            assert info["version"] == CURRENT_VERSION
             values = read(chart / "values.yaml")
             run("lint", chart, "--strict")
             example_name = "commons-services" if chart.name == "openg2p-commons-services" else chart.name.removeprefix("openg2p-").removesuffix("-registry")
             example = ROOT / "examples/dev" / (example_name + ".yaml")
             run("lint", chart, "--strict", "-f", example)
-            documents(run("template", "verify", chart, "--namespace", "verify-a", "-f", example), "verify-a")
+            example_docs, _ = documents(run("template", "verify", chart, "--namespace", "verify-a", "-f", example), "verify-a")
+            check_dev_endpoints(example_docs)
             baseline, identities = documents(run("template", "verify", chart, "--namespace", "verify-a"), "verify-a")
             upstream = baselines[chart.name]
-            assert identities == {tuple(x) for x in upstream["resourceIdentities"]}, "Upstream resource names changed"
+            assert stable_identities(identities) == stable_identities({tuple(x) for x in upstream["resourceIdentities"]}), "Upstream resource names changed"
+            check_dev_endpoints(baseline)
+            check_url_contract(chart, baseline)
             assert secret_refs(baseline) == {tuple(x) for x in upstream["secretKeyReferences"]}, "Upstream Secret references changed"
             selectors = {doc["kind"] + "/" + doc["metadata"]["name"]: doc["spec"].get("selector") for doc in baseline if doc["kind"] in ["Deployment", "StatefulSet", "Service"]}
             assert selectors == upstream["selectors"], "Upstream selectors changed"
             documents(run("template", "verify", chart, "--namespace", "verify-b"), "verify-b")
+            migration = ROOT / "environments/dev/values" / (example_name + ".yaml")
+            migrated, _ = documents(run("template", "verify", chart, "--namespace", "verify-a", "-f", migration), "verify-a")
+            check_dev_endpoints(migrated)
+            check_url_contract(chart, migrated)
+            if chart.name in {"openg2p-farmer-registry", "openg2p-cropsown-registry", "openg2p-livestock-registry"}:
+                saved = build / "synthetic-saved-values.yaml"
+                saved.write_text(yaml.safe_dump({"global": {"keycloakBaseUrl": "https://keycloak.old.openg2p.test", "registryHostname": "registry.old.openg2p.test", "registryDBSecret": "render-only-private-db", "registryDBUserPasswordKey": "password"}, "registry": {"staffUi": {"envVars": {"APP_URL": "https://registry.old.openg2p.test", "IAM_URL": "https://iam.old.openg2p.test", "COOKIE_DOMAIN": ".old.openg2p.test", "MIGRATION_PRESERVES_CUSTOM_SETTING": "render-only"}}}}))
+                upgraded, _ = documents(run("template", "verify", chart, "--namespace", "verify-a", "-f", saved, "-f", migration), "verify-a")
+                check_dev_endpoints(upgraded)
+                check_url_contract(chart, upgraded)
+                assert ("render-only-private-db", "password") in secret_refs(upgraded)
+                assert deployment_env(upgraded, "verify-staff-portal-ui")["MIGRATION_PRESERVES_CUSTOM_SETTING"] == "render-only"
             components = ["aggregationApi"] if chart.name == "openg2p-commons-services" else ["dashboardApi", "dashboardUi"]
             for component in components:
                 assert values[component]["enabled"] is False
@@ -266,6 +347,7 @@ def main():
                 test_values = build / "values.yaml"
                 test_values.write_text(yaml.safe_dump(fixture))
                 enabled, enabled_ids = documents(run("template", "verify", chart, "--namespace", "verify-a", "-f", test_values), "verify-a")
+                check_dev_endpoints(enabled)
                 assert identities <= enabled_ids, "Enabling an add-on removed an existing resource"
                 assert any(ref.startswith("example.invalid/render-only@sha256:") for ref in image_refs(enabled))
                 deployment = next(x for x in enabled if x["kind"] == "Deployment" and x["metadata"]["name"] == "verify-" + {"dashboardApi": "dashboard-api", "dashboardUi": "dashboard-ui", "aggregationApi": "aggregation-api"}[component])
@@ -288,6 +370,7 @@ def main():
                 assert secret_refs(baseline) <= secret_refs(enabled)
             report["charts"][chart.name] = {"lint": "strict passed", "resources": len(identities), "namespaces": ["verify-a", "verify-b"], "preservation": "upstream resource identities, selectors and Secret references match baseline", "baselineScope": upstream["scope"], "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed", "defaultImageReferences": image_refs(baseline)}
             report["charts"][chart.name]["devExample"] = str(example.relative_to(ROOT)) + ": strict lint and render passed"
+            report["charts"][chart.name]["devEndpointMigration"] = "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
         if args.online:
             online_cache = build / "online-cache"
             online_cache.mkdir()
@@ -314,7 +397,7 @@ def main():
     if args.package:
         print("Packaged five charts; archives and relative Helm index verified over local HTTP.")
     if args.release_ready:
-        release = read(ROOT / "releases/1.0.0-dev.1.yaml")
+        release = read(ROOT / f"releases/{CURRENT_VERSION}.yaml")
         assert release["readyForPublication"] is True
         assert not release["publicationBlockers"], "Publication blocked: " + "; ".join(release["publicationBlockers"])
 

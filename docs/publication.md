@@ -8,7 +8,7 @@ references, namespace isolation, optional workloads, packages and HTTP index
 downloads. It has read-only repository permissions and does not publish/deploy.
 
 After merge, the Pages workflow repeats validation, checks release readiness,
-uploads `docs/` and deploys Pages. Configure **Settings → Pages → Source: GitHub
+uploads `repository/` and deploys Pages. Configure **Settings → Pages → Source: GitHub
 Actions** first. A fork preview uses the same setting on the fork and a reviewed
 merge into its `main`; pushing the feature branch alone does not publish. No
 application/cluster deployment or image build-number synchronization is included.
@@ -25,3 +25,7 @@ Empty `publicationBlockers` in the release manifest allows chart publication.
 Installation prerequisites are recorded separately: publishing does not make DA
 or unavailable optional images ready to run. Follow the
 [readiness table](readiness.md) and [Rancher guide](rancher-dev.md).
+
+The current version comes from `releases/current.yaml`. `1.0.0-dev.2` adds migrated
+new-dev endpoints; `1.0.0-dev.1` archives/checksums remain unchanged in the index.
+Use the [service catalog](service-catalog.md) to review the five-chart scope.

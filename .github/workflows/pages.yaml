@@ -23,7 +23,7 @@ jobs:
         run: python scripts/validate.py --package --release-ready
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: docs
+          path: repository
   publish:
     needs: prepare
     runs-on: ubuntu-latest

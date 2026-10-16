@@ -1,5 +1,5 @@
 {
-  "chartVersion": "1.0.0-dev.1",
+  "chartVersion": "1.0.0-dev.2",
   "status": "prepared",
   "sources": [
     {
@@ -242,5 +242,13 @@
       "commit": "8fe3bf97030bb0b3f6283c2123ad58026af6cc50",
       "use": "Aggregation port/configuration prerequisites"
     }
-  ]
+  ],
+  "initialChartVersion": "1.0.0-dev.1",
+  "devEndpointMigration": {
+    "inventory": "environments/dev/endpoints.yaml",
+    "overlays": "environments/dev/values",
+    "sourceCommitsUnchanged": true,
+    "historicalArchivesRetained": true,
+    "configurationChanges": "Canonical URLs and namespace-qualified service calls; no guessed endpoints; unconfirmed browser surfaces disabled/unset; service catalog documents every included COSS service."
+  }
 }

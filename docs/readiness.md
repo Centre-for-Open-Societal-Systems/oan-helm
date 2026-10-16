@@ -29,13 +29,14 @@ support `image.digest` directly.
 Commons Services archive SHA-256:
 `96ab00f327652a4cc3d511525e1ac5260813d744a11620054e2491b698206272`.
 The fresh index and downloaded archive matched on 16 October 2026. Consent
-dependency versions and upstream service settings remain as published. Only COSS
-image overrides and disabled Aggregation resources were added. Private live
+dependency versions remain as published. The dev profile now uses verified
+canonical URLs; Superset/Certify are disabled as observed, and unconfirmed
+notification/browser endpoints remain unset. Private live
 values and Secret payloads are excluded.
 
 ## Comparison with the current dev deployment
 
-Read-only inspection on 16 October 2026 confirmed these releases and owners.
+The initial read-only inspection on 16 October 2026 recorded these releases/owners.
 `releases/dev-inventory.json` contains the sanitized comparison, with no raw
 release values or Secret payloads.
 
@@ -43,17 +44,18 @@ release values or Secret payloads.
 | --- | --- | --- |
 | `farmer-registry` / `farmer` | `0.0.0-rc.0`, revision 28 | Upgrade same release. Dashboard API belongs to it; retain its enabled state and authenticated configuration |
 | `cropsown-registry` / `crop` | `0.0.0-develop`, revision 10 | Upgrade same release. Dashboard API belongs to it and uses the registry's DB Secret |
-| `livestock-registry` / `livestock` | `1.2.0+bf78e69`, revision 12 | Select `1.0.0-dev.1` explicitly; independent chart numbering, not an application downgrade. Dashboard API currently absent |
+| `livestock-registry` / `livestock` | `1.2.0+bf78e69`, revision 12 | Select `1.0.0-dev.2` explicitly; independent chart numbering, not an application downgrade. Dashboard API currently absent |
 | `commons-services` / `commons` | `2.3.4-rc.245`, revision 13 | Same owner for `cm-api`, `cm-partner-api`, `cm-ui` and expiry CronJob. Customized chart numbering is independent of upstream |
 | `commons` / `commons` | `2.3.3`, revision 3 | Preserve; no Base upgrade included |
 | `oan-dashboards` / `commons` | `0.1.0`, revision 1 | Shared dashboard remains independent |
 | Farmer/Crop/Livestock connectors | `farmer-registry-connector`, `cropsown-connector`, `livestock-connector` | Keep independent owners; credentials chart also remains separate |
 | DA | No DA release in inspected target namespace | Namespace remains unconfirmed; separate install preparation required |
 
-The public registry host examples match the recorded dev route inventory:
-`registry.farmer-dev.oanstaging.com`, `registry.crop-dev.oanstaging.com` and
-`registry.livestock-dev.oanstaging.com`. They are examples, not copied private
-release values. Reconcile actual hosts/cookies/issuers before use. Staging has
+The current defaults/examples use the confirmed canonical hosts:
+`farmer-registry-development.oanstaging.com`, `crop-registry-development.oanstaging.com`
+and `livestock-registry-development.oanstaging.com`. The initial redirect aliases
+were replaced in `1.0.0-dev.2`; see [the complete URL map](dev-urls.md).
+Reconcile private settings before use. Staging has
 different namespaces (`far`, `crop`, `live`); do not reuse dev values.
 
 An old `gen2/cropsown-registry/dashboard-ui` image exists but reads the database
