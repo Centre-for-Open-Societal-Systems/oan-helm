@@ -44,7 +44,7 @@ release values or Secret payloads.
 | --- | --- | --- |
 | `farmer-registry` / `farmer` | `0.0.0-rc.0`, revision 28 | Upgrade same release. Dashboard API belongs to it; retain its enabled state and authenticated configuration |
 | `cropsown-registry` / `crop` | `0.0.0-develop`, revision 10 | Upgrade same release. Dashboard API belongs to it and uses the registry's DB Secret |
-| `livestock-registry` / `livestock` | `1.2.0+bf78e69`, revision 12 | Select `1.0.0-dev.3` explicitly; independent chart numbering, not an application downgrade. Dashboard API currently absent |
+| `livestock-registry` / `livestock` | `1.2.0+bf78e69`, revision 12 | Select `1.0.0-dev.4` explicitly; independent chart numbering, not an application downgrade. Dashboard API currently absent |
 | `commons-services` / `commons` | `2.3.4-rc.245`, revision 13 | Same owner for `cm-api`, `cm-partner-api`, `cm-ui` and expiry CronJob. Customized chart numbering is independent of upstream |
 | `commons` / `commons` | `2.3.3`, revision 3 | Preserve; no Base upgrade included |
 | `oan-dashboards` / `commons` | `0.1.0`, revision 1 | Shared dashboard remains independent |
@@ -52,8 +52,8 @@ release values or Secret payloads.
 | DA | No DA release in inspected target namespace | Namespace remains unconfirmed; separate install preparation required |
 
 The current defaults/examples use the confirmed canonical hosts:
-`farmer-registry-development.oanstaging.com`, `crop-registry-development.oanstaging.com`
-and `livestock-registry-development.oanstaging.com`. The initial redirect aliases
+`farmer-registry.development.oanstaging.com`, `crop-registry.development.oanstaging.com`
+and `livestock-registry.development.oanstaging.com`. The initial redirect aliases
 were replaced in `1.0.0-dev.2`; see [the complete URL map](dev-urls.md).
 Reconcile private settings before use. Staging has
 different namespaces (`far`, `crop`, `live`); do not reuse dev values.
@@ -82,3 +82,6 @@ or ownership change was performed.
 Version `1.0.0-dev.3` adds OAN display names and COSS source links; runtime values
 are unchanged from `1.0.0-dev.2`. Local pair results and their limits are in
 [the isolated check guide](consent-aggregation-local-check.md).
+
+For the 19 October wildcard URL migration and current release revisions, consult
+`releases/live-domain-migration.json`. The initial inventory above remains historical.

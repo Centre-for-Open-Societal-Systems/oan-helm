@@ -3,7 +3,8 @@
 Complete [readiness prerequisites](readiness.md) for components being enabled.
 For Consent/Aggregation, follow the [component preparation guide](consent-aggregation-prerequisites.md).
 Use the five packages after repository publication. No
-cluster deployment or ownership migration has been performed.
+ownership migration has been performed. The separate dev URL cutover is recorded
+in `releases/live-domain-migration.json`; it retains installed chart/image versions.
 
 ## Add the repository
 
@@ -13,11 +14,11 @@ cluster deployment or ownership migration has been performed.
    Use the Helm repository URL
    `https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/`.
    For the current fork preview, use
-   `https://raw.githubusercontent.com/asmitonweb/oan-helm/feat/coss-rancher-charts/repository/`.
+   `https://raw.githubusercontent.com/asmitonweb/oan-helm/feat/dev-wildcard-domain/repository/`.
    The preview uses the same relative archive paths. GitHub Pages is not required.
    Enter the raw directory URL, not GitHub's HTML `tree`/`blob` URL or the index filename.
 3. Confirm `/index.yaml` and its `.tgz` archive URLs are available, refresh the
-   repository, and select exact version **`1.0.0-dev.3`**, including its prerelease
+   repository, and select exact version **`1.0.0-dev.4`**, including its prerelease
    suffix. Version `1.0.0-dev.1` is retained for history and has old URL defaults.
 
 ## New releases
@@ -83,7 +84,7 @@ An equivalent CLI upgrade, once those checks are complete, is:
 
 ```sh
 helm upgrade farmer-registry coss/openg2p-farmer-registry \
-  --namespace farmer --version 1.0.0-dev.3 \
+  --namespace farmer --version 1.0.0-dev.4 \
   --reuse-values -f /private/reviewed-changes.yaml \
   -f environments/dev/values/farmer.yaml --wait --timeout 15m
 ```
@@ -116,8 +117,8 @@ prepared recovery procedure.
 
 ## OAN names and GitHub sources in Rancher
 
-Refresh the repository and select exact version `1.0.0-dev.3` to see the OAN
-metadata and embedded README. Older versions retain their original metadata.
+Refresh the repository and select exact version `1.0.0-dev.4` to see the OAN
+metadata and embedded README. Earlier versions retain their historical metadata and URL defaults.
 Rancher may show either a display name or the Helm identifier depending on its
 view; the chart Home, Sources and README link directly to the COSS repositories.
 
@@ -136,3 +137,6 @@ Aggregation is a template in the Commons chart, with source
 [COSS/oan-aggregation-api](https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api).
 Changing these labels does not enable Aggregation or select newer candidate
 images. Use the explicit candidate overlays only after the prerequisites.
+
+For new or previously disabled services, follow [service onboarding](service-onboarding.md).
+Version dev.4 requires the environment wildcard DNS/TLS and shared Gateway.

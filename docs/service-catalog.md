@@ -112,7 +112,7 @@ in the bundled archives under `charts/openg2p-commons-services/charts/`.
 | `superset` | Superset web/worker/init and integration | Disabled, matching inspected dev configuration; public URL unconfirmed |
 | `esignet` | eSignet authentication components | Enabled; verified development route |
 | `mock-identity-system` | eSignet mock identity integration | Enabled; existing shared eSignet route preserved |
-| `odk-central` | ODK Central frontend/backend, Enketo and form conversion | Enabled; canonical `odk-central-development.oanstaging.com` |
+| `odk-central` | ODK Central frontend/backend, Enketo and form conversion | Enabled; canonical `odk-central.development.oanstaging.com` |
 | `openg2p-iam-service` | Staff IAM API, agent IAM API, staff IAM UI, login provider and initialization configuration | Enabled; confirmed API/UI routes; agent portal redirect unset pending a confirmed URL |
 | `openg2p-inji-certify` | Credential issuing and initialization | Disabled, matching inspected dev configuration; public URL unconfirmed |
 | `openg2p-audit-manager` | Shared audit API | Enabled; canonical development route |

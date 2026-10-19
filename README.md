@@ -13,11 +13,13 @@ New [Consent candidate images](docs/consent-candidate-build.md) and the
 [Aggregation image override](examples/dev/aggregation-image.yaml) are recorded
 separately from the immutable chart defaults.
 
-Current chart version is **`1.0.0-dev.3`**, with OAN Rancher display names,
-direct COSS GitHub source links and embedded component READMEs in all five charts.
-It retains the migrated new-dev URLs and runtime settings from `1.0.0-dev.2`.
-Both earlier versions remain available unchanged. Component versions
-and image digests are separate; automatic build-number synchronization is deferred.
+Current chart version is **`1.0.0-dev.4`**, using
+`<service>.development.oanstaging.com` and the shared Istio Gateway. It retains
+OAN display names and direct COSS source links. Earlier packages remain unchanged.
+Component image versions are independent; automatic synchronization is deferred.
+
+Use the [service onboarding guide](docs/service-onboarding.md) to add or enable a
+service without an individual Route 53 record, Nginx site or certificate.
 
 | Location | Contents |
 | --- | --- |
@@ -33,12 +35,12 @@ and image digests are separate; automatic build-number synchronization is deferr
 Rancher repository URLs served directly by GitHub:
 
 - COSS after merge: `https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/`
-- Current fork preview: `https://raw.githubusercontent.com/asmitonweb/oan-helm/feat/coss-rancher-charts/repository/`
+- Current fork preview: `https://raw.githubusercontent.com/asmitonweb/oan-helm/feat/dev-wildcard-domain/repository/`
 
 GitHub serves the committed `repository/index.yaml` and archives directly;
 GitHub Pages is not required. Validation runs on PRs and pushes. Merging the
 reviewed files into `main` makes the COSS URL available; this change does not
-merge the PR or deploy to Kubernetes.
+merge the PR. Live URL cutover evidence is recorded separately from chart publication.
 
 Use the [Rancher guide](docs/rancher-dev.md) and
 [new-dev URL migration guide](docs/dev-urls.md), plus the
@@ -82,5 +84,6 @@ Synthetic render fixtures use `example.invalid`; installation examples never do.
 
 Archives are immutable. Packaging rejects changed source bytes for an existing
 archive/version. Keep historical archives and index entries; future releases
-require a new chart version and manifest. No application-repository CI changes
-or cluster deployment are included.
+require a new chart version and manifest. The separate 19 October dev URL cutover retains installed chart/image versions;
+see `releases/live-domain-migration.json`. No application-repository CI changes
+are included.

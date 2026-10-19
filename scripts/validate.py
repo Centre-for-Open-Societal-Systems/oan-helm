@@ -180,6 +180,10 @@ def check_dev_endpoints(docs):
     for doc in docs:
         if doc["kind"] == "VirtualService":
             assert all(not host.endswith((".openg2p.org", ".openg2p.test")) for host in doc["spec"]["hosts"])
+            public_hosts = [host for host in doc["spec"]["hosts"] if host.endswith(".oanstaging.com")]
+            if public_hosts:
+                assert all(host.endswith(".development.oanstaging.com") for host in public_hosts), "Public chart route outside the development domain"
+                assert doc["spec"]["gateways"] == ["istio-system/development"], "Public route does not use the environment Gateway"
 
 
 def deployment_env(docs, name):
@@ -194,7 +198,7 @@ def check_url_contract(chart, docs):
         env = deployment_env(docs, "verify-staff-portal-ui")
         assert env["APP_URL"] == "https://" + hosts[name]
         assert env["IAM_URL"] == "https://" + hosts["iam"]
-        assert env["COOKIE_DOMAIN"] == ".oanstaging.com"
+        assert env["COOKIE_DOMAIN"] == ".development.oanstaging.com"
         assert env["KEYCLOAK_LOGOUT_URL"] == "https://" + hosts["keycloak"] + "/realms/staff/protocol/openid-connect/logout"
         env = deployment_env(docs, "verify-staff-portal-api")
         assert env["REGISTRY_STAFF_PORTAL_API_AWE_BASE_URL"] == "http://commons-services-awe.commons.svc.cluster.local"

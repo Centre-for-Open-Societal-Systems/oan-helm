@@ -1,10 +1,10 @@
 global:
-  baseDomain: oanstaging.com
-  keycloakBaseUrl: https://keycloak-development.oanstaging.com
+  baseDomain: development.oanstaging.com
+  keycloakBaseUrl: https://keycloak.development.oanstaging.com
   keycloakInternalUrl: http://commons-keycloak.commons.svc.cluster.local:80
   keycloakRealm: staff
   keycloakIssuerUrl: http://commons-keycloak.commons.svc.cluster.local:80/realms/staff
-  keycloakExternalIssuerUrl: https://keycloak-development.oanstaging.com/realms/staff
+  keycloakExternalIssuerUrl: https://keycloak.development.oanstaging.com/realms/staff
   postgresqlHost: commons-postgresql
   postgresqlSecret: commons-postgresql
   postgresqlSecretKey: postgres-password
@@ -16,40 +16,40 @@ global:
   kafkaInstallationName: commons-kafka
   softhsmInstallationName: commons-softhsm
   supersetHostname: ''
-  odkHostname: odk-central-development.oanstaging.com
-  iamHostname: staff-iam-development.oanstaging.com
-  staffPortalApiHostname: staff-iam-development.oanstaging.com
-  agentPortalApiHostname: agent-iam-development.oanstaging.com
+  odkHostname: odk-central.development.oanstaging.com
+  iamHostname: staff-iam.development.oanstaging.com
+  staffPortalApiHostname: staff-iam.development.oanstaging.com
+  agentPortalApiHostname: agent-iam.development.oanstaging.com
   agentPortalHostname: ''
   certifyHostname: ''
-  staffPortalHostname: staff-portal-development.oanstaging.com
-  staffPortalCookieDomain: .oanstaging.com
+  staffPortalHostname: staff-portal.development.oanstaging.com
+  staffPortalCookieDomain: .development.oanstaging.com
   iamServiceUrl: http://commons-services-iam-staff-portal-api.commons.svc.cluster.local
   keycloakAdminSecret: commons-keycloak
   keycloakAdminSecretKey: admin-password
   keycloakAdminUser: admin
-  aweHostname: awe-development.oanstaging.com
+  aweHostname: awe.development.oanstaging.com
   aweDB: awe
   aweDBPort: 5432
   aweDBUser: awe_user
   aweDBSecret: awe-db-user
   aweDBUserPasswordKey: awe-db-user-password
-  authCookieDomain: .oanstaging.com
-  cookieDomain: .oanstaging.com
-  iamUrl: https://staff-iam-development.oanstaging.com
-  masterDataHostname: master-data-development.oanstaging.com
-  masterDataUiHostname: master-data-ui-development.oanstaging.com
+  authCookieDomain: .development.oanstaging.com
+  cookieDomain: .development.oanstaging.com
+  iamUrl: https://staff-iam.development.oanstaging.com
+  masterDataHostname: master-data.development.oanstaging.com
+  masterDataUiHostname: master-data-ui.development.oanstaging.com
   masterDataApiUrl: http://commons-services-master-data-api.commons.svc.cluster.local
   aweBaseUrl: http://commons-services-awe.commons.svc.cluster.local
 master-data:
   enabled: true
   global:
-    masterDataHostname: master-data-development.oanstaging.com
+    masterDataHostname: master-data.development.oanstaging.com
     masterDataDB: master_data
     masterDataDBUser: master_data_user
     masterDataDBSecret: master-data-db-user
     masterDataDBUserPasswordKey: master-data-db-user-password
-    masterDataUiHostname: master-data-ui-development.oanstaging.com
+    masterDataUiHostname: master-data-ui.development.oanstaging.com
   geoSeed:
     countryPack: ETH
     load:
@@ -69,9 +69,16 @@ master-data:
   keycloak-init:
     nameOverride: master-data-kc-init
   masterDataUi:
-    iamPublicUrl: https://staff-iam-development.oanstaging.com
+    iamPublicUrl: https://staff-iam.development.oanstaging.com
     envVars:
-      COOKIE_DOMAIN: .oanstaging.com
+      COOKIE_DOMAIN: .development.oanstaging.com
+    istio:
+      virtualservice:
+        gateway: istio-system/development
+  masterDataAPI:
+    istio:
+      virtualservice:
+        gateway: istio-system/development
 odk-central:
   enabled: true
   hostname: '{{ tpl .Values.global.odkHostname $ }}'
@@ -114,11 +121,11 @@ odk-central:
       command:
       - sh
       - -c
-      - "until nc -zv {{ tpl .Values.global.minioInstallationName $ }} 9000; do\n\
-        \  echo \"Waiting for MinIO...\"\n  sleep 2\ndone\n"
+      - "until nc -zv {{ tpl .Values.global.minioInstallationName $ }} 9000; do\n  echo \"Waiting for\
+        \ MinIO...\"\n  sleep 2\ndone\n"
     envVars:
       OIDC_ENABLED: true
-      OIDC_ISSUER_URL: https://keycloak-development.oanstaging.com/realms/staff
+      OIDC_ISSUER_URL: https://keycloak.development.oanstaging.com/realms/staff
       OIDC_CLIENT_ID: '{{ tpl .Values.oidcClientId $ }}'
     envVarsFrom:
       DB_PASSWORD:
@@ -129,6 +136,9 @@ odk-central:
         secretKeyRef:
           name: '{{ tpl .Values.oidcClientSecret $ }}'
           key: '{{ tpl .Values.oidcClientSecretKey $ }}'
+  istio:
+    virtualservice:
+      gateway: istio-system/development
 artifactory:
   enabled: true
   image:
@@ -155,6 +165,8 @@ keymanager:
   artifactoryInstallationName: '{{ .Release.Name }}-artifactory'
   istio:
     enabled: false
+    virtualservice:
+      gateway: istio-system/development
   springConfig:
     names: application,kernel
     profile: default
@@ -165,10 +177,9 @@ keymanager:
     rawConfig: ''
   envVars:
     JDK_JAVA_OPTIONS: -XX:-UseContainerSupport -Dspring.jmx.enabled=false -Dcom.sun.management.jmxremote=false
-    auth_server_admin_allowed_audience: openg2p-registry,openg2p-registry-{{ .Release.Namespace
-      }},openg2p-pbms,openg2p-pbms-{{ .Release.Namespace }},openg2p-spar,openg2p-spar-{{
-      .Release.Namespace }},openg2p-g2p-bridge,openg2p-g2p-bridge-{{ .Release.Namespace
-      }}
+    auth_server_admin_allowed_audience: openg2p-registry,openg2p-registry-{{ .Release.Namespace }},openg2p-pbms,openg2p-pbms-{{
+      .Release.Namespace }},openg2p-spar,openg2p-spar-{{ .Release.Namespace }},openg2p-g2p-bridge,openg2p-g2p-bridge-{{
+      .Release.Namespace }}
     keycloak_internal_url: '{{ tpl .Values.global.keycloakInternalUrl $ }}'
     keycloak_external_url: '{{ tpl .Values.global.keycloakBaseUrl $ }}'
   envVarsFrom:
@@ -264,50 +275,42 @@ superset:
 
     '
   configOverrides:
-    enable_oauth: "import os\nSECRET_KEY = '{{ tpl .Values.supersetSecretKey $ }}'\
-      \ or 'OPENG2P_SUPER_SECRET_KEY'\n\n# This will make sure the redirect_uri is\
-      \ properly computed, even with SSL offloading\nENABLE_PROXY_FIX = True\n\nfrom\
-      \ flask_appbuilder.security.manager import AUTH_OAUTH\nAUTH_TYPE = AUTH_OAUTH\n\
-      OAUTH_PROVIDERS = [\n  {\n    \"name\": \"keycloak\",\n    \"icon\": \"fa-key\"\
-      ,\n    \"token_key\": \"access_token\",\n    \"remote_app\": {\n      \"client_id\"\
-      : \"{{ tpl .Values.oidcClientId $ }}\",\n      \"client_secret\": os.getenv(\"\
-      client_secret\"),\n      \"api_base_url\": \"{{ tpl .Values.oidcIssuerUrl $\
-      \ }}/protocol/openid-connect\",\n      \"client_kwargs\": {\"scope\": \"email\
-      \ profile openid\"},\n      \"access_token_url\": \"{{ tpl .Values.oidcIssuerUrl\
-      \ $ }}/protocol/openid-connect/token\",\n      \"jwks_uri\": \"{{ tpl .Values.oidcIssuerUrl\
-      \ $ }}/protocol/openid-connect/certs\",\n      \"authorize_url\": \"{{ tpl .Values.global.keycloakExternalIssuerUrl\
-      \ $ }}/protocol/openid-connect/auth\",\n      \"request_token_url\": None\n\
-      \    },\n  }\n]\n\n# Map Authlib roles to superset roles\nAUTH_ROLES_MAPPING\
-      \ = {\n  \"Public\": [\"Public\"],\n  \"Admin\": [\"Admin\"],\n}\n\nAUTH_ROLES_SYNC_AT_LOGIN\
-      \ = True\n\n# Will allow user self registration, allowing to create Flask users\
-      \ from Authorized User\nAUTH_USER_REGISTRATION = True\n\n# The default user\
-      \ self registration role\n# AUTH_USER_REGISTRATION_ROLE = \"Public\"\n\nfrom\
-      \ superset.security import SupersetSecurityManager\nclass CustomSsoSecurityManager(SupersetSecurityManager):\n\
-      \  def oauth_user_info(self, provider, response=None):\n    if provider == \"\
-      keycloak\":\n      me = self.appbuilder.sm.oauth_remotes[provider].get(\n  \
-      \      \"openid-connect/userinfo\"\n      )\n      me.raise_for_status()\n \
-      \     data = me.json()\n      return {\n        \"username\": data.get(\"preferred_username\"\
-      , \"\"),\n        \"first_name\": data.get(\"given_name\", \"\"),\n        \"\
-      last_name\": data.get(\"family_name\", \"\"),\n        \"email\": data.get(\"\
-      email\", \"\"),\n        \"role_keys\": data.get(\"client_roles\", []),\n  \
-      \    }\n    return {}\n\nCUSTOM_SECURITY_MANAGER = CustomSsoSecurityManager\n\
-      SESSION_COOKIE_HTTPONLY = True\nSESSION_COOKIE_SECURE = True\nSESSION_COOKIE_SAMESITE\
-      \ = None\nTALISMAN_ENABLED = False\n\n# Embedded dashboards. G2P Insights shows\
-      \ Superset dashboards inside its\n# own shell, which loads /embedded/<uuid>\
-      \ in an iframe â€” a route Superset\n# only registers when this flag is on.\n\
-      #\n# Without it the failure is silent in an unhelpful way: the REST call that\n\
-      # mints an embedded UUID still succeeds, the guest token is still issued\n#\
-      \ and looks valid, so every check passes and only the iframe 404s. It reads\n\
-      # as a broken client, not a missing feature flag.\nFEATURE_FLAGS = {\"EMBEDDED_SUPERSET\"\
-      : True}\n\n# The role a guest token carries. Gamma can read the dashboards it\
-      \ is\n# granted and nothing else, which is what an embedded viewer needs.\n\
-      GUEST_ROLE_NAME = \"Gamma\"\n"
+    enable_oauth: "import os\nSECRET_KEY = '{{ tpl .Values.supersetSecretKey $ }}' or 'OPENG2P_SUPER_SECRET_KEY'\n\
+      \n# This will make sure the redirect_uri is properly computed, even with SSL offloading\nENABLE_PROXY_FIX\
+      \ = True\n\nfrom flask_appbuilder.security.manager import AUTH_OAUTH\nAUTH_TYPE = AUTH_OAUTH\nOAUTH_PROVIDERS\
+      \ = [\n  {\n    \"name\": \"keycloak\",\n    \"icon\": \"fa-key\",\n    \"token_key\": \"access_token\"\
+      ,\n    \"remote_app\": {\n      \"client_id\": \"{{ tpl .Values.oidcClientId $ }}\",\n      \"client_secret\"\
+      : os.getenv(\"client_secret\"),\n      \"api_base_url\": \"{{ tpl .Values.oidcIssuerUrl $ }}/protocol/openid-connect\"\
+      ,\n      \"client_kwargs\": {\"scope\": \"email profile openid\"},\n      \"access_token_url\":\
+      \ \"{{ tpl .Values.oidcIssuerUrl $ }}/protocol/openid-connect/token\",\n      \"jwks_uri\": \"{{\
+      \ tpl .Values.oidcIssuerUrl $ }}/protocol/openid-connect/certs\",\n      \"authorize_url\": \"{{\
+      \ tpl .Values.global.keycloakExternalIssuerUrl $ }}/protocol/openid-connect/auth\",\n      \"request_token_url\"\
+      : None\n    },\n  }\n]\n\n# Map Authlib roles to superset roles\nAUTH_ROLES_MAPPING = {\n  \"Public\"\
+      : [\"Public\"],\n  \"Admin\": [\"Admin\"],\n}\n\nAUTH_ROLES_SYNC_AT_LOGIN = True\n\n# Will allow\
+      \ user self registration, allowing to create Flask users from Authorized User\nAUTH_USER_REGISTRATION\
+      \ = True\n\n# The default user self registration role\n# AUTH_USER_REGISTRATION_ROLE = \"Public\"\
+      \n\nfrom superset.security import SupersetSecurityManager\nclass CustomSsoSecurityManager(SupersetSecurityManager):\n\
+      \  def oauth_user_info(self, provider, response=None):\n    if provider == \"keycloak\":\n     \
+      \ me = self.appbuilder.sm.oauth_remotes[provider].get(\n        \"openid-connect/userinfo\"\n  \
+      \    )\n      me.raise_for_status()\n      data = me.json()\n      return {\n        \"username\"\
+      : data.get(\"preferred_username\", \"\"),\n        \"first_name\": data.get(\"given_name\", \"\"\
+      ),\n        \"last_name\": data.get(\"family_name\", \"\"),\n        \"email\": data.get(\"email\"\
+      , \"\"),\n        \"role_keys\": data.get(\"client_roles\", []),\n      }\n    return {}\n\nCUSTOM_SECURITY_MANAGER\
+      \ = CustomSsoSecurityManager\nSESSION_COOKIE_HTTPONLY = True\nSESSION_COOKIE_SECURE = True\nSESSION_COOKIE_SAMESITE\
+      \ = None\nTALISMAN_ENABLED = False\n\n# Embedded dashboards. G2P Insights shows Superset dashboards\
+      \ inside its\n# own shell, which loads /embedded/<uuid> in an iframe \xE2\u20AC\u201D a route Superset\n\
+      # only registers when this flag is on.\n#\n# Without it the failure is silent in an unhelpful way:\
+      \ the REST call that\n# mints an embedded UUID still succeeds, the guest token is still issued\n\
+      # and looks valid, so every check passes and only the iframe 404s. It reads\n# as a broken client,\
+      \ not a missing feature flag.\nFEATURE_FLAGS = {\"EMBEDDED_SUPERSET\": True}\n\n# The role a guest\
+      \ token carries. Gamma can read the dashboards it is\n# granted and nothing else, which is what\
+      \ an embedded viewer needs.\nGUEST_ROLE_NAME = \"Gamma\"\n"
   istio:
     enabled: true
     virtualservice:
       enabled: true
       host: ''
-      gateway: internal
+      gateway: istio-system/development
       destination: '{{ include "superset.fullname" . }}'
       destinationPort: '{{ .Values.service.port }}'
     gateway:
@@ -323,7 +326,7 @@ superset:
         credentialName: ''
 esignet:
   enabled: true
-  hostname: esignet-development.oanstaging.com
+  hostname: esignet.development.oanstaging.com
   resources:
     requests:
       cpu: 100m
@@ -360,9 +363,16 @@ esignet:
       repoUrl: https://github.com/openg2p/mosip-config
       branch: master
     rawConfig: ''
+  istio:
+    virtualservice:
+      gateway: istio-system/development
+  oidcUi:
+    istio:
+      virtualservice:
+        gateway: istio-system/development
 mock-identity-system:
   enabled: true
-  hostname: esignet-development.oanstaging.com
+  hostname: esignet.development.oanstaging.com
   resources:
     requests:
       cpu: 50m
@@ -387,6 +397,9 @@ mock-identity-system:
       repoUrl: https://github.com/openg2p/mosip-config
       branch: master
     rawConfig: ''
+  istio:
+    virtualservice:
+      gateway: istio-system/development
 openg2p-inji-certify:
   enabled: false
   global:
@@ -410,8 +423,10 @@ openg2p-inji-certify:
     postgresql:
       host: '{{ tpl .Values.global.postgresqlHost $ }}'
       existingSecret: '{{ tpl .Values.global.postgresqlSecret $ }}'
-      existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey
-        $ }}'
+      existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey $ }}'
+  istio:
+    virtualservice:
+      gateway: istio-system/development
 openg2p-iam-service:
   enabled: true
   iamStaffPortalApi:
@@ -420,12 +435,18 @@ openg2p-iam-service:
       requests:
         cpu: 50m
         memory: 256Mi
+    istio:
+      virtualservice:
+        gateway: istio-system/development
   iamAgentPortalApi:
     hostname: '{{ tpl .Values.global.agentPortalApiHostname $ }}'
     resources:
       requests:
         cpu: 50m
         memory: 256Mi
+    istio:
+      virtualservice:
+        gateway: istio-system/development
   global:
     iamHostname: '{{ tpl .Values.global.iamHostname $ }}'
     postgresqlHost: '{{ tpl .Values.global.postgresqlHost $ }}'
@@ -433,15 +454,15 @@ openg2p-iam-service:
     iamDBUser: iam_user
     iamDBSecret: iam
     iamDBUserPasswordKey: iam-db-user
-    staffPortalDefaultRedirectUri: https://staff-portal-development.oanstaging.com
+    staffPortalDefaultRedirectUri: https://staff-portal.development.oanstaging.com
     agentPortalDefaultRedirectUri: ''
-    keycloakApplicationUrl: https://keycloak-development.oanstaging.com
-    registryApplicationUrl: https://farmer-registry-development.oanstaging.com
-    minioApplicationUrl: https://minio-console-development.oanstaging.com
+    keycloakApplicationUrl: https://keycloak.development.oanstaging.com
+    registryApplicationUrl: https://farmer-registry.development.oanstaging.com
+    minioApplicationUrl: https://minio-console.development.oanstaging.com
     supersetApplicationUrl: ''
-    iamStaffUiApplicationUrl: https://iam-staff-ui-development.oanstaging.com
-    masterDataApplicationUrl: https://master-data-development.oanstaging.com
-    aweApplicationUrl: https://awe-development.oanstaging.com
+    iamStaffUiApplicationUrl: https://iam-staff-ui.development.oanstaging.com
+    masterDataApplicationUrl: https://master-data.development.oanstaging.com
+    aweApplicationUrl: https://awe.development.oanstaging.com
   postgres-init:
     enabled: true
     nameOverride: iam-pg-init
@@ -453,17 +474,19 @@ openg2p-iam-service:
       host: '{{ tpl .Values.global.postgresqlHost $ }}'
       port: 5432
       existingSecret: '{{ tpl .Values.global.postgresqlSecret $ }}'
-      existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey
-        $ }}'
+      existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey $ }}'
   iamStaffUi:
-    hostname: iam-staff-ui-development.oanstaging.com
+    hostname: iam-staff-ui.development.oanstaging.com
     envVars:
-      COOKIE_DOMAIN: .oanstaging.com
-      BACKEND_API_URL: https://staff-iam-development.oanstaging.com
+      COOKIE_DOMAIN: .development.oanstaging.com
+      BACKEND_API_URL: https://staff-iam.development.oanstaging.com
+    istio:
+      virtualservice:
+        gateway: istio-system/development
 openg2p-audit-manager:
   enabled: true
   global:
-    auditManagerHostname: auditmanager-development.oanstaging.com
+    auditManagerHostname: auditmanager.development.oanstaging.com
     postgresqlHost: '{{ tpl .Values.global.postgresqlHost $ }}'
     auditManagerDB: audit_manager
     auditManagerDBUser: audit_manager_user
@@ -481,8 +504,7 @@ openg2p-audit-manager:
       host: '{{ tpl .Values.global.postgresqlHost $ }}'
       port: 5432
       existingSecret: '{{ tpl .Values.global.postgresqlSecret $ }}'
-      existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey
-        $ }}'
+      existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey $ }}'
   auditManager:
     enabled: true
     nameOverride: auditmanager
@@ -499,6 +521,9 @@ openg2p-audit-manager:
         helm.sh/hook: null
         helm.sh/hook-weight: null
         helm.sh/hook-delete-policy: null
+    istio:
+      virtualservice:
+        gateway: istio-system/development
 openg2p-staff-portal-ui:
   enabled: true
   global:
@@ -516,8 +541,11 @@ openg2p-staff-portal-ui:
         cpu: 50m
         memory: 64Mi
     envVars:
-      COOKIE_DOMAIN: .oanstaging.com
-      IAM_URL: https://staff-iam-development.oanstaging.com
+      COOKIE_DOMAIN: .development.oanstaging.com
+      IAM_URL: https://staff-iam.development.oanstaging.com
+    istio:
+      virtualservice:
+        gateway: istio-system/development
 openg2p-awe:
   enabled: true
   awe:
@@ -530,6 +558,9 @@ openg2p-awe:
   keycloak-init:
     enabled: true
     nameOverride: awe-kc-init
+  istio:
+    virtualservice:
+      gateway: istio-system/development
 partner-management:
   enabled: true
   global:
@@ -537,35 +568,35 @@ partner-management:
     pmDBUser: partner_management_user
     pmDBSecret: partner-management-db
     pmDBUserPasswordKey: partner-management-db-user
-    staffPortalUiHostname: partner-management-development.oanstaging.com
-    staffPortalApiHostname: partner-management-staff-portal-api.{{ tpl .Values.global.baseDomain
-      $ }}
-    partnerApiHostname: partner-management-partner-api-development.oanstaging.com
+    staffPortalUiHostname: partner-management.development.oanstaging.com
+    staffPortalApiHostname: partner-management-staff-portal-api.{{ tpl .Values.global.baseDomain $ }}
+    partnerApiHostname: partner-management-partner-api.development.oanstaging.com
     cookieDomain: .{{ tpl .Values.global.baseDomain $ }}
   staffPortalApi:
     nameOverride: pm-staff-portal-api
     istio:
       virtualservice:
         destination: '{{ .Release.Name }}-pm-staff-portal-api'
+        gateway: istio-system/development
     envVars:
-      COMMON_AUTH_DEFAULT_ISSUERS: '["{{ tpl .Values.global.keycloakExternalIssuerUrl
-        $ }}"]'
-      COMMON_AUTH_DEFAULT_JWKS_URLS: '["{{ tpl .Values.global.keycloakIssuerUrl $
-        }}/protocol/openid-connect/certs"]'
+      COMMON_AUTH_DEFAULT_ISSUERS: '["{{ tpl .Values.global.keycloakExternalIssuerUrl $ }}"]'
+      COMMON_AUTH_DEFAULT_JWKS_URLS: '["{{ tpl .Values.global.keycloakIssuerUrl $ }}/protocol/openid-connect/certs"]'
   partnerApi:
     nameOverride: pm-partner-api
     istio:
       virtualservice:
         destination: '{{ .Release.Name }}-pm-partner-api'
+        gateway: istio-system/development
   staffPortalUi:
     nameOverride: pm-staff-portal-ui
     istio:
       virtualservice:
         destination: '{{ .Release.Name }}-pm-staff-portal-ui'
+        gateway: istio-system/development
     envVars:
       STAFF_PORTAL_API_URL: http://{{ .Release.Name }}-pm-staff-portal-api
-      IAM_URL: https://staff-iam-development.oanstaging.com
-      KEYCLOAK_LOGOUT_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/logout
+      IAM_URL: https://staff-iam.development.oanstaging.com
+      KEYCLOAK_LOGOUT_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/logout
   postgres-init:
     enabled: true
     nameOverride: pm-pg-init
@@ -582,8 +613,6 @@ partner-management:
       helm.sh/hook: null
       helm.sh/hook-weight: null
       helm.sh/hook-delete-policy: null
-# OAN Consent Manager application: https://github.com/Centre-for-Open-Societal-Systems/consent-management
-# The retained openg2p-consent-manager name selects compatible upstream templates.
 openg2p-consent-manager:
   enabled: true
   global:
@@ -591,8 +620,8 @@ openg2p-consent-manager:
     consentDBUser: consent_manager_user
     consentDBSecret: consent-manager-db
     consentDBUserPasswordKey: consent-manager-db-user
-    consentManagerHostname: consent-manager-development.oanstaging.com
-    consentManagerPartnerHostname: consent-manager-partner-development.oanstaging.com
+    consentManagerHostname: consent-manager.development.oanstaging.com
+    consentManagerPartnerHostname: consent-manager-partner.development.oanstaging.com
     consentManagerBeneHostname: ''
     partnerManagementApiUrl: http://commons-services-pm-partner-api
     partnerManagementAdminApiUrl: http://commons-services-pm-staff-portal-api
@@ -602,12 +631,11 @@ openg2p-consent-manager:
     istio:
       virtualservice:
         destination: '{{ .Release.Name }}-cm-api'
+        gateway: istio-system/development
     envVars:
-      CONSENT_MANAGER_AUTH_ISSUER: '{{ tpl .Values.global.keycloakExternalIssuerUrl
-        $ }}'
+      CONSENT_MANAGER_AUTH_ISSUER: '{{ tpl .Values.global.keycloakExternalIssuerUrl $ }}'
       CONSENT_MANAGER_AUTH_JWKS_URL: '{{ tpl .Values.global.keycloakIssuerUrl $ }}/protocol/openid-connect/certs'
-      CONSENT_MANAGER_AWE_CALLBACK_URL: http://{{ .Release.Name }}-cm-api.{{ .Release.Namespace
-        }}.svc.cluster.local/consent/v1/awe/webhooks/decision
+      CONSENT_MANAGER_AWE_CALLBACK_URL: http://{{ .Release.Name }}-cm-api.{{ .Release.Namespace }}.svc.cluster.local/consent/v1/awe/webhooks/decision
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api
       tag: develop-5361069@sha256:67180496e5f9d5edb5afb9727d9da4501e96599166c1712e4e24dbf1f6fa2a77
@@ -624,7 +652,7 @@ openg2p-consent-manager:
       virtualservice:
         enabled: true
         host: '{{ tpl .Values.global.consentManagerPartnerHostname $ }}'
-        gateway: internal
+        gateway: istio-system/development
         destination: '{{ .Release.Name }}-cm-partner-api'
         destinationPort: 80
         prefix: /api/consent-manager-partner/
@@ -643,7 +671,7 @@ openg2p-consent-manager:
       virtualservice:
         enabled: true
         host: '{{ tpl .Values.global.consentManagerBeneHostname $ }}'
-        gateway: internal
+        gateway: istio-system/development
         destination: '{{ .Release.Name }}-cm-bene-api'
         destinationPort: 80
         prefix: /api/consent-manager-bene/
@@ -655,6 +683,7 @@ openg2p-consent-manager:
     istio:
       virtualservice:
         destination: '{{ .Release.Name }}-cm-ui'
+        gateway: istio-system/development
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-ui
       tag: develop-5361069@sha256:1ae7cc25b094e9c72ea9262a8d920480d2049b13d1505f2a9a2aeeeff8abf92d
@@ -710,8 +739,6 @@ keycloak-init:
         clientRoleMappings:
           openg2p-superset:
           - Admin
-# OAN Aggregation API: https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
-# Implemented locally by templates/aggregation-api.yaml; enable only after prerequisites.
 aggregationApi:
   enabled: false
   nameOverride: ''

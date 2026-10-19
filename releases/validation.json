@@ -1,6 +1,6 @@
 {
   "helm": "v3.19.0+g3d8990f",
-  "chartVersion": "1.0.0-dev.3",
+  "chartVersion": "1.0.0-dev.4",
   "clusterAccess": false,
   "charts": {
     "openg2p-commons-services": {
@@ -158,10 +158,6 @@
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     }
   },
-  "upstreamResolution": "passed",
-  "offlineResolution": "All five locks resolved from dependencies bundled with verified source packages",
-  "packages": 15,
-  "currentPackages": 5,
-  "historicalPackages": 10,
-  "index": "Relative URLs, SHA-256, HTTP download, exact Helm version selection and repository-based renders verified against loopback server"
+  "upstreamResolution": "not attempted",
+  "offlineResolution": "All five locks resolved from dependencies bundled with verified source packages"
 }

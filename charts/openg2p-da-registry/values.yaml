@@ -1,8 +1,7 @@
 global:
   registryVariant: da-registry
   registryHostname: ''
-  aweDefaultCallbackUrl: http://{{ .Release.Name }}-staff-portal-api.{{ .Release.Namespace
-    }}.svc.cluster.local/awe/webhooks/decision
+  aweDefaultCallbackUrl: http://{{ .Release.Name }}-staff-portal-api.{{ .Release.Namespace }}.svc.cluster.local/awe/webhooks/decision
   postgresqlHost: commons-postgresql.commons.svc.cluster.local
   registryDB: '{{ printf "%s" .Release.Name | replace "-" "_" }}'
   registryDBPort: 5432
@@ -14,14 +13,14 @@ global:
   masterDataDBUser: master_data_user
   masterDataDBSecret: master-data
   masterDataDBUserPasswordKey: master-data-db-user
-  baseDomain: oanstaging.com
-  keycloakBaseUrl: https://keycloak-development.oanstaging.com
+  baseDomain: development.oanstaging.com
+  keycloakBaseUrl: https://keycloak.development.oanstaging.com
   keycloakRealm: staff
-  keycloakIssuerUrl: https://keycloak-development.oanstaging.com/realms/staff
+  keycloakIssuerUrl: https://keycloak.development.oanstaging.com/realms/staff
   keycloakInternalUrl: http://commons-keycloak.commons.svc.cluster.local:80
-  keycloakExternalIssuerUrl: https://keycloak-development.oanstaging.com/realms/staff
-  masterDataTokenUrl: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/token
-  minioHost: minio-farmer-development.oanstaging.com
+  keycloakExternalIssuerUrl: https://keycloak.development.oanstaging.com/realms/staff
+  masterDataTokenUrl: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
+  minioHost: minio-farmer.development.oanstaging.com
   minioSecure: true
   iamServiceUrl: http://commons-services-iam-staff-portal-api.commons.svc.cluster.local
   masterDataApiUrl: http://commons-services-master-data-api.commons.svc.cluster.local
@@ -30,12 +29,10 @@ global:
   consentManagerUrl: http://commons-services-cm-partner-api.commons.svc.cluster.local
   consentManagerStaffUrl: http://commons-services-cm-api.commons.svc.cluster.local
   auditManagerUrl: http://commons-services-auditmanager.commons.svc.cluster.local:80
-  aweHostname: awe-development.oanstaging.com
+  aweHostname: awe.development.oanstaging.com
   aweBaseUrl: http://commons-services-awe.commons.svc.cluster.local
-  idGeneratorInternalUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace
-    }}.svc.cluster.local/v1
-  idGeneratorApiUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace
-    }}.svc.cluster.local/v1
+  idGeneratorInternalUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace }}.svc.cluster.local/v1
+  idGeneratorApiUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace }}.svc.cluster.local/v1
   notificationEnabled: false
   notificationApiHostname: ''
   notificationWsHostname: ''
@@ -52,24 +49,27 @@ registry:
       REGISTRY_STAFF_PORTAL_API_AUTH_REDIS_URL: redis://commons-redis-master.commons.svc.cluster.local:6379/0
       REGISTRY_STAFF_PORTAL_API_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_STAFF_PORTAL_API_MASTER_DATA_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
-      REGISTRY_STAFF_PORTAL_API_MASTER_DATA_TOKEN_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/token
+      REGISTRY_STAFF_PORTAL_API_MASTER_DATA_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
       REGISTRY_STAFF_PORTAL_API_PARTNER_MGMT_API_URL: http://commons-services-pm-partner-api.commons.svc.cluster.local
       REGISTRY_STAFF_PORTAL_API_PARTNER_MGMT_ADMIN_API_URL: http://commons-services-pm-staff-portal-api.commons.svc.cluster.local
-      REGISTRY_STAFF_PORTAL_API_PARTNER_MGMT_ADMIN_TOKEN_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/token
+      REGISTRY_STAFF_PORTAL_API_PARTNER_MGMT_ADMIN_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
       REGISTRY_STAFF_PORTAL_API_AWE_BASE_URL: http://commons-services-awe.commons.svc.cluster.local
-      REGISTRY_STAFF_PORTAL_API_AWE_DEFAULT_CALLBACK_URL: http://{{ .Release.Name
-        }}-staff-portal-api.{{ .Release.Namespace }}.svc.cluster.local/awe/webhooks/decision
+      REGISTRY_STAFF_PORTAL_API_AWE_DEFAULT_CALLBACK_URL: http://{{ .Release.Name }}-staff-portal-api.{{
+        .Release.Namespace }}.svc.cluster.local/awe/webhooks/decision
       REGISTRY_STAFF_PORTAL_API_AUDIT_MANAGER_URL: http://commons-services-auditmanager.commons.svc.cluster.local:80
       COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       NOTIFICATION_ENABLED: 'false'
       NOTIFICATION_PROVIDER_URL: ''
-      KEYCLOAK_BASE_URL: https://keycloak-development.oanstaging.com
+      KEYCLOAK_BASE_URL: https://keycloak.development.oanstaging.com
       REGISTRY_STAFF_PORTAL_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CORE_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
     image:
       repository: ''
       tag: ''
     enabled: false
+    istio:
+      virtualservice:
+        gateway: istio-system/development
   partnerApi:
     envVars:
       DA_AUTO_APPROVE_IMPORTS: 'true'
@@ -78,42 +78,42 @@ registry:
       REGISTRY_PARTNER_API_KEYMANAGER_API_BASE_URL: http://commons-services-keymanager.commons.svc.cluster.local/v1/keymanager
       REGISTRY_PARTNER_API_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_PARTNER_API_MASTER_DATA_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
-      REGISTRY_PARTNER_API_MASTER_DATA_TOKEN_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/token
+      REGISTRY_PARTNER_API_MASTER_DATA_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
       REGISTRY_PARTNER_API_PARTNER_MGMT_API_URL: http://commons-services-pm-partner-api.commons.svc.cluster.local
       REGISTRY_PARTNER_API_PARTNER_MGMT_ADMIN_API_URL: http://commons-services-pm-staff-portal-api.commons.svc.cluster.local
-      REGISTRY_PARTNER_API_PARTNER_MGMT_ADMIN_TOKEN_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/token
+      REGISTRY_PARTNER_API_PARTNER_MGMT_ADMIN_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
       REGISTRY_PARTNER_API_AUDIT_MANAGER_URL: http://commons-services-auditmanager.commons.svc.cluster.local:80
       COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       NOTIFICATION_ENABLED: 'false'
       NOTIFICATION_PROVIDER_URL: ''
-      KEYCLOAK_BASE_URL: https://keycloak-development.oanstaging.com
+      KEYCLOAK_BASE_URL: https://keycloak.development.oanstaging.com
       REGISTRY_PARTNER_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
     image:
       repository: ''
       tag: ''
     enabled: false
+    istio:
+      virtualservice:
+        gateway: istio-system/development
   celeryWorker:
     envVars:
       DA_AUTO_APPROVE_IMPORTS: 'true'
       REGISTRY_CELERY_WORKERS_APPLICATION_REFERENCE_FORMAT: '{DATE:%Y%b%d|upper}-{SECONDS:5}-{RAND:4}'
       REGISTRY_CELERY_WORKERS_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
-      REGISTRY_CELERY_WORKERS_MASTER_DATA_DB_PORT: '{{ .Values.global.masterDataDBPort
-        }}'
-      REGISTRY_CELERY_WORKERS_MASTER_DATA_DB_DBNAME: '{{ tpl .Values.global.masterDataDB
-        $ }}'
-      REGISTRY_CELERY_WORKERS_MASTER_DATA_DB_USERNAME: '{{ tpl .Values.global.masterDataDBUser
-        $ }}'
+      REGISTRY_CELERY_WORKERS_MASTER_DATA_DB_PORT: '{{ .Values.global.masterDataDBPort }}'
+      REGISTRY_CELERY_WORKERS_MASTER_DATA_DB_DBNAME: '{{ tpl .Values.global.masterDataDB $ }}'
+      REGISTRY_CELERY_WORKERS_MASTER_DATA_DB_USERNAME: '{{ tpl .Values.global.masterDataDBUser $ }}'
       REGISTRY_CELERY_WORKERS_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CELERY_WORKERS_MASTER_DATA_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
-      REGISTRY_CELERY_WORKERS_MASTER_DATA_TOKEN_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/token
+      REGISTRY_CELERY_WORKERS_MASTER_DATA_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
       REGISTRY_CELERY_WORKERS_PARTNER_MGMT_API_URL: http://commons-services-pm-partner-api.commons.svc.cluster.local
       REGISTRY_CELERY_WORKERS_PARTNER_MGMT_ADMIN_API_URL: http://commons-services-pm-staff-portal-api.commons.svc.cluster.local
-      REGISTRY_CELERY_WORKERS_PARTNER_MGMT_ADMIN_TOKEN_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/token
+      REGISTRY_CELERY_WORKERS_PARTNER_MGMT_ADMIN_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
       REGISTRY_CELERY_WORKERS_AWE_BASE_URL: http://commons-services-awe.commons.svc.cluster.local
       REGISTRY_CELERY_WORKERS_AWE_DEFAULT_CALLBACK_URL: http://{{ .Release.Name }}-staff-portal-api.{{
         .Release.Namespace }}.svc.cluster.local/awe/webhooks/decision
-      REGISTRY_CELERY_WORKERS_AWE_TOKEN_ISSUER_BASE_URL: https://keycloak-development.oanstaging.com
-      REGISTRY_CELERY_WORKERS_AWE_TOKEN_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/token
+      REGISTRY_CELERY_WORKERS_AWE_TOKEN_ISSUER_BASE_URL: https://keycloak.development.oanstaging.com
+      REGISTRY_CELERY_WORKERS_AWE_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
       COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       NOTIFICATION_ENABLED: 'false'
       NOTIFICATION_PROVIDER_URL: ''
@@ -158,6 +158,7 @@ registry:
       istio:
         virtualservice:
           host: '{{ tpl .Values.global.idGeneratorHostname $ }}'
+          gateway: istio-system/development
         gateway:
           host: '{{ tpl .Values.global.idGeneratorHostname $ }}'
     enabled: false
@@ -171,13 +172,16 @@ registry:
       repository: ''
       tag: ''
     enabled: false
-    iamPublicUrl: https://staff-iam-development.oanstaging.com
+    iamPublicUrl: https://staff-iam.development.oanstaging.com
     envVars:
-      COOKIE_DOMAIN: .oanstaging.com
-      IAM_URL: https://staff-iam-development.oanstaging.com
-      KEYCLOAK_LOGOUT_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/logout
+      COOKIE_DOMAIN: .development.oanstaging.com
+      IAM_URL: https://staff-iam.development.oanstaging.com
+      KEYCLOAK_LOGOUT_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/logout
       NOTIFICATION_BACKEND_URL: ''
       NOTIFICATION_WEBSOCKET_URL: ''
+    istio:
+      virtualservice:
+        gateway: istio-system/development
   postgres-init:
     enabled: false
     postgresql:
@@ -188,6 +192,10 @@ registry:
       url: http://commons-keycloak.commons.svc.cluster.local:80
   redis:
     enabled: false
+  beneApi:
+    istio:
+      virtualservice:
+        gateway: istio-system/development
 dashboardUi:
   enabled: false
   nameOverride: ''

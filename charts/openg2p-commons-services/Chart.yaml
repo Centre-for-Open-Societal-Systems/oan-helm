@@ -74,12 +74,12 @@ dependencies:
   name: keycloak-init
   repository: https://openg2p.github.io/openg2p-helm
   version: 1.2.0
-description: OAN Commons Services including OAN Consent Manager and Aggregation API
-  from COSS repositories, with pinned OpenG2P shared-service dependencies.
+description: OAN Commons Services including OAN Consent Manager and Aggregation API from COSS repositories,
+  with pinned OpenG2P shared-service dependencies.
 icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
 name: openg2p-commons-services
 type: application
-version: 1.0.0-dev.3
+version: 1.0.0-dev.4
 home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
 sources:
 - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
@@ -95,7 +95,3 @@ keywords:
 maintainers:
 - name: OpenAgriNet (OAN) / COSS
   url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
-
-# openg2p-consent-manager is the retained upstream template dependency name.
-# OAN Consent images/values come from the COSS consent-management repository.
-# OAN Aggregation is templates/aggregation-api.yaml, configured by aggregationApi.

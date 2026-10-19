@@ -39,10 +39,10 @@ shared-platform upgrade. Preserve other Commons service settings and owners.
 | Database Secret | Existing default is Secret `consent-manager-db`, key `consent-manager-db-user`, in `commons`. Do not replace an existing password with an example |
 | Image pulls | Confirm nodes or the workload ServiceAccount can pull the private ECR images, including seed/sanity Jobs. Check the rendered Pod/ServiceAccount configuration; the reused API templates do not directly consume a generic `global.imagePullSecrets` setting |
 | Receipt signing | Preserve the existing signing key and key id. For a separately managed key, use `openg2p-consent-manager.consentManagerApi.signingKey.mode: existing` and point its Secret/key/password references to that key. Default names are `consent-manager-signing`, `cm_signing.p12`, and `password`. The inherited default is a public demo key; it is not a private environment key |
-| Keycloak | Verify external issuer `https://keycloak-development.oanstaging.com/realms/staff`, reachable JWKS, the `consent-manager` client and appropriate admin/approver roles. Preserve client Secrets and the existing user login flow |
+| Keycloak | Verify external issuer `https://keycloak.development.oanstaging.com/realms/staff`, reachable JWKS, the `consent-manager` client and appropriate admin/approver roles. Preserve client Secrets and the existing user login flow |
 | Partner Management | Verify access to `commons-services-pm-partner-api` and that each partner's registered public key/reference matches its signed requests |
 | AWE, when enabled | Verify approval policy `consent-manager.policy_change.v1`, service credentials, callback HMAC registration, and callback to `http://commons-services-cm-api.commons.svc.cluster.local/consent/v1/awe/webhooks/decision`. Preserve the existing enabled state; do not enable AWE without its policy/Secret setup |
-| Public routes | Preserve working TLS/routing for `consent-manager-development.oanstaging.com` and `consent-manager-partner-development.oanstaging.com`; review UI login/API configuration |
+| Public routes | Preserve working TLS/routing for `consent-manager.development.oanstaging.com` and `consent-manager-partner.development.oanstaging.com`; review UI login/API configuration |
 | Upgrade values | Explicitly merge reviewed image overrides and `environments/dev/values/commons-services.yaml` into saved private values. The URL overlay does not select new image versions |
 
 If a signing Secret is currently Helm-managed, changing its management mode or
@@ -69,7 +69,8 @@ only; strict subject-consent flags require a separate reviewed values change.
    96 tests in a container without networking. The subsequent exact-image local pair
    check passed 30/30 using fresh databases; authenticated/live integration and
    upgrade migrations remain separate prerequisites. The image serves port `8100`.
-   No application CI or cluster deployment changes were made.
+   The candidate image build did not deploy workloads. The separate URL migration
+   preserves those enablement settings.
 2. **Provision its own database/user.** It can use the existing PostgreSQL
    server, but must have a separate database and credentials. It must not use
    the Consent database as its store. Store credentials in a Secret in `commons`.

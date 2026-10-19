@@ -1,0 +1,933 @@
+{
+  "checkedAtUtc": "2026-10-19T09:00:15.282919+00:00",
+  "server": "13.201.58.55",
+  "domain": "development.oanstaging.com",
+  "gateway": "istio-system/development",
+  "workloadsReady": 68,
+  "unreadyWorkloads": [],
+  "legacyWorkloadUrls": [],
+  "imageChanges": [],
+  "releases": [
+    {
+      "name": "commons",
+      "namespace": "commons",
+      "chart": "openg2p-commons-base-2.3.3",
+      "beforeRevision": "3",
+      "afterRevision": "4",
+      "status": "deployed"
+    },
+    {
+      "name": "commons-services",
+      "namespace": "commons",
+      "chart": "openg2p-commons-services-2.3.4-rc.245",
+      "beforeRevision": "15",
+      "afterRevision": "16",
+      "status": "deployed"
+    },
+    {
+      "name": "cropsown-connector",
+      "namespace": "crop",
+      "chart": "openg2p-connector-0.1.0",
+      "beforeRevision": "1",
+      "afterRevision": "3",
+      "status": "deployed"
+    },
+    {
+      "name": "cropsown-registry",
+      "namespace": "crop",
+      "chart": "openg2p-cropsown-registry-0.0.0-develop",
+      "beforeRevision": "10",
+      "afterRevision": "12",
+      "status": "deployed"
+    },
+    {
+      "name": "farmer-registry",
+      "namespace": "farmer",
+      "chart": "openg2p-farmer-registry-0.0.0-rc.0",
+      "beforeRevision": "36",
+      "afterRevision": "37",
+      "status": "deployed"
+    },
+    {
+      "name": "farmer-registry-connector",
+      "namespace": "farmer",
+      "chart": "openg2p-connector-0.1.0",
+      "beforeRevision": "10",
+      "afterRevision": "11",
+      "status": "deployed"
+    },
+    {
+      "name": "livestock-connector",
+      "namespace": "livestock",
+      "chart": "openg2p-connector-0.1.0",
+      "beforeRevision": "2",
+      "afterRevision": "3",
+      "status": "deployed"
+    },
+    {
+      "name": "livestock-registry",
+      "namespace": "livestock",
+      "chart": "openg2p-livestock-registry-1.2.0+3be78a4",
+      "beforeRevision": "13",
+      "afterRevision": "15",
+      "status": "deployed"
+    },
+    {
+      "name": "oan-dashboards",
+      "namespace": "commons",
+      "chart": "oan-dashboards-0.1.0",
+      "beforeRevision": "1",
+      "afterRevision": "2",
+      "status": "deployed"
+    }
+  ],
+  "routes": [
+    {
+      "namespace": "commons",
+      "name": "commons-kafka-ui",
+      "hosts": [
+        "kafka.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "commons-keycloak",
+      "hosts": [
+        "keycloak.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "commons-minio",
+      "hosts": [
+        "minio-console.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "commons-minio-api",
+      "hosts": [
+        "minio-farmer.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "commons-services-auditmanager",
+      "hosts": [
+        "auditmanager.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "commons-services-awe",
+      "hosts": [
+        "awe.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "commons-services-cm-partner-api",
+      "hosts": [
+        "consent-manager-partner.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "commons-services-console",
+      "hosts": [
+        "consent-manager.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "commons-services-esignet-oidc-ui",
+      "hosts": [
+        "esignet.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "commons-services-iam-agent-portal-api",
+      "hosts": [
+        "agent-iam.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "commons-services-iam-staff-portal-api",
+      "hosts": [
+        "staff-iam.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "commons-services-iam-staff-ui",
+      "hosts": [
+        "iam-staff-ui.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "commons-services-master-data-api",
+      "hosts": [
+        "master-data.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "commons-services-master-data-ui",
+      "hosts": [
+        "master-data-ui.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "commons-services-mock-identity-system",
+      "hosts": [
+        "esignet.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "commons-services-odk-central",
+      "hosts": [
+        "odk-central.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "commons-services-pm-partner-api",
+      "hosts": [
+        "partner-management-partner-api.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "commons-services-pm-staff-portal-api",
+      "hosts": [
+        "staff-iam.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "commons-services-pm-staff-portal-ui",
+      "hosts": [
+        "partner-management.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "commons-services-staff-portal-ui",
+      "hosts": [
+        "staff-portal.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "commons",
+      "name": "oan-dashboards-private",
+      "hosts": [
+        "oan-dashboard.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "crop",
+      "name": "cropsown-connector",
+      "hosts": [
+        "connector-cropsown-registry.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "crop",
+      "name": "cropsown-registry-dashboard-api",
+      "hosts": [
+        "dashboard-api.crop.openg2p.test"
+      ],
+      "gateways": [
+        "internal"
+      ],
+      "publicDevelopmentRoute": false
+    },
+    {
+      "namespace": "crop",
+      "name": "cropsown-registry-id-generator",
+      "hosts": [
+        "idgenerator-cropsown-registry.crop.openg2p.test"
+      ],
+      "gateways": [
+        "internal"
+      ],
+      "publicDevelopmentRoute": false
+    },
+    {
+      "namespace": "crop",
+      "name": "cropsown-registry-partner-api",
+      "hosts": [
+        "partner-crop.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "crop",
+      "name": "cropsown-registry-staff-portal-api",
+      "hosts": [
+        "staff-crop.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "crop",
+      "name": "cropsown-registry-staff-portal-ui",
+      "hosts": [
+        "crop-registry.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "farmer",
+      "name": "farmer-registry-connector",
+      "hosts": [
+        "connector-farmer-registry.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "farmer",
+      "name": "farmer-registry-id-generator",
+      "hosts": [
+        "idgenerator-farmer.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "farmer",
+      "name": "farmer-registry-partner-api",
+      "hosts": [
+        "partner-farmer.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "farmer",
+      "name": "farmer-registry-staff-portal-api",
+      "hosts": [
+        "staff-farmer.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "farmer",
+      "name": "farmer-registry-staff-portal-ui",
+      "hosts": [
+        "farmer-registry.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "livestock",
+      "name": "livestock-connector",
+      "hosts": [
+        "connector-livestock-registry.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "livestock",
+      "name": "livestock-registry-id-generator",
+      "hosts": [
+        "idgenerator-livestock.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "livestock",
+      "name": "livestock-registry-partner-api",
+      "hosts": [
+        "partner-livestock.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "livestock",
+      "name": "livestock-registry-staff-portal-api",
+      "hosts": [
+        "staff-livestock.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    },
+    {
+      "namespace": "livestock",
+      "name": "livestock-registry-staff-portal-ui",
+      "hosts": [
+        "livestock-registry.development.oanstaging.com"
+      ],
+      "gateways": [
+        "istio-system/development"
+      ],
+      "publicDevelopmentRoute": true
+    }
+  ],
+  "certificate": "notBefore=Oct 19 07:35:25 2026 GMT\nnotAfter=Jan 17 07:35:24 2027 GMT\nX509v3 Subject Alternative Name: \n    DNS:*.development.oanstaging.com, DNS:development.oanstaging.com",
+  "acmeAwsCredentialsPersisted": false,
+  "istioAnalyzeExitCode": 0,
+  "istioDiagnostics": [
+    "Warning [IST0132] (VirtualService crop/cropsown-registry-dashboard-api) one or more host [dashboard-api.crop.openg2p.test] defined in VirtualService crop/cropsown-registry-dashboard-api not found in Gateway crop/internal.",
+    "Warning [IST0132] (VirtualService crop/cropsown-registry-id-generator) one or more host [idgenerator-cropsown-registry.crop.openg2p.test] defined in VirtualService crop/cropsown-registry-id-generator not found in Gateway crop/internal.",
+    "Warning [IST0133] (EnvoyFilter istio-system/spdy-upgrade-filter) Schema validation warning: EnvoyFilter exposes internal implementation details that may change at any time. Prefer other APIs if possible, and exercise extreme caution, especially around upgrades.",
+    "Warning [IST0150] (Service farmer/commons-services-auditmanager) Port name for ExternalName service is invalid. Proxy may prevent tcp named ports and unmatched traffic for ports serving TCP protocol from being forwarded correctly",
+    "Warning [IST0150] (Service livestock/commons-services-auditmanager) Port name for ExternalName service is invalid. Proxy may prevent tcp named ports and unmatched traffic for ports serving TCP protocol from being forwarded correctly",
+    "Warning [IST0150] (Service farmer/commons-services-awe) Port name for ExternalName service is invalid. Proxy may prevent tcp named ports and unmatched traffic for ports serving TCP protocol from being forwarded correctly",
+    "Warning [IST0150] (Service livestock/commons-services-awe) Port name for ExternalName service is invalid. Proxy may prevent tcp named ports and unmatched traffic for ports serving TCP protocol from being forwarded correctly",
+    "Warning [IST0150] (Service farmer/commons-services-cm-api) Port name for ExternalName service is invalid. Proxy may prevent tcp named ports and unmatched traffic for ports serving TCP protocol from being forwarded correctly",
+    "Warning [IST0150] (Service livestock/commons-services-cm-api) Port name for ExternalName service is invalid. Proxy may prevent tcp named ports and unmatched traffic for ports serving TCP protocol from being forwarded correctly",
+    "Warning [IST0150] (Service farmer/commons-services-cm-partner-api) Port name for ExternalName service is invalid. Proxy may prevent tcp named ports and unmatched traffic for ports serving TCP protocol from being forwarded correctly",
+    "Warning [IST0150] (Service livestock/commons-services-cm-partner-api) Port name for ExternalName service is invalid. Proxy may prevent tcp named ports and unmatched traffic for ports serving TCP protocol from being forwarded correctly",
+    "Warning [IST0150] (Service farmer/commons-services-iam-staff-portal-api) Port name for ExternalName service is invalid. Proxy may prevent tcp named ports and unmatched traffic for ports serving TCP protocol from being forwarded correctly",
+    "Warning [IST0150] (Service livestock/commons-services-iam-staff-portal-api) Port name for ExternalName service is invalid. Proxy may prevent tcp named ports and unmatched traffic for ports serving TCP protocol from being forwarded correctly"
+  ],
+  "aggregationEnabled": false,
+  "privateBackupDirectory": "/var/backups/oan-dev-domain/20261019T082942Z",
+  "publicHttpsChecks": {
+    "passed": 32,
+    "total": 32,
+    "checks": [
+      {
+        "url": "https://farmer-registry.development.oanstaging.com/",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "farmer-registry.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://crop-registry.development.oanstaging.com/",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "crop-registry.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://livestock-registry.development.oanstaging.com/",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "livestock-registry.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://staff-farmer.development.oanstaging.com/ping",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "staff-farmer.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://staff-crop.development.oanstaging.com/ping",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "staff-crop.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://staff-livestock.development.oanstaging.com/ping",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "staff-livestock.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://partner-farmer.development.oanstaging.com/ping",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "partner-farmer.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://partner-crop.development.oanstaging.com/ping",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "partner-crop.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://partner-livestock.development.oanstaging.com/ping",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "partner-livestock.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://staff-iam.development.oanstaging.com/ping",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "staff-iam.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://agent-iam.development.oanstaging.com/ping",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "agent-iam.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://master-data.development.oanstaging.com/ping",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "master-data.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://master-data-ui.development.oanstaging.com/",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "master-data-ui.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://consent-manager.development.oanstaging.com/",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "consent-manager.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://consent-manager.development.oanstaging.com/consent/v1/partners",
+        "expectedStatuses": [
+          401,
+          403
+        ],
+        "tlsVerified": true,
+        "status": 401,
+        "passed": true
+      },
+      {
+        "url": "https://consent-manager-partner.development.oanstaging.com/api/consent-manager-partner/ping",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "consent-manager-partner.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://partner-management.development.oanstaging.com/",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "partner-management.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://partner-management-partner-api.development.oanstaging.com/ping",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "partner-management-partner-api.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://awe.development.oanstaging.com/",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "awe.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://iam-staff-ui.development.oanstaging.com/",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "iam-staff-ui.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://staff-portal.development.oanstaging.com/",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "staff-portal.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://connector-farmer-registry.development.oanstaging.com/",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "connector-farmer-registry.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://connector-cropsown-registry.development.oanstaging.com/",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "connector-cropsown-registry.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://connector-livestock-registry.development.oanstaging.com/",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "connector-livestock-registry.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://oan-dashboard.development.oanstaging.com/",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "oan-dashboard.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://odk-central.development.oanstaging.com/",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "odk-central.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://odk-central.development.oanstaging.com/v1/projects",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "odk-central.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://minio-console.development.oanstaging.com/",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "minio-console.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://minio-farmer.development.oanstaging.com/minio/health/live",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "minio-farmer.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://esignet.development.oanstaging.com/",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "esignet.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://kafka.development.oanstaging.com/",
+        "expectedStatuses": [
+          200
+        ],
+        "tlsVerified": true,
+        "status": 200,
+        "finalHost": "keycloak.development.oanstaging.com",
+        "passed": true
+      },
+      {
+        "url": "https://no-service-20261019.development.oanstaging.com/",
+        "expectedStatuses": [
+          404
+        ],
+        "tlsVerified": true,
+        "status": 404,
+        "passed": true
+      }
+    ]
+  },
+  "oidcDiscoveryPostmanChecks": {
+    "passed": 7,
+    "total": 7,
+    "script": "postman/check-development-discovery.js"
+  },
+  "runtimeAuthentication": {
+    "pod": "commons-services-cm-api-76b48f485d-cml6g",
+    "runtimeAuthenticationProbeExecuted": true,
+    "runtimeAuthentication": {
+      "internalJwksHttpStatus": 200,
+      "internalVerificationKeysPresent": true,
+      "clientCredentialsHttpStatus": 200,
+      "tokenSignatureIssuerAndExpiryVerified": true,
+      "serviceTokenHasConsentAdminRole": true
+    },
+    "partnerSigningProbeExecuted": true,
+    "partnerSigning": {
+      "mountedKeyReadable": true,
+      "privateKeyLoaded": true,
+      "certificateLoaded": true,
+      "mountedKeyMatchesKubernetesSecret": true
+    }
+  },
+  "dns": {
+    "zone": "Z0489132CZLGOYQM4M7U",
+    "beforeRecords": 113,
+    "afterRecords": 78,
+    "retiredApplicationRecords": 37,
+    "unrelatedRecordsUnchanged": true,
+    "retirementChange": {
+      "result": {
+        "ChangeInfo": {
+          "Id": "/change/C06778202UMOB8VSWCMRF",
+          "Status": "INSYNC",
+          "SubmittedAt": "2026-10-19T08:56:38.725Z",
+          "Comment": "Retire only migrated OAN new-dev application names after verified wildcard cutover"
+        }
+      }
+    },
+    "newRecords": [
+      {
+        "Name": "development.oanstaging.com.",
+        "Type": "A",
+        "TTL": "300",
+        "ResourceRecords": {
+          "ResourceRecord": {
+            "Value": "13.201.58.55"
+          }
+        }
+      },
+      {
+        "Name": "\\052.development.oanstaging.com.",
+        "Type": "CNAME",
+        "TTL": "300",
+        "ResourceRecords": {
+          "ResourceRecord": {
+            "Value": "development.oanstaging.com."
+          }
+        }
+      }
+    ]
+  },
+  "identityChanges": {
+    "keycloakClients": 11,
+    "iamLoginProviders": 2,
+    "iamApplicationLinks": 9,
+    "databaseSchemaChanges": false
+  },
+  "certificateRenewal": {
+    "jenkinsJob": "oan-development-wildcard-certificate-renewal",
+    "schedule": "daily",
+    "successfulFirstBuild": 3,
+    "url": "https://jenkins.oanstaging.com/job/oan-development-wildcard-certificate-renewal/",
+    "awsCredentialsPersistedOnServer": false,
+    "successfulRepeatBuild": 4
+  },
+  "deploymentMethod": "Upgrade existing owners with exact installed chart versions, URL-only private values and compatibility post-renderer; hooks and initialization Jobs suppressed.",
+  "cutover": "Immediate; no old application DNS/routes or compatibility redirects. Rancher/Jenkins management URLs unchanged.",
+  "liveOverridesReconciled": {
+    "cropConnectorImages": "Running develop-88 overrides were absent from saved Helm values. An initial upgrade reapplied develop-76; corrected to develop-88 and persisted in Helm values. Final images match the running-workload backup.",
+    "livestockEnrichment": "Live enrichment flags/signing identity/audience/purpose/search URL were reconciled into Helm values and restored after an initial upgrade reapplied older saved settings.",
+    "cropWorker": "Legacy KEYCLOAK_BASE_URL manually added outside Helm migrated and persisted.",
+    "kafkaUi": "Restarted to reload its changed mounted login configuration."
+  },
+  "limits": [
+    "Endpoint routing, health, auth rejection, token signature/issuer/expiry and OIDC discovery were checked; full interactive end-user login and application write workflows were not executed.",
+    "Pre-existing private Crop route host mismatch and ExternalName port-name warnings remain; no new public Gateway errors from istioctl analyze.",
+    "DA and Aggregation remain disabled; this change does not establish their runtime readiness."
+  ],
+  "gatewayCleanup": {
+    "legacyPublicHostBindingsRemoved": 33,
+    "namespacePrivateGatewayHostsRetained": true
+  },
+  "staffRealmSessionsInvalidated": true,
+  "managementRealmSessionsUnchanged": true
+}
