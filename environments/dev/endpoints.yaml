@@ -1,37 +1,37 @@
-checkedAt: '2026-10-16'
+checkedAt: '2026-10-19'
 server: 13.201.58.55
 publicHosts:
-  keycloak: keycloak-development.oanstaging.com
-  iam: staff-iam-development.oanstaging.com
-  agentIam: agent-iam-development.oanstaging.com
-  staffPortal: staff-portal-development.oanstaging.com
-  iamUi: iam-staff-ui-development.oanstaging.com
-  awe: awe-development.oanstaging.com
-  masterData: master-data-development.oanstaging.com
-  masterDataUi: master-data-ui-development.oanstaging.com
-  consent: consent-manager-development.oanstaging.com
-  consentPartner: consent-manager-partner-development.oanstaging.com
-  partnerManagement: partner-management-development.oanstaging.com
-  partnerManagementApi: partner-management-partner-api-development.oanstaging.com
-  odk: odk-central-development.oanstaging.com
-  minio: minio-farmer-development.oanstaging.com
-  minioConsole: minio-console-development.oanstaging.com
-  audit: auditmanager-development.oanstaging.com
-  esignet: esignet-development.oanstaging.com
-  farmer: farmer-registry-development.oanstaging.com
-  farmerStaff: staff-farmer-development.oanstaging.com
-  farmerPartner: partner-farmer-development.oanstaging.com
-  farmerId: idgenerator-farmer-development.oanstaging.com
-  cropsown: crop-registry-development.oanstaging.com
-  cropsownStaff: staff-crop-development.oanstaging.com
-  cropsownPartner: partner-crop-development.oanstaging.com
-  livestock: livestock-registry-development.oanstaging.com
-  livestockStaff: staff-livestock-development.oanstaging.com
-  livestockPartner: partner-livestock-development.oanstaging.com
-  livestockId: idgenerator-livestock-development.oanstaging.com
+  keycloak: keycloak.development.oanstaging.com
+  iam: staff-iam.development.oanstaging.com
+  agentIam: agent-iam.development.oanstaging.com
+  staffPortal: staff-portal.development.oanstaging.com
+  iamUi: iam-staff-ui.development.oanstaging.com
+  awe: awe.development.oanstaging.com
+  masterData: master-data.development.oanstaging.com
+  masterDataUi: master-data-ui.development.oanstaging.com
+  consent: consent-manager.development.oanstaging.com
+  consentPartner: consent-manager-partner.development.oanstaging.com
+  partnerManagement: partner-management.development.oanstaging.com
+  partnerManagementApi: partner-management-partner-api.development.oanstaging.com
+  odk: odk-central.development.oanstaging.com
+  minio: minio-farmer.development.oanstaging.com
+  minioConsole: minio-console.development.oanstaging.com
+  audit: auditmanager.development.oanstaging.com
+  esignet: esignet.development.oanstaging.com
+  farmer: farmer-registry.development.oanstaging.com
+  farmerStaff: staff-farmer.development.oanstaging.com
+  farmerPartner: partner-farmer.development.oanstaging.com
+  farmerId: idgenerator-farmer.development.oanstaging.com
+  cropsown: crop-registry.development.oanstaging.com
+  cropsownStaff: staff-crop.development.oanstaging.com
+  cropsownPartner: partner-crop.development.oanstaging.com
+  livestock: livestock-registry.development.oanstaging.com
+  livestockStaff: staff-livestock.development.oanstaging.com
+  livestockPartner: partner-livestock.development.oanstaging.com
+  livestockId: idgenerator-livestock.development.oanstaging.com
 sharedNamespace: commons
-method: Read-only Helm endpoint fields, workload environment URLs, Istio hosts and
-  Nginx server names; no credentials or raw live values copied.
+method: Read-only post-cutover HTTPS checks and Helm/workload/Istio inventory. Private values/Secret payloads
+  excluded.
 unconfirmed:
 - Superset
 - Inji Certify
@@ -44,180 +44,181 @@ verifiedRoutes:
 - namespace: commons
   name: commons-minio
   hosts:
-  - minio-console-development.oanstaging.com
+  - minio-console.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: commons
   name: commons-services-auditmanager
   hosts:
-  - auditmanager-development.oanstaging.com
+  - auditmanager.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: commons
   name: commons-services-awe
   hosts:
-  - awe-development.oanstaging.com
+  - awe.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: commons
   name: commons-services-cm-partner-api
   hosts:
-  - consent-manager-partner-development.oanstaging.com
+  - consent-manager-partner.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: commons
   name: commons-services-console
   hosts:
-  - consent-manager-development.oanstaging.com
+  - consent-manager.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: commons
   name: commons-services-esignet-oidc-ui
   hosts:
-  - esignet-development.oanstaging.com
+  - esignet.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: commons
   name: commons-services-iam-agent-portal-api
   hosts:
-  - agent-iam-development.oanstaging.com
+  - agent-iam.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: commons
   name: commons-services-iam-staff-portal-api
   hosts:
-  - staff-iam-development.oanstaging.com
+  - staff-iam.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: commons
   name: commons-services-iam-staff-ui
   hosts:
-  - iam-staff-ui-development.oanstaging.com
+  - iam-staff-ui.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: commons
   name: commons-services-master-data-api
   hosts:
-  - master-data-development.oanstaging.com
+  - master-data.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: commons
   name: commons-services-master-data-ui
   hosts:
-  - master-data-ui-development.oanstaging.com
+  - master-data-ui.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: commons
   name: commons-services-mock-identity-system
   hosts:
-  - esignet-development.oanstaging.com
+  - esignet.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: commons
   name: commons-services-pm-partner-api
   hosts:
-  - partner-management-partner-api-development.oanstaging.com
+  - partner-management-partner-api.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: commons
   name: commons-services-pm-staff-portal-api
   hosts:
-  - staff-iam-development.oanstaging.com
+  - staff-iam.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: commons
   name: commons-services-pm-staff-portal-ui
   hosts:
-  - partner-management-development.oanstaging.com
+  - partner-management.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: commons
   name: commons-services-staff-portal-ui
   hosts:
-  - staff-portal-development.oanstaging.com
+  - staff-portal.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: commons
   name: keycloak-development
   hosts:
-  - keycloak-development.oanstaging.com
+  - keycloak.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: commons
   name: minio-farmer-development
   hosts:
-  - minio-farmer-development.oanstaging.com
+  - minio-farmer.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: commons
   name: odk-central-development
   hosts:
-  - odk-central-development.oanstaging.com
+  - odk-central.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: crop
   name: cropsown-registry-partner-api
   hosts:
-  - partner-crop-development.oanstaging.com
+  - partner-crop.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: crop
   name: cropsown-registry-staff-portal-api
   hosts:
-  - staff-crop-development.oanstaging.com
+  - staff-crop.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: crop
   name: cropsown-registry-staff-portal-ui
   hosts:
-  - crop-registry-development.oanstaging.com
+  - crop-registry.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: farmer
   name: farmer-registry-id-generator
   hosts:
-  - idgenerator-farmer-development.oanstaging.com
+  - idgenerator-farmer.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: farmer
   name: farmer-registry-partner-api
   hosts:
-  - partner-farmer-development.oanstaging.com
+  - partner-farmer.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: farmer
   name: farmer-registry-staff-portal-api
   hosts:
-  - staff-farmer-development.oanstaging.com
+  - staff-farmer.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: farmer
   name: farmer-registry-staff-portal-ui
   hosts:
-  - farmer-registry-development.oanstaging.com
+  - farmer-registry.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: livestock
   name: livestock-registry-id-generator
   hosts:
-  - idgenerator-livestock-development.oanstaging.com
+  - idgenerator-livestock.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: livestock
   name: livestock-registry-partner-api
   hosts:
-  - partner-livestock-development.oanstaging.com
+  - partner-livestock.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: livestock
   name: livestock-registry-staff-portal-api
   hosts:
-  - staff-livestock-development.oanstaging.com
+  - staff-livestock.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
 - namespace: livestock
   name: livestock-registry-staff-portal-ui
   hosts:
-  - livestock-registry-development.oanstaging.com
+  - livestock-registry.development.oanstaging.com
   gateways:
-  - internal
+  - istio-system/development
+status: Live cutover verified on 2026-10-19; see releases/live-domain-migration.json.

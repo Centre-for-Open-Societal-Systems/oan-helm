@@ -1,5 +1,5 @@
 {
-  "chartVersion": "1.0.0-dev.3",
+  "chartVersion": "1.0.0-dev.4",
   "status": "prepared",
   "sources": [
     {
@@ -256,5 +256,12 @@
     "owner": "OpenAgriNet (OAN) / COSS",
     "scope": "Rancher display names, chart home/sources, embedded README and app-readme; original Helm/dependency names and upstream provenance retained",
     "runtimeChangesFromDev2": false
+  },
+  "developmentDomainMigration": {
+    "domain": "development.oanstaging.com",
+    "gateway": "istio-system/development",
+    "componentImagesChanged": false,
+    "dependencyPinsChanged": false,
+    "historicalArchivesRetained": true
   }
 }

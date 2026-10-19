@@ -180,6 +180,10 @@ def check_dev_endpoints(docs):
     for doc in docs:
         if doc["kind"] == "VirtualService":
             assert all(not host.endswith((".openg2p.org", ".openg2p.test")) for host in doc["spec"]["hosts"])
+            public_hosts = [host for host in doc["spec"]["hosts"] if host.endswith(".oanstaging.com")]
+            if public_hosts:
+                assert all(host.endswith(".development.oanstaging.com") for host in public_hosts), "Public chart route outside the development domain"
+                assert doc["spec"]["gateways"] == ["istio-system/development"], "Public route does not use the environment Gateway"
 
 
 def deployment_env(docs, name):
@@ -194,7 +198,7 @@ def check_url_contract(chart, docs):
         env = deployment_env(docs, "verify-staff-portal-ui")
         assert env["APP_URL"] == "https://" + hosts[name]
         assert env["IAM_URL"] == "https://" + hosts["iam"]
-        assert env["COOKIE_DOMAIN"] == ".oanstaging.com"
+        assert env["COOKIE_DOMAIN"] == ".development.oanstaging.com"
         assert env["KEYCLOAK_LOGOUT_URL"] == "https://" + hosts["keycloak"] + "/realms/staff/protocol/openid-connect/logout"
         env = deployment_env(docs, "verify-staff-portal-api")
         assert env["REGISTRY_STAFF_PORTAL_API_AWE_BASE_URL"] == "http://commons-services-awe.commons.svc.cluster.local"
@@ -384,6 +388,16 @@ def main():
                 assert pod["containers"][0]["envFrom"] == fixture[component]["envFrom"]
                 if component == "aggregationApi":
                     assert pod["containers"][0]["ports"][0]["containerPort"] == 8100
+                    for probe in ["startupProbe", "readinessProbe", "livenessProbe"]:
+                        assert pod["containers"][0][probe]["httpGet"] == {"path": "/ping", "port": "http"}
+                    fixture[component]["virtualService"] = {"enabled": True, "host": "aggregation.development.oanstaging.com", "gateway": "istio-system/development"}
+                    test_values.write_text(yaml.safe_dump(fixture))
+                    routed, routed_ids = documents(run("template", "verify", chart, "--namespace", "verify-a", "-f", test_values), "verify-a")
+                    route = next(x for x in routed if x["kind"] == "VirtualService" and x["metadata"]["name"] == "verify-aggregation-api")
+                    assert route["spec"]["hosts"] == [fixture[component]["virtualService"]["host"]]
+                    assert route["spec"]["gateways"] == ["istio-system/development"]
+                    assert route["spec"]["http"][0]["route"][0]["destination"] == {"host": "verify-aggregation-api", "port": {"number": 80}}
+                    assert enabled_ids <= routed_ids
                 if component == "dashboardApi" and chart.name != "openg2p-da-registry":
                     password = next(x for x in pod["containers"][0]["env"] if x["name"] == "PGPASSWORD")
                     assert password["valueFrom"] == {"secretKeyRef": {"name": "verify", "key": "verify-db-user"}}

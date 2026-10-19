@@ -19,16 +19,23 @@ original provenance; this chart does not claim they were all authored by OAN.
 
 ## Select the images deliberately
 
-Chart version **1.0.0-dev.3** adds OAN branding and source links. Runtime defaults
-remain those of dev.2, including the recorded older OAN Consent build. To select
-the newly published candidates, merge the reviewed
-[Consent image override](https://github.com/Centre-for-Open-Societal-Systems/oan-helm/blob/main/examples/dev/consent-image-values.yaml)
-and [Aggregation image override](https://github.com/Centre-for-Open-Societal-Systems/oan-helm/blob/main/examples/dev/aggregation-image.yaml)
-with your private values. The image overrides do not prepare databases, signing
-keys, identity, policy bindings or routing. Aggregation stays disabled.
+Chart version **1.0.0-dev.5** uses the wildcard development domain and shared Istio Gateway.
+Consent images are pinned to COSS commit `48e64c249056`, and Aggregation to
+`a5fa17fd7e7f`, using verified ECR digests. Aggregation is now stateless: it needs
+no database, queue or migration. Its own signing key, registry catalog, protected
+staff authentication and partner/policy bindings still need preparation.
+The optional VirtualService selects `aggregation.development.oanstaging.com`.
+OTP log/bucket publishing remain disabled pending SMS. See the current
+[setup guide](https://github.com/Centre-for-Open-Societal-Systems/oan-helm/blob/main/docs/consent-aggregation-prerequisites.md).
+Default Aggregation enablement remains false; use a complete reviewed runtime
+overlay when upgrading the existing release.
 
 Upgrade the existing `commons-services` release in namespace `commons`. Review
 all shared-service changes and backups. Helm rollback does not reverse database
 migrations. Follow the
 [component prerequisites](https://github.com/Centre-for-Open-Societal-Systems/oan-helm/blob/main/docs/consent-aggregation-prerequisites.md)
 and [Rancher guide](https://github.com/Centre-for-Open-Societal-Systems/oan-helm/blob/main/docs/rancher-dev.md).
+
+Dev URLs use `<service>.development.oanstaging.com`. The environment-owned
+wildcard DNS/TLS and `istio-system/development` Gateway must be prepared first.
+See the service onboarding and enablement guide in `docs/service-onboarding.md`.

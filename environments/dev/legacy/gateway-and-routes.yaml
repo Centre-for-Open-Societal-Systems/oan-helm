@@ -1,0 +1,1264 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: development-legacy
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 8080
+      name: legacy-development-http
+      protocol: HTTP
+    hosts:
+    - agent-iam-development.oanstaging.com
+    - auditmanager-development.oanstaging.com
+    - awe-development.oanstaging.com
+    - connector-cropsown-registry-development.oanstaging.com
+    - connector-farmer-registry-development.oanstaging.com
+    - connector-livestock-registry-development.oanstaging.com
+    - consent-manager-development.oanstaging.com
+    - consent-manager-partner-development.oanstaging.com
+    - crop-registry-development.oanstaging.com
+    - esignet-development.oanstaging.com
+    - farmer-registry-development.oanstaging.com
+    - iam-staff-ui-development.oanstaging.com
+    - idgenerator-farmer-development.oanstaging.com
+    - idgenerator-livestock-development.oanstaging.com
+    - kafka-development.oanstaging.com
+    - keycloak-crop-development.oanstaging.com
+    - keycloak-development.oanstaging.com
+    - keycloak-livestock-development.oanstaging.com
+    - livestock-registry-development.oanstaging.com
+    - master-data-development.oanstaging.com
+    - master-data-ui-development.oanstaging.com
+    - minio-console-development.oanstaging.com
+    - minio-farmer-development.oanstaging.com
+    - oan-dashboard-development.oanstaging.com
+    - odk-central-development.oanstaging.com
+    - partner-crop-development.oanstaging.com
+    - partner-farmer-development.oanstaging.com
+    - partner-livestock-development.oanstaging.com
+    - partner-management-development.oanstaging.com
+    - partner-management-partner-api-development.oanstaging.com
+    - staff-crop-development.oanstaging.com
+    - staff-farmer-development.oanstaging.com
+    - staff-iam-crop-development.oanstaging.com
+    - staff-iam-development.oanstaging.com
+    - staff-iam-livestock-development.oanstaging.com
+    - staff-livestock-development.oanstaging.com
+    - staff-portal-development.oanstaging.com
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-kafka-ui
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-kafka-ui
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - kafka-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: kafka.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: commons-kafka-ui
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-keycloak
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-keycloak
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - keycloak-crop-development.oanstaging.com
+  - keycloak-development.oanstaging.com
+  - keycloak-livestock-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-proto: https
+    route:
+    - destination:
+        host: commons-keycloak
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-minio
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-minio
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - minio-console-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: minio-console.development.oanstaging.com
+          x-forwarded-proto: https
+    route:
+    - destination:
+        host: commons-minio
+        port:
+          number: 9001
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-minio-api
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-minio-api
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - minio-farmer-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: minio-farmer.development.oanstaging.com
+          x-forwarded-proto: https
+    route:
+    - destination:
+        host: commons-minio
+        port:
+          number: 9000
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-services-auditmanager
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-services-auditmanager
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - auditmanager-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: auditmanager.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /v1/auditmanager/
+    route:
+    - destination:
+        host: commons-services-auditmanager
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-services-awe
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-services-awe
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - awe-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: awe.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /v1/awe/
+    name: backend
+    route:
+    - destination:
+        host: commons-services-awe
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /
+    name: ui
+    route:
+    - destination:
+        host: commons-services-awe-ui
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-services-cm-partner-api
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-services-cm-partner-api
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - consent-manager-partner-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: consent-manager-partner.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /api/consent-manager-partner/
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: commons-services-cm-partner-api
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-services-console
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-services-console
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - consent-manager-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: consent-manager.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /consent/
+    name: staff-api
+    route:
+    - destination:
+        host: commons-services-cm-api
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /
+    name: ui
+    route:
+    - destination:
+        host: commons-services-cm-ui
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-services-esignet-oidc-ui
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-services-esignet-oidc-ui
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - esignet-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: esignet.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: commons-services-esignet-oidc-ui
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-services-iam-agent-portal-api
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-services-iam-agent-portal-api
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - agent-iam-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: agent-iam.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: commons-services-iam-agent-portal-api
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-services-iam-staff-portal-api
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-services-iam-staff-portal-api
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - staff-iam-crop-development.oanstaging.com
+  - staff-iam-development.oanstaging.com
+  - staff-iam-livestock-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: staff-iam.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: commons-services-iam-staff-portal-api
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-services-iam-staff-ui
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-services-iam-staff-ui
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - iam-staff-ui-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: iam-staff-ui.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: commons-services-iam-staff-ui
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-services-master-data-api
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-services-master-data-api
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - master-data-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: master-data.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: commons-services-master-data-api
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-services-master-data-ui
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-services-master-data-ui
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - master-data-ui-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: master-data-ui.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: commons-services-master-data-ui
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-services-mock-identity-system
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-services-mock-identity-system
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - esignet-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: esignet.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /v1/mock-identity-system
+    route:
+    - destination:
+        host: commons-services-mock-identity-system
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-services-odk-central
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-services-odk-central
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - odk-central-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: odk-central.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: commons-services-odk-central-frontend
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-services-pm-partner-api
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-services-pm-partner-api
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - partner-management-partner-api-development.oanstaging.com
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: commons-services-pm-partner-api
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-services-pm-staff-portal-api
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-services-pm-staff-portal-api
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - staff-iam-crop-development.oanstaging.com
+  - staff-iam-development.oanstaging.com
+  - staff-iam-livestock-development.oanstaging.com
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: commons-services-pm-staff-portal-api
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-services-pm-staff-portal-ui
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-services-pm-staff-portal-ui
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - partner-management-development.oanstaging.com
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: commons-services-pm-staff-portal-ui
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-commons-services-staff-portal-ui
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/commons-services-staff-portal-ui
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - staff-portal-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: staff-portal.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: commons-services-staff-portal-ui
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-oan-dashboards-private
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: commons/oan-dashboards-private
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - oan-dashboard-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: oan-dashboard.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: oan-dashboards
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-cropsown-connector
+  namespace: crop
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: crop/cropsown-connector
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - connector-cropsown-registry-development.oanstaging.com
+  http:
+  - match:
+    - uri:
+        prefix: /connectors
+    route:
+    - destination:
+        host: cropsown-connector-api
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /runs
+    route:
+    - destination:
+        host: cropsown-connector-api
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /dlq
+    route:
+    - destination:
+        host: cropsown-connector-api
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /metadata
+    route:
+    - destination:
+        host: cropsown-connector-api
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /health
+    route:
+    - destination:
+        host: cropsown-connector-api
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /webhook
+    route:
+    - destination:
+        host: cropsown-connector-api
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: cropsown-connector-ui
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-cropsown-registry-partner-api
+  namespace: crop
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: crop/cropsown-registry-partner-api
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - partner-crop-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: partner-crop.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: cropsown-registry-partner-api
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-cropsown-registry-staff-portal-api
+  namespace: crop
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: crop/cropsown-registry-staff-portal-api
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - staff-crop-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: staff-crop.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: cropsown-registry-staff-portal-api
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-cropsown-registry-staff-portal-ui
+  namespace: crop
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: crop/cropsown-registry-staff-portal-ui
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - crop-registry-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: crop-registry.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: cropsown-registry-staff-portal-ui
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-farmer-registry-connector
+  namespace: farmer
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: farmer/farmer-registry-connector
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - connector-farmer-registry-development.oanstaging.com
+  http:
+  - match:
+    - uri:
+        prefix: /connectors
+    route:
+    - destination:
+        host: farmer-registry-connector-api
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /runs
+    route:
+    - destination:
+        host: farmer-registry-connector-api
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /dlq
+    route:
+    - destination:
+        host: farmer-registry-connector-api
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /metadata
+    route:
+    - destination:
+        host: farmer-registry-connector-api
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /health
+    route:
+    - destination:
+        host: farmer-registry-connector-api
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /webhook
+    route:
+    - destination:
+        host: farmer-registry-connector-api
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: farmer-registry-connector-ui
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-farmer-registry-id-generator
+  namespace: farmer
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: farmer/farmer-registry-id-generator
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - idgenerator-farmer-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: idgenerator-farmer.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /v1/idgenerator/
+    route:
+    - destination:
+        host: farmer-registry-id-generator
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-farmer-registry-partner-api
+  namespace: farmer
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: farmer/farmer-registry-partner-api
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - partner-farmer-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: partner-farmer.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: farmer-registry-partner-api
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-farmer-registry-staff-portal-api
+  namespace: farmer
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: farmer/farmer-registry-staff-portal-api
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - staff-farmer-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: staff-farmer.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: farmer-registry-staff-portal-api
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-farmer-registry-staff-portal-ui
+  namespace: farmer
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: farmer/farmer-registry-staff-portal-ui
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - farmer-registry-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: farmer-registry.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: farmer-registry-staff-portal-ui
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-livestock-connector
+  namespace: livestock
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: livestock/livestock-connector
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - connector-livestock-registry-development.oanstaging.com
+  http:
+  - match:
+    - uri:
+        prefix: /connectors
+    route:
+    - destination:
+        host: livestock-connector-api
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /runs
+    route:
+    - destination:
+        host: livestock-connector-api
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /dlq
+    route:
+    - destination:
+        host: livestock-connector-api
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /metadata
+    route:
+    - destination:
+        host: livestock-connector-api
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /health
+    route:
+    - destination:
+        host: livestock-connector-api
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /webhook
+    route:
+    - destination:
+        host: livestock-connector-api
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: livestock-connector-ui
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-livestock-registry-id-generator
+  namespace: livestock
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: livestock/livestock-registry-id-generator
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - idgenerator-livestock-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: idgenerator-livestock.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /v1/idgenerator/
+    route:
+    - destination:
+        host: livestock-registry-id-generator
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-livestock-registry-partner-api
+  namespace: livestock
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: livestock/livestock-registry-partner-api
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - partner-livestock-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: partner-livestock.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: livestock-registry-partner-api
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-livestock-registry-staff-portal-api
+  namespace: livestock
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: livestock/livestock-registry-staff-portal-api
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - staff-livestock-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: staff-livestock.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: livestock-registry-staff-portal-api
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: legacy-livestock-registry-staff-portal-ui
+  namespace: livestock
+  labels:
+    app.kubernetes.io/part-of: oan-development-legacy-compatibility
+    app.kubernetes.io/managed-by: oan-environment-operations
+  annotations:
+    oan.org/canonical-route: livestock/livestock-registry-staff-portal-ui
+spec:
+  gateways:
+  - istio-system/development-legacy
+  hosts:
+  - livestock-registry-development.oanstaging.com
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: livestock-registry.development.oanstaging.com
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: livestock-registry-staff-portal-ui
+        port:
+          number: 80

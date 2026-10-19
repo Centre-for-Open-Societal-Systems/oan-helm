@@ -1,16 +1,13 @@
-# Published COSS Consent candidates; merge into saved private values deliberately.
-# Image overrides only: no subject-consent policy, signing-key or routing change.
-# Aggregation must remain disabled until integration and runtime prerequisites pass.
 openg2p-consent-manager:
   consentManagerApi:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api
-      tag: dev-d6ce86b9e3f9@sha256:21f1ab4c8483ded3906353f855a210dd30b9ea5044ce60307d5402b10ac878e4
+      tag: dev-48e64c249056@sha256:cca3273868b8ed28d193642b346fc3369b450ad7feefd42d02e91e84cb074831
   ui:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-ui
-      tag: dev-d6ce86b9e3f9@sha256:b69eac8965b66e47d5b5fd34d43f40cac461551e86f6de5cde0e714c2a772ecf
+      tag: dev-48e64c249056@sha256:423f78a0d99b8bd65605848bf72e6d0abf84cb07303fdd6d8cf9fd424c5620c7
   sanity:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-sanity
-      tag: dev-d6ce86b9e3f9@sha256:76047a5ca2c7eaeeefaffa2b43b6bfda42b238d128b4de0a9e78cff4bf713e43
+      tag: dev-48e64c249056@sha256:e5d2a30e5a30c252f30849fb7c61c772691f7521906c575ab3fb22584c2358e7

@@ -9,15 +9,23 @@ For those two components, start at
 [where COSS Consent Manager and Aggregation are included](docs/service-catalog.md#where-are-coss-consent-manager-and-aggregation).
 Consent reuses the `openg2p-consent-manager` child chart with COSS image overrides;
 Aggregation is a local Commons template, disabled pending runtime preparation.
-New [Consent candidate images](docs/consent-candidate-build.md) and the
-[Aggregation image override](examples/dev/aggregation-image.yaml) are recorded
-separately from the immutable chart defaults.
+The current chart pins new Consent and Aggregation images from the recorded
+COSS commits by ECR digest. See [the current setup guide](docs/consent-aggregation-prerequisites.md).
 
-Current chart version is **`1.0.0-dev.3`**, with OAN Rancher display names,
-direct COSS GitHub source links and embedded component READMEs in all five charts.
-It retains the migrated new-dev URLs and runtime settings from `1.0.0-dev.2`.
-Both earlier versions remain available unchanged. Component versions
-and image digests are separate; automatic build-number synchronization is deferred.
+Current chart version is **`1.0.0-dev.5`**, using
+`<service>.development.oanstaging.com` and the shared Istio Gateway. It retains
+OAN display names and direct COSS source links. Earlier packages remain unchanged.
+Component image versions are independent; automatic synchronization is deferred.
+Old application URLs remain compatible until explicit migration completion;
+browser navigations redirect temporarily and API requests retain their methods.
+
+The new-dev `commons-services/commons` release now runs dev.5 with **Aggregation
+enabled** and the new Consent images. See [installed Rancher status and remaining
+prerequisites](docs/rancher-consent-aggregation-status.md). Defaults remain disabled
+for new installations until their runtime configuration is ready.
+
+Use the [service onboarding guide](docs/service-onboarding.md) to add or enable a
+service without an individual Route 53 record, Nginx site or certificate.
 
 | Location | Contents |
 | --- | --- |
@@ -33,12 +41,12 @@ and image digests are separate; automatic build-number synchronization is deferr
 Rancher repository URLs served directly by GitHub:
 
 - COSS after merge: `https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/`
-- Current fork preview: `https://raw.githubusercontent.com/asmitonweb/oan-helm/feat/coss-rancher-charts/repository/`
+- Current fork preview: `https://raw.githubusercontent.com/asmitonweb/oan-helm/feat/consent-aggregation-rancher/repository/`
 
 GitHub serves the committed `repository/index.yaml` and archives directly;
 GitHub Pages is not required. Validation runs on PRs and pushes. Merging the
 reviewed files into `main` makes the COSS URL available; this change does not
-merge the PR or deploy to Kubernetes.
+merge the PR. Live URL cutover evidence is recorded separately from chart publication.
 
 Use the [Rancher guide](docs/rancher-dev.md) and
 [new-dev URL migration guide](docs/dev-urls.md), plus the
@@ -51,12 +59,12 @@ Unconfirmed public endpoints stay unset. Superset/Certify defaults match their
 disabled state in the inspected dev release; notifications await confirmed routes.
 
 Follow the [Consent and Aggregation prerequisites](docs/consent-aggregation-prerequisites.md)
-before enabling Aggregation. The pinned Consent build predates the inspected
-Aggregation version's subject-consent requirements. The new candidate overlay
-provides the required settings and endpoint schema. The exact published API pair
-passed [30 local integration checks](docs/consent-aggregation-local-check.md)
-against source-owned stand-ins. Authenticated split routing and existing-database
-upgrades still require environment verification.
+before enabling Aggregation. The 19 October code is stateless and uses the split
+Consent partner API directly; it needs no Aggregation database, queue or worker.
+Consent uses per-binding `consent_method` settings; the older global
+`subject_consent_*` flags are absent. OTP remains unavailable pending SMS;
+neither OTP logging nor bucket publishing is enabled. Historical integration
+reports apply only to their recorded image pairs, not these new images.
 
 Commons Services was imported from the latest published OpenG2P package at
 verification time, `2.3.4-rc.247`, with its published SHA-256 verified. All registry
@@ -82,5 +90,6 @@ Synthetic render fixtures use `example.invalid`; installation examples never do.
 
 Archives are immutable. Packaging rejects changed source bytes for an existing
 archive/version. Keep historical archives and index entries; future releases
-require a new chart version and manifest. No application-repository CI changes
-or cluster deployment are included.
+require a new chart version and manifest. The separate 19 October dev URL cutover retains installed chart/image versions;
+see `releases/live-domain-migration.json`. No application-repository CI changes
+are included.

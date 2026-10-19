@@ -1,0 +1,19 @@
+# Environment-owned, installed once. Application charts reference this Gateway.
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: development
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/part-of: oan-development-ingress
+    app.kubernetes.io/managed-by: oan-environment-operations
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 8080
+        name: development-http
+        protocol: HTTP
+      hosts:
+        - '*.development.oanstaging.com'
