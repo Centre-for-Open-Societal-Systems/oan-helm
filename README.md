@@ -30,6 +30,17 @@ and image digests are separate; automatic build-number synchronization is deferr
 | `docs/` | Readable service catalog, URL migration and Rancher guides |
 | `scripts/validate.py` | Dependency, render, packaging and repository validation |
 
+## APISIX gateway
+
+The OAN API gateway is Apache APISIX, installed from Apache's upstream chart and configured
+through the APISIX Ingress Controller. This repository holds only its values under
+`environments/dev/values/` (`apisix.yaml`, `oan-grievance-gateway.yaml`,
+`oan-a2c-gateway.yaml`), not charts. Each app's route chart is generated from its OpenAPI
+spec and lives in the app repository. The values target the separate grievance cluster, not
+the OpenG2P cluster the five charts above deploy to. Start at the
+[APISIX gateway guide](docs/apisix-gateway.md): it covers the design, the dev-cluster
+install, testing, the traffic cutover and rollback.
+
 Rancher repository URLs served directly by GitHub:
 
 - COSS after merge: `https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/`
