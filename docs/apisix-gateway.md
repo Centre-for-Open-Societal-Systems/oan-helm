@@ -11,11 +11,11 @@ OpenG2P cluster.
 | Part | Source | Values |
 | --- | --- | --- |
 | APISIX and the Ingress Controller | Upstream chart `apisix/apisix` 2.18.2 (bundles `apisix-ingress-controller`) from `https://apache.github.io/apisix-helm-chart`. It is not vendored, repackaged or added to `releases/` | [grievance-dev/values/apisix.yaml](../environments/grievance-dev/values/apisix.yaml) |
-| Grievance routes | [gateway/oan-grievance-gateway](../gateway/oan-grievance-gateway/), whose templates are generated in `oan_grievance_service/apisix/k8s` | [grievance-dev/values/oan-grievance-gateway.yaml](../environments/grievance-dev/values/oan-grievance-gateway.yaml) |
+| Grievance routes | Chart `oan-grievance-gateway` in [oan_grievance_service/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/tree/develop/apisix/k8s), generated from the service's OpenAPI spec. It is not copied here | [grievance-dev/values/oan-grievance-gateway.yaml](../environments/grievance-dev/values/oan-grievance-gateway.yaml) |
 
-The grievance chart sits under `gateway/`, not `charts/`, so it stays outside the five
-packaged Rancher charts and `scripts/validate.py`. The grievance service will get its own
-chart repository and releases later.
+This repository holds only the values for both charts. The grievance service will get its
+own chart repository and releases later; until then, install its chart from a checkout of
+the service repository at the deployed commit.
 
 ## Traffic path
 
@@ -43,7 +43,7 @@ helm repo add apisix https://apache.github.io/apisix-helm-chart
 helm upgrade --install apisix apisix/apisix --version 2.18.2 \
   -n apisix --create-namespace -f environments/grievance-dev/values/apisix.yaml
 
-helm upgrade --install oan-grievance-gateway gateway/oan-grievance-gateway \
+helm upgrade --install oan-grievance-gateway <oan_grievance_service>/apisix/k8s \
   -n develop -f environments/grievance-dev/values/oan-grievance-gateway.yaml
 ```
 

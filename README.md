@@ -29,7 +29,7 @@ and image digests are separate; automatic build-number synchronization is deferr
 | `repository/` | Generated Rancher downloads, SHA256SUMS and cumulative Helm index, including historical versions |
 | `docs/` | Readable service catalog, URL migration and Rancher guides |
 | `scripts/validate.py` | Dependency, render, packaging and repository validation |
-| `gateway/` | APISIX gateway route charts; see [the APISIX gateway guide](docs/apisix-gateway.md) |
+| `environments/grievance-dev/` | APISIX gateway values for the separate grievance cluster; see [the APISIX gateway guide](docs/apisix-gateway.md) |
 
 Rancher repository URLs served directly by GitHub:
 
