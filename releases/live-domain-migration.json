@@ -861,8 +861,8 @@
   "dns": {
     "zone": "Z0489132CZLGOYQM4M7U",
     "beforeRecords": 113,
-    "afterRecords": 78,
-    "retiredApplicationRecords": 37,
+    "afterRecords": 115,
+    "retiredApplicationRecords": 0,
     "unrelatedRecordsUnchanged": true,
     "retirementChange": {
       "result": {
@@ -895,7 +895,10 @@
           }
         }
       }
-    ]
+    ],
+    "initialRetiredApplicationRecords": 37,
+    "restoredApplicationRecords": 37,
+    "legacyRestorationChangeId": "/change/C0122887X5A17A25RWP1"
   },
   "identityChanges": {
     "keycloakClients": 11,
@@ -912,7 +915,7 @@
     "successfulRepeatBuild": 4
   },
   "deploymentMethod": "Upgrade existing owners with exact installed chart versions, URL-only private values and compatibility post-renderer; hooks and initialization Jobs suppressed.",
-  "cutover": "Immediate; no old application DNS/routes or compatibility redirects. Rancher/Jenkins management URLs unchanged.",
+  "cutover": "New URLs canonical; legacy URL compatibility active until explicit completion. Management URLs unchanged.",
   "liveOverridesReconciled": {
     "cropConnectorImages": "Running develop-88 overrides were absent from saved Helm values. An initial upgrade reapplied develop-76; corrected to develop-88 and persisted in Helm values. Final images match the running-workload backup.",
     "livestockEnrichment": "Live enrichment flags/signing identity/audience/purpose/search URL were reconciled into Helm values and restored after an initial upgrade reapplied older saved settings.",
@@ -929,5 +932,103 @@
     "namespacePrivateGatewayHostsRetained": true
   },
   "staffRealmSessionsInvalidated": true,
-  "managementRealmSessionsUnchanged": true
+  "managementRealmSessionsUnchanged": true,
+  "loginResponseHeaderFix": {
+    "reason": "Wildcard Nginx configuration omitted the previous proxy response buffer settings; browser authorization/callback requests produced upstream sent too big header and HTTP 502.",
+    "applied": true,
+    "nginxTest": "passed",
+    "proxyBufferSize": "16k",
+    "proxyBuffers": "8 16k",
+    "proxyBusyBuffersSize": "32k",
+    "iamLoginTransaction": {
+      "authenticationTransactionStatus": 200,
+      "responseContentType": "application/json",
+      "keycloakAuthorizationStatus": 200,
+      "loginFormPresent": true,
+      "authorizationHost": "keycloak.development.oanstaging.com",
+      "responseHeaderBytes": 2253,
+      "sessionCookiesSet": 3,
+      "passed": true
+    },
+    "largeHeaderRegression": {
+      "httpStatus": 200,
+      "responseHeaderBytes": 7393,
+      "postmanAssertionsPassed": 5,
+      "postmanAssertionsTotal": 5,
+      "credentialSubmission": false
+    }
+  },
+  "legacyCompatibility": {
+    "enabled": true,
+    "requestedByUser": true,
+    "legacyHosts": 37,
+    "canonicalDomain": "development.oanstaging.com",
+    "temporaryGateway": "istio-system/development-legacy",
+    "browserNavigation": "HTTP 307 to canonical hostname with path/query preserved; HTML GET/HEAD only. MinIO object API always proxies to preserve signed URLs.",
+    "apiTraffic": "Proxy methods, path, query, body and original Host; no redirect for POST or JSON clients.",
+    "issuer": "New canonical issuer retained for responses through either host.",
+    "dnsStatus": "INSYNC",
+    "removal": "Only after user confirms migration completion; no automatic expiration.",
+    "source": "environments/dev/legacy",
+    "certificateCoverage": "Original SAN certificates retained; keep renewal active for the compatibility period.",
+    "checkedAtUtc": "2026-10-19T09:28:33.011446+00:00",
+    "verification": {
+      "legacyHttpsRoutesPassed": 37,
+      "legacyHttpsRoutesTotal": 37,
+      "legacyHttpsMethod": "Verified normal TLS/SNI using the public ingress address; 36 temporary redirects and one MinIO direct proxy.",
+      "apiChecks": [
+        {
+          "host": "keycloak-development.oanstaging.com",
+          "method": "GET",
+          "path": "/realms/staff/.well-known/openid-configuration",
+          "status": 200,
+          "redirected": false,
+          "tlsVerified": true,
+          "passed": true,
+          "canonicalIssuer": "https://keycloak.development.oanstaging.com/realms/staff"
+        },
+        {
+          "host": "staff-farmer-development.oanstaging.com",
+          "method": "GET",
+          "path": "/ping",
+          "status": 200,
+          "redirected": false,
+          "tlsVerified": true,
+          "passed": true
+        },
+        {
+          "host": "minio-farmer-development.oanstaging.com",
+          "method": "GET",
+          "path": "/minio/health/live",
+          "status": 200,
+          "redirected": false,
+          "tlsVerified": true,
+          "passed": true
+        },
+        {
+          "host": "staff-iam-development.oanstaging.com",
+          "method": "POST",
+          "path": "/auth/start_authentication_transaction",
+          "status": 200,
+          "redirected": false,
+          "tlsVerified": true,
+          "passed": true
+        }
+      ],
+      "localResolverCachedFailures": [
+        "connector-cropsown-registry-development.oanstaging.com"
+      ],
+      "publicResolverCheck": "Cloudflare 1.1.1.1 returns 13.201.58.55 for connector-cropsown-registry-development.oanstaging.com; authoritative Route 53 restoration INSYNC.",
+      "canonicalHttpsChecksPassedAfterCompatibility": 32,
+      "canonicalHttpsChecksTotal": 32,
+      "nginxTest": "passed",
+      "nginxReload": "passed",
+      "workloadsReady": 68,
+      "workloadsTotal": 68,
+      "istioAnalyzeExitCode": 0,
+      "localSafetyTestsPassed": 9,
+      "limits": "Signed object requests and full credential-based end-user login were not exercised. MinIO health with browser Accept proves direct proxy behavior; routing retains original Host."
+    }
+  },
+  "initialImmediateCutover": "Immediate; no old application DNS/routes or compatibility redirects. Rancher/Jenkins management URLs unchanged."
 }

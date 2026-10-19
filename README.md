@@ -17,6 +17,8 @@ Current chart version is **`1.0.0-dev.4`**, using
 `<service>.development.oanstaging.com` and the shared Istio Gateway. It retains
 OAN display names and direct COSS source links. Earlier packages remain unchanged.
 Component image versions are independent; automatic synchronization is deferred.
+Old application URLs remain compatible until explicit migration completion;
+browser navigations redirect temporarily and API requests retain their methods.
 
 Use the [service onboarding guide](docs/service-onboarding.md) to add or enable a
 service without an individual Route 53 record, Nginx site or certificate.

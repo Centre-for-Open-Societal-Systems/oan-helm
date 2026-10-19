@@ -103,7 +103,31 @@ render against live resources before removing it. Preserve runtime image and
 manual configuration overrides now saved in Helm values. Do not run initialization
 Jobs as part of a URL-only update.
 
-In Rancher, select **Apps ? Installed Apps ? the existing release ? Upgrade**,
+In Rancher, select **Apps > Installed Apps > the existing release > Upgrade**,
 choose the reviewed chart version, and reconcile these values in the YAML editor.
 Confirm the namespace, image references and rendered route before upgrading.
 Do not install a second release to change a hostname.
+
+## Temporary old-URL compatibility
+
+Old `*-development.oanstaging.com` links remain available until migration
+completion is explicitly confirmed. Browser HTML GET/HEAD navigation redirects
+with HTTP 307; API/JSON traffic and POSTs keep their methods, paths and bodies.
+The old MinIO object API always proxies, including browser requests, so signed
+download URLs retain the Host used by their signature.
+Do not revert the canonical Keycloak issuer or application cookie domain.
+
+Existing aliases use the separate environment-owned Gateway
+`istio-system/development-legacy` and manifests under `environments/dev/legacy/`.
+When an existing service's destination, port or path rules change, refresh its
+legacy alias too. New services need only the new wildcard domain; do not create
+new legacy DNS names by default. Preserve legacy certificate renewal while these
+names are in use. Remove compatibility only after explicit completion, retaining
+the private recovery snapshot.
+
+For Keycloak authorization and IAM callbacks, preserve the ingress response
+buffers (`proxy_buffer_size 16k`, `proxy_buffers 8 16k`, and
+`proxy_busy_buffers_size 32k`). A 502 with `upstream sent too big header` indicates
+these buffers are insufficient. Check the real authorization page as well as
+OIDC discovery; `python scripts/check-keycloak-login.py` runs five live Postman
+assertions with a synthetic large state/nonce and submits no credentials.

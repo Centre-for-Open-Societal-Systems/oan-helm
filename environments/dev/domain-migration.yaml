@@ -39,7 +39,8 @@ additionalAliases:
   minio-api.commons-dev.oanstaging.com: minio-farmer.development.oanstaging.com
   farmer-dev.oanstaging.com: farmer-registry.development.oanstaging.com
   connector.livestock-dev.oanstaging.com: connector-livestock-registry.development.oanstaging.com
-cutoverPolicy: Immediate; old application DNS/routes removed only after acceptance; management URLs retained.
+cutoverPolicy: New URLs canonical. Preserve legacy DNS/TLS and aliases until user confirms completion;
+  no automatic expiration. Management URLs unchanged.
 cookieDomain: .development.oanstaging.com
 reservedDisabledHosts:
 - aggregation.development.oanstaging.com

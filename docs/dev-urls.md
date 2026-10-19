@@ -70,12 +70,21 @@ reviewed URL migration, not as a general substitute for required initialization.
 
 ## Cutover and recovery
 
-The user selected an immediate cutover: no old application URL redirects or
-compatibility period. Remove only the saved DNS records for migrated services
-on this dev server after the new routes pass acceptance. Other servers under
-`oanstaging.com`, management URLs and private/test routes are outside this change.
-Retain private backups of exact DNS records, certificates, Nginx, Helm history,
-identity settings and IAM/Keycloak database snapshots for coordinated recovery.
+Both URL schemes remain available during completion of the migration. The
+`*-development.oanstaging.com` records and original TLS certificates are restored.
+HTML GET/HEAD browser navigation gets a temporary 307 redirect to the matching
+canonical hostname, preserving path and query. API/JSON requests and POSTs are
+proxied through temporary environment-owned aliases without changing method,
+body or original Host. The MinIO object API always proxies, including browser
+requests, to preserve signed download URLs. Keycloak continues to advertise the
+new issuer.
+
+The compatibility configuration is in `environments/dev/legacy/`; refresh its
+aliases when canonical service routing changes. Retain old DNS/TLS and renew the
+legacy certificates until the user explicitly confirms completion. Do not remove
+compatibility on a timer. Other servers and Rancher/Jenkins management URLs remain
+outside this change. Private backups retain the exact pre-cutover records and
+identity/release settings for recovery.
 
 The migration does not enable Aggregation, DA or unavailable components. Reserved
 future hostnames are not evidence of running services. Use the
