@@ -1,0 +1,29 @@
+# gateway/oan-grievance-gateway on the grievance dev cluster (endpoints.yaml in this folder).
+# Install in namespace `develop`, next to the grievance Frappe Services, so each
+# ApisixRoute backend resolves there. See docs/apisix-gateway.md.
+
+ingressClassName: apisix
+
+hosts:
+  - grievance-backend-dev.oanstaging.com
+
+# Frappe site name (Jenkinsfile `targets.develop.site`), sent as Host because Frappe
+# selects the site from it.
+siteName: develop.grievance.test
+
+# Required: Service names in namespace `develop`, unconfirmed. The Frappe Deployment is
+# `backend`; point both at the frappe nginx Service instead if routing through it.
+web:
+  serviceName: ""
+  port: 8000
+socket:
+  serviceName: ""
+  port: 9000
+
+# Required: a Redis in the grievance cluster for limit-count counters. The OpenG2P Commons
+# Redis is in another cluster and is not reachable from here.
+redis:
+  host: ""
+
+# Browser origins (socket.io cookies) and CORS origin regexes keep the chart's localhost
+# defaults until the grievance UI host is confirmed.

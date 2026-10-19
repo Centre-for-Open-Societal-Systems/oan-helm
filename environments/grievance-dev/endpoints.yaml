@@ -1,0 +1,6 @@
+# Grievance dev cluster: a separate RKE2 node from environments/dev (OpenG2P), with its
+# own ingress-nginx. Values here must not be installed into the OpenG2P cluster.
+checkedAt: '2026-10-19'
+server: 13.233.56.204
+publicHosts:
+  grievanceBackend: grievance-backend-dev.oanstaging.com
