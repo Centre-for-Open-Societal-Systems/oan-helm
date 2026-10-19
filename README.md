@@ -31,12 +31,23 @@ service without an individual Route 53 record, Nginx site or certificate.
 | --- | --- |
 | `charts/` | Five editable source trees; start at [charts/README.md](charts/README.md) |
 | `docs/service-catalog.md` | Every included service, its COSS repository, owning chart and status |
-| `environments/dev/` | Canonical endpoint inventory and public URL migration overlays |
+| `environments/dev/` | Canonical endpoint inventory and public URL migration overlays, plus APISIX gateway values; see [the APISIX gateway guide](docs/apisix-gateway.md) |
 | `examples/dev/` | Public dev configuration checklists; no private live values |
 | `releases/` | Release manifest, provenance, deployment comparison and validation evidence |
 | `repository/` | Generated Rancher downloads, SHA256SUMS and cumulative Helm index, including historical versions |
 | `docs/` | Readable service catalog, URL migration and Rancher guides |
 | `scripts/validate.py` | Dependency, render, packaging and repository validation |
+
+## APISIX gateway
+
+The OAN API gateway is Apache APISIX, installed from Apache's upstream chart and configured
+through the APISIX Ingress Controller. This repository holds only its values under
+`environments/dev/values/` (`apisix.yaml`, `oan-grievance-gateway.yaml`,
+`oan-a2c-gateway.yaml`), not charts. Each app's route chart is generated from its OpenAPI
+spec and lives in the app repository. The values target the separate grievance cluster, not
+the OpenG2P cluster the five charts above deploy to. Start at the
+[APISIX gateway guide](docs/apisix-gateway.md): it covers the design, the dev-cluster
+install, testing, the traffic cutover and rollback.
 
 Rancher repository URLs served directly by GitHub:
 

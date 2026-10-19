@@ -1,0 +1,34 @@
+# Values for the oan-a2c-gateway chart (oan_a2c/apisix/k8s).
+# Target: not decided. A2C dev runs on docker-compose on EC2 (site mysite.localhost), and
+# staging_ati through oan-kustomize and ArgoCD; neither is a cluster these values name.
+# Install in the namespace of the A2C Frappe Service. See docs/apisix-gateway.md.
+
+ingressClassName: apisix
+
+# Unconfirmed public endpoints stay unset; an empty list matches any host.
+hosts: []
+
+# Required: Frappe site name, sent as Host because Frappe selects the site from it.
+siteName: ""
+
+# Required: the A2C Frappe nginx Service, unconfirmed.
+web:
+  serviceName: ""
+  port: 8080
+
+# Required: a Redis in the same cluster for limit-count counters.
+redis:
+  host: ""
+
+# Source addresses allowed on the partner webhook routes. Development defaults; narrow to
+# the partners' egress CIDRs (OpenG2P, telco IVR) before go-live.
+ipAllowlist:
+  - 127.0.0.1/32
+  - ::1/128
+  - 10.0.0.0/8
+  - 172.16.0.0/12
+  - 192.168.0.0/16
+
+# Localhost only until the A2C UI hosts are confirmed.
+corsOriginRegexes:
+  - https?://localhost(:[0-9]+)?
