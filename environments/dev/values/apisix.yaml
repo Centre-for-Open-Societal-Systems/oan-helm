@@ -18,6 +18,10 @@ apisix:
         - 127.0.0.1
         - "unix:"
         - 10.42.0.0/16
+  # Metrics on containerPort 9091 at /apisix/prometheus/metrics; the prometheus global
+  # rule below records them for every route.
+  prometheus:
+    enabled: true
   admin:
     credentials:
       # Namespace-local Secret with keys `admin` and `viewer`, provisioned through the
@@ -44,6 +48,19 @@ ingress-controller:
       ingressClass: apisix
   gatewayProxy:
     createDefault: true
+    # Gateway-wide plugins (APISIX global rules), applied to every route of every app.
+    # App charts own their routes' plugins (CORS, body size, rate limits, auth).
+    plugins:
+      - name: request-id
+        enabled: true
+        config:
+          header_name: X-Request-Id
+          include_in_response: true
+      - name: prometheus
+        enabled: true
+        config:
+          # Label metrics by route and service name, not id.
+          prefer_name: true
     provider:
       controlPlane:
         service:

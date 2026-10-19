@@ -76,6 +76,14 @@ and cert settings. To roll back, point the backend at the Frappe Service again.
 Do not also run `adc sync` against this gateway. ADC and the Ingress Controller each
 overwrite the other's routes.
 
+## Gateway-wide plugins
+
+`request-id` (`X-Request-Id`, echoed in the response) and `prometheus` are global rules,
+set as `gatewayProxy.plugins` in `apisix.yaml`, so they apply to every app's routes. Metrics
+are served on port 9091 at `/apisix/prometheus/metrics`; enable
+`metrics.serviceMonitor` once a Prometheus Operator scrapes the cluster. Per-app plugins
+(CORS, body size, rate limits, authentication) stay in each app's chart.
+
 ## A2C
 
 A2C has no Kubernetes target yet. Dev runs on docker-compose, and staging_ati runs through
