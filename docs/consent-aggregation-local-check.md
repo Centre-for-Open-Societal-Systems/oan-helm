@@ -1,5 +1,8 @@
 # OAN Consent and Aggregation local image-pair check
 
+> Historical image-pair evidence. For current dev.5 images and prerequisites, see
+> [the current setup guide](consent-aggregation-prerequisites.md).
+
 The exact published Consent API and Aggregation API candidates passed **30/30**
 source-owned end-to-end checks on 16 October 2026. Both applications ran as real
 containers with separate fresh PostgreSQL databases. Their migrations ran before

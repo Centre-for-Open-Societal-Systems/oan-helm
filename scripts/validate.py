@@ -388,6 +388,16 @@ def main():
                 assert pod["containers"][0]["envFrom"] == fixture[component]["envFrom"]
                 if component == "aggregationApi":
                     assert pod["containers"][0]["ports"][0]["containerPort"] == 8100
+                    for probe in ["startupProbe", "readinessProbe", "livenessProbe"]:
+                        assert pod["containers"][0][probe]["httpGet"] == {"path": "/ping", "port": "http"}
+                    fixture[component]["virtualService"] = {"enabled": True, "host": "aggregation.development.oanstaging.com", "gateway": "istio-system/development"}
+                    test_values.write_text(yaml.safe_dump(fixture))
+                    routed, routed_ids = documents(run("template", "verify", chart, "--namespace", "verify-a", "-f", test_values), "verify-a")
+                    route = next(x for x in routed if x["kind"] == "VirtualService" and x["metadata"]["name"] == "verify-aggregation-api")
+                    assert route["spec"]["hosts"] == [fixture[component]["virtualService"]["host"]]
+                    assert route["spec"]["gateways"] == ["istio-system/development"]
+                    assert route["spec"]["http"][0]["route"][0]["destination"] == {"host": "verify-aggregation-api", "port": {"number": 80}}
+                    assert enabled_ids <= routed_ids
                 if component == "dashboardApi" and chart.name != "openg2p-da-registry":
                     password = next(x for x in pod["containers"][0]["env"] if x["name"] == "PGPASSWORD")
                     assert password["valueFrom"] == {"secretKeyRef": {"name": "verify", "key": "verify-db-user"}}

@@ -14,11 +14,11 @@ in `releases/live-domain-migration.json`; it retains installed chart/image versi
    Use the Helm repository URL
    `https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/`.
    For the current fork preview, use
-   `https://raw.githubusercontent.com/asmitonweb/oan-helm/feat/dev-wildcard-domain/repository/`.
+   `https://raw.githubusercontent.com/asmitonweb/oan-helm/feat/consent-aggregation-rancher/repository/`.
    The preview uses the same relative archive paths. GitHub Pages is not required.
    Enter the raw directory URL, not GitHub's HTML `tree`/`blob` URL or the index filename.
 3. Confirm `/index.yaml` and its `.tgz` archive URLs are available, refresh the
-   repository, and select exact version **`1.0.0-dev.4`**, including its prerelease
+   repository, and select exact version **`1.0.0-dev.5`**, including its prerelease
    suffix. Version `1.0.0-dev.1` is retained for history and has old URL defaults.
 
 ## New releases
@@ -46,14 +46,15 @@ client role and any client Secret supplied through `env` valueFrom or `envFrom`.
 These charts do not silently create IAM clients or grant roles. The generic DA
 API and Aggregation API additionally require confirmed runtime contracts.
 
-Aggregation uses port `8100`. Supply its own database credentials and persistent
-signing key through Secret references. Mount its reviewed registry catalog and
-signing material with `volumes`/`volumeMounts`. Its entrypoint migrates the
-database before serving; prepare that migration and Partner Management/Consent
-bindings separately before enabling it.
-
-The optional UI and Aggregation resources expose ClusterIP Services only. Supply
-environment-owned ingress/TLS routing after confirming hosts and authentication.
+Aggregation uses port `8100` and is stateless in the current image: no own DB,
+migration, queue or worker. Supply its persistent signing key, reviewed registry
+catalog, staff issuer/JWKS and optional staff service credentials through existing
+Secret/ConfigMap references. Complete Partner Management key registration and
+matching Consent bindings before claiming consent-based searches work.
+The optional `aggregationApi.virtualService` routes through the shared Gateway;
+its hostname is `aggregation.development.oanstaging.com`. Readiness checks `/ping`.
+Keep OTP log/bucket publishing disabled pending SMS. The optional registry UIs
+still expose ClusterIP Services only.
 
 Commons Base stays a separate release installed directly from the pinned
 OpenG2P repository: `openg2p-commons-base` version `2.3.4-rc.245` for new preparations.
@@ -84,7 +85,7 @@ An equivalent CLI upgrade, once those checks are complete, is:
 
 ```sh
 helm upgrade farmer-registry coss/openg2p-farmer-registry \
-  --namespace farmer --version 1.0.0-dev.4 \
+  --namespace farmer --version 1.0.0-dev.5 \
   --reuse-values -f /private/reviewed-changes.yaml \
   -f environments/dev/values/farmer.yaml --wait --timeout 15m
 ```
@@ -117,7 +118,7 @@ prepared recovery procedure.
 
 ## OAN names and GitHub sources in Rancher
 
-Refresh the repository and select exact version `1.0.0-dev.4` to see the OAN
+Refresh the repository and select exact version `1.0.0-dev.5` to see the OAN
 metadata and embedded README. Earlier versions retain their historical metadata and URL defaults.
 Rancher may show either a display name or the Helm identifier depending on its
 view; the chart Home, Sources and README link directly to the COSS repositories.

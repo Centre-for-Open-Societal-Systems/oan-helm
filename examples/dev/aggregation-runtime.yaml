@@ -1,0 +1,55 @@
+# Reference only: verify Secrets, catalog and staff grants before enabling.
+aggregationApi:
+  enabled: false
+  imagePullSecrets:
+    - name: ecr-pull-secret
+  virtualService:
+    enabled: true
+    host: aggregation.development.oanstaging.com
+    gateway: istio-system/development
+  envFrom:
+    - secretRef:
+        name: aggregation-api-runtime
+  env:
+    - name: AGGREGATION_LAYER_CM_BASE_URL
+      value: http://commons-services-cm-partner-api.commons.svc.cluster.local
+    - name: AGGREGATION_LAYER_AUTH_ENABLED
+      value: 'true'
+    - name: AGGREGATION_LAYER_AUTH_ISSUER
+      value: https://keycloak.development.oanstaging.com/realms/staff
+    - name: AGGREGATION_LAYER_AUTH_JWKS_URL
+      value: http://commons-keycloak.commons.svc.cluster.local/realms/staff/protocol/openid-connect/certs
+    - name: AGGREGATION_LAYER_STAFF_SEARCH_ROLES
+      value: '["AGGREGATION_STAFF_VIEWER"]'
+    - name: AGGREGATION_LAYER_STAFF_API_TOKEN_URL
+      value: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
+    - name: AGGREGATION_LAYER_STAFF_API_CLIENT_ID
+      value: aggregation-layer-staff
+    - name: AGGREGATION_LAYER_REGISTRY_CATALOG_PATH
+      value: /app/config/registries.yaml
+    - name: AGGREGATION_LAYER_SIGNING_P12_PATH
+      value: /app/keys/aggregation.p12
+    - name: AGGREGATION_LAYER_SIGNING_P12_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: aggregation-api-signing
+          key: password
+    - name: AGGREGATION_LAYER_SIGNING_KID
+      value: oan-aggregation-development-20261019
+  volumes:
+    - name: signing
+      secret:
+        secretName: aggregation-api-signing
+        items:
+          - key: aggregation.p12
+            path: aggregation.p12
+    - name: catalog
+      configMap:
+        name: aggregation-api-catalog
+  volumeMounts:
+    - name: signing
+      mountPath: /app/keys
+      readOnly: true
+    - name: catalog
+      mountPath: /app/config
+      readOnly: true

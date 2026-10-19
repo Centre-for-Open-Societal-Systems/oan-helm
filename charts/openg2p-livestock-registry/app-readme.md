@@ -15,7 +15,7 @@ and resource names. It does not identify the application source owner. The
 OpenG2P dependency repository contains reused platform templates; application
 images and provenance are configured by this OAN chart.
 
-Use chart version **1.0.0-dev.4** and upgrade the current release in its current
+Use chart version **1.0.0-dev.5** and upgrade the current release in its current
 namespace. Review private values, image digests and namespace-local Secret
 references before applying changes. Optional dashboard components remain at
 their explicit enablement settings; DA workloads await verified images/config.

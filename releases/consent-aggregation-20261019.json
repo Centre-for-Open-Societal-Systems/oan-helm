@@ -1,0 +1,90 @@
+{
+  "checkedAtUtc": "2026-10-19T10:41:12.354462+00:00",
+  "sourceRepositories": {
+    "consent": "https://github.com/Centre-for-Open-Societal-Systems/consent-management",
+    "aggregation": "https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api"
+  },
+  "sourceCommits": {
+    "consent": "48e64c249056a1aed3ce728c61c1bc059a288a50",
+    "aggregation": "a5fa17fd7e7f50eb9a8649c267a9cc59223c934c"
+  },
+  "frameworkCommit": "164f07f7e7f38944b60cb1528d2582d025b830b5",
+  "images": [
+    {
+      "component": "aggregation-api",
+      "repository": "oan/commons/aggregation-api",
+      "tag": "dev-a5fa17fd7e7f",
+      "sourceCommit": "a5fa17fd7e7f50eb9a8649c267a9cc59223c934c",
+      "ecrDigest": "sha256:3bd17245a75252bdf497cc1bab22b9e1148d0fedce376e7892a9e551bcefb7b4",
+      "publishedReference": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/aggregation-api@sha256:3bd17245a75252bdf497cc1bab22b9e1148d0fedce376e7892a9e551bcefb7b4",
+      "publishedAtUtc": "2026-10-19T10:45:17.517468+00:00"
+    },
+    {
+      "component": "consent-manager-api",
+      "repository": "openg2p/commons/consent-manager-api",
+      "tag": "dev-48e64c249056",
+      "sourceCommit": "48e64c249056a1aed3ce728c61c1bc059a288a50",
+      "ecrDigest": "sha256:cca3273868b8ed28d193642b346fc3369b450ad7feefd42d02e91e84cb074831",
+      "publishedReference": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api@sha256:cca3273868b8ed28d193642b346fc3369b450ad7feefd42d02e91e84cb074831",
+      "publishedAtUtc": "2026-10-19T10:45:28.420305+00:00"
+    },
+    {
+      "component": "consent-manager-ui",
+      "repository": "openg2p/commons/consent-manager-ui",
+      "tag": "dev-48e64c249056",
+      "sourceCommit": "48e64c249056a1aed3ce728c61c1bc059a288a50",
+      "ecrDigest": "sha256:423f78a0d99b8bd65605848bf72e6d0abf84cb07303fdd6d8cf9fd424c5620c7",
+      "publishedReference": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-ui@sha256:423f78a0d99b8bd65605848bf72e6d0abf84cb07303fdd6d8cf9fd424c5620c7",
+      "publishedAtUtc": "2026-10-19T10:45:30.415840+00:00"
+    },
+    {
+      "component": "consent-manager-sanity",
+      "repository": "openg2p/commons/consent-manager-sanity",
+      "tag": "dev-48e64c249056",
+      "sourceCommit": "48e64c249056a1aed3ce728c61c1bc059a288a50",
+      "ecrDigest": "sha256:e5d2a30e5a30c252f30849fb7c61c772691f7521906c575ab3fb22584c2358e7",
+      "publishedReference": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-sanity@sha256:e5d2a30e5a30c252f30849fb7c61c772691f7521906c575ab3fb22584c2358e7",
+      "publishedAtUtc": "2026-10-19T10:45:32.093040+00:00"
+    }
+  ],
+  "applicationCiChanged": false,
+  "aggregationArchitecture": "Stateless; no database, migration, Kafka, reaper, OTP or consent-creation workflow in Aggregation.",
+  "otpDecision": "Disabled pending SMS; no debug logging or OTP bucket publishing.",
+  "dependencyPinsChanged": false,
+  "liveRollout": "pending prerequisites and private manifest comparison",
+  "unitTests": {
+    "profile": "source unit suites in disposable containers; no live services",
+    "images": [
+      {
+        "component": "aggregation-api",
+        "sourceCommit": "a5fa17fd7e7f50eb9a8649c267a9cc59223c934c",
+        "exitCode": 0,
+        "summary": "171 passed, 2 warnings in 3.78s"
+      },
+      {
+        "component": "consent-manager-api",
+        "sourceCommit": "48e64c249056a1aed3ce728c61c1bc059a288a50",
+        "exitCode": 0,
+        "summary": "24 passed, 171 skipped in 3.04s"
+      }
+    ]
+  },
+  "consentDatabaseTests": {
+    "sourceCommit": "48e64c249056a1aed3ce728c61c1bc059a288a50",
+    "profile": "disposable PostgreSQL 16; source-owned synthetic legacy schema/migrations and API tests; local crypto stand-in",
+    "exitCode": 0,
+    "summary": "195 passed, 23 warnings in 20.47s",
+    "liveServicesContacted": false
+  },
+  "liveDatabaseRehearsal": {
+    "backupDirectory": "/var/backups/oan-consent-aggregation/20261019T104617Z",
+    "freshLiveDatabaseCopy": true,
+    "migrationRunsPassed": 2,
+    "initialTables": 10,
+    "finalTables": 13,
+    "existingTableRowCountsAndIdentifiersPreserved": true,
+    "sourceDatabaseModified": false,
+    "rehearsalDatabaseRemoved": true,
+    "limits": "Preserves row counts and record IDs in the rehearsal; does not prove every business field or client workflow."
+  }
+}

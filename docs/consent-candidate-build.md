@@ -1,5 +1,8 @@
 # Published COSS Consent candidate images
 
+> Historical image-pair evidence. For current dev.5 images and prerequisites, see
+> [the current setup guide](consent-aggregation-prerequisites.md).
+
 The three images tagged `dev-d6ce86b9e3f9` were manually built from COSS
 `consent-management` commit `d6ce86b9e3f904ee668d913fd06835e8f70e7f64` and
 published through the existing Jenkins AWS credential. Actual image digests,

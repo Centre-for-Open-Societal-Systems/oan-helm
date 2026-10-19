@@ -63,7 +63,7 @@ credentials, usable database contents or an ingress for every optional workload.
 | --- | --- |
 | Registry dashboard API | `dashboardApi.enabled`; reporting views, database Secret and the source's access model. Existing unauthenticated/private APIs must remain private; do not attach their routes to the public Gateway. |
 | Registry dashboard UI | `dashboardUi.enabled`; verified UI image, IAM/client roles, backend URL and an explicit authenticated public route. |
-| OAN Aggregation | `aggregationApi.enabled`; select the published image overlay, complete [Consent/Aggregation prerequisites](consent-aggregation-prerequisites.md), prepare its own DB, signing key, registry catalog, bindings and authenticated Consent routing. Its chart currently creates a ClusterIP Service; add the reviewed VirtualService separately. `aggregation.development.oanstaging.com` is reserved and does not mean it is deployed. |
+| OAN Aggregation | `aggregationApi.enabled`; published stateless image, persistent signing, catalog, staff auth/roles and reviewed PM/CM bindings. No own DB or queue. Optional `aggregationApi.virtualService` uses `aggregation.development.oanstaging.com`; see [current prerequisites](consent-aggregation-prerequisites.md). |
 | DA registry | Verified backend images, confirmed namespace, DB/IAM initialization and routes. Remains disabled until those prerequisites are available. |
 | Other Commons components | Preserve the shared release's settings; verify image, identity/database requirements and routes before enabling. |
 

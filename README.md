@@ -9,11 +9,10 @@ For those two components, start at
 [where COSS Consent Manager and Aggregation are included](docs/service-catalog.md#where-are-coss-consent-manager-and-aggregation).
 Consent reuses the `openg2p-consent-manager` child chart with COSS image overrides;
 Aggregation is a local Commons template, disabled pending runtime preparation.
-New [Consent candidate images](docs/consent-candidate-build.md) and the
-[Aggregation image override](examples/dev/aggregation-image.yaml) are recorded
-separately from the immutable chart defaults.
+The current chart pins new Consent and Aggregation images from the recorded
+COSS commits by ECR digest. See [the current setup guide](docs/consent-aggregation-prerequisites.md).
 
-Current chart version is **`1.0.0-dev.4`**, using
+Current chart version is **`1.0.0-dev.5`**, using
 `<service>.development.oanstaging.com` and the shared Istio Gateway. It retains
 OAN display names and direct COSS source links. Earlier packages remain unchanged.
 Component image versions are independent; automatic synchronization is deferred.
@@ -37,7 +36,7 @@ service without an individual Route 53 record, Nginx site or certificate.
 Rancher repository URLs served directly by GitHub:
 
 - COSS after merge: `https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/`
-- Current fork preview: `https://raw.githubusercontent.com/asmitonweb/oan-helm/feat/dev-wildcard-domain/repository/`
+- Current fork preview: `https://raw.githubusercontent.com/asmitonweb/oan-helm/feat/consent-aggregation-rancher/repository/`
 
 GitHub serves the committed `repository/index.yaml` and archives directly;
 GitHub Pages is not required. Validation runs on PRs and pushes. Merging the
@@ -55,12 +54,12 @@ Unconfirmed public endpoints stay unset. Superset/Certify defaults match their
 disabled state in the inspected dev release; notifications await confirmed routes.
 
 Follow the [Consent and Aggregation prerequisites](docs/consent-aggregation-prerequisites.md)
-before enabling Aggregation. The pinned Consent build predates the inspected
-Aggregation version's subject-consent requirements. The new candidate overlay
-provides the required settings and endpoint schema. The exact published API pair
-passed [30 local integration checks](docs/consent-aggregation-local-check.md)
-against source-owned stand-ins. Authenticated split routing and existing-database
-upgrades still require environment verification.
+before enabling Aggregation. The 19 October code is stateless and uses the split
+Consent partner API directly; it needs no Aggregation database, queue or worker.
+Consent uses per-binding `consent_method` settings; the older global
+`subject_consent_*` flags are absent. OTP remains unavailable pending SMS;
+neither OTP logging nor bucket publishing is enabled. Historical integration
+reports apply only to their recorded image pairs, not these new images.
 
 Commons Services was imported from the latest published OpenG2P package at
 verification time, `2.3.4-rc.247`, with its published SHA-256 verified. All registry

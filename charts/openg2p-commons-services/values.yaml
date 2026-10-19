@@ -121,8 +121,8 @@ odk-central:
       command:
       - sh
       - -c
-      - "until nc -zv {{ tpl .Values.global.minioInstallationName $ }} 9000; do\n  echo \"Waiting for\
-        \ MinIO...\"\n  sleep 2\ndone\n"
+      - "until nc -zv {{ tpl .Values.global.minioInstallationName $ }} 9000; do\n\
+        \  echo \"Waiting for MinIO...\"\n  sleep 2\ndone\n"
     envVars:
       OIDC_ENABLED: true
       OIDC_ISSUER_URL: https://keycloak.development.oanstaging.com/realms/staff
@@ -177,9 +177,10 @@ keymanager:
     rawConfig: ''
   envVars:
     JDK_JAVA_OPTIONS: -XX:-UseContainerSupport -Dspring.jmx.enabled=false -Dcom.sun.management.jmxremote=false
-    auth_server_admin_allowed_audience: openg2p-registry,openg2p-registry-{{ .Release.Namespace }},openg2p-pbms,openg2p-pbms-{{
-      .Release.Namespace }},openg2p-spar,openg2p-spar-{{ .Release.Namespace }},openg2p-g2p-bridge,openg2p-g2p-bridge-{{
-      .Release.Namespace }}
+    auth_server_admin_allowed_audience: openg2p-registry,openg2p-registry-{{ .Release.Namespace
+      }},openg2p-pbms,openg2p-pbms-{{ .Release.Namespace }},openg2p-spar,openg2p-spar-{{
+      .Release.Namespace }},openg2p-g2p-bridge,openg2p-g2p-bridge-{{ .Release.Namespace
+      }}
     keycloak_internal_url: '{{ tpl .Values.global.keycloakInternalUrl $ }}'
     keycloak_external_url: '{{ tpl .Values.global.keycloakBaseUrl $ }}'
   envVarsFrom:
@@ -275,36 +276,44 @@ superset:
 
     '
   configOverrides:
-    enable_oauth: "import os\nSECRET_KEY = '{{ tpl .Values.supersetSecretKey $ }}' or 'OPENG2P_SUPER_SECRET_KEY'\n\
-      \n# This will make sure the redirect_uri is properly computed, even with SSL offloading\nENABLE_PROXY_FIX\
-      \ = True\n\nfrom flask_appbuilder.security.manager import AUTH_OAUTH\nAUTH_TYPE = AUTH_OAUTH\nOAUTH_PROVIDERS\
-      \ = [\n  {\n    \"name\": \"keycloak\",\n    \"icon\": \"fa-key\",\n    \"token_key\": \"access_token\"\
-      ,\n    \"remote_app\": {\n      \"client_id\": \"{{ tpl .Values.oidcClientId $ }}\",\n      \"client_secret\"\
-      : os.getenv(\"client_secret\"),\n      \"api_base_url\": \"{{ tpl .Values.oidcIssuerUrl $ }}/protocol/openid-connect\"\
-      ,\n      \"client_kwargs\": {\"scope\": \"email profile openid\"},\n      \"access_token_url\":\
-      \ \"{{ tpl .Values.oidcIssuerUrl $ }}/protocol/openid-connect/token\",\n      \"jwks_uri\": \"{{\
-      \ tpl .Values.oidcIssuerUrl $ }}/protocol/openid-connect/certs\",\n      \"authorize_url\": \"{{\
-      \ tpl .Values.global.keycloakExternalIssuerUrl $ }}/protocol/openid-connect/auth\",\n      \"request_token_url\"\
-      : None\n    },\n  }\n]\n\n# Map Authlib roles to superset roles\nAUTH_ROLES_MAPPING = {\n  \"Public\"\
-      : [\"Public\"],\n  \"Admin\": [\"Admin\"],\n}\n\nAUTH_ROLES_SYNC_AT_LOGIN = True\n\n# Will allow\
-      \ user self registration, allowing to create Flask users from Authorized User\nAUTH_USER_REGISTRATION\
-      \ = True\n\n# The default user self registration role\n# AUTH_USER_REGISTRATION_ROLE = \"Public\"\
-      \n\nfrom superset.security import SupersetSecurityManager\nclass CustomSsoSecurityManager(SupersetSecurityManager):\n\
-      \  def oauth_user_info(self, provider, response=None):\n    if provider == \"keycloak\":\n     \
-      \ me = self.appbuilder.sm.oauth_remotes[provider].get(\n        \"openid-connect/userinfo\"\n  \
-      \    )\n      me.raise_for_status()\n      data = me.json()\n      return {\n        \"username\"\
-      : data.get(\"preferred_username\", \"\"),\n        \"first_name\": data.get(\"given_name\", \"\"\
-      ),\n        \"last_name\": data.get(\"family_name\", \"\"),\n        \"email\": data.get(\"email\"\
-      , \"\"),\n        \"role_keys\": data.get(\"client_roles\", []),\n      }\n    return {}\n\nCUSTOM_SECURITY_MANAGER\
-      \ = CustomSsoSecurityManager\nSESSION_COOKIE_HTTPONLY = True\nSESSION_COOKIE_SECURE = True\nSESSION_COOKIE_SAMESITE\
-      \ = None\nTALISMAN_ENABLED = False\n\n# Embedded dashboards. G2P Insights shows Superset dashboards\
-      \ inside its\n# own shell, which loads /embedded/<uuid> in an iframe \xE2\u20AC\u201D a route Superset\n\
-      # only registers when this flag is on.\n#\n# Without it the failure is silent in an unhelpful way:\
-      \ the REST call that\n# mints an embedded UUID still succeeds, the guest token is still issued\n\
-      # and looks valid, so every check passes and only the iframe 404s. It reads\n# as a broken client,\
-      \ not a missing feature flag.\nFEATURE_FLAGS = {\"EMBEDDED_SUPERSET\": True}\n\n# The role a guest\
-      \ token carries. Gamma can read the dashboards it is\n# granted and nothing else, which is what\
-      \ an embedded viewer needs.\nGUEST_ROLE_NAME = \"Gamma\"\n"
+    enable_oauth: "import os\nSECRET_KEY = '{{ tpl .Values.supersetSecretKey $ }}'\
+      \ or 'OPENG2P_SUPER_SECRET_KEY'\n\n# This will make sure the redirect_uri is\
+      \ properly computed, even with SSL offloading\nENABLE_PROXY_FIX = True\n\nfrom\
+      \ flask_appbuilder.security.manager import AUTH_OAUTH\nAUTH_TYPE = AUTH_OAUTH\n\
+      OAUTH_PROVIDERS = [\n  {\n    \"name\": \"keycloak\",\n    \"icon\": \"fa-key\"\
+      ,\n    \"token_key\": \"access_token\",\n    \"remote_app\": {\n      \"client_id\"\
+      : \"{{ tpl .Values.oidcClientId $ }}\",\n      \"client_secret\": os.getenv(\"\
+      client_secret\"),\n      \"api_base_url\": \"{{ tpl .Values.oidcIssuerUrl $\
+      \ }}/protocol/openid-connect\",\n      \"client_kwargs\": {\"scope\": \"email\
+      \ profile openid\"},\n      \"access_token_url\": \"{{ tpl .Values.oidcIssuerUrl\
+      \ $ }}/protocol/openid-connect/token\",\n      \"jwks_uri\": \"{{ tpl .Values.oidcIssuerUrl\
+      \ $ }}/protocol/openid-connect/certs\",\n      \"authorize_url\": \"{{ tpl .Values.global.keycloakExternalIssuerUrl\
+      \ $ }}/protocol/openid-connect/auth\",\n      \"request_token_url\": None\n\
+      \    },\n  }\n]\n\n# Map Authlib roles to superset roles\nAUTH_ROLES_MAPPING\
+      \ = {\n  \"Public\": [\"Public\"],\n  \"Admin\": [\"Admin\"],\n}\n\nAUTH_ROLES_SYNC_AT_LOGIN\
+      \ = True\n\n# Will allow user self registration, allowing to create Flask users\
+      \ from Authorized User\nAUTH_USER_REGISTRATION = True\n\n# The default user\
+      \ self registration role\n# AUTH_USER_REGISTRATION_ROLE = \"Public\"\n\nfrom\
+      \ superset.security import SupersetSecurityManager\nclass CustomSsoSecurityManager(SupersetSecurityManager):\n\
+      \  def oauth_user_info(self, provider, response=None):\n    if provider == \"\
+      keycloak\":\n      me = self.appbuilder.sm.oauth_remotes[provider].get(\n  \
+      \      \"openid-connect/userinfo\"\n      )\n      me.raise_for_status()\n \
+      \     data = me.json()\n      return {\n        \"username\": data.get(\"preferred_username\"\
+      , \"\"),\n        \"first_name\": data.get(\"given_name\", \"\"),\n        \"\
+      last_name\": data.get(\"family_name\", \"\"),\n        \"email\": data.get(\"\
+      email\", \"\"),\n        \"role_keys\": data.get(\"client_roles\", []),\n  \
+      \    }\n    return {}\n\nCUSTOM_SECURITY_MANAGER = CustomSsoSecurityManager\n\
+      SESSION_COOKIE_HTTPONLY = True\nSESSION_COOKIE_SECURE = True\nSESSION_COOKIE_SAMESITE\
+      \ = None\nTALISMAN_ENABLED = False\n\n# Embedded dashboards. G2P Insights shows\
+      \ Superset dashboards inside its\n# own shell, which loads /embedded/<uuid>\
+      \ in an iframe â€” a route Superset\n# only registers when this flag is on.\n\
+      #\n# Without it the failure is silent in an unhelpful way: the REST call that\n\
+      # mints an embedded UUID still succeeds, the guest token is still issued\n#\
+      \ and looks valid, so every check passes and only the iframe 404s. It reads\n\
+      # as a broken client, not a missing feature flag.\nFEATURE_FLAGS = {\"EMBEDDED_SUPERSET\"\
+      : True}\n\n# The role a guest token carries. Gamma can read the dashboards it\
+      \ is\n# granted and nothing else, which is what an embedded viewer needs.\n\
+      GUEST_ROLE_NAME = \"Gamma\"\n"
   istio:
     enabled: true
     virtualservice:
@@ -423,7 +432,8 @@ openg2p-inji-certify:
     postgresql:
       host: '{{ tpl .Values.global.postgresqlHost $ }}'
       existingSecret: '{{ tpl .Values.global.postgresqlSecret $ }}'
-      existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey $ }}'
+      existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey
+        $ }}'
   istio:
     virtualservice:
       gateway: istio-system/development
@@ -474,7 +484,8 @@ openg2p-iam-service:
       host: '{{ tpl .Values.global.postgresqlHost $ }}'
       port: 5432
       existingSecret: '{{ tpl .Values.global.postgresqlSecret $ }}'
-      existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey $ }}'
+      existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey
+        $ }}'
   iamStaffUi:
     hostname: iam-staff-ui.development.oanstaging.com
     envVars:
@@ -504,7 +515,8 @@ openg2p-audit-manager:
       host: '{{ tpl .Values.global.postgresqlHost $ }}'
       port: 5432
       existingSecret: '{{ tpl .Values.global.postgresqlSecret $ }}'
-      existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey $ }}'
+      existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey
+        $ }}'
   auditManager:
     enabled: true
     nameOverride: auditmanager
@@ -569,7 +581,8 @@ partner-management:
     pmDBSecret: partner-management-db
     pmDBUserPasswordKey: partner-management-db-user
     staffPortalUiHostname: partner-management.development.oanstaging.com
-    staffPortalApiHostname: partner-management-staff-portal-api.{{ tpl .Values.global.baseDomain $ }}
+    staffPortalApiHostname: partner-management-staff-portal-api.{{ tpl .Values.global.baseDomain
+      $ }}
     partnerApiHostname: partner-management-partner-api.development.oanstaging.com
     cookieDomain: .{{ tpl .Values.global.baseDomain $ }}
   staffPortalApi:
@@ -579,8 +592,10 @@ partner-management:
         destination: '{{ .Release.Name }}-pm-staff-portal-api'
         gateway: istio-system/development
     envVars:
-      COMMON_AUTH_DEFAULT_ISSUERS: '["{{ tpl .Values.global.keycloakExternalIssuerUrl $ }}"]'
-      COMMON_AUTH_DEFAULT_JWKS_URLS: '["{{ tpl .Values.global.keycloakIssuerUrl $ }}/protocol/openid-connect/certs"]'
+      COMMON_AUTH_DEFAULT_ISSUERS: '["{{ tpl .Values.global.keycloakExternalIssuerUrl
+        $ }}"]'
+      COMMON_AUTH_DEFAULT_JWKS_URLS: '["{{ tpl .Values.global.keycloakIssuerUrl $
+        }}/protocol/openid-connect/certs"]'
   partnerApi:
     nameOverride: pm-partner-api
     istio:
@@ -633,12 +648,16 @@ openg2p-consent-manager:
         destination: '{{ .Release.Name }}-cm-api'
         gateway: istio-system/development
     envVars:
-      CONSENT_MANAGER_AUTH_ISSUER: '{{ tpl .Values.global.keycloakExternalIssuerUrl $ }}'
+      CONSENT_MANAGER_AUTH_ISSUER: '{{ tpl .Values.global.keycloakExternalIssuerUrl
+        $ }}'
       CONSENT_MANAGER_AUTH_JWKS_URL: '{{ tpl .Values.global.keycloakIssuerUrl $ }}/protocol/openid-connect/certs'
-      CONSENT_MANAGER_AWE_CALLBACK_URL: http://{{ .Release.Name }}-cm-api.{{ .Release.Namespace }}.svc.cluster.local/consent/v1/awe/webhooks/decision
+      CONSENT_MANAGER_AWE_CALLBACK_URL: http://{{ .Release.Name }}-cm-api.{{ .Release.Namespace
+        }}.svc.cluster.local/consent/v1/awe/webhooks/decision
+      CONSENT_MANAGER_OTP_LOG_CODES: 'false'
+      CONSENT_MANAGER_OTP_PUBLISH_ENABLED: 'false'
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api
-      tag: develop-5361069@sha256:67180496e5f9d5edb5afb9727d9da4501e96599166c1712e4e24dbf1f6fa2a77
+      tag: dev-48e64c249056@sha256:cca3273868b8ed28d193642b346fc3369b450ad7feefd42d02e91e84cb074831
   extraApis:
   - enabled: true
     nameOverride: cm-partner-api
@@ -686,7 +705,7 @@ openg2p-consent-manager:
         gateway: istio-system/development
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-ui
-      tag: develop-5361069@sha256:1ae7cc25b094e9c72ea9262a8d920480d2049b13d1505f2a9a2aeeeff8abf92d
+      tag: dev-48e64c249056@sha256:423f78a0d99b8bd65605848bf72e6d0abf84cb07303fdd6d8cf9fd424c5620c7
   postgres-init:
     enabled: true
     nameOverride: cm-pg-init
@@ -704,7 +723,7 @@ openg2p-consent-manager:
     partnerBaseUrl: http://{{ .Release.Name }}-cm-partner-api
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-sanity
-      tag: develop-5361069@sha256:1af320db949eb1c641dec5533b3f7352980483de45774b16e310cca996a0f330
+      tag: dev-48e64c249056@sha256:e5d2a30e5a30c252f30849fb7c61c772691f7521906c575ab3fb22584c2358e7
 keycloak-init:
   enabled: true
   keycloak:
@@ -743,14 +762,18 @@ aggregationApi:
   enabled: false
   nameOverride: ''
   image:
-    repository: ''
+    repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/aggregation-api
     tag: ''
-    digest: ''
+    digest: sha256:3bd17245a75252bdf497cc1bab22b9e1148d0fedce376e7892a9e551bcefb7b4
     pullPolicy: IfNotPresent
   imagePullSecrets: []
   replicas: 1
   containerPort: 8100
   servicePort: 80
+  virtualService:
+    enabled: false
+    host: aggregation.development.oanstaging.com
+    gateway: istio-system/development
   env: []
   envFrom: []
   resources:
