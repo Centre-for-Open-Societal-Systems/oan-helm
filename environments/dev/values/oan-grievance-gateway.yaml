@@ -1,0 +1,26 @@
+# gateway/oan-grievance-gateway. Install in the namespace of the grievance Frappe
+# Services, so each ApisixRoute backend resolves there. See docs/apisix-gateway.md.
+
+ingressClassName: apisix
+
+# Unconfirmed public endpoints stay unset; an empty list matches any host. Add the
+# grievance host (e.g. grievance-development.oanstaging.com) to environments/dev/endpoints.yaml
+# once it is provisioned, then list it here.
+hosts: []
+
+# Required. Frappe site name, sent as Host because Frappe selects the site from it.
+siteName: ""
+
+web:
+  serviceName: oan-grievance
+  port: 8000
+socket:
+  serviceName: oan-grievance-websocket
+  port: 9000
+
+# Rate-limit counters for limit-count, shared with the Commons Redis.
+redis:
+  host: commons-redis-master.commons.svc.cluster.local
+
+# Browser origins (socket.io cookies) and CORS origin regexes keep the chart's localhost
+# defaults until the grievance UI host is confirmed.

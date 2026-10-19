@@ -1,0 +1,52 @@
+# Upstream chart apisix/apisix 2.18.2 (APISIX 3.19.0) from
+# https://apache.github.io/apisix-helm-chart, with its bundled
+# apisix-ingress-controller subchart. Not vendored or repackaged here.
+# Release: name `apisix`, namespace `apisix`. See docs/apisix-gateway.md.
+
+apisix:
+  # OAN routes use `:param` path segments.
+  router:
+    http: radixtree_uri_with_parameter
+  admin:
+    credentials:
+      # Namespace-local Secret with keys `admin` and `viewer`, provisioned through the
+      # environment's secret process. Never commit the keys.
+      secretName: apisix-admin-credentials
+    allow:
+      # Narrow to the cluster Pod CIDR once confirmed; the chart default allows any address.
+      ingressControllerExtraIpList:
+        - 0.0.0.0/0
+
+# North-south placement (behind the Istio ingress gateway or exposed directly) is not yet
+# decided, so the gateway Service stays internal.
+service:
+  type: ClusterIP
+
+# Built-in etcd is meant for development only. Use externalEtcd in production.
+etcd:
+  enabled: true
+
+ingress-controller:
+  enabled: true
+  config:
+    kubernetes:
+      ingressClass: apisix
+  gatewayProxy:
+    createDefault: true
+    provider:
+      controlPlane:
+        service:
+          name: apisix-admin
+          port: 9180
+        auth:
+          adminKey:
+            value: ""
+            valueFrom:
+              secretKeyRef:
+                name: apisix-admin-credentials
+                key: admin
+  apisix:
+    adminService:
+      namespace: apisix
+      name: apisix-admin
+      port: 9180
