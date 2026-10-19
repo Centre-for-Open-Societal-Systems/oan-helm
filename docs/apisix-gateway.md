@@ -12,6 +12,7 @@ names its target cluster in its header. Never install them into the OpenG2P clus
 | --- | --- | --- |
 | APISIX and the Ingress Controller | Upstream chart `apisix/apisix` 2.18.2 (bundles `apisix-ingress-controller`) from `https://apache.github.io/apisix-helm-chart`. It is not vendored, repackaged or added to `releases/` | [dev/values/apisix.yaml](../environments/dev/values/apisix.yaml) |
 | Grievance routes | Chart `oan-grievance-gateway` in [oan_grievance_service/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/tree/develop/apisix/k8s), generated from the service's OpenAPI spec. It is not copied here | [dev/values/oan-grievance-gateway.yaml](../environments/dev/values/oan-grievance-gateway.yaml) |
+| Auth routes | Chart `oan-auth-gateway` in [oan_auth_service/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_auth_service/tree/develop/apisix/k8s). oan_auth_service runs inside the grievance bench, so it shares grievance's host, site and Service | [dev/values/oan-auth-gateway.yaml](../environments/dev/values/oan-auth-gateway.yaml) |
 | A2C routes | Chart `oan-a2c-gateway` in [oan_a2c/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/tree/develop/apisix/k8s), generated from the A2C OpenAPI spec | [dev/values/oan-a2c-gateway.yaml](../environments/dev/values/oan-a2c-gateway.yaml) |
 
 This repository holds only the values for both charts. The grievance service will get its
@@ -46,6 +47,9 @@ helm upgrade --install apisix apisix/apisix --version 2.18.2 \
 
 helm upgrade --install oan-grievance-gateway <oan_grievance_service>/apisix/k8s \
   -n develop -f environments/dev/values/oan-grievance-gateway.yaml
+
+helm upgrade --install oan-auth-gateway <oan_auth_service>/apisix/k8s \
+  -n develop -f environments/dev/values/oan-auth-gateway.yaml
 ```
 
 The release name `apisix` matters: the Ingress Controller values point at the
