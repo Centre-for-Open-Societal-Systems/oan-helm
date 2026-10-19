@@ -12,6 +12,7 @@ names its target cluster in its header. Never install them into the OpenG2P clus
 | --- | --- | --- |
 | APISIX and the Ingress Controller | Upstream chart `apisix/apisix` 2.18.2 (bundles `apisix-ingress-controller`) from `https://apache.github.io/apisix-helm-chart`. It is not vendored, repackaged or added to `releases/` | [dev/values/apisix.yaml](../environments/dev/values/apisix.yaml) |
 | Grievance routes | Chart `oan-grievance-gateway` in [oan_grievance_service/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/tree/develop/apisix/k8s), generated from the service's OpenAPI spec. It is not copied here | [dev/values/oan-grievance-gateway.yaml](../environments/dev/values/oan-grievance-gateway.yaml) |
+| A2C routes | Chart `oan-a2c-gateway` in [oan_a2c/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/tree/develop/apisix/k8s), generated from the A2C OpenAPI spec | [dev/values/oan-a2c-gateway.yaml](../environments/dev/values/oan-a2c-gateway.yaml) |
 
 This repository holds only the values for both charts. The grievance service will get its
 own chart repository and releases later; until then, install its chart from a checkout of
@@ -75,9 +76,34 @@ and cert settings. To roll back, point the backend at the Frappe Service again.
 Do not also run `adc sync` against this gateway. ADC and the Ingress Controller each
 overwrite the other's routes.
 
+## A2C
+
+A2C has no Kubernetes target yet. Dev runs on docker-compose, and staging_ati runs through
+oan-kustomize and ArgoCD. Once it has one, install APISIX there, or reuse a gateway that
+can reach it. Then install `oan-a2c-gateway` next to the A2C Frappe Service.
+
+A2C needs secrets that grievance does not, all provisioned outside Git:
+
+- One Secret per partner and dashboard consumer in the chart's namespace, named after the
+  consumer, with key `key`: `a2c-openg2p-consent-webhook`, `a2c-telco-ivr-lead-gateway`,
+  `a2c-oan-dashboards`.
+- `A2C_FRAPPE_SERVICE_AUTHORIZATION` (`token <api_key>:<api_secret>` of the Frappe service
+  user) in the APISIX pods' environment. Partner routes reference it as
+  `$env://A2C_FRAPPE_SERVICE_AUTHORIZATION`. In the `apisix` values:
+
+```yaml
+extraEnvVars:
+  - name: A2C_FRAPPE_SERVICE_AUTHORIZATION
+    valueFrom:
+      secretKeyRef:
+        name: a2c-frappe-service-credential
+        key: authorization
+```
+
 ## Open items
 
 - Frappe web and socket.io Service names in `develop` (`kubectl get svc -n develop`).
+- A2C: target cluster, public host, site name, Service name and partner egress CIDRs.
 - A Redis for rate-limit counters in the grievance cluster.
 - Grievance UI origins for CORS and socket.io cookies. They are still the localhost defaults.
 - Confirm the Pod CIDR in `apisix.nginx.http.realIpFrom`, and narrow
