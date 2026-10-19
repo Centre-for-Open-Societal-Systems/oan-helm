@@ -1,7 +1,2 @@
-# INCOMPLETE public checklist. Do not apply this as an upgrade overlay: it would
-# disable an existing Aggregation workload. Preserve all saved shared values.
 aggregationApi:
   enabled: false
-# COSS Consent API/UI/sanity defaults are pinned to verified ECR digests.
-# Preserve shared service settings, Secret names and image pull credentials.
-# The partner API and expiry CronJob reuse the verified API image.

@@ -1,0 +1,71 @@
+# Source mappings need review against live scopes/identifiers before partner data release.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aggregation-api-catalog
+  namespace: commons
+  labels:
+    app.kubernetes.io/part-of: oan-aggregation
+data:
+  registries.yaml: "version: 1\nregistries:\n  FARMER_REGISTRY:\n    name: Farmer\
+    \ Registry\n    partner_api:\n      base_url: http://farmer-registry-partner-api.farmer.svc.cluster.local\n\
+    \      receiver_id: farmer-registry\n    staff_api:\n      base_url: http://farmer-registry-staff-portal-api.farmer.svc.cluster.local\n\
+    \      registers:\n      - Farmer\n    binding:\n      audience: agg-layer-farmer\n\
+    \      controller_id: farmer_registry\n      allowed_purposes:\n      - loan_origination\n\
+    \      - subsidy_verification\n    search:\n      reg_type: Farmer\n      reg_record_type:\
+    \ spdci-extensions-dci:FarmerRecord\n      id_type: UIN\n      match:\n      \
+    \  path: farmer_personal_details.member_identifier[]\n        strip_prefixes:\n\
+    \        - FAN-\n    registers:\n      FARMER:\n        name: Farmer\n       \
+    \ functional_record_id: farmer_personal_details.member_identifier[].identifier_value\n\
+    \        last_approved_at: farmer_personal_details.last_updated\n    scopes:\n\
+    \      farmer_personal_details:\n        register: FARMER\n        fields:\n \
+    \       - member_identifier[].identifier_value\n        - demographic_info.name.given_name\n\
+    \        - demographic_info.name.second_name\n        - demographic_info.name.surname\n\
+    \        - demographic_info.phone_number\n        - demographic_info.sex\n   \
+    \     - demographic_info.birth_date\n        - marital_status\n        - education_level\n\
+    \        - registration_date\n      family_details:\n        table: HOUSEHOLD\n\
+    \        name: Household\n        parent: FARMER\n        internal_record_id:\
+    \ group_identifier[].identifier_value\n        fields:\n        - '*'\n      farm_details:\n\
+    \        table: FARM\n        name: Farm\n        parent: FARMER\n        fields:\n\
+    \        - '*'\n  LIVESTOCK_REGISTRY:\n    name: Livestock Registry\n    partner_api:\n\
+    \      base_url: http://livestock-registry-partner-api.livestock.svc.cluster.local\n\
+    \      receiver_id: livestock-registry\n    staff_api:\n      base_url: http://livestock-registry-staff-portal-api.livestock.svc.cluster.local\n\
+    \      registers:\n      - Farmer\n      - Livestock\n    binding:\n      audience:\
+    \ agg-layer-livestock\n      controller_id: livestock_registry\n      allowed_purposes:\n\
+    \      - loan_origination\n      - subsidy_verification\n    search:\n      reg_type:\
+    \ Livestock\n      reg_record_type: spdci-extensions-dci:LivestockRecord\n   \
+    \   id_type: UIN\n      match:\n        path: livestock_details.farmer_info.member_identifier[]\n\
+    \        strip_prefixes:\n        - FAN-\n    registers:\n      LIVESTOCK:\n \
+    \       name: Livestock holding\n        functional_record_id: livestock_details.record_identifier[].identifier_value\n\
+    \        record_status: livestock_details.status\n    scopes:\n      livestock_details:\n\
+    \        register: LIVESTOCK\n        fields:\n        - record_identifier[].identifier_value\n\
+    \        - oan_id\n        - status\n        - total_animals\n        - registration_date\n\
+    \        - farmer_info.demographic_info.name.given_name\n        - farmer_info.demographic_info.name.surname\n\
+    \        - farmer_info.phone_number\n        - place\n      animal_details:\n\
+    \        table: ANIMAL\n        name: Animal\n        parent: LIVESTOCK\n    \
+    \    fields:\n        - '*'\n      health_event_details:\n        table: HEALTH_EVENT\n\
+    \        name: Health event\n        parent: LIVESTOCK\n        fields:\n    \
+    \    - '*'\n      vaccination_details:\n        table: VACCINATION\n        name:\
+    \ Vaccination\n        parent: LIVESTOCK\n        fields:\n        - '*'\n   \
+    \   vital_event_details:\n        table: VITAL_EVENT\n        name: Vital event\n\
+    \        parent: LIVESTOCK\n        fields:\n        - '*'\n      breeding_details:\n\
+    \        table: BREEDING\n        name: Breeding\n        parent: LIVESTOCK\n\
+    \        fields:\n        - '*'\n  CROPSOWN_REGISTRY:\n    name: Crop Sown Registry\n\
+    \    partner_api:\n      base_url: http://cropsown-registry-partner-api.crop.svc.cluster.local\n\
+    \      receiver_id: cropsown-registry\n    staff_api:\n      base_url: http://cropsown-registry-staff-portal-api.crop.svc.cluster.local\n\
+    \      registers:\n      - CropSown\n    binding:\n      audience: agg-layer-cropsown\n\
+    \      controller_id: cropsown_registry\n      allowed_purposes:\n      - loan_origination\n\
+    \      - subsidy_verification\n    search:\n      reg_type: CropSown\n      reg_record_type:\
+    \ spdci-extensions-dci:CropSownRecord\n      id_type: UIN\n      match:\n    \
+    \    path: crop_sown_details.farmer_info.member_identifier[]\n        strip_prefixes:\n\
+    \        - FAN-\n    registers:\n      CROP_SOWN:\n        name: Crop sown\n \
+    \       functional_record_id: crop_sown_details.record_identifier[].identifier_value\n\
+    \    scopes:\n      crop_sown_details:\n        register: CROP_SOWN\n        fields:\n\
+    \        - '*'\n      farm_details:\n        table: FARM\n        name: Farm\n\
+    \        parent: CROP_SOWN\n        fields:\n        - '*'\n      crop_production_details:\n\
+    \        table: CROP_PRODUCTION\n        name: Crop production\n        parent:\
+    \ CROP_SOWN\n        fields:\n        - '*'\n      infestation_details:\n    \
+    \    table: INFESTATION\n        name: Infestation\n        parent: CROP_SOWN\n\
+    \        fields:\n        - '*'\n      cluster_details:\n        table: CLUSTER\n\
+    \        name: Cluster\n        parent: CROP_SOWN\n        fields:\n        -\
+    \ '*'\n"

@@ -1,0 +1,329 @@
+{
+  "verifiedAtUtc": "2026-10-19T11:04:14.894985+00:00",
+  "upgrade": {
+    "server": "13.201.58.55",
+    "release": "commons-services",
+    "namespace": "commons",
+    "chartVersion": "1.0.0-dev.5",
+    "helmExitCode": 0,
+    "helmStatus": "deployed",
+    "revision": 17,
+    "backupDirectory": "/var/backups/oan-consent-aggregation/20261019T105654Z",
+    "databaseDumpSha256": "f77fe974d94fe3aaa9fb2c631bd3b984c8403d544a9671d1943665bc7922032d",
+    "serverDryRunPassed": true,
+    "rancherRepository": "oan-coss-preview",
+    "repositoryUrl": "https://raw.githubusercontent.com/asmitonweb/oan-helm/feat/consent-aggregation-rancher/repository/",
+    "aggregationEnabled": true,
+    "otpLoggingEnabled": false,
+    "otpBucketPublishingEnabled": false,
+    "initializationJobsSuppressed": true,
+    "upstreamPrMerged": false
+  },
+  "runtimePreparation": {
+    "runtimeSecret": "commons/aggregation-api-runtime",
+    "signingSecret": "commons/aggregation-api-signing",
+    "keyPersistent": true,
+    "signingCertificateSha256": "dc557bec3e1a18d091fc82bbaef7e3806530ef71f322d5f84a33437fbc667f42",
+    "staffServiceClient": "aggregation-layer-staff",
+    "registryClientRoleGrants": [
+      {
+        "client": "farmer-registry-staff-portal",
+        "role": "Data Supervisor"
+      },
+      {
+        "client": "cropsown-registry-staff-portal",
+        "role": "Data Supervisor"
+      },
+      {
+        "client": "livestock-registry-staff-portal",
+        "role": "Data Supervisor"
+      }
+    ],
+    "humanStaffRole": "AGGREGATION_STAFF_VIEWER",
+    "humanRoleAssignmentsPerformed": false,
+    "cmAdminRoleGranted": false,
+    "partnerManagementKeyRegistered": false,
+    "consentBindingsRegistered": false,
+    "otpEnabled": false
+  },
+  "currentPods": [
+    {
+      "deployment": "commons-services-cm-api",
+      "observedGenerationCurrent": true,
+      "updatedReplicas": 1,
+      "availableReplicas": 1,
+      "pods": [
+        {
+          "pod": "commons-services-cm-api-7d594956c6-9dfs5",
+          "ready": true,
+          "containers": [
+            {
+              "name": "cm-api",
+              "image": "sha256:7c3e5001ec51b373ac28b999a86939a452cdecf091e24be8d5e671d03c478b55",
+              "imageId": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api@sha256:cca3273868b8ed28d193642b346fc3369b450ad7feefd42d02e91e84cb074831",
+              "restartCount": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "deployment": "commons-services-cm-partner-api",
+      "observedGenerationCurrent": true,
+      "updatedReplicas": 1,
+      "availableReplicas": 1,
+      "pods": [
+        {
+          "pod": "commons-services-cm-partner-api-7fff56c647-qzzws",
+          "ready": true,
+          "containers": [
+            {
+              "name": "cm-partner-api",
+              "image": "sha256:7c3e5001ec51b373ac28b999a86939a452cdecf091e24be8d5e671d03c478b55",
+              "imageId": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api@sha256:cca3273868b8ed28d193642b346fc3369b450ad7feefd42d02e91e84cb074831",
+              "restartCount": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "deployment": "commons-services-cm-ui",
+      "observedGenerationCurrent": true,
+      "updatedReplicas": 1,
+      "availableReplicas": 1,
+      "pods": [
+        {
+          "pod": "commons-services-cm-ui-6bd77bf6dd-b58ms",
+          "ready": true,
+          "containers": [
+            {
+              "name": "cm-ui",
+              "image": "sha256:04de1ef4ce282e3d59b9d8f072234ae05f056c770993a5653604528b8e838006",
+              "imageId": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-ui@sha256:423f78a0d99b8bd65605848bf72e6d0abf84cb07303fdd6d8cf9fd424c5620c7",
+              "restartCount": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "deployment": "commons-services-aggregation-api",
+      "observedGenerationCurrent": true,
+      "updatedReplicas": 1,
+      "availableReplicas": 1,
+      "pods": [
+        {
+          "pod": "commons-services-aggregation-api-5f89455956-5b7bb",
+          "ready": true,
+          "containers": [
+            {
+              "name": "aggregation-api",
+              "image": "sha256:017d0dec4680b2f2cb176ebb4e4f4805f8a7d9b646b509601792e00e79f1a619",
+              "imageId": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/aggregation-api@sha256:3bd17245a75252bdf497cc1bab22b9e1148d0fedce376e7892a9e551bcefb7b4",
+              "restartCount": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "workloadsTotal": 69,
+  "unreadyWorkloads": [],
+  "istioAnalyzeExitCode": 0,
+  "rancherRepository": {
+    "name": "oan-coss-preview",
+    "url": "https://raw.githubusercontent.com/asmitonweb/oan-helm/feat/consent-aggregation-rancher/repository/",
+    "downloaded": true
+  },
+  "unrelatedWorkloadImagesPreserved": true,
+  "existingSecretPayloadsPreserved": true,
+  "changedExistingSecretNames": [],
+  "unrelatedRenderedChanges": [],
+  "removedResources": [],
+  "addedResources": [
+    [
+      "Deployment",
+      "commons-services-aggregation-api"
+    ],
+    [
+      "Service",
+      "commons-services-aggregation-api"
+    ],
+    [
+      "VirtualService",
+      "commons-services-aggregation-api"
+    ]
+  ],
+  "initialCmStartup": {
+    "staffPodRestarts": 1,
+    "previousExceptionTypes": [
+      "asyncpg.exceptions.UniqueViolationError",
+      "sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.IntegrityError",
+      "sqlalchemy.exc.IntegrityError"
+    ],
+    "interpretation": "Both API audiences start with migrations; concurrent creation caused one startup failure. Retry succeeded. No automatic Helm rollback was used."
+  },
+  "registryMetadataAccess": {
+    "farmer": true,
+    "livestock": true,
+    "cropsown": true,
+    "personalRecordsRead": false
+  },
+  "remainingPrerequisites": [
+    "Assign AGGREGATION_STAFF_VIEWER only to the user-selected staff accounts; no human role assignments performed.",
+    "Register the Aggregation public key in Partner Management and review explicit catalog/controller/scope/purpose bindings using current consent_method settings.",
+    "Configure partner realm, clients and partner_id claims before authorize.consent_id.",
+    "Keep OTP unavailable until SMS delivery exists; no OTP logging or bucket publishing enabled.",
+    "Review field allowlists and beneficiary identity matching before partner data release; metadata checks alone do not establish this.",
+    "Existing Consent receipt key remains the original demo key; activating the separately prepared private key requires a trust/retention plan."
+  ],
+  "limits": "Health/auth rejection and registry metadata access verified. No real beneficiary search, stored-consent issuance, OTP delivery, authorized human staff login, partner signature/data-release or async callback acceptance was performed.",
+  "cropUrlRepair": {
+    "release": "cropsown-registry",
+    "namespace": "crop",
+    "beforeRevision": 13,
+    "afterRevision": 14,
+    "onlyUrlFieldsChanged": true,
+    "imagesUnchanged": true,
+    "initializationJobsSuppressed": true,
+    "reason": "Revision 13 used legacy hosts/internal Gateway, producing three canonical 404s. Current exact chart was reconstructed; render matched the existing release and URL-only transform before upgrade."
+  },
+  "livePostmanChecks": {
+    "profile": "live read-only health/routing and missing/invalid-token rejection; no credential submission",
+    "probes": [
+      {
+        "name": "aggregation-health",
+        "expectedStatuses": [
+          200
+        ],
+        "expectedHttpRejection": false,
+        "postmanExitCode": 0,
+        "assertionsPassed": 1,
+        "assertionsTotal": 1,
+        "passed": true
+      },
+      {
+        "name": "aggregation-catalog",
+        "expectedStatuses": [
+          200
+        ],
+        "expectedHttpRejection": false,
+        "postmanExitCode": 0,
+        "assertionsPassed": 3,
+        "assertionsTotal": 3,
+        "passed": true
+      },
+      {
+        "name": "staff-search-no-token",
+        "expectedStatuses": [
+          401
+        ],
+        "expectedHttpRejection": true,
+        "postmanExitCode": 1,
+        "assertionsPassed": 1,
+        "assertionsTotal": 1,
+        "passed": true
+      },
+      {
+        "name": "staff-search-invalid-token",
+        "expectedStatuses": [
+          401
+        ],
+        "expectedHttpRejection": true,
+        "postmanExitCode": 1,
+        "assertionsPassed": 1,
+        "assertionsTotal": 1,
+        "passed": true
+      },
+      {
+        "name": "staff-tab-no-token",
+        "expectedStatuses": [
+          401
+        ],
+        "expectedHttpRejection": true,
+        "postmanExitCode": 1,
+        "assertionsPassed": 1,
+        "assertionsTotal": 1,
+        "passed": true
+      },
+      {
+        "name": "consent-staff-no-token",
+        "expectedStatuses": [
+          401,
+          403
+        ],
+        "expectedHttpRejection": true,
+        "postmanExitCode": 1,
+        "assertionsPassed": 1,
+        "assertionsTotal": 1,
+        "passed": true
+      },
+      {
+        "name": "consent-partner-health",
+        "expectedStatuses": [
+          200
+        ],
+        "expectedHttpRejection": false,
+        "postmanExitCode": 0,
+        "assertionsPassed": 1,
+        "assertionsTotal": 1,
+        "passed": true
+      },
+      {
+        "name": "consent-ui",
+        "expectedStatuses": [
+          200
+        ],
+        "expectedHttpRejection": false,
+        "postmanExitCode": 0,
+        "assertionsPassed": 1,
+        "assertionsTotal": 1,
+        "passed": true
+      },
+      {
+        "name": "legacy-consent-ui",
+        "expectedStatuses": [
+          200
+        ],
+        "expectedHttpRejection": false,
+        "postmanExitCode": 0,
+        "assertionsPassed": 1,
+        "assertionsTotal": 1,
+        "passed": true
+      },
+      {
+        "name": "legacy-consent-partner-health",
+        "expectedStatuses": [
+          200
+        ],
+        "expectedHttpRejection": false,
+        "postmanExitCode": 0,
+        "assertionsPassed": 1,
+        "assertionsTotal": 1,
+        "passed": true
+      }
+    ],
+    "passed": true,
+    "assertionsPassed": 12,
+    "assertionsTotal": 12
+  },
+  "canonicalUrlChecks": {
+    "passed": 32,
+    "total": 32,
+    "readOnly": true
+  },
+  "repositoryChecks": {
+    "repositoryUrl": "https://raw.githubusercontent.com/asmitonweb/oan-helm/feat/consent-aggregation-rancher/repository/",
+    "archivesVerified": 25,
+    "passed": true,
+    "currentVersion": "1.0.0-dev.5",
+    "currentPackages": 5,
+    "historicalPackages": 20
+  },
+  "githubValidation": {
+    "commit": "af380de",
+    "passed": true,
+    "url": "https://github.com/asmitonweb/oan-helm/actions/runs/39240659093"
+  }
+}

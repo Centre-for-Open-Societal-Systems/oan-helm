@@ -1,0 +1,47 @@
+environmentDomain: development.oanstaging.com
+gateway: istio-system/development
+ingressAddress: 13.201.58.55
+legacyHostMap:
+  agent-iam-development.oanstaging.com: agent-iam.development.oanstaging.com
+  auditmanager-development.oanstaging.com: auditmanager.development.oanstaging.com
+  awe-development.oanstaging.com: awe.development.oanstaging.com
+  connector-cropsown-registry-development.oanstaging.com: connector-cropsown-registry.development.oanstaging.com
+  connector-farmer-registry-development.oanstaging.com: connector-farmer-registry.development.oanstaging.com
+  connector-livestock-registry-development.oanstaging.com: connector-livestock-registry.development.oanstaging.com
+  consent-manager-development.oanstaging.com: consent-manager.development.oanstaging.com
+  consent-manager-partner-development.oanstaging.com: consent-manager-partner.development.oanstaging.com
+  crop-registry-development.oanstaging.com: crop-registry.development.oanstaging.com
+  esignet-development.oanstaging.com: esignet.development.oanstaging.com
+  farmer-registry-development.oanstaging.com: farmer-registry.development.oanstaging.com
+  iam-staff-ui-development.oanstaging.com: iam-staff-ui.development.oanstaging.com
+  idgenerator-farmer-development.oanstaging.com: idgenerator-farmer.development.oanstaging.com
+  idgenerator-livestock-development.oanstaging.com: idgenerator-livestock.development.oanstaging.com
+  kafka-development.oanstaging.com: kafka.development.oanstaging.com
+  keycloak-development.oanstaging.com: keycloak.development.oanstaging.com
+  livestock-registry-development.oanstaging.com: livestock-registry.development.oanstaging.com
+  master-data-development.oanstaging.com: master-data.development.oanstaging.com
+  master-data-ui-development.oanstaging.com: master-data-ui.development.oanstaging.com
+  minio-console-development.oanstaging.com: minio-console.development.oanstaging.com
+  minio-farmer-development.oanstaging.com: minio-farmer.development.oanstaging.com
+  oan-dashboard-development.oanstaging.com: oan-dashboard.development.oanstaging.com
+  odk-central-development.oanstaging.com: odk-central.development.oanstaging.com
+  partner-crop-development.oanstaging.com: partner-crop.development.oanstaging.com
+  partner-farmer-development.oanstaging.com: partner-farmer.development.oanstaging.com
+  partner-livestock-development.oanstaging.com: partner-livestock.development.oanstaging.com
+  partner-management-development.oanstaging.com: partner-management.development.oanstaging.com
+  partner-management-partner-api-development.oanstaging.com: partner-management-partner-api.development.oanstaging.com
+  staff-crop-development.oanstaging.com: staff-crop.development.oanstaging.com
+  staff-farmer-development.oanstaging.com: staff-farmer.development.oanstaging.com
+  staff-iam-development.oanstaging.com: staff-iam.development.oanstaging.com
+  staff-livestock-development.oanstaging.com: staff-livestock.development.oanstaging.com
+  staff-portal-development.oanstaging.com: staff-portal.development.oanstaging.com
+additionalAliases:
+  minio-api.commons-dev.oanstaging.com: minio-farmer.development.oanstaging.com
+  farmer-dev.oanstaging.com: farmer-registry.development.oanstaging.com
+  connector.livestock-dev.oanstaging.com: connector-livestock-registry.development.oanstaging.com
+cutoverPolicy: New URLs canonical. Preserve legacy DNS/TLS and aliases until user confirms completion;
+  no automatic expiration. Management URLs unchanged.
+cookieDomain: .development.oanstaging.com
+reservedDisabledHosts:
+- aggregation.development.oanstaging.com
+nonPublicRoutes: Existing private/test dashboard routes keep their private gateways and exposure.

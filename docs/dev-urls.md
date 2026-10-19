@@ -1,77 +1,91 @@
-# New-dev URL migration
+# Development wildcard URLs
 
-Use chart version **`1.0.0-dev.2`**. Version `1.0.0-dev.1` is retained unchanged
-as a historical artifact and contains the original environment defaults.
+The dev environment uses `<service>.development.oanstaging.com`. New chart
+version **`1.0.0-dev.4`** contains the new URL defaults and shared Gateway settings;
+older archives retain their historical configuration.
 
-The canonical hosts below were confirmed from the new server's Helm endpoint
-configuration, Istio routes and Nginx mappings on 16 October 2026. The new-dev
-server is `13.201.58.55`. Public endpoint metadata is in
-[`environments/dev/endpoints.yaml`](../environments/dev/endpoints.yaml).
+The migration keeps installed chart/image versions intact using URL-only private
+values and the compatibility post-renderer. Selecting a new chart is a separate
+review: installing new chart defaults must not replace current live application
+images or settings accidentally. Current live results are recorded in
+`releases/live-domain-migration.json`.
 
 | Service | Canonical URL |
 | --- | --- |
-| Farmer Registry | `https://farmer-registry-development.oanstaging.com` |
-| Farmer staff / partner API | `https://staff-farmer-development.oanstaging.com` / `https://partner-farmer-development.oanstaging.com` |
-| Crop Registry | `https://crop-registry-development.oanstaging.com` |
-| Crop staff / partner API | `https://staff-crop-development.oanstaging.com` / `https://partner-crop-development.oanstaging.com` |
-| Livestock Registry | `https://livestock-registry-development.oanstaging.com` |
-| Livestock staff / partner API | `https://staff-livestock-development.oanstaging.com` / `https://partner-livestock-development.oanstaging.com` |
-| Keycloak | `https://keycloak-development.oanstaging.com` |
-| Staff IAM / agent IAM API | `https://staff-iam-development.oanstaging.com` / `https://agent-iam-development.oanstaging.com` |
-| Staff portal / IAM UI | `https://staff-portal-development.oanstaging.com` / `https://iam-staff-ui-development.oanstaging.com` |
-| Master Data API / UI | `https://master-data-development.oanstaging.com` / `https://master-data-ui-development.oanstaging.com` |
-| COSS Consent / partner API | `https://consent-manager-development.oanstaging.com` / `https://consent-manager-partner-development.oanstaging.com` |
-| Partner Management / partner API | `https://partner-management-development.oanstaging.com` / `https://partner-management-partner-api-development.oanstaging.com` |
-| Approval Workflow / Audit | `https://awe-development.oanstaging.com` / `https://auditmanager-development.oanstaging.com` |
-| ODK Central | `https://odk-central-development.oanstaging.com` |
-| MinIO API / console | `https://minio-farmer-development.oanstaging.com` / `https://minio-console-development.oanstaging.com` |
-| eSignet | `https://esignet-development.oanstaging.com` |
+| keycloak | `https://keycloak.development.oanstaging.com` |
+| iam | `https://staff-iam.development.oanstaging.com` |
+| agentIam | `https://agent-iam.development.oanstaging.com` |
+| staffPortal | `https://staff-portal.development.oanstaging.com` |
+| iamUi | `https://iam-staff-ui.development.oanstaging.com` |
+| awe | `https://awe.development.oanstaging.com` |
+| masterData | `https://master-data.development.oanstaging.com` |
+| masterDataUi | `https://master-data-ui.development.oanstaging.com` |
+| consent | `https://consent-manager.development.oanstaging.com` |
+| consentPartner | `https://consent-manager-partner.development.oanstaging.com` |
+| partnerManagement | `https://partner-management.development.oanstaging.com` |
+| partnerManagementApi | `https://partner-management-partner-api.development.oanstaging.com` |
+| odk | `https://odk-central.development.oanstaging.com` |
+| minio | `https://minio-farmer.development.oanstaging.com` |
+| minioConsole | `https://minio-console.development.oanstaging.com` |
+| audit | `https://auditmanager.development.oanstaging.com` |
+| esignet | `https://esignet.development.oanstaging.com` |
+| farmer | `https://farmer-registry.development.oanstaging.com` |
+| farmerStaff | `https://staff-farmer.development.oanstaging.com` |
+| farmerPartner | `https://partner-farmer.development.oanstaging.com` |
+| farmerId | `https://idgenerator-farmer.development.oanstaging.com` |
+| cropsown | `https://crop-registry.development.oanstaging.com` |
+| cropsownStaff | `https://staff-crop.development.oanstaging.com` |
+| cropsownPartner | `https://partner-crop.development.oanstaging.com` |
+| livestock | `https://livestock-registry.development.oanstaging.com` |
+| livestockStaff | `https://staff-livestock.development.oanstaging.com` |
+| livestockPartner | `https://partner-livestock.development.oanstaging.com` |
+| livestockId | `https://idgenerator-livestock.development.oanstaging.com` |
 
-API path prefixes remain controlled by their existing charts. Public staff
-cookies use `.oanstaging.com`. Staff logout and issuer URLs use the public
-Keycloak host and `/realms/staff`; internal JWKS/service communication can use
-`commons-keycloak.commons.svc.cluster.local` without changing the public issuer.
+Connectors use `connector-farmer-registry.development.oanstaging.com`,
+`connector-cropsown-registry.development.oanstaging.com` and
+`connector-livestock-registry.development.oanstaging.com`. The shared dashboard is
+`oan-dashboard.development.oanstaging.com`; Kafka UI is
+`kafka.development.oanstaging.com`. Preserve their existing access restrictions.
 
-Registry-to-Commons calls explicitly use `*.commons.svc.cluster.local` for
-PostgreSQL, IAM, Master Data, Consent, Partner Management, AWE, audit and shared
-cache endpoints. AWE callbacks target the existing registry API in its own
-release namespace. The Consent callback targets `<release>-cm-api`, rather than
-the nonexistent `<release>-api` service. Crop ID Generator uses its namespace's
-internal Service because no canonical public route was confirmed.
+The environment has one wildcard DNS record and certificate, Nginx forwards to
+Istio, and public VirtualServices use `istio-system/development`. Rancher and
+Jenkins retain their existing management URLs. Exact DNS records override the
+wildcard and must be checked when troubleshooting unexpected destinations.
 
-## Apply to an existing dev release
+## Login and application settings
 
-Changing chart defaults alone does not replace literal URLs saved in an
-existing release. Reconcile private values, then apply the corresponding
-public migration overlay from [`environments/dev/values/`](../environments/dev/values/).
-Those files contain URL/configuration changes, not passwords or live values.
+The staff issuer is `https://keycloak.development.oanstaging.com/realms/staff`.
+Application cookies use `.development.oanstaging.com`. Exact client redirects,
+web origins, logout URLs, IAM login-provider records and application links must
+be migrated together. Users must sign in again; old tokens may carry the former
+issuer. Internal Service/JWKS/database addresses retain their existing namespaces.
 
-```sh
-helm upgrade farmer-registry coss/openg2p-farmer-registry \
-  --namespace farmer --version 1.0.0-dev.2 --reuse-values \
-  -f /private/reviewed-values.yaml \
-  -f environments/dev/values/farmer.yaml --wait --timeout 15m
-```
+The URL overlays under `environments/dev/values/` are public configuration only.
+Saved private lists, clients and custom environment values require reconciliation;
+replacing an entire list can discard existing settings. The legacy compatibility
+renderer migrates literal URLs and encoded configuration, retains private/test
+route gateways, and can suppress initialization Jobs for this URL-only operation.
+Use `--no-hooks` and `--post-renderer-args --skip-initialization-jobs` only for the
+reviewed URL migration, not as a general substitute for required initialization.
 
-Use the existing release and namespace for every upgrade. For Rancher, merge
-the same overlay into the installed app's values while selecting the exact
-version. Render and inspect the combined result first. Saved lists such as
-Keycloak clients, login providers, extra APIs or custom env arrays may contain
-their own literal URLs; preserve their other entries and replace those URLs
-privately. Whole-list replacement can discard existing clients or settings.
+## Cutover and recovery
 
-Superset, Inji Certify, the agent portal UI, notifications, DA, Aggregation and
-standalone registry dashboards have no confirmed new-dev public URLs. None were
-guessed. Superset and Certify defaults are disabled, matching the inspected dev
-release; notifications are disabled pending endpoints. The Superset client
-identity is retained with an empty redirect list. Agent portal redirect is
-unset. Other unavailable workloads remain disabled. Their future enablement
-requires explicit hosts, routes, authentication and the existing component
-prerequisites. Review these choices before applying an overlay to a differently
-configured environment.
+Both URL schemes remain available during completion of the migration. The
+`*-development.oanstaging.com` records and original TLS certificates are restored.
+HTML GET/HEAD browser navigation gets a temporary 307 redirect to the matching
+canonical hostname, preserving path and query. API/JSON requests and POSTs are
+proxied through temporary environment-owned aliases without changing method,
+body or original Host. The MinIO object API always proxies, including browser
+requests, to preserve signed download URLs. Keycloak continues to advertise the
+new issuer.
 
-The validator checks current renders, including encoded login-provider data,
-for old environment hostnames and unconfirmed public addresses. It preserves
-stable resource names, selectors and Secret references. Upstream Keycloak Job
-names include a configuration hash, so their suffix changes with new URLs.
-No server, DNS, cluster or identity-provider configuration is changed by this PR.
+The compatibility configuration is in `environments/dev/legacy/`; refresh its
+aliases when canonical service routing changes. Retain old DNS/TLS and renew the
+legacy certificates until the user explicitly confirms completion. Do not remove
+compatibility on a timer. Other servers and Rancher/Jenkins management URLs remain
+outside this change. Private backups retain the exact pre-cutover records and
+identity/release settings for recovery.
+
+The migration does not enable Aggregation, DA or unavailable components. Reserved
+future hostnames are not evidence of running services. Use the
+[service onboarding and enablement guide](service-onboarding.md) for new services.

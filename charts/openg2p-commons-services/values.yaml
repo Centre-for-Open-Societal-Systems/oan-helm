@@ -1,10 +1,10 @@
 global:
-  baseDomain: oanstaging.com
-  keycloakBaseUrl: https://keycloak-development.oanstaging.com
+  baseDomain: development.oanstaging.com
+  keycloakBaseUrl: https://keycloak.development.oanstaging.com
   keycloakInternalUrl: http://commons-keycloak.commons.svc.cluster.local:80
   keycloakRealm: staff
   keycloakIssuerUrl: http://commons-keycloak.commons.svc.cluster.local:80/realms/staff
-  keycloakExternalIssuerUrl: https://keycloak-development.oanstaging.com/realms/staff
+  keycloakExternalIssuerUrl: https://keycloak.development.oanstaging.com/realms/staff
   postgresqlHost: commons-postgresql
   postgresqlSecret: commons-postgresql
   postgresqlSecretKey: postgres-password
@@ -16,40 +16,40 @@ global:
   kafkaInstallationName: commons-kafka
   softhsmInstallationName: commons-softhsm
   supersetHostname: ''
-  odkHostname: odk-central-development.oanstaging.com
-  iamHostname: staff-iam-development.oanstaging.com
-  staffPortalApiHostname: staff-iam-development.oanstaging.com
-  agentPortalApiHostname: agent-iam-development.oanstaging.com
+  odkHostname: odk-central.development.oanstaging.com
+  iamHostname: staff-iam.development.oanstaging.com
+  staffPortalApiHostname: staff-iam.development.oanstaging.com
+  agentPortalApiHostname: agent-iam.development.oanstaging.com
   agentPortalHostname: ''
   certifyHostname: ''
-  staffPortalHostname: staff-portal-development.oanstaging.com
-  staffPortalCookieDomain: .oanstaging.com
+  staffPortalHostname: staff-portal.development.oanstaging.com
+  staffPortalCookieDomain: .development.oanstaging.com
   iamServiceUrl: http://commons-services-iam-staff-portal-api.commons.svc.cluster.local
   keycloakAdminSecret: commons-keycloak
   keycloakAdminSecretKey: admin-password
   keycloakAdminUser: admin
-  aweHostname: awe-development.oanstaging.com
+  aweHostname: awe.development.oanstaging.com
   aweDB: awe
   aweDBPort: 5432
   aweDBUser: awe_user
   aweDBSecret: awe-db-user
   aweDBUserPasswordKey: awe-db-user-password
-  authCookieDomain: .oanstaging.com
-  cookieDomain: .oanstaging.com
-  iamUrl: https://staff-iam-development.oanstaging.com
-  masterDataHostname: master-data-development.oanstaging.com
-  masterDataUiHostname: master-data-ui-development.oanstaging.com
+  authCookieDomain: .development.oanstaging.com
+  cookieDomain: .development.oanstaging.com
+  iamUrl: https://staff-iam.development.oanstaging.com
+  masterDataHostname: master-data.development.oanstaging.com
+  masterDataUiHostname: master-data-ui.development.oanstaging.com
   masterDataApiUrl: http://commons-services-master-data-api.commons.svc.cluster.local
   aweBaseUrl: http://commons-services-awe.commons.svc.cluster.local
 master-data:
   enabled: true
   global:
-    masterDataHostname: master-data-development.oanstaging.com
+    masterDataHostname: master-data.development.oanstaging.com
     masterDataDB: master_data
     masterDataDBUser: master_data_user
     masterDataDBSecret: master-data-db-user
     masterDataDBUserPasswordKey: master-data-db-user-password
-    masterDataUiHostname: master-data-ui-development.oanstaging.com
+    masterDataUiHostname: master-data-ui.development.oanstaging.com
   geoSeed:
     countryPack: ETH
     load:
@@ -69,9 +69,16 @@ master-data:
   keycloak-init:
     nameOverride: master-data-kc-init
   masterDataUi:
-    iamPublicUrl: https://staff-iam-development.oanstaging.com
+    iamPublicUrl: https://staff-iam.development.oanstaging.com
     envVars:
-      COOKIE_DOMAIN: .oanstaging.com
+      COOKIE_DOMAIN: .development.oanstaging.com
+    istio:
+      virtualservice:
+        gateway: istio-system/development
+  masterDataAPI:
+    istio:
+      virtualservice:
+        gateway: istio-system/development
 odk-central:
   enabled: true
   hostname: '{{ tpl .Values.global.odkHostname $ }}'
@@ -118,7 +125,7 @@ odk-central:
         \  echo \"Waiting for MinIO...\"\n  sleep 2\ndone\n"
     envVars:
       OIDC_ENABLED: true
-      OIDC_ISSUER_URL: https://keycloak-development.oanstaging.com/realms/staff
+      OIDC_ISSUER_URL: https://keycloak.development.oanstaging.com/realms/staff
       OIDC_CLIENT_ID: '{{ tpl .Values.oidcClientId $ }}'
     envVarsFrom:
       DB_PASSWORD:
@@ -129,6 +136,9 @@ odk-central:
         secretKeyRef:
           name: '{{ tpl .Values.oidcClientSecret $ }}'
           key: '{{ tpl .Values.oidcClientSecretKey $ }}'
+  istio:
+    virtualservice:
+      gateway: istio-system/development
 artifactory:
   enabled: true
   image:
@@ -155,6 +165,8 @@ keymanager:
   artifactoryInstallationName: '{{ .Release.Name }}-artifactory'
   istio:
     enabled: false
+    virtualservice:
+      gateway: istio-system/development
   springConfig:
     names: application,kernel
     profile: default
@@ -307,7 +319,7 @@ superset:
     virtualservice:
       enabled: true
       host: ''
-      gateway: internal
+      gateway: istio-system/development
       destination: '{{ include "superset.fullname" . }}'
       destinationPort: '{{ .Values.service.port }}'
     gateway:
@@ -323,7 +335,7 @@ superset:
         credentialName: ''
 esignet:
   enabled: true
-  hostname: esignet-development.oanstaging.com
+  hostname: esignet.development.oanstaging.com
   resources:
     requests:
       cpu: 100m
@@ -360,9 +372,16 @@ esignet:
       repoUrl: https://github.com/openg2p/mosip-config
       branch: master
     rawConfig: ''
+  istio:
+    virtualservice:
+      gateway: istio-system/development
+  oidcUi:
+    istio:
+      virtualservice:
+        gateway: istio-system/development
 mock-identity-system:
   enabled: true
-  hostname: esignet-development.oanstaging.com
+  hostname: esignet.development.oanstaging.com
   resources:
     requests:
       cpu: 50m
@@ -387,6 +406,9 @@ mock-identity-system:
       repoUrl: https://github.com/openg2p/mosip-config
       branch: master
     rawConfig: ''
+  istio:
+    virtualservice:
+      gateway: istio-system/development
 openg2p-inji-certify:
   enabled: false
   global:
@@ -412,6 +434,9 @@ openg2p-inji-certify:
       existingSecret: '{{ tpl .Values.global.postgresqlSecret $ }}'
       existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey
         $ }}'
+  istio:
+    virtualservice:
+      gateway: istio-system/development
 openg2p-iam-service:
   enabled: true
   iamStaffPortalApi:
@@ -420,12 +445,18 @@ openg2p-iam-service:
       requests:
         cpu: 50m
         memory: 256Mi
+    istio:
+      virtualservice:
+        gateway: istio-system/development
   iamAgentPortalApi:
     hostname: '{{ tpl .Values.global.agentPortalApiHostname $ }}'
     resources:
       requests:
         cpu: 50m
         memory: 256Mi
+    istio:
+      virtualservice:
+        gateway: istio-system/development
   global:
     iamHostname: '{{ tpl .Values.global.iamHostname $ }}'
     postgresqlHost: '{{ tpl .Values.global.postgresqlHost $ }}'
@@ -433,15 +464,15 @@ openg2p-iam-service:
     iamDBUser: iam_user
     iamDBSecret: iam
     iamDBUserPasswordKey: iam-db-user
-    staffPortalDefaultRedirectUri: https://staff-portal-development.oanstaging.com
+    staffPortalDefaultRedirectUri: https://staff-portal.development.oanstaging.com
     agentPortalDefaultRedirectUri: ''
-    keycloakApplicationUrl: https://keycloak-development.oanstaging.com
-    registryApplicationUrl: https://farmer-registry-development.oanstaging.com
-    minioApplicationUrl: https://minio-console-development.oanstaging.com
+    keycloakApplicationUrl: https://keycloak.development.oanstaging.com
+    registryApplicationUrl: https://farmer-registry.development.oanstaging.com
+    minioApplicationUrl: https://minio-console.development.oanstaging.com
     supersetApplicationUrl: ''
-    iamStaffUiApplicationUrl: https://iam-staff-ui-development.oanstaging.com
-    masterDataApplicationUrl: https://master-data-development.oanstaging.com
-    aweApplicationUrl: https://awe-development.oanstaging.com
+    iamStaffUiApplicationUrl: https://iam-staff-ui.development.oanstaging.com
+    masterDataApplicationUrl: https://master-data.development.oanstaging.com
+    aweApplicationUrl: https://awe.development.oanstaging.com
   postgres-init:
     enabled: true
     nameOverride: iam-pg-init
@@ -456,14 +487,17 @@ openg2p-iam-service:
       existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey
         $ }}'
   iamStaffUi:
-    hostname: iam-staff-ui-development.oanstaging.com
+    hostname: iam-staff-ui.development.oanstaging.com
     envVars:
-      COOKIE_DOMAIN: .oanstaging.com
-      BACKEND_API_URL: https://staff-iam-development.oanstaging.com
+      COOKIE_DOMAIN: .development.oanstaging.com
+      BACKEND_API_URL: https://staff-iam.development.oanstaging.com
+    istio:
+      virtualservice:
+        gateway: istio-system/development
 openg2p-audit-manager:
   enabled: true
   global:
-    auditManagerHostname: auditmanager-development.oanstaging.com
+    auditManagerHostname: auditmanager.development.oanstaging.com
     postgresqlHost: '{{ tpl .Values.global.postgresqlHost $ }}'
     auditManagerDB: audit_manager
     auditManagerDBUser: audit_manager_user
@@ -499,6 +533,9 @@ openg2p-audit-manager:
         helm.sh/hook: null
         helm.sh/hook-weight: null
         helm.sh/hook-delete-policy: null
+    istio:
+      virtualservice:
+        gateway: istio-system/development
 openg2p-staff-portal-ui:
   enabled: true
   global:
@@ -516,8 +553,11 @@ openg2p-staff-portal-ui:
         cpu: 50m
         memory: 64Mi
     envVars:
-      COOKIE_DOMAIN: .oanstaging.com
-      IAM_URL: https://staff-iam-development.oanstaging.com
+      COOKIE_DOMAIN: .development.oanstaging.com
+      IAM_URL: https://staff-iam.development.oanstaging.com
+    istio:
+      virtualservice:
+        gateway: istio-system/development
 openg2p-awe:
   enabled: true
   awe:
@@ -530,6 +570,9 @@ openg2p-awe:
   keycloak-init:
     enabled: true
     nameOverride: awe-kc-init
+  istio:
+    virtualservice:
+      gateway: istio-system/development
 partner-management:
   enabled: true
   global:
@@ -537,16 +580,17 @@ partner-management:
     pmDBUser: partner_management_user
     pmDBSecret: partner-management-db
     pmDBUserPasswordKey: partner-management-db-user
-    staffPortalUiHostname: partner-management-development.oanstaging.com
+    staffPortalUiHostname: partner-management.development.oanstaging.com
     staffPortalApiHostname: partner-management-staff-portal-api.{{ tpl .Values.global.baseDomain
       $ }}
-    partnerApiHostname: partner-management-partner-api-development.oanstaging.com
+    partnerApiHostname: partner-management-partner-api.development.oanstaging.com
     cookieDomain: .{{ tpl .Values.global.baseDomain $ }}
   staffPortalApi:
     nameOverride: pm-staff-portal-api
     istio:
       virtualservice:
         destination: '{{ .Release.Name }}-pm-staff-portal-api'
+        gateway: istio-system/development
     envVars:
       COMMON_AUTH_DEFAULT_ISSUERS: '["{{ tpl .Values.global.keycloakExternalIssuerUrl
         $ }}"]'
@@ -557,15 +601,17 @@ partner-management:
     istio:
       virtualservice:
         destination: '{{ .Release.Name }}-pm-partner-api'
+        gateway: istio-system/development
   staffPortalUi:
     nameOverride: pm-staff-portal-ui
     istio:
       virtualservice:
         destination: '{{ .Release.Name }}-pm-staff-portal-ui'
+        gateway: istio-system/development
     envVars:
       STAFF_PORTAL_API_URL: http://{{ .Release.Name }}-pm-staff-portal-api
-      IAM_URL: https://staff-iam-development.oanstaging.com
-      KEYCLOAK_LOGOUT_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/logout
+      IAM_URL: https://staff-iam.development.oanstaging.com
+      KEYCLOAK_LOGOUT_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/logout
   postgres-init:
     enabled: true
     nameOverride: pm-pg-init
@@ -582,8 +628,6 @@ partner-management:
       helm.sh/hook: null
       helm.sh/hook-weight: null
       helm.sh/hook-delete-policy: null
-# OAN Consent Manager application: https://github.com/Centre-for-Open-Societal-Systems/consent-management
-# The retained openg2p-consent-manager name selects compatible upstream templates.
 openg2p-consent-manager:
   enabled: true
   global:
@@ -591,8 +635,8 @@ openg2p-consent-manager:
     consentDBUser: consent_manager_user
     consentDBSecret: consent-manager-db
     consentDBUserPasswordKey: consent-manager-db-user
-    consentManagerHostname: consent-manager-development.oanstaging.com
-    consentManagerPartnerHostname: consent-manager-partner-development.oanstaging.com
+    consentManagerHostname: consent-manager.development.oanstaging.com
+    consentManagerPartnerHostname: consent-manager-partner.development.oanstaging.com
     consentManagerBeneHostname: ''
     partnerManagementApiUrl: http://commons-services-pm-partner-api
     partnerManagementAdminApiUrl: http://commons-services-pm-staff-portal-api
@@ -602,15 +646,18 @@ openg2p-consent-manager:
     istio:
       virtualservice:
         destination: '{{ .Release.Name }}-cm-api'
+        gateway: istio-system/development
     envVars:
       CONSENT_MANAGER_AUTH_ISSUER: '{{ tpl .Values.global.keycloakExternalIssuerUrl
         $ }}'
       CONSENT_MANAGER_AUTH_JWKS_URL: '{{ tpl .Values.global.keycloakIssuerUrl $ }}/protocol/openid-connect/certs'
       CONSENT_MANAGER_AWE_CALLBACK_URL: http://{{ .Release.Name }}-cm-api.{{ .Release.Namespace
         }}.svc.cluster.local/consent/v1/awe/webhooks/decision
+      CONSENT_MANAGER_OTP_LOG_CODES: 'false'
+      CONSENT_MANAGER_OTP_PUBLISH_ENABLED: 'false'
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api
-      tag: develop-5361069@sha256:67180496e5f9d5edb5afb9727d9da4501e96599166c1712e4e24dbf1f6fa2a77
+      tag: dev-48e64c249056@sha256:cca3273868b8ed28d193642b346fc3369b450ad7feefd42d02e91e84cb074831
   extraApis:
   - enabled: true
     nameOverride: cm-partner-api
@@ -624,7 +671,7 @@ openg2p-consent-manager:
       virtualservice:
         enabled: true
         host: '{{ tpl .Values.global.consentManagerPartnerHostname $ }}'
-        gateway: internal
+        gateway: istio-system/development
         destination: '{{ .Release.Name }}-cm-partner-api'
         destinationPort: 80
         prefix: /api/consent-manager-partner/
@@ -643,7 +690,7 @@ openg2p-consent-manager:
       virtualservice:
         enabled: true
         host: '{{ tpl .Values.global.consentManagerBeneHostname $ }}'
-        gateway: internal
+        gateway: istio-system/development
         destination: '{{ .Release.Name }}-cm-bene-api'
         destinationPort: 80
         prefix: /api/consent-manager-bene/
@@ -655,9 +702,10 @@ openg2p-consent-manager:
     istio:
       virtualservice:
         destination: '{{ .Release.Name }}-cm-ui'
+        gateway: istio-system/development
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-ui
-      tag: develop-5361069@sha256:1ae7cc25b094e9c72ea9262a8d920480d2049b13d1505f2a9a2aeeeff8abf92d
+      tag: dev-48e64c249056@sha256:423f78a0d99b8bd65605848bf72e6d0abf84cb07303fdd6d8cf9fd424c5620c7
   postgres-init:
     enabled: true
     nameOverride: cm-pg-init
@@ -675,7 +723,7 @@ openg2p-consent-manager:
     partnerBaseUrl: http://{{ .Release.Name }}-cm-partner-api
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-sanity
-      tag: develop-5361069@sha256:1af320db949eb1c641dec5533b3f7352980483de45774b16e310cca996a0f330
+      tag: dev-48e64c249056@sha256:e5d2a30e5a30c252f30849fb7c61c772691f7521906c575ab3fb22584c2358e7
 keycloak-init:
   enabled: true
   keycloak:
@@ -710,20 +758,22 @@ keycloak-init:
         clientRoleMappings:
           openg2p-superset:
           - Admin
-# OAN Aggregation API: https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
-# Implemented locally by templates/aggregation-api.yaml; enable only after prerequisites.
 aggregationApi:
   enabled: false
   nameOverride: ''
   image:
-    repository: ''
+    repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/aggregation-api
     tag: ''
-    digest: ''
+    digest: sha256:3bd17245a75252bdf497cc1bab22b9e1148d0fedce376e7892a9e551bcefb7b4
     pullPolicy: IfNotPresent
   imagePullSecrets: []
   replicas: 1
   containerPort: 8100
   servicePort: 80
+  virtualService:
+    enabled: false
+    host: aggregation.development.oanstaging.com
+    gateway: istio-system/development
   env: []
   envFrom: []
   resources:

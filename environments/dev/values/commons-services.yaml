@@ -1,85 +1,154 @@
 global:
-  baseDomain: oanstaging.com
-  keycloakBaseUrl: https://keycloak-development.oanstaging.com
+  baseDomain: development.oanstaging.com
+  keycloakBaseUrl: https://keycloak.development.oanstaging.com
   keycloakInternalUrl: http://commons-keycloak.commons.svc.cluster.local:80
-  keycloakExternalIssuerUrl: https://keycloak-development.oanstaging.com/realms/staff
+  keycloakExternalIssuerUrl: https://keycloak.development.oanstaging.com/realms/staff
   keycloakIssuerUrl: http://commons-keycloak.commons.svc.cluster.local:80/realms/staff
-  iamHostname: staff-iam-development.oanstaging.com
-  staffPortalApiHostname: staff-iam-development.oanstaging.com
-  agentPortalApiHostname: agent-iam-development.oanstaging.com
-  staffPortalHostname: staff-portal-development.oanstaging.com
-  staffPortalCookieDomain: .oanstaging.com
-  authCookieDomain: .oanstaging.com
-  cookieDomain: .oanstaging.com
-  iamUrl: https://staff-iam-development.oanstaging.com
+  iamHostname: staff-iam.development.oanstaging.com
+  staffPortalApiHostname: staff-iam.development.oanstaging.com
+  agentPortalApiHostname: agent-iam.development.oanstaging.com
+  staffPortalHostname: staff-portal.development.oanstaging.com
+  staffPortalCookieDomain: .development.oanstaging.com
+  authCookieDomain: .development.oanstaging.com
+  cookieDomain: .development.oanstaging.com
+  iamUrl: https://staff-iam.development.oanstaging.com
   iamServiceUrl: http://commons-services-iam-staff-portal-api.commons.svc.cluster.local
-  masterDataHostname: master-data-development.oanstaging.com
-  masterDataUiHostname: master-data-ui-development.oanstaging.com
+  masterDataHostname: master-data.development.oanstaging.com
+  masterDataUiHostname: master-data-ui.development.oanstaging.com
   masterDataApiUrl: http://commons-services-master-data-api.commons.svc.cluster.local
-  aweHostname: awe-development.oanstaging.com
+  aweHostname: awe.development.oanstaging.com
   aweBaseUrl: http://commons-services-awe.commons.svc.cluster.local
-  odkHostname: odk-central-development.oanstaging.com
+  odkHostname: odk-central.development.oanstaging.com
   supersetHostname: ''
   certifyHostname: ''
   agentPortalHostname: ''
 superset:
   enabled: false
+  istio:
+    virtualservice:
+      gateway: istio-system/development
 openg2p-inji-certify:
   enabled: false
+  istio:
+    virtualservice:
+      gateway: istio-system/development
 master-data:
   global:
-    masterDataHostname: master-data-development.oanstaging.com
-    masterDataUiHostname: master-data-ui-development.oanstaging.com
+    masterDataHostname: master-data.development.oanstaging.com
+    masterDataUiHostname: master-data-ui.development.oanstaging.com
   masterDataUi:
-    iamPublicUrl: https://staff-iam-development.oanstaging.com
+    iamPublicUrl: https://staff-iam.development.oanstaging.com
     envVars:
-      COOKIE_DOMAIN: .oanstaging.com
+      COOKIE_DOMAIN: .development.oanstaging.com
+    istio:
+      virtualservice:
+        gateway: istio-system/development
+  masterDataAPI:
+    istio:
+      virtualservice:
+        gateway: istio-system/development
 odk-central:
   backend:
     envVars:
-      OIDC_ISSUER_URL: https://keycloak-development.oanstaging.com/realms/staff
+      OIDC_ISSUER_URL: https://keycloak.development.oanstaging.com/realms/staff
+  istio:
+    virtualservice:
+      gateway: istio-system/development
 esignet:
-  hostname: esignet-development.oanstaging.com
+  hostname: esignet.development.oanstaging.com
+  istio:
+    virtualservice:
+      gateway: istio-system/development
+  oidcUi:
+    istio:
+      virtualservice:
+        gateway: istio-system/development
 mock-identity-system:
-  hostname: esignet-development.oanstaging.com
+  hostname: esignet.development.oanstaging.com
+  istio:
+    virtualservice:
+      gateway: istio-system/development
 openg2p-iam-service:
   global:
-    keycloakApplicationUrl: https://keycloak-development.oanstaging.com
-    registryApplicationUrl: https://farmer-registry-development.oanstaging.com
-    minioApplicationUrl: https://minio-console-development.oanstaging.com
+    keycloakApplicationUrl: https://keycloak.development.oanstaging.com
+    registryApplicationUrl: https://farmer-registry.development.oanstaging.com
+    minioApplicationUrl: https://minio-console.development.oanstaging.com
     supersetApplicationUrl: ''
-    iamStaffUiApplicationUrl: https://iam-staff-ui-development.oanstaging.com
-    masterDataApplicationUrl: https://master-data-development.oanstaging.com
-    aweApplicationUrl: https://awe-development.oanstaging.com
-    staffPortalDefaultRedirectUri: https://staff-portal-development.oanstaging.com
+    iamStaffUiApplicationUrl: https://iam-staff-ui.development.oanstaging.com
+    masterDataApplicationUrl: https://master-data.development.oanstaging.com
+    aweApplicationUrl: https://awe.development.oanstaging.com
+    staffPortalDefaultRedirectUri: https://staff-portal.development.oanstaging.com
     agentPortalDefaultRedirectUri: ''
   iamStaffUi:
-    hostname: iam-staff-ui-development.oanstaging.com
+    hostname: iam-staff-ui.development.oanstaging.com
     envVars:
-      COOKIE_DOMAIN: .oanstaging.com
-      BACKEND_API_URL: https://staff-iam-development.oanstaging.com
+      COOKIE_DOMAIN: .development.oanstaging.com
+      BACKEND_API_URL: https://staff-iam.development.oanstaging.com
+    istio:
+      virtualservice:
+        gateway: istio-system/development
+  iamStaffPortalApi:
+    istio:
+      virtualservice:
+        gateway: istio-system/development
+  iamAgentPortalApi:
+    istio:
+      virtualservice:
+        gateway: istio-system/development
 openg2p-staff-portal-ui:
   staffPortalUi:
     envVars:
-      COOKIE_DOMAIN: .oanstaging.com
-      IAM_URL: https://staff-iam-development.oanstaging.com
+      COOKIE_DOMAIN: .development.oanstaging.com
+      IAM_URL: https://staff-iam.development.oanstaging.com
+    istio:
+      virtualservice:
+        gateway: istio-system/development
 openg2p-audit-manager:
   global:
-    auditManagerHostname: auditmanager-development.oanstaging.com
+    auditManagerHostname: auditmanager.development.oanstaging.com
+  auditManager:
+    istio:
+      virtualservice:
+        gateway: istio-system/development
 partner-management:
   global:
-    staffPortalUiHostname: partner-management-development.oanstaging.com
-    partnerApiHostname: partner-management-partner-api-development.oanstaging.com
+    staffPortalUiHostname: partner-management.development.oanstaging.com
+    partnerApiHostname: partner-management-partner-api.development.oanstaging.com
   staffPortalUi:
     envVars:
-      IAM_URL: https://staff-iam-development.oanstaging.com
-      KEYCLOAK_LOGOUT_URL: https://keycloak-development.oanstaging.com/realms/staff/protocol/openid-connect/logout
+      IAM_URL: https://staff-iam.development.oanstaging.com
+      KEYCLOAK_LOGOUT_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/logout
+    istio:
+      virtualservice:
+        gateway: istio-system/development
+  staffPortalApi:
+    istio:
+      virtualservice:
+        gateway: istio-system/development
+  partnerApi:
+    istio:
+      virtualservice:
+        gateway: istio-system/development
 openg2p-consent-manager:
   global:
-    consentManagerHostname: consent-manager-development.oanstaging.com
-    consentManagerPartnerHostname: consent-manager-partner-development.oanstaging.com
+    consentManagerHostname: consent-manager.development.oanstaging.com
+    consentManagerPartnerHostname: consent-manager-partner.development.oanstaging.com
     consentManagerBeneHostname: ''
   consentManagerApi:
     envVars:
-      CONSENT_MANAGER_AWE_CALLBACK_URL: http://{{ .Release.Name }}-cm-api.{{ .Release.Namespace
-        }}.svc.cluster.local/consent/v1/awe/webhooks/decision
+      CONSENT_MANAGER_AWE_CALLBACK_URL: http://{{ .Release.Name }}-cm-api.{{ .Release.Namespace }}.svc.cluster.local/consent/v1/awe/webhooks/decision
+    istio:
+      virtualservice:
+        gateway: istio-system/development
+  ui:
+    istio:
+      virtualservice:
+        gateway: istio-system/development
+keymanager:
+  istio:
+    virtualservice:
+      gateway: istio-system/development
+openg2p-awe:
+  istio:
+    virtualservice:
+      gateway: istio-system/development

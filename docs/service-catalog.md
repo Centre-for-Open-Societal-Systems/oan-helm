@@ -13,7 +13,7 @@ no separately named `coss-consent-manager` or `coss-aggregator` child charts.
 | Component | Helm implementation | Configuration | Default state |
 | --- | --- | --- | --- |
 | COSS Consent Manager | Pinned upstream `openg2p-consent-manager:1.0.2` child chart, with COSS image overrides | [`openg2p-consent-manager` in Commons values](../charts/openg2p-commons-services/values.yaml); API image at `consentManagerApi.image`, UI at `ui.image`, sanity at `sanity.image` | Enabled; verified COSS API/UI/sanity digests |
-| COSS Aggregation API | Local [Deployment and Service template](../charts/openg2p-commons-services/templates/aggregation-api.yaml) inside the Commons parent chart | [`aggregationApi` in Commons values](../charts/openg2p-commons-services/values.yaml) | Published candidate [image override](../examples/dev/aggregation-image.yaml); disabled pending Consent compatibility and runtime configuration |
+| COSS Aggregation API | Local [Deployment and Service template](../charts/openg2p-commons-services/templates/aggregation-api.yaml) inside the Commons parent chart | [`aggregationApi` in Commons values](../charts/openg2p-commons-services/values.yaml) | Verified image digest included; disabled by default pending runtime configuration |
 
 This dependency entry in Commons `Chart.yaml` selects the reused Consent
 templates, not the application image publisher:
@@ -25,30 +25,19 @@ templates, not the application image publisher:
   version: 1.0.2
 ```
 
-The parent values override those templates with images verified for the COSS
-[`consent-management`](https://github.com/Centre-for-Open-Societal-Systems/consent-management)
-source revision `536106974a7f6d67501a45dfc02cb9da95348f37`. The ECR image paths
-also retain the `openg2p/commons/` prefix. Names alone do not identify which
-application source built the container; the recorded image tags and digests
-are in [`components.json`](../releases/components.json). The partner API
-and expiry CronJob reuse the API image. Keeping the dependency and workload
-names preserves existing Helm resource ownership and saved values.
+The current parent values select Consent from COSS commit `48e64c249056` and
+Aggregation from `a5fa17fd7e7f`, by ECR digest. API/partner API/expiry share the
+API image. Template names, dependency pins and existing owners remain intact.
+See [current image/test evidence](../releases/consent-aggregation-20261019.json);
+`components.json` and older candidate reports are historical inventories.
 
-Newer COSS source `d6ce86b` is now published as candidate tag `dev-d6ce86b9e3f9`.
-Select it explicitly with the [image-only overlay](../examples/dev/consent-image-values.yaml);
-see [its build adjustments and verification](consent-candidate-build.md).
-The immutable chart defaults continue to select `develop-5361069`.
-
-Aggregation configures the COSS
-[`oan-aggregation-api`](https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api)
-application. It has no `Chart.yaml` dependency entry because its template is
-already part of the Commons parent chart. `aggregationApi.enabled: false`
-renders no Aggregation resources. Enabling it requires a verified image,
-database/migrations, registry catalog, persistent signing key and Consent/Partner
-Management/auth configuration. Inclusion of this workload template does not
-mean the component is ready to install. The pinned Consent build also predates
-Aggregation's subject-consent requirements. See the
-[prerequisites and compatibility guide](consent-aggregation-prerequisites.md).
+Aggregation is a local parent template, so it has no separate dependency entry.
+It is now stateless: no DB, queue, migration or OTP storage. Its optional
+VirtualService uses the shared Gateway. Defaults stay disabled until persistent
+signing, catalog, staff authentication and reviewed bindings are prepared.
+Consent uses per-binding `consent_method`; old global subject-consent flags are
+absent. OTP remains unavailable pending SMS. Follow the
+[current prerequisites](consent-aggregation-prerequisites.md).
 
 ## Five installable chart entries
 
@@ -74,8 +63,8 @@ Aggregation's subject-consent requirements. See the
 | `oan_farmerregistry_dashboard` | Farmer dashboard UI | [UI template](../charts/openg2p-farmer-registry/templates/dashboard-ui.yaml), `dashboardUi.*` | Configurable workload included; matching published image unavailable; disabled |
 | `oan_cropsown_dashboard` | Crop dashboard UI | [UI template](../charts/openg2p-cropsown-registry/templates/dashboard-ui.yaml), `dashboardUi.*` | Configurable workload included; current published image unavailable; disabled; legacy database-based UI is not substituted |
 | `oan_livestock_dashboard` | Livestock dashboard UI | [UI template](../charts/openg2p-livestock-registry/templates/dashboard-ui.yaml), `dashboardUi.*` | Configurable workload included; matching published image unavailable; disabled |
-| `consent-management` | Consent staff API, partner API, UI, expiry CronJob, seed/sanity and initialization | [Commons values](../charts/openg2p-commons-services/values.yaml), `openg2p-consent-manager.*`; bundled `openg2p-consent-manager:1.0.2` templates | COSS `develop-5361069` API/UI/sanity images verified and pinned to separate digests; beneficiary API remains disabled |
-| `oan-aggregation-api` | Aggregation API Deployment and ClusterIP Service | [Aggregation template](../charts/openg2p-commons-services/templates/aggregation-api.yaml), `aggregationApi.*` in Commons values | Candidate ECR image published, 96 unit tests passed; disabled pending compatible Consent, DB, key, catalog, bindings and route |
+| `consent-management` | Consent staff API, partner API, UI, expiry CronJob, seed/sanity and initialization | [Commons values](../charts/openg2p-commons-services/values.yaml), `openg2p-consent-manager.*`; bundled `openg2p-consent-manager:1.0.2` templates | COSS `48e64c249056` API/UI/sanity images pinned by ECR digest; beneficiary API and new partner portal remain disabled |
+| `oan-aggregation-api` | Aggregation API Deployment and ClusterIP Service | [Aggregation template](../charts/openg2p-commons-services/templates/aggregation-api.yaml), `aggregationApi.*` in Commons values | COSS `a5fa17fd7e7f` ECR image; 171 unit tests pass; stateless; disabled by default pending key/catalog/auth/bindings; optional route included |
 | No DA dashboard repository identified | Optional DA API/UI workload definitions | [DA templates](../charts/openg2p-da-registry/templates/), `dashboardApi.*`, `dashboardUi.*` | Explicit placeholders for future verified components; disabled; no source/image equivalence claimed |
 
 Application source code stays in those repositories. These charts configure
@@ -112,7 +101,7 @@ in the bundled archives under `charts/openg2p-commons-services/charts/`.
 | `superset` | Superset web/worker/init and integration | Disabled, matching inspected dev configuration; public URL unconfirmed |
 | `esignet` | eSignet authentication components | Enabled; verified development route |
 | `mock-identity-system` | eSignet mock identity integration | Enabled; existing shared eSignet route preserved |
-| `odk-central` | ODK Central frontend/backend, Enketo and form conversion | Enabled; canonical `odk-central-development.oanstaging.com` |
+| `odk-central` | ODK Central frontend/backend, Enketo and form conversion | Enabled; canonical `odk-central.development.oanstaging.com` |
 | `openg2p-iam-service` | Staff IAM API, agent IAM API, staff IAM UI, login provider and initialization configuration | Enabled; confirmed API/UI routes; agent portal redirect unset pending a confirmed URL |
 | `openg2p-inji-certify` | Credential issuing and initialization | Disabled, matching inspected dev configuration; public URL unconfirmed |
 | `openg2p-audit-manager` | Shared audit API | Enabled; canonical development route |
@@ -144,6 +133,7 @@ direct links. Commons explicitly lists OAN Consent Manager and OAN Aggregation.
 Original `openg2p-*` Helm identifiers and upstream dependency pins are retained
 for compatibility with existing releases.
 
-The exact new Consent/Aggregation candidate pair passed
-[30 isolated checks](consent-aggregation-local-check.md). Candidate image overlays
-remain explicit, Aggregation remains disabled, and production prerequisites still apply.
+The historical candidate pair's [30 isolated checks](consent-aggregation-local-check.md)
+do not validate the current images. Current evidence records 171 Aggregation unit
+tests, 195 Consent tests with disposable PostgreSQL, and two successful migrations
+of an isolated fresh live DB copy. Live business acceptance is recorded separately.
