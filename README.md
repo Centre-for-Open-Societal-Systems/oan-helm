@@ -23,13 +23,12 @@ and image digests are separate; automatic build-number synchronization is deferr
 | --- | --- |
 | `charts/` | Five editable source trees; start at [charts/README.md](charts/README.md) |
 | `docs/service-catalog.md` | Every included service, its COSS repository, owning chart and status |
-| `environments/dev/` | Canonical endpoint inventory and public URL migration overlays |
+| `environments/dev/` | Canonical endpoint inventory and public URL migration overlays, plus APISIX gateway values; see [the APISIX gateway guide](docs/apisix-gateway.md) |
 | `examples/dev/` | Public dev configuration checklists; no private live values |
 | `releases/` | Release manifest, provenance, deployment comparison and validation evidence |
 | `repository/` | Generated Rancher downloads, SHA256SUMS and cumulative Helm index, including historical versions |
 | `docs/` | Readable service catalog, URL migration and Rancher guides |
 | `scripts/validate.py` | Dependency, render, packaging and repository validation |
-| `environments/grievance-dev/` | APISIX gateway values for the separate grievance cluster; see [the APISIX gateway guide](docs/apisix-gateway.md) |
 
 Rancher repository URLs served directly by GitHub:
 

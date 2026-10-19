@@ -1,5 +1,6 @@
-# Values for the oan-grievance-gateway chart (oan_grievance_service/apisix/k8s) on the
-# grievance dev cluster (endpoints.yaml in this folder).
+# Values for the oan-grievance-gateway chart (oan_grievance_service/apisix/k8s).
+# Target: the grievance RKE2 node (13.233.56.204), not the OpenG2P cluster that `server`
+# in ../endpoints.yaml names.
 # Install in namespace `develop`, next to the grievance Frappe Services, so each
 # ApisixRoute backend resolves there. See docs/apisix-gateway.md.
 

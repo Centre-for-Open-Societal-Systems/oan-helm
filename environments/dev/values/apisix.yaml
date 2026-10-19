@@ -1,7 +1,8 @@
 # Upstream chart apisix/apisix 2.18.2 (APISIX 3.19.0) from
 # https://apache.github.io/apisix-helm-chart, with its bundled
 # apisix-ingress-controller subchart. Not vendored or repackaged here.
-# Grievance dev cluster (endpoints.yaml in this folder), not the OpenG2P dev cluster.
+# Target: the grievance RKE2 node (13.233.56.204, ingress-nginx), not the OpenG2P cluster
+# that `server` in ../endpoints.yaml names.
 # Release: name `apisix`, namespace `apisix`. See docs/apisix-gateway.md.
 
 apisix:

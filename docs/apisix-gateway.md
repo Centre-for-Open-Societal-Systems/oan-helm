@@ -4,14 +4,14 @@ The OAN API gateway is Apache APISIX, configured through the APISIX Ingress Cont
 No cluster deployment has been performed.
 
 The grievance service runs on its own RKE2 cluster (`13.233.56.204`), separate from the
-OpenG2P dev cluster in `environments/dev` (`13.201.58.55`). Its values live in
-[environments/grievance-dev](../environments/grievance-dev/). Never install them into the
-OpenG2P cluster.
+OpenG2P dev cluster (`server` in `environments/dev/endpoints.yaml`, `13.201.58.55`). Its
+gateway values sit with the other dev values in `environments/dev/values/`, and each file
+names its target cluster in its header. Never install them into the OpenG2P cluster.
 
 | Part | Source | Values |
 | --- | --- | --- |
-| APISIX and the Ingress Controller | Upstream chart `apisix/apisix` 2.18.2 (bundles `apisix-ingress-controller`) from `https://apache.github.io/apisix-helm-chart`. It is not vendored, repackaged or added to `releases/` | [grievance-dev/values/apisix.yaml](../environments/grievance-dev/values/apisix.yaml) |
-| Grievance routes | Chart `oan-grievance-gateway` in [oan_grievance_service/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/tree/develop/apisix/k8s), generated from the service's OpenAPI spec. It is not copied here | [grievance-dev/values/oan-grievance-gateway.yaml](../environments/grievance-dev/values/oan-grievance-gateway.yaml) |
+| APISIX and the Ingress Controller | Upstream chart `apisix/apisix` 2.18.2 (bundles `apisix-ingress-controller`) from `https://apache.github.io/apisix-helm-chart`. It is not vendored, repackaged or added to `releases/` | [dev/values/apisix.yaml](../environments/dev/values/apisix.yaml) |
+| Grievance routes | Chart `oan-grievance-gateway` in [oan_grievance_service/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/tree/develop/apisix/k8s), generated from the service's OpenAPI spec. It is not copied here | [dev/values/oan-grievance-gateway.yaml](../environments/dev/values/oan-grievance-gateway.yaml) |
 
 This repository holds only the values for both charts. The grievance service will get its
 own chart repository and releases later; until then, install its chart from a checkout of
@@ -41,10 +41,10 @@ grievance host changes, from the Frappe Service to APISIX.
 ```sh
 helm repo add apisix https://apache.github.io/apisix-helm-chart
 helm upgrade --install apisix apisix/apisix --version 2.18.2 \
-  -n apisix --create-namespace -f environments/grievance-dev/values/apisix.yaml
+  -n apisix --create-namespace -f environments/dev/values/apisix.yaml
 
 helm upgrade --install oan-grievance-gateway <oan_grievance_service>/apisix/k8s \
-  -n develop -f environments/grievance-dev/values/oan-grievance-gateway.yaml
+  -n develop -f environments/dev/values/oan-grievance-gateway.yaml
 ```
 
 The release name `apisix` matters: the Ingress Controller values point at the
