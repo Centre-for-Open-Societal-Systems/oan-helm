@@ -1,5 +1,10 @@
 # Manual Rancher installation and upgrade
 
+For the currently installed Consent/Aggregation release, start with
+[live Rancher status and upgrade controls](rancher-consent-aggregation-status.md).
+It is already running dev.5 at revision 17. Native UI upgrades still require
+reviewed bootstrap-Job suppression and complete URL/Gateway values; see that page.
+
 Complete [readiness prerequisites](readiness.md) for components being enabled.
 For Consent/Aggregation, follow the [component preparation guide](consent-aggregation-prerequisites.md).
 Use the five packages after repository publication. No

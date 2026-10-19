@@ -6,6 +6,11 @@ Current chart: **1.0.0-dev.5**. Consent comes from COSS commit
 existing ECR repositories and selected by digest. See [current evidence](../releases/consent-aggregation-20261019.json).
 Historical candidate/integration reports describe older images only.
 
+The existing dev release is now upgraded, with Aggregation enabled. Runtime
+Secrets, catalog and registry service identity are prepared; see
+[installed status and remaining functional prerequisites](rancher-consent-aggregation-status.md).
+The checklist below also applies when preparing another environment.
+
 ## Current application contract
 
 Aggregation is stateless: **no database, migration, Kafka, worker, reaper or OTP

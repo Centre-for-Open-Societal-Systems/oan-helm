@@ -4,6 +4,10 @@ All five charts are packageable. Installing a package still requires the
 environment's private values, pull credentials and service prerequisites.
 Rendering does not prove runtime compatibility or migration safety.
 
+Current new-dev Consent and Aggregation are deployed at chart dev.5/revision 17;
+Aggregation is enabled. [Live status and remaining prerequisites](rancher-consent-aggregation-status.md)
+distinguish installed components from partner/staff workflows still awaiting setup.
+
 | Component | Available evidence | Prerequisites / default behavior |
 | --- | --- | --- |
 | Farmer Registry | Source `90811b6`, platform `1.2.2-rc.544`; core images `90811b61a59f` verified in ECR | Retain current release values, database/identity/Secret wiring and reporting preparation |

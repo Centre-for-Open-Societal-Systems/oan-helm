@@ -19,6 +19,11 @@ Component image versions are independent; automatic synchronization is deferred.
 Old application URLs remain compatible until explicit migration completion;
 browser navigations redirect temporarily and API requests retain their methods.
 
+The new-dev `commons-services/commons` release now runs dev.5 with **Aggregation
+enabled** and the new Consent images. See [installed Rancher status and remaining
+prerequisites](docs/rancher-consent-aggregation-status.md). Defaults remain disabled
+for new installations until their runtime configuration is ready.
+
 Use the [service onboarding guide](docs/service-onboarding.md) to add or enable a
 service without an individual Route 53 record, Nginx site or certificate.
 
