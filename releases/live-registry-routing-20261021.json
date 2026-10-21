@@ -1,0 +1,196 @@
+{
+  "checkedAtUtc": "2026-10-21T05:53:36.788051+00:00",
+  "environment": "new development",
+  "reason": "Revision-16 application deployments restored legacy hosts and internal Gateway; browser redirects still selected canonical hosts.",
+  "releases": [
+    {
+      "name": "cropsown-registry",
+      "namespace": "crop",
+      "beforeRevision": 16,
+      "afterRevision": 17,
+      "chartVersion": "0.0.0-develop",
+      "status": "deployed"
+    },
+    {
+      "name": "livestock-registry",
+      "namespace": "livestock",
+      "beforeRevision": 16,
+      "afterRevision": 17,
+      "chartVersion": "1.2.0+aa7ef81",
+      "status": "deployed"
+    }
+  ],
+  "chartRepositoryVersionUnchanged": "1.0.0-dev.6",
+  "exactInstalledChartsReconstructed": true,
+  "dependencyPinsPreserved": true,
+  "nonJobBaselineMatchedBeforeUpgrade": true,
+  "proposedManifestMatchedAppliedManifest": true,
+  "applicationImageChanges": false,
+  "releaseOwnershipPreserved": true,
+  "legacyCompatibilityRetained": true,
+  "privateDashboardRoutesRetained": true,
+  "workloads": {
+    "checked": 23,
+    "ready": 23,
+    "updated": 23,
+    "observedGenerationsCurrent": true
+  },
+  "initialization": {
+    "hookExecutionDisabled": true,
+    "databaseSeedHookRerun": false,
+    "ordinaryJobSpecificationsUnchanged": true,
+    "ordinaryTtlCleanedJobsRecreated": 6,
+    "ordinaryJobsCompleted": 6,
+    "note": "Keeping an unchanged Job in a Helm manifest recreates it when TTL cleanup previously removed it. Future URL-only repairs must suppress Jobs as well as hooks."
+  },
+  "releaseSecretDataUnchanged": true,
+  "syntheticFixtures": {
+    "expected": 4,
+    "newRows": 0,
+    "existingRowsUnchanged": true
+  },
+  "publicRoutingRegression": {
+    "checkedAtUtc": "2026-10-21T05:49:57.101986+00:00",
+    "live": true,
+    "passed": true,
+    "postmanExitCode": 0,
+    "stats": {
+      "requests": {
+        "executed": 14,
+        "failed": 0
+      },
+      "assertions": {
+        "executed": 28,
+        "failed": 0
+      }
+    },
+    "credentialsRequired": false,
+    "cloudRunEventsEnabled": false
+  },
+  "browserRoutingRegression": {
+    "checkedAtUtc": "2026-10-21T05:53:01.935591+00:00",
+    "live": true,
+    "passed": true,
+    "registries": [
+      {
+        "registry": "crop",
+        "passed": true,
+        "navigations": [
+          {
+            "host": "crop-registry-development.oanstaging.com",
+            "path": "/"
+          },
+          {
+            "host": "crop-registry.development.oanstaging.com",
+            "path": "/"
+          },
+          {
+            "host": "crop-registry.development.oanstaging.com",
+            "path": "/en"
+          },
+          {
+            "host": "crop-registry.development.oanstaging.com",
+            "path": "/api/login"
+          },
+          {
+            "host": "keycloak.development.oanstaging.com",
+            "path": "/realms/staff/protocol/openid-connect/auth"
+          }
+        ],
+        "loginHost": "keycloak.development.oanstaging.com",
+        "loginClient": [
+          "staff-portal"
+        ],
+        "loginRedirect": [
+          "https://staff-iam.development.oanstaging.com/auth/callback"
+        ],
+        "httpErrors": [
+          {
+            "host": "crop-registry.development.oanstaging.com",
+            "path": "/api/me",
+            "status": 401
+          }
+        ]
+      },
+      {
+        "registry": "livestock",
+        "passed": true,
+        "navigations": [
+          {
+            "host": "livestock-registry-development.oanstaging.com",
+            "path": "/"
+          },
+          {
+            "host": "livestock-registry.development.oanstaging.com",
+            "path": "/"
+          },
+          {
+            "host": "livestock-registry.development.oanstaging.com",
+            "path": "/en"
+          },
+          {
+            "host": "livestock-registry.development.oanstaging.com",
+            "path": "/api/login"
+          },
+          {
+            "host": "keycloak.development.oanstaging.com",
+            "path": "/realms/staff/protocol/openid-connect/auth"
+          }
+        ],
+        "loginHost": "keycloak.development.oanstaging.com",
+        "loginClient": [
+          "staff-portal"
+        ],
+        "loginRedirect": [
+          "https://staff-iam.development.oanstaging.com/auth/callback"
+        ],
+        "httpErrors": [
+          {
+            "host": "livestock-registry.development.oanstaging.com",
+            "path": "/api/me",
+            "status": 401
+          }
+        ]
+      }
+    ],
+    "authenticatedSessionTested": false,
+    "credentialsRequired": false
+  },
+  "staffRegression": {
+    "finishedAtUtc": "2026-10-21T05:51:25.584296+00:00",
+    "passed": true,
+    "postmanExitCode": 0,
+    "stats": {
+      "iterations": {
+        "executed": 1,
+        "failed": 0
+      },
+      "requests": {
+        "executed": 39,
+        "failed": 0
+      },
+      "test-scripts": {
+        "executed": 39,
+        "failed": 0
+      },
+      "prerequest-scripts": {
+        "executed": 26,
+        "failed": 0
+      },
+      "assertions": {
+        "executed": 107,
+        "failed": 0
+      }
+    },
+    "uniqueScenariosExecuted": 20,
+    "requiredScenarios": 20,
+    "tabsOpened": 20
+  },
+  "totalApiAssertions": 135,
+  "authenticatedRegistryBrowserSessionTested": false,
+  "applicationRepositoriesChanged": false,
+  "applicationCiChanged": false,
+  "deploymentRecurrenceRisk": "Older application Jenkins inputs still contain old URLs. Adopt canonical profiles/compatibility renderer before running those deployments; this Helm PR does not change application CI.",
+  "backupDirectory": "/var/backups/oan-registry-routing/20261021T054709Z",
+  "privateValuesOrCredentialsPublished": false
+}

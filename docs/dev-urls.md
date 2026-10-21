@@ -10,6 +10,13 @@ review: installing new chart defaults must not replace current live application
 images or settings accidentally. Current live results are recorded in
 `releases/live-domain-migration.json`.
 
+The 21 October Crop/Livestock routing repair and follow-up checks are recorded in
+[`live-registry-routing-20261021.json`](../releases/live-registry-routing-20261021.json).
+Their later revision-16 deployments had restored old hosts with the `internal`
+Gateway while legacy browser redirects still selected the canonical URLs.
+Both existing releases now use revision 17 with their original chart versions,
+images, resource names and Helm ownership.
+
 | Service | Canonical URL |
 | --- | --- |
 | keycloak | `https://keycloak.development.oanstaging.com` |
@@ -89,3 +96,65 @@ identity/release settings for recovery.
 The migration does not enable Aggregation, DA or unavailable components. Reserved
 future hostnames are not evidence of running services. Use the
 [service onboarding and enablement guide](service-onboarding.md) for new services.
+
+## Preventing a deployment from restoring old routes
+
+The OAN charts from dev.4 onward already select the canonical hosts and shared
+Gateway. Keep the current release name and namespace when upgrading in Rancher;
+reconcile private saved values before changing charts or images.
+
+Application-repository deployment settings are a separate source of overrides.
+At inspection, Crop's `ci/deploy-crop-dev.sh` explicitly writes old public hosts
+after reading saved release values. Livestock's `Jenkinsfile` selects
+`helm/openg2p-livestock-registry/values-new-dev.yaml`, which also contains old
+hosts. Merely saving corrected values in Rancher cannot override those inputs.
+Application CI was outside the authorized chart-repository scope and was not
+changed. **Those older Jenkins deployments can still revert this repair** until
+their deployment inputs adopt the canonical environment profile/renderer.
+
+For Crop, the existing script's environment inputs must select
+`REGISTRY_HOST=crop-registry.development.oanstaging.com`,
+`STAFF_API_HOST=staff-crop.development.oanstaging.com`,
+`PARTNER_API_HOST=partner-crop.development.oanstaging.com`,
+`KEYCLOAK_URL=https://keycloak.development.oanstaging.com`,
+`MINIO_HOST=minio-farmer.development.oanstaging.com`,
+`STAFF_IAM_URL=https://staff-iam.development.oanstaging.com`, and
+`COOKIE_DOMAIN=.development.oanstaging.com`. The public VirtualServices must
+also select `istio-system/development`; changing hostnames alone is insufficient.
+Livestock needs the corresponding canonical values from
+[`environments/dev/values/livestock.yaml`](../environments/dev/values/livestock.yaml).
+Review these URL profiles against saved private configuration rather than
+replacing whole custom lists. Do not expose private dashboard/test routes.
+
+Before any deployment, inspect the rendered public hosts, Gateway and image
+diff. For a legacy chart, retain the URL compatibility post-renderer. URL-only
+repairs must suppress initialization Jobs as well as hooks: Jobs already cleaned
+up by TTL are recreated by Helm even if their manifests are unchanged. In the
+21 October repair six such ordinary initialization Jobs were recreated and
+completed; database seed hooks did not run, and release Secret values and the
+synthetic fixtures remained unchanged. Retain the private release backup and
+assess initialization/migration behavior before any future upgrade.
+
+After deployment, run the independent public routing regression:
+
+```sh
+python scripts/check-registry-public-urls.py
+```
+
+It performs 14 credential-free GET requests and 28 assertions against both
+registries: canonical UI/API responses, temporary browser redirects with path
+and query preservation, and old JSON/API proxy compatibility. It must pass in
+addition to internal registry/data tests. A missing route or mismatched response
+exits nonzero. It is also a preflight in the automated staff regression; it does
+not itself prevent a deployment or reconcile cluster resources.
+
+For a real browser check through the shared IAM/Keycloak login form, install
+Playwright/Chromium as for the partner browser test, then run:
+
+```sh
+python scripts/test-registry-public-browser.py --output .build/registry-browser
+```
+
+This checks anonymous navigation, including the expected `/api/me` 401 that
+starts sign-in. It does not submit credentials or prove an authenticated registry
+session. CI chart validation remains independent of live cluster reachability.

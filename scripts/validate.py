@@ -428,6 +428,35 @@ def main():
                 assert bad.returncode != 0, f"{component} accepts an invalid digest"
                 # Existing API DB Secret references must remain present.
                 assert secret_refs(baseline) <= secret_refs(enabled)
+            if chart.name == "openg2p-commons-services":
+                assert values["consentPartnerPortal"]["enabled"] is False
+                portal_values = build / "partner-portal.yaml"
+                portal_values.write_text(yaml.safe_dump({"consentPartnerPortal": {
+                    "enabled": True, "image": dict(SYNTHETIC_IMAGE),
+                    "imagePullSecrets": [{"name": "render-only-pull"}]
+                }}))
+                for namespace in ["verify-a", "verify-b"]:
+                    portal_docs, portal_ids = documents(run("template", "verify", chart, "--namespace", namespace, "-f", portal_values), namespace)
+                    check_dev_endpoints(portal_docs)
+                    assert stable_identities({(api, kind, namespace, name) for api, kind, _, name in identities}) <= stable_identities(portal_ids)
+                    added = [doc for doc in portal_docs if doc["metadata"]["name"].startswith("verify-cm-partner-portal")]
+                    assert {doc["kind"] for doc in added} == {"Deployment", "Service", "ConfigMap", "VirtualService"}
+                    route = next(doc for doc in added if doc["kind"] == "VirtualService")
+                    assert route["spec"]["gateways"] == ["istio-system/development"]
+                    api_route, ui_route = route["spec"]["http"]
+                    assert api_route["match"] == [{"uri": {"prefix": "/consent/v1/partner-portal/"}}]
+                    assert api_route["route"][0]["destination"]["host"] == "verify-cm-api"
+                    assert ui_route["route"][0]["destination"]["host"] == "verify-cm-partner-portal"
+                    pod = next(doc for doc in added if doc["kind"] == "Deployment")["spec"]["template"]["spec"]
+                    assert pod["imagePullSecrets"] == [{"name": "render-only-pull"}]
+                    assert pod["automountServiceAccountToken"] is False
+                    assert pod["containers"][0]["securityContext"]["readOnlyRootFilesystem"] is True
+                    config = json.loads(next(doc for doc in added if doc["kind"] == "ConfigMap")["data"]["config.json"])
+                    assert config["apiBaseUrl"] == ""
+                    assert config["keycloak"] == {"url": "https://keycloak.development.oanstaging.com", "realm": "partner", "clientId": "consent-partner-portal"}
+                for setting in ["consentPartnerPortal.image.repository=", "consentPartnerPortal.image.digest=sha256:invalid", "consentPartnerPortal.keycloak.url=", "openg2p-consent-manager.enabled=false"]:
+                    bad = subprocess.run([HELM, "template", "verify", str(chart), "--set", "consentPartnerPortal.enabled=true", "--set", setting], capture_output=True)
+                    assert bad.returncode != 0, "Portal accepts invalid prerequisites: " + setting
             report["charts"][chart.name] = {"lint": "strict passed", "resources": len(identities), "namespaces": ["verify-a", "verify-b"], "preservation": "upstream resource identities, selectors and Secret references match baseline", "baselineScope": upstream["scope"], "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed", "defaultImageReferences": image_refs(baseline)}
             report["charts"][chart.name]["devExample"] = str(example.relative_to(ROOT)) + ": strict lint and render passed"
             report["charts"][chart.name]["devEndpointMigration"] = "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"

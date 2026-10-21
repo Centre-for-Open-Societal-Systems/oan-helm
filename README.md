@@ -12,20 +12,31 @@ Aggregation is a local Commons template, disabled pending runtime preparation.
 The current chart pins new Consent and Aggregation images from the recorded
 COSS commits by ECR digest. See [the current setup guide](docs/consent-aggregation-prerequisites.md).
 
-Current chart version is **`1.0.0-dev.5`**, using
+Current chart version is **`1.0.0-dev.6`**, using
 `<service>.development.oanstaging.com` and the shared Istio Gateway. It retains
 OAN display names and direct COSS source links. Earlier packages remain unchanged.
 Component image versions are independent; automatic synchronization is deferred.
 Farmer Jenkins' pinned dev integration and guarded first cutover are described
 in [the Farmer dev profile guide](docs/farmer-jenkins-dev.md), including its
 current installed-configuration compatibility blocker.
+See the [versioning guideline](docs/versioning.md) for when to increment the dev
+counter, patch, minor or major version and how a package becomes a stable release.
 Old application URLs remain compatible until explicit migration completion;
 browser navigations redirect temporarily and API requests retain their methods.
 
-The new-dev `commons-services/commons` release now runs dev.5 with **Aggregation
+The new-dev `commons-services/commons` release now runs dev.6 with **Aggregation
 enabled** and the new Consent images. See [installed Rancher status and remaining
 prerequisites](docs/rancher-consent-aggregation-status.md). Defaults remain disabled
 for new installations until their runtime configuration is ready.
+
+The [automated staff regression](docs/automated-staff-test.md) prepares marked
+fixtures and fresh test tokens, then checks search, every returned tab and access
+denials without manual token or identifier entry.
+
+The [OAN Consent Partner Portal](docs/consent-partner-portal.md) is included as a
+separate optional browser workload, with a verified COSS image and partner-realm
+PKCE login. Its same-origin API uses the existing Consent staff service. OTP stays
+unavailable pending SMS.
 
 Use the [service onboarding guide](docs/service-onboarding.md) to add or enable a
 service without an individual Route 53 record, Nginx site or certificate.
