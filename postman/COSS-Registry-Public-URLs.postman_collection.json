@@ -1,0 +1,443 @@
+{
+  "info": {
+    "name": "COSS registry public URL regression",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Read-only live routing checks, with no login or fixtures. Detects canonical routes missing despite healthy internal registry APIs. Legacy HTML GET redirects, JSON/API calls keep proxy compatibility."
+  },
+  "item": [
+    {
+      "name": "crop canonical UI",
+      "protocolProfileBehavior": {
+        "followRedirects": true
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://crop-registry.development.oanstaging.com/en",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "text/html"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "pm.test('Registry HTML returned',()=>pm.expect(pm.response.headers.get('Content-Type')).to.include('text/html'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "crop legacy browser redirect",
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://crop-registry-development.oanstaging.com/en?routing-check=1",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "text/html"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(307));",
+              "pm.test('Canonical redirect preserves path and query',()=>pm.expect(pm.response.headers.get('Location')).to.equal(\"https://crop-registry.development.oanstaging.com/en?routing-check=1\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "crop legacy non-browser proxy",
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://crop-registry-development.oanstaging.com/en",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "pm.test('Registry HTML returned',()=>pm.expect(pm.response.headers.get('Content-Type')).to.include('text/html'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "crop staff canonical API",
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://staff-crop.development.oanstaging.com/ping",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "pm.test('Registry API answered',()=>pm.expect(pm.response.json()).to.equal('pong'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "crop staff legacy API",
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://staff-crop-development.oanstaging.com/ping",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "pm.test('Registry API answered',()=>pm.expect(pm.response.json()).to.equal('pong'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "crop partner canonical API",
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://partner-crop.development.oanstaging.com/ping",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "pm.test('Registry API answered',()=>pm.expect(pm.response.json()).to.equal('pong'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "crop partner legacy API",
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://partner-crop-development.oanstaging.com/ping",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "pm.test('Registry API answered',()=>pm.expect(pm.response.json()).to.equal('pong'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "livestock canonical UI",
+      "protocolProfileBehavior": {
+        "followRedirects": true
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://livestock-registry.development.oanstaging.com/en",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "text/html"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "pm.test('Registry HTML returned',()=>pm.expect(pm.response.headers.get('Content-Type')).to.include('text/html'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "livestock legacy browser redirect",
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://livestock-registry-development.oanstaging.com/en?routing-check=1",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "text/html"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(307));",
+              "pm.test('Canonical redirect preserves path and query',()=>pm.expect(pm.response.headers.get('Location')).to.equal(\"https://livestock-registry.development.oanstaging.com/en?routing-check=1\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "livestock legacy non-browser proxy",
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://livestock-registry-development.oanstaging.com/en",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "pm.test('Registry HTML returned',()=>pm.expect(pm.response.headers.get('Content-Type')).to.include('text/html'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "livestock staff canonical API",
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://staff-livestock.development.oanstaging.com/ping",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "pm.test('Registry API answered',()=>pm.expect(pm.response.json()).to.equal('pong'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "livestock staff legacy API",
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://staff-livestock-development.oanstaging.com/ping",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "pm.test('Registry API answered',()=>pm.expect(pm.response.json()).to.equal('pong'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "livestock partner canonical API",
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://partner-livestock.development.oanstaging.com/ping",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "pm.test('Registry API answered',()=>pm.expect(pm.response.json()).to.equal('pong'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "livestock partner legacy API",
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://partner-livestock-development.oanstaging.com/ping",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "pm.test('Registry API answered',()=>pm.expect(pm.response.json()).to.equal('pong'));"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+# Merge into the existing release values. Prepare the partner realm/client first.
+consentPartnerPortal:
+  enabled: true
+  nameOverride: ''
+  image:
+    repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/consent-partner-portal
+    tag: ''
+    digest: sha256:26f09120695896ac63de01463b0b9d762f99ee4c335293fcd03cdb5c12538ea4
+    pullPolicy: IfNotPresent
+  imagePullSecrets:
+  - name: ecr-pull-secret
+  replicas: 1
+  staffApiServiceName: ''
+  apiBaseUrl: ''
+  compositeUrl: ''
+  keycloak:
+    url: https://keycloak.development.oanstaging.com
+    realm: partner
+    clientId: consent-partner-portal
+  virtualService:
+    enabled: true
+    host: consent-partner-portal.development.oanstaging.com
+    gateway: istio-system/development
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+openg2p-consent-manager:
+  consentManagerApi:
+    envVars:
+      CONSENT_MANAGER_PARTNER_AUTH_ISSUER: https://keycloak.development.oanstaging.com/realms/partner
+      CONSENT_MANAGER_PARTNER_AUTH_JWKS_URL: http://commons-keycloak.commons.svc.cluster.local/realms/partner/protocol/openid-connect/certs
+      CONSENT_MANAGER_PARTNER_AUTH_ROLES: '["PARTNER_OPERATOR","PARTNER_ADMIN"]'
+      CONSENT_MANAGER_OTP_LOG_CODES: 'false'
+      CONSENT_MANAGER_OTP_PUBLISH_ENABLED: 'false'

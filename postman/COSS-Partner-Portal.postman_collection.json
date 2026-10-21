@@ -1,0 +1,405 @@
+{
+  "info": {
+    "name": "OAN live Consent Partner Portal regression",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Run using the private environment captured from normal PKCE browser login. Tests scoped synthetic reads and authentication denial. Does not create consent requests or enable OTP."
+  },
+  "item": [
+    {
+      "name": "Portal HTML",
+      "request": {
+        "method": "GET",
+        "url": "{{portal_url}}/",
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "pm.test('HTML document',()=>pm.expect(pm.response.headers.get('Content-Type')).to.include('text/html'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Runtime configuration",
+      "request": {
+        "method": "GET",
+        "url": "{{portal_url}}/config.json",
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "const c=pm.response.json();",
+              "pm.test('Real partner realm and public client',()=>{pm.expect(c.keycloak).to.eql({url:'https://keycloak.development.oanstaging.com',realm:'partner',clientId:'consent-partner-portal'});pm.expect(c.apiBaseUrl).to.equal('');});",
+              "pm.test('Configuration is not cached',()=>pm.expect(pm.response.headers.get('Cache-Control')).to.include('no-store'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "SPA deep link /requests",
+      "request": {
+        "method": "GET",
+        "url": "{{portal_url}}/requests",
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "pm.test('Deep link serves HTML',()=>pm.expect(pm.response.headers.get('Content-Type')).to.include('text/html'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "SPA deep link /consents",
+      "request": {
+        "method": "GET",
+        "url": "{{portal_url}}/consents",
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "pm.test('Deep link serves HTML',()=>pm.expect(pm.response.headers.get('Content-Type')).to.include('text/html'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "SPA deep link /access",
+      "request": {
+        "method": "GET",
+        "url": "{{portal_url}}/access",
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "pm.test('Deep link serves HTML',()=>pm.expect(pm.response.headers.get('Content-Type')).to.include('text/html'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Missing token rejected",
+      "request": {
+        "method": "GET",
+        "url": "{{portal_url}}/consent/v1/partner-portal/me",
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(401));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Invalid token rejected",
+      "request": {
+        "method": "GET",
+        "url": "{{portal_url}}/consent/v1/partner-portal/me",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{invalid_access_token}}",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(401));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Staff token rejected by partner API",
+      "request": {
+        "method": "GET",
+        "url": "{{portal_url}}/consent/v1/partner-portal/me",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{staff_access_token}}",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(401));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Partner identity",
+      "request": {
+        "method": "GET",
+        "url": "{{portal_url}}/consent/v1/partner-portal/me",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{partner_access_token}}",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "const me=pm.response.json();",
+              "pm.test('Correct scoped partner identity',()=>{pm.expect(me.username).to.equal(pm.environment.get('expected_username'));pm.expect(me.partner_id).to.equal(pm.environment.get('expected_partner_id'));pm.expect(me.roles).to.include('PARTNER_OPERATOR');pm.expect(me.roles).not.to.include('PARTNER_ADMIN');});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Synthetic partner has no approved bindings",
+      "request": {
+        "method": "GET",
+        "url": "{{portal_url}}/consent/v1/partner-portal/bindings",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{partner_access_token}}",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "pm.test('No unrelated partner bindings',()=>pm.expect(pm.response.json()).to.eql([]));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Synthetic partner empty list /consent-requests",
+      "request": {
+        "method": "GET",
+        "url": "{{portal_url}}/consent/v1/partner-portal/consent-requests",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{partner_access_token}}",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "pm.test('No unrelated records',()=>{const j=pm.response.json();pm.expect(j.total).to.equal(0);pm.expect(j.items).to.eql([]);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Synthetic partner empty list /consents",
+      "request": {
+        "method": "GET",
+        "url": "{{portal_url}}/consent/v1/partner-portal/consents",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{partner_access_token}}",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(200));",
+              "pm.test('No unrelated records',()=>{const j=pm.response.json();pm.expect(j.total).to.equal(0);pm.expect(j.items).to.eql([]);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Unknown request not disclosed",
+      "request": {
+        "method": "GET",
+        "url": "{{portal_url}}/consent/v1/partner-portal/consent-requests/00000000-0000-0000-0000-000000000000",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{partner_access_token}}",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Unknown consent not disclosed",
+      "request": {
+        "method": "GET",
+        "url": "{{portal_url}}/consent/v1/partner-portal/consents/00000000-0000-0000-0000-000000000000",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{partner_access_token}}",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Partner token cannot administer Consent",
+      "request": {
+        "method": "GET",
+        "url": "https://consent-manager.development.oanstaging.com/consent/v1/partners",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{partner_access_token}}",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP status',()=>pm.response.to.have.status(401));"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "invalid_access_token",
+      "value": "invalid-regression-token"
+    }
+  ]
+}

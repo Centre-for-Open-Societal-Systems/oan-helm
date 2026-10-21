@@ -39,3 +39,11 @@ and [Rancher guide](https://github.com/Centre-for-Open-Societal-Systems/oan-helm
 Dev URLs use `<service>.development.oanstaging.com`. The environment-owned
 wildcard DNS/TLS and `istio-system/development` Gateway must be prepared first.
 See the service onboarding and enablement guide in `docs/service-onboarding.md`.
+
+## OAN Consent Partner Portal
+
+The COSS browser portal is included through `consentPartnerPortal`, alongside the
+existing Consent staff UI and partner API. Enable it with the reviewed
+`examples/dev/consent-partner-portal.yaml` overlay after preparing partner login.
+Its image is built from the recorded COSS Consent source and pinned by ECR digest.
+OTP stays unavailable pending SMS; enabling the UI does not enable OTP delivery.

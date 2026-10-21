@@ -14,6 +14,7 @@ no separately named `coss-consent-manager` or `coss-aggregator` child charts.
 | --- | --- | --- | --- |
 | COSS Consent Manager | Pinned upstream `openg2p-consent-manager:1.0.2` child chart, with COSS image overrides | [`openg2p-consent-manager` in Commons values](../charts/openg2p-commons-services/values.yaml); API image at `consentManagerApi.image`, UI at `ui.image`, sanity at `sanity.image` | Enabled; verified COSS API/UI/sanity digests |
 | COSS Aggregation API | Local [Deployment and Service template](../charts/openg2p-commons-services/templates/aggregation-api.yaml) inside the Commons parent chart | [`aggregationApi` in Commons values](../charts/openg2p-commons-services/values.yaml) | Verified image digest included; disabled by default pending runtime configuration |
+| OAN Consent Partner Portal | Local [portal template](../charts/openg2p-commons-services/templates/consent-partner-portal.yaml) in the Commons parent chart; COSS `consent-management/partner-portal` source | `consentPartnerPortal.*`; [setup guide](consent-partner-portal.md) | Verified ECR digest; optional, disabled until partner login is prepared |
 
 This dependency entry in Commons `Chart.yaml` selects the reused Consent
 templates, not the application image publisher:

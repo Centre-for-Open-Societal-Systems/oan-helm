@@ -1,0 +1,226 @@
+{
+  "checkedAtUtc": "2026-10-21T04:37:08.850959+00:00",
+  "release": {
+    "name": "commons-services",
+    "namespace": "commons",
+    "chartVersion": "1.0.0-dev.6",
+    "revision": 18,
+    "status": "deployed"
+  },
+  "workloadsTotal": 70,
+  "unreadyWorkloads": [],
+  "portal": {
+    "deployment": "commons-services-cm-partner-portal",
+    "readyReplicas": 1,
+    "image": "379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/consent-partner-portal@sha256:26f09120695896ac63de01463b0b9d762f99ee4c335293fcd03cdb5c12538ea4",
+    "host": "consent-partner-portal.development.oanstaging.com",
+    "gateway": [
+      "istio-system/development"
+    ],
+    "apiDestination": "commons-services-cm-api"
+  },
+  "upgrade": {
+    "finishedAtUtc": "2026-10-21T04:32:57.888403+00:00",
+    "release": "commons-services",
+    "namespace": "commons",
+    "chartVersion": "1.0.0-dev.6",
+    "previousRevision": 17,
+    "revision": 18,
+    "status": "deployed",
+    "helmExitCode": 0,
+    "backupDirectory": "/var/backups/oan-consent-partner-portal/upgrade-20261021T043152Z",
+    "databaseDumpSha256": "0d7feb6876f59bbcea81dced54f72fe9b5946ea88fbcf00e0788f2c8ad989626",
+    "serverDryRunPassed": true,
+    "initializationJobsSuppressed": true,
+    "existingApplicationImagesChanged": false,
+    "otpEnabled": false,
+    "portalHostname": "consent-partner-portal.development.oanstaging.com",
+    "sourceCommit": "9cac1781def951bdab8ac9c7f5a9fa8fa00d672a"
+  },
+  "comparison": {
+    "removedResources": [],
+    "addedResources": [
+      [
+        "ConfigMap",
+        "commons-services-cm-partner-portal-config"
+      ],
+      [
+        "Deployment",
+        "commons-services-cm-partner-portal"
+      ],
+      [
+        "Service",
+        "commons-services-cm-partner-portal"
+      ],
+      [
+        "VirtualService",
+        "commons-services-cm-partner-portal"
+      ]
+    ],
+    "liveImageChanges": [],
+    "initializationJobsRendered": [],
+    "readyForUpgrade": true
+  },
+  "staffUsers": [
+    {
+      "username": "admin",
+      "aggregationViewer": true
+    },
+    {
+      "username": "nina.patel",
+      "aggregationViewer": true
+    }
+  ],
+  "partnerIssuerConfigured": true,
+  "otpLoggingEnabled": false,
+  "otpBucketPublishingEnabled": false,
+  "evidenceStorageConfigured": false,
+  "istioAnalyzeExitCode": 0,
+  "rancherRepositories": [
+    {
+      "name": "oan-coss",
+      "url": "https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/",
+      "downloaded": true
+    },
+    {
+      "name": "oan-coss-preview",
+      "url": "https://raw.githubusercontent.com/asmitonweb/oan-helm/feat/consent-aggregation-rancher/repository/",
+      "downloaded": true
+    }
+  ],
+  "temporaryProbeRemoved": true,
+  "browser": {
+    "startedAtUtc": "2026-10-21T04:34:56.616780+00:00",
+    "host": "https://consent-partner-portal.development.oanstaging.com",
+    "syntheticUser": "oan-partner-e2e",
+    "partnerId": "oan-partner-e2e",
+    "authorizationCodeWithPkce": true,
+    "codeVerifierSent": true,
+    "apiResponses": [
+      {
+        "path": "/consent/v1/partner-portal/me",
+        "status": 200
+      },
+      {
+        "path": "/consent/v1/partner-portal/consent-requests",
+        "status": 200
+      },
+      {
+        "path": "/consent/v1/partner-portal/bindings",
+        "status": 200
+      },
+      {
+        "path": "/consent/v1/partner-portal/consents",
+        "status": 200
+      }
+    ],
+    "pages": [
+      "/requests",
+      "/consents",
+      "/access"
+    ],
+    "consoleErrors": 0,
+    "passed": true,
+    "finishedAtUtc": "2026-10-21T04:34:59.515188+00:00"
+  },
+  "portalPostman": {
+    "passed": true,
+    "postmanExitCode": 0,
+    "stats": {
+      "iterations": {
+        "executed": 1,
+        "failed": 0
+      },
+      "requests": {
+        "executed": 15,
+        "failed": 0
+      },
+      "test-scripts": {
+        "executed": 15,
+        "failed": 0
+      },
+      "prerequest-scripts": {
+        "executed": 0,
+        "failed": 0
+      },
+      "assertions": {
+        "executed": 25,
+        "failed": 0
+      }
+    },
+    "live": true,
+    "target": "https://consent-partner-portal.development.oanstaging.com",
+    "cloudRunEventsEnabled": false
+  },
+  "staffRegression": {
+    "finishedAtUtc": "2026-10-21T04:38:45.672347+00:00",
+    "target": "https://aggregation.development.oanstaging.com",
+    "live": true,
+    "postmanExitCode": 0,
+    "passed": true,
+    "cloudRunEventsEnabled": false,
+    "stats": {
+      "iterations": {
+        "executed": 1,
+        "failed": 0
+      },
+      "requests": {
+        "executed": 39,
+        "failed": 0
+      },
+      "test-scripts": {
+        "executed": 39,
+        "failed": 0
+      },
+      "prerequest-scripts": {
+        "executed": 26,
+        "failed": 0
+      },
+      "assertions": {
+        "executed": 107,
+        "failed": 0
+      }
+    },
+    "uniqueScenariosExecuted": 20,
+    "requiredScenarios": 20,
+    "tabsOpened": 20,
+    "identity": "Dedicated service accounts, not admin or nina.patel",
+    "consentPartnerOtp": {
+      "status": "blocked",
+      "prerequisites": [
+        "Aggregation partner authentication and appropriate integration clients",
+        "Reviewed Consent and internal registry bindings plus PM signing key",
+        "SMS delivery; OTP remains disabled"
+      ]
+    },
+    "rawReportsPrivate": true
+  },
+  "packageValidationWorkflow": "https://github.com/asmitonweb/oan-helm/actions/runs/39544143130",
+  "publication": {
+    "forkBranch": "feat/consent-aggregation-rancher",
+    "upstreamMerged": false,
+    "stableRancherRepositoryGetsDev6AfterMerge": true
+  },
+  "combinedUnattendedTest": {
+    "finishedAtUtc": "2026-10-21T04:38:53.303912+00:00",
+    "passed": true,
+    "staffAssertions": {
+      "executed": 107,
+      "failed": 0
+    },
+    "portalAssertions": {
+      "executed": 25,
+      "failed": 0
+    },
+    "staffTabsOpened": 20,
+    "browserPages": [
+      "/requests",
+      "/consents",
+      "/access"
+    ],
+    "browserPkceVerified": true,
+    "postmanExitCode": 0,
+    "otpFlow": "Blocked pending SMS and reviewed partner integration/bindings; not executed",
+    "credentialsAndTokensRemainPrivate": true
+  }
+}
