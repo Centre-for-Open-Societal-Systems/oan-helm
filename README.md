@@ -12,7 +12,7 @@ Aggregation is a local Commons template, disabled pending runtime preparation.
 The current chart pins new Consent and Aggregation images from the recorded
 COSS commits by ECR digest. See [the current setup guide](docs/consent-aggregation-prerequisites.md).
 
-Current chart version is **`1.0.0-dev.6`**, using
+Current chart version is **`1.0.0-dev.7`**, using
 `<service>.development.oanstaging.com` and the shared Istio Gateway. It retains
 OAN display names and direct COSS source links. Earlier packages remain unchanged.
 Component image versions are independent; automatic synchronization is deferred.
@@ -115,3 +115,7 @@ archive/version. Keep historical archives and index entries; future releases
 require a new chart version and manifest. The separate 19 October dev URL cutover retains installed chart/image versions;
 see `releases/live-domain-migration.json`. No application-repository CI changes
 are included.
+
+Staff application tiles are registered in IAM by their owning Helm releases.
+See [staff portal tiles](docs/staff-portal-tiles.md) for Consent registration,
+registry dashboard delivery prerequisites and role-based access.

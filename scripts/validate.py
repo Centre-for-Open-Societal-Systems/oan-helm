@@ -411,6 +411,24 @@ def main():
                 # Existing API DB Secret references must remain present.
                 assert secret_refs(baseline) <= secret_refs(enabled)
             if chart.name == "openg2p-commons-services":
+                assert values["consentStaffPortalTile"]["enabled"] is False
+                tile_docs, tile_ids = documents(run("template", "verify", chart, "--namespace", "verify-a",
+                                                     "--set", "consentStaffPortalTile.enabled=true"), "verify-a")
+                assert stable_identities(identities) <= stable_identities(tile_ids)
+                tile_resources = [d for d in tile_docs if d["metadata"]["name"] == "verify-consent-staff-tile"]
+                assert {d["kind"] for d in tile_resources} == {"ConfigMap", "Job"}
+                catalog = json.loads(next(d for d in tile_resources if d["kind"] == "ConfigMap")["data"]["application.json"])
+                assert catalog["clientId"] == catalog["application"]["application_mnemonic"] == "consent-manager"
+                assert catalog["application"]["application_url"] == "https://consent-manager.development.oanstaging.com"
+                assert {r["role_mnemonic"] for r in catalog["application"]["roles"]} == {"CONSENT_MANAGER_ADMIN", "CONSENT_MANAGER_APPROVER"}
+                job = next(d for d in tile_resources if d["kind"] == "Job")
+                assert job["metadata"]["annotations"]["helm.sh/hook"] == "post-install,post-upgrade"
+                assert job["spec"]["template"]["spec"]["automountServiceAccountToken"] is False
+                assert secret_refs(baseline) <= secret_refs(tile_docs)
+                for invalid in ["openg2p-consent-manager.ui.enabled=false", "consentStaffPortalTile.iamUrl=",
+                                "consentStaffPortalTile.clientSecret.name="]:
+                    bad = subprocess.run([HELM, "template", "verify", str(chart), "--set", "consentStaffPortalTile.enabled=true", "--set", invalid], capture_output=True)
+                    assert bad.returncode != 0, "Consent tile accepts missing prerequisites: " + invalid
                 assert values["consentPartnerPortal"]["enabled"] is False
                 portal_values = build / "partner-portal.yaml"
                 portal_values.write_text(yaml.safe_dump({"consentPartnerPortal": {
