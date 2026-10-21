@@ -50,7 +50,7 @@ upgrade is not automatically a patch: classify its effect on that contract.
   component's real source commit and immutable digest separately; they do not
   share a synchronized build number.
 
-This repository currently publishes the five charts together under one release
+This repository currently publishes the six charts together under one release
 version, enforced by `scripts/validate.py` and `releases/current.yaml`. Keep that
 release train consistent until per-chart versioning is explicitly introduced.
 Publishing together does not require upgrading every installed release.
@@ -58,7 +58,7 @@ Publishing together does not require upgrading every installed release.
 ## Publication and promotion
 
 1. Record the version, changes, compatibility impact, prerequisites and any
-   migrations in `releases/<version>.yaml`; update all five `Chart.yaml` versions,
+   migrations in `releases/<version>.yaml`; update all six `Chart.yaml` versions,
    `releases/current.yaml` and the preserved resource baseline for this release.
 2. Verify image availability/digests and locked dependencies. Run strict lint,
    representative renders, namespace/ownership/Secret checks, regression checks

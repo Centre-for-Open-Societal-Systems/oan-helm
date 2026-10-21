@@ -29,6 +29,11 @@ charts:
   upstreamVersion: 2.3.4-rc.247
   sourceCommit: 32638189178ca451d354316a099918574c6730a5
   upstreamArchiveSha256: 96ab00f327652a4cc3d511525e1ac5260813d744a11620054e2491b698206272
+- name: oan-sandbox
+  release: sandbox
+  namespace: null
+  sourceCommit: 66964713b571cad98cbe77a054b413eac55b4385
+  note: New chart; API, web and route disabled until the sandbox images are published.
 commonsBase:
   repository: https://openg2p.github.io/openg2p-helm
   chart: openg2p-commons-base
@@ -38,6 +43,7 @@ commonsBase:
 componentsAwaitingImages:
 - Current standalone registry dashboard UIs (legacy Crop UI is not substituted).
 - DA backend/dashboard workloads; da-registry-frontend is a different app.
+- OAN Sandbox API and web (sandbox-platform images not yet published).
 publicationBlockers: []
 installationPrerequisites:
 - Upgrade existing commons-services/commons only after private backup, migration rehearsal
