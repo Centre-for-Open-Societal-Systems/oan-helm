@@ -372,7 +372,25 @@ def package(report):
     report["index"] = "Relative URLs, SHA-256, HTTP download, exact Helm version selection and repository-based renders verified against loopback server"
 
 
+def check_farmer_jenkins_profile():
+    pin = json.loads((ROOT / 'environments/dev/farmer-jenkins.json').read_text(encoding='utf-8'))
+    assert (pin['environment'], pin['namespace'], pin['release']) == ('dev', 'farmer', 'farmer-registry')
+    assert pin['repository'] == 'https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/'
+    archive = ROOT / 'repository' / (pin['name'] + '-' + pin['version'] + '.tgz')
+    assert hashlib.sha256(archive.read_bytes()).hexdigest() == pin['sha256']
+    with tarfile.open(archive) as chart:
+        def metadata(path):
+            return yaml.safe_load(chart.extractfile(pin['name'] + '/' + path))
+        parent = metadata('Chart.yaml')
+        child = metadata('charts/openg2p-registry/Chart.yaml')
+    assert (parent['name'], parent['version'], parent['appVersion']) == (pin['name'], pin['version'], pin['platformVersion'])
+    assert parent['dependencies'] == [{'alias': 'registry', 'name': 'openg2p-registry',
+                                      'version': pin['platformVersion'], 'repository': 'https://openg2p.github.io/openg2p-helm'}]
+    assert (child['name'], child['version']) == ('openg2p-registry', pin['platformVersion'])
+
+
 def main():
+    check_farmer_jenkins_profile()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--package", action="store_true")
     parser.add_argument("--online", action="store_true")

@@ -17,6 +17,9 @@ Current chart version is **`1.0.0-dev.6`**, using
 `<service>.development.oanstaging.com` and the shared Istio Gateway. It retains
 OAN display names and direct COSS source links. Earlier packages remain unchanged.
 Component image versions are independent; automatic synchronization is deferred.
+Farmer Jenkins' pinned dev integration and guarded first cutover are described
+in [the Farmer dev profile guide](docs/farmer-jenkins-dev.md), including its
+verified configuration-preservation rehearsal and merge/cutover order.
 See the [versioning guideline](docs/versioning.md) for when to increment the dev
 counter, patch, minor or major version and how a package becomes a stable release.
 Old application URLs remain compatible until explicit migration completion;
