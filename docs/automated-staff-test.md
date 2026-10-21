@@ -40,7 +40,12 @@ Every run:
    partial setup can be rerun. Server preparation evidence is retained under
    `/var/lib/oan-aggregation-development/e2e/last-preparation.json`.
 6. Updates the private Postman environment with tokens, expiry and subject, then
-   runs the complete saved collection with cloud run events disabled. The token
+   runs the independent public registry URL regression before the complete saved
+   staff collection, with cloud run events disabled. The public preflight adds
+   14 requests/28 assertions for Crop and Livestock UI/API canonical routes and
+   old-URL compatibility; internal registry access alone cannot prove these
+   routes work. Its credential-free entry point is
+   `python scripts/check-registry-public-urls.py`. The token
    now represents `service-account-oan-aggregation-e2e`, rather than a human.
 7. Saves sanitized `report.json`, setup hashes and detailed private CLI output
    beneath `e2e-test-kit/runs/<UTC timestamp>/`. The top-level `report.json` holds

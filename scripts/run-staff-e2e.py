@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 import re
 import subprocess
+import sys
 import uuid
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -98,6 +99,11 @@ def main():
         return
     if not args.environment:parser.error('--environment is required')
     args.output.mkdir(parents=True,exist_ok=True)
+    routing=subprocess.run([sys.executable,str(ROOT/'scripts/check-registry-public-urls.py'),
+        '--output',str(args.output/'public-routing')],capture_output=True,text=True,encoding='utf-8',timeout=140)
+    if routing.returncode:
+        print(json.dumps({'passed':False,'stage':'public registry routing','report':str(args.output/'public-routing/report.json')}))
+        raise SystemExit(1)
     result=subprocess.run(['postman','collection','run',str(COLLECTION),'-e',str(args.environment),
         '--no-report-events','--disable-unicode','--timeout','180000','--timeout-request','20000'],capture_output=True,text=True,encoding='utf-8',timeout=200)
     (args.output/'private-cli.log').write_text(result.stdout+'\n'+result.stderr,encoding='utf-8')
@@ -112,6 +118,7 @@ def main():
         'target':'https://aggregation.development.oanstaging.com','live':True,
         'postmanExitCode':result.returncode,'passed':tests_passed and result.returncode==0,
         'cloudRunEventsEnabled':False,'stats':stats,
+        'publicRouting':json.loads((args.output/'public-routing/report.json').read_text()),
         'uniqueScenariosExecuted':len(seen),'requiredScenarios':len(required),
         'tabsOpened':sum(name.strip()=='15 Open every returned tab' for name in names),
         'identity':'Dedicated service accounts, not admin or nina.patel',
