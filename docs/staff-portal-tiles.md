@@ -27,7 +27,7 @@ The registration is an idempotent upsert. Failures stop the Helm hook rather
 than reporting an installed-but-unregistered tile. Rehearse install, rerun and
 failure recovery against the intended environment before a Commons upgrade;
 retain the existing release, private values and unrelated image/resource pins.
-Default installations keep this optional Job disabled. Dev.7 adds this feature
+Default installations keep this optional Job disabled. Dev.8 adds this feature
 without modifying any previously published chart archive.
 
 ## Registry dashboards
@@ -57,3 +57,7 @@ Confirm the tile label and URL, enabled state for assigned users, disabled
 state for unassigned users and the destination's own authorization. A tile or
 an open health endpoint alone does not prove dashboard chart access. No default
 staff grants are added by this integration.
+
+The dev.8 package excludes Python bytecode caches from both source seals and
+chart archives. Test imports therefore do not change package provenance on
+another Python version or checkout. Earlier archives remain unchanged.

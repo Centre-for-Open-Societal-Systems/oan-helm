@@ -1,0 +1,27 @@
+apiVersion: v2
+name: oan-sandbox
+description: OAN Sandbox for OpenAgriNet (OAN), developed in the COSS sandbox-platform
+  repository; developer portal with the API catalogue, participant portal, try-it console
+  and admin console. Component images have independent versions.
+type: application
+version: 1.0.0-dev.8
+appVersion: develop
+keywords:
+- oan
+- openagrinet
+- coss
+- sandbox
+- developer-portal
+home: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+sources:
+- https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+- https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+annotations:
+  catalog.cattle.io/display-name: OAN Sandbox
+  oan.org/owner: OpenAgriNet (OAN) / COSS
+  oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+  oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-sandbox
+  org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+maintainers:
+- name: OpenAgriNet (OAN) / COSS
+  url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm

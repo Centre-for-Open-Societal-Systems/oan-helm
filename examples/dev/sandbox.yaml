@@ -1,0 +1,30 @@
+# OAN Sandbox: dev enablement checklist (public values only).
+# Steps, in order:
+#   1. Push the API and web images built from sandbox-platform; the web image with
+#      NEXT_PUBLIC_API_BASE_URL=https://sandbox.development.oanstaging.com/oan.
+#   2. Create database sandbox_db_oan and user sandbox on commons-postgresql.
+#   3. kubectl -n sandbox create secret generic sandbox-secrets \
+#        --from-literal=DB_PASSWORD=... --from-literal=JWT_ACCESS_TOKEN_KEY=... \
+#        --from-literal=JWT_REFRESH_TOKEN_KEY=... [--from-literal=SEED_ADMIN_PASSWORD=...]
+#   4. Set the image digests below, enabled: true on api, web and virtualService,
+#      and install with environments/dev/values/sandbox.yaml.
+secret:
+  name: sandbox-secrets
+config:
+  mail:
+    enabled: false
+  devFixedOtp: ""
+  seed:
+    adminEmail: admin@openagrinet.org
+api:
+  enabled: false
+  image:
+    repository: ""
+    digest: ""
+web:
+  enabled: false
+  image:
+    repository: ""
+    digest: ""
+virtualService:
+  enabled: false

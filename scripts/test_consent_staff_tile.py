@@ -1,6 +1,7 @@
 """Exercise the registration job over HTTP without a live IAM or Keycloak."""
 import importlib.util
 import json
+import sys
 import threading
 import unittest
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -10,7 +11,12 @@ from urllib.parse import parse_qs
 source = Path(__file__).resolve().parents[1] / "charts/openg2p-commons-services/files/register-consent-tile.py"
 spec = importlib.util.spec_from_file_location("consent_tile", source)
 tile = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(tile)
+previous_bytecode_setting = sys.dont_write_bytecode
+try:
+    sys.dont_write_bytecode = True
+    spec.loader.exec_module(tile)
+finally:
+    sys.dont_write_bytecode = previous_bytecode_setting
 
 
 class RegistrationTests(unittest.TestCase):

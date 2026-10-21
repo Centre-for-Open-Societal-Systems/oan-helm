@@ -1,0 +1,113 @@
+# OAN Sandbox: public site with the API catalogue, participant portal (sign-up,
+# environment access, try-it console, API history) and admin console.
+# Source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+#
+# Both workloads stay disabled until a verified image is configured: the images
+# (docker/sandbox-api/Dockerfile and ui/Dockerfile in sandbox-platform) are not
+# published yet. Secrets come from an existing namespace-local Secret, never Git.
+
+global:
+  # Public host for the web app; the API is served on the same host under /oan.
+  hostname: sandbox.development.oanstaging.com
+
+# Non-secret API settings (environment variables of the api container).
+config:
+  # sandbox | uat | production. production also turns off any fixed sign-up code.
+  appEnv: sandbox
+  defaultCountryCode: ET
+  logLevel: INFO
+  # true exposes Swagger at /docs on the API; keep false on shared environments.
+  debug: false
+  db:
+    host: commons-postgresql.commons.svc.cluster.local
+    port: 5432
+    name: sandbox_db_oan
+    user: sandbox
+  mail:
+    enabled: false
+    host: ""
+    port: 587
+    user: ""
+    from: no-reply@openagrinet.org
+    tls: true
+  # Sign-up code used while mail is off. Empty: random codes only (keep empty on
+  # shared environments, or anyone can register any email).
+  devFixedOtp: ""
+  # Try-it calls for products "served through the API gateway" go to this proxy.
+  gateway:
+    enabled: true
+    sandboxUrl: ""
+    uatUrl: ""
+    prodUrl: ""
+    # "Pull from gateway" in the console: reads the gateway Admin API.
+    sync:
+      enabled: false
+      # apisix | kong
+      type: apisix
+      adminUrl: ""
+  # Only used on an empty database: creates the master administrator, masters
+  # and CMS content when the Secret holds SEED_ADMIN_PASSWORD (idempotent).
+  seed:
+    adminEmail: ""
+
+# Existing Secret in the release namespace, loaded into the api container.
+# Required keys: DB_PASSWORD, JWT_ACCESS_TOKEN_KEY, JWT_REFRESH_TOKEN_KEY.
+# Optional keys: SMTP_PASSWORD, GATEWAY_ADMIN_TOKEN, SEED_ADMIN_PASSWORD.
+secret:
+  name: ""
+
+api:
+  enabled: false
+  image:
+    repository: ""
+    tag: ""
+    digest: ""
+    pullPolicy: IfNotPresent
+  imagePullSecrets: []
+  # The container applies database migrations on start; keep one replica per
+  # rollout unless migrations are run separately.
+  replicas: 1
+  containerPort: 8000
+  servicePort: 80
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 1Gi
+  # Participant ID proofs, certificates, product icons and documents.
+  persistence:
+    enabled: true
+    existingClaim: ""
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 5Gi
+  env: []
+  envFrom: []
+
+web:
+  enabled: false
+  # The browser API URL (https://<global.hostname>/oan) is built into this image
+  # (build argument NEXT_PUBLIC_API_BASE_URL): build one web image per environment.
+  image:
+    repository: ""
+    tag: ""
+    digest: ""
+    pullPolicy: IfNotPresent
+  imagePullSecrets: []
+  replicas: 1
+  containerPort: 3000
+  servicePort: 80
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 512Mi
+  env: []
+  envFrom: []
+
+# Istio route: /oan to the API, everything else to the web app.
+virtualService:
+  enabled: false
+  gateway: istio-system/development

@@ -2,8 +2,9 @@
 
 Start with the [service catalog](docs/service-catalog.md): it maps every included
 COSS service to its chart, source/configuration and enablement status. The
-[five editable source charts](charts/README.md) are Farmer, Crop Sown, Livestock,
-DA and Commons Services, which contains COSS Consent and Aggregation.
+[six editable source charts](charts/README.md) are Farmer, Crop Sown, Livestock,
+DA, Commons Services, which contains COSS Consent and Aggregation, and the OAN
+Sandbox developer portal (disabled until its images are published).
 
 For those two components, start at
 [where COSS Consent Manager and Aggregation are included](docs/service-catalog.md#where-are-coss-consent-manager-and-aggregation).
@@ -12,10 +13,13 @@ Aggregation is a local Commons template, disabled pending runtime preparation.
 The current chart pins new Consent and Aggregation images from the recorded
 COSS commits by ECR digest. See [the current setup guide](docs/consent-aggregation-prerequisites.md).
 
-Current chart version is **`1.0.0-dev.7`**, using
+Current chart version is **`1.0.0-dev.8`**, using
 `<service>.development.oanstaging.com` and the shared Istio Gateway. It retains
 OAN display names and direct COSS source links. Earlier packages remain unchanged.
 Component image versions are independent; automatic synchronization is deferred.
+Farmer Jenkins' pinned dev integration and guarded first cutover are described
+in [the Farmer dev profile guide](docs/farmer-jenkins-dev.md), including its
+verified configuration-preservation rehearsal and merge/cutover order.
 See the [versioning guideline](docs/versioning.md) for when to increment the dev
 counter, patch, minor or major version and how a package becomes a stable release.
 Old application URLs remain compatible until explicit migration completion;
@@ -40,7 +44,7 @@ service without an individual Route 53 record, Nginx site or certificate.
 
 | Location | Contents |
 | --- | --- |
-| `charts/` | Five editable source trees; start at [charts/README.md](charts/README.md) |
+| `charts/` | Six editable source trees; start at [charts/README.md](charts/README.md) |
 | `docs/service-catalog.md` | Every included service, its COSS repository, owning chart and status |
 | `environments/dev/` | Canonical endpoint inventory and public URL migration overlays, plus APISIX gateway values; see [the APISIX gateway guide](docs/apisix-gateway.md) |
 | `examples/dev/` | Public dev configuration checklists; no private live values |
@@ -56,7 +60,7 @@ through the APISIX Ingress Controller. This repository holds only its values und
 `environments/dev/values/` (`apisix.yaml`, `oan-grievance-gateway.yaml`,
 `oan-a2c-gateway.yaml`), not charts. Each app's route chart is generated from its OpenAPI
 spec and lives in the app repository. The values target the separate grievance cluster, not
-the OpenG2P cluster the five charts above deploy to. Start at the
+the OpenG2P cluster the charts above deploy to. Start at the
 [APISIX gateway guide](docs/apisix-gateway.md): it covers the design, the dev-cluster
 install, testing, the traffic cutover and rollback.
 

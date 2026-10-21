@@ -30,6 +30,8 @@ publicHosts:
   livestockPartner: partner-livestock.development.oanstaging.com
   livestockId: idgenerator-livestock.development.oanstaging.com
   consentPartnerPortal: consent-partner-portal.development.oanstaging.com
+  # Planned, not yet deployed: OAN Sandbox (charts/oan-sandbox), web and /oan API on one host.
+  sandbox: sandbox.development.oanstaging.com
   # On the grievance RKE2 node 13.233.56.204, not `server` above.
   grievanceBackend: grievance-backend-dev.oanstaging.com
 sharedNamespace: commons
@@ -43,6 +45,7 @@ unconfirmed:
 - DA
 - Aggregation
 - standalone registry dashboards
+- OAN Sandbox
 verifiedRoutes:
 - namespace: commons
   name: commons-minio

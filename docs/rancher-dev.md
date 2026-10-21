@@ -7,7 +7,7 @@ reviewed bootstrap-Job suppression and complete URL/Gateway values; see that pag
 
 Complete [readiness prerequisites](readiness.md) for components being enabled.
 For Consent/Aggregation, follow the [component preparation guide](consent-aggregation-prerequisites.md).
-Use the five packages after repository publication. No
+Use the six packages after repository publication. No
 ownership migration has been performed. The separate dev URL cutover is recorded
 in `releases/live-domain-migration.json`; it retains installed chart/image versions.
 

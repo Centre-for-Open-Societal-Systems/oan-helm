@@ -1,4 +1,4 @@
-"""Validate and optionally package the five charts without accessing Kubernetes.
+"""Validate and optionally package the OAN charts without accessing Kubernetes.
 
 An offline mirror is derived only from bundled dependency sources. Resolving
 against it checks Helm's locks without claiming a fresh upstream download.
@@ -28,7 +28,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CURRENT_VERSION = yaml.safe_load((ROOT / "releases/current.yaml").read_text())["chartVersion"]
 HELM = os.environ.get("HELM", "helm")
 CHARTS = sorted((ROOT / "charts").glob("*/Chart.yaml"))
-EXPECTED = {f"openg2p-{x}-registry" for x in ["farmer", "cropsown", "livestock", "da"]} | {"openg2p-commons-services"}
+EXPECTED = {f"openg2p-{x}-registry" for x in ["farmer", "cropsown", "livestock", "da"]} | {"openg2p-commons-services", "oan-sandbox"}
 SYNTHETIC_IMAGE = {"repository": "example.invalid/render-only", "digest": "sha256:" + "a" * 64}
 COSS = "https://github.com/Centre-for-Open-Societal-Systems/"
 APPLICATION_SOURCES = {
@@ -37,6 +37,7 @@ APPLICATION_SOURCES = {
     "openg2p-livestock-registry": [COSS + "livestock-registry"],
     "openg2p-da-registry": [COSS + "da-registry"],
     "openg2p-commons-services": [COSS + "consent-management", COSS + "oan-aggregation-api"],
+    "oan-sandbox": [COSS + "sandbox-platform"],
 }
 
 
@@ -74,7 +75,9 @@ def fingerprint(chart):
     # pathlib uses platform-specific ordering (Windows compares case-insensitively).
     # Hash portable relative strings so a fresh Linux checkout has the same seal.
     for path in sorted(chart.rglob("*"), key=lambda p: p.relative_to(chart).as_posix()):
-        if path.is_file():
+        # Test imports create bytecode with interpreter/path-specific headers.
+        # These ignored runtime artifacts are not chart source or package inputs.
+        if path.is_file() and "__pycache__" not in path.relative_to(chart).parts and path.suffix != ".pyc":
             h.update(path.relative_to(chart).as_posix().encode() + b"\0" + path.read_bytes() + b"\0")
     return h.hexdigest()
 
@@ -214,6 +217,50 @@ def check_url_contract(chart, docs):
         assert env["KEYCLOAK_LOGOUT_URL"] == "https://" + hosts["keycloak"] + "/realms/staff/protocol/openid-connect/logout"
 
 
+def check_sandbox(chart, values, build, migration):
+    """OAN Sandbox: everything off by default; enabled API/web/route render correctly."""
+    hosts = read(ROOT / "environments/dev/endpoints.yaml")["publicHosts"]
+    for key in ["api", "web", "virtualService"]:
+        assert values[key]["enabled"] is False, f"oan-sandbox {key} must be disabled by default"
+    fixture = {
+        "secret": {"name": "render-only-config"},
+        "virtualService": {"enabled": True},
+        **{key: {"enabled": True, "image": dict(SYNTHETIC_IMAGE), "imagePullSecrets": [{"name": "render-only-pull"}]} for key in ["api", "web"]},
+    }
+    sandbox_values = build / "sandbox.yaml"
+    sandbox_values.write_text(yaml.safe_dump(fixture))
+    for namespace in ["verify-a", "verify-b"]:
+        docs, ids = documents(run("template", "verify", chart, "--namespace", namespace, "-f", migration, "-f", sandbox_values), namespace)
+        check_dev_endpoints(docs)
+        assert {kind + "/" + name for _, kind, _, name in ids} == {
+            "PersistentVolumeClaim/verify-api-uploads", "Deployment/verify-api", "Service/verify-api",
+            "Deployment/verify-web", "Service/verify-web", "VirtualService/verify",
+        }
+        route = next(doc for doc in docs if doc["kind"] == "VirtualService")
+        assert route["spec"]["hosts"] == [hosts["sandbox"]]
+        assert route["spec"]["gateways"] == ["istio-system/development"]
+        api_route, web_route = route["spec"]["http"]
+        assert {"uri": {"prefix": "/oan/"}} in api_route["match"]
+        assert api_route["route"][0]["destination"] == {"host": "verify-api", "port": {"number": 80}}
+        assert web_route["route"][0]["destination"] == {"host": "verify-web", "port": {"number": 80}}
+        api = deployment_env(docs, "verify-api")
+        assert api["ALLOWED_ORIGINS"] == api["PORTAL_URL"] == "https://" + hosts["sandbox"]
+        assert api["DB_HOST"] == "commons-postgresql.commons.svc.cluster.local"
+        assert deployment_env(docs, "verify-web")["API_INTERNAL_URL"] == f"http://verify-api.{namespace}.svc.cluster.local:80/oan"
+        for name in ["verify-api", "verify-web"]:
+            pod = next(doc for doc in docs if doc["kind"] == "Deployment" and doc["metadata"]["name"] == name)["spec"]["template"]["spec"]
+            assert pod["automountServiceAccountToken"] is False
+            assert pod["securityContext"]["runAsNonRoot"] is True
+            assert pod["imagePullSecrets"] == [{"name": "render-only-pull"}]
+            assert pod["containers"][0]["image"].startswith("example.invalid/render-only@sha256:")
+        api_pod = next(doc for doc in docs if doc["kind"] == "Deployment" and doc["metadata"]["name"] == "verify-api")["spec"]["template"]["spec"]
+        assert api_pod["containers"][0]["envFrom"][0] == {"secretRef": {"name": "render-only-config"}}
+        assert api_pod["containers"][0]["readinessProbe"]["httpGet"] == {"path": "/oan/health", "port": "http"}
+    for setting in ["api.image.repository=", "api.image.digest=sha256:invalid", "web.image.repository=", "secret.name=", "web.enabled=false"]:
+        bad = subprocess.run([HELM, "template", "verify", str(chart), "-f", str(sandbox_values), "--set", setting], capture_output=True)
+        assert bad.returncode != 0, "oan-sandbox accepts invalid settings: " + setting
+
+
 def offline_resolution(build):
     mirror = build / "mirror"
     mirror.mkdir()
@@ -251,7 +298,9 @@ def offline_resolution(build):
             # Helm validates the dependency digest and downloads locked packages
             # from this loopback mirror. Original chart URLs are unchanged.
             run("dependency", "build", target, "--skip-refresh", env=env)
-            assert read(target / "Chart.lock") == read(metadata.parent / "Chart.lock")
+            # A chart without dependencies (oan-sandbox) has no lock to compare.
+            if read(metadata).get("dependencies"):
+                assert read(target / "Chart.lock") == read(metadata.parent / "Chart.lock")
             for ns in ["verify-a", "verify-b"]:
                 original, identities = documents(run("template", "verify", metadata.parent, "--namespace", ns), ns)
                 resolved, new_identities = documents(run("template", "verify", target, "--namespace", ns), ns)
@@ -278,7 +327,8 @@ def package(report):
             else:
                 run("package", chart, "--destination", temp)
                 shutil.copy2(temp / archive_name, archive)
-                prior[archive_name] = {"sha256": digest(archive), "sourceSha256": source_sha}
+                prior[archive_name] = {"sha256": digest(archive), "sourceSha256": source_sha,
+                                       "sourceFingerprintAlgorithm": "sha256-relative-posix-paths-and-bytes-without-python-cache-v2"}
             for ns in ["verify-a", "verify-b"]:
                 packaged_docs, from_package = documents(run("template", "verify", archive, "--namespace", ns), ns)
                 source_docs, from_source = documents(run("template", "verify", chart, "--namespace", ns), ns)
@@ -287,6 +337,7 @@ def package(report):
                 assert secret_refs(packaged_docs) == secret_refs(source_docs)
             with tarfile.open(archive) as tar:
                 assert not any(Path(member.name).name in {"values-live.yaml", "values-dev.yaml", "values-new-dev.yaml"} or Path(member.name).name.startswith(("private-values", ".env")) for member in tar.getmembers()), "Private/environment capture in package"
+                assert not any("__pycache__" in Path(member.name).parts or member.name.endswith(".pyc") for member in tar.getmembers()), "Python bytecode cache in chart package"
                 packaged_info = yaml.safe_load(tar.extractfile(chart.name + "/Chart.yaml").read())
                 assert packaged_info["annotations"] == info["annotations"]
                 assert packaged_info["sources"] == info["sources"]
@@ -325,7 +376,25 @@ def package(report):
     report["index"] = "Relative URLs, SHA-256, HTTP download, exact Helm version selection and repository-based renders verified against loopback server"
 
 
+def check_farmer_jenkins_profile():
+    pin = json.loads((ROOT / 'environments/dev/farmer-jenkins.json').read_text(encoding='utf-8'))
+    assert (pin['environment'], pin['namespace'], pin['release']) == ('dev', 'farmer', 'farmer-registry')
+    assert pin['repository'] == 'https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/'
+    archive = ROOT / 'repository' / (pin['name'] + '-' + pin['version'] + '.tgz')
+    assert hashlib.sha256(archive.read_bytes()).hexdigest() == pin['sha256']
+    with tarfile.open(archive) as chart:
+        def metadata(path):
+            return yaml.safe_load(chart.extractfile(pin['name'] + '/' + path))
+        parent = metadata('Chart.yaml')
+        child = metadata('charts/openg2p-registry/Chart.yaml')
+    assert (parent['name'], parent['version'], parent['appVersion']) == (pin['name'], pin['version'], pin['platformVersion'])
+    assert parent['dependencies'] == [{'alias': 'registry', 'name': 'openg2p-registry',
+                                      'version': pin['platformVersion'], 'repository': 'https://openg2p.github.io/openg2p-helm'}]
+    assert (child['name'], child['version']) == ('openg2p-registry', pin['platformVersion'])
+
+
 def main():
+    check_farmer_jenkins_profile()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--package", action="store_true")
     parser.add_argument("--online", action="store_true")
@@ -338,7 +407,7 @@ def main():
     baselines = json.loads((ROOT / f"releases/resource-baselines-{CURRENT_VERSION}.json").read_text())
     with build_directory() as build:
         offline_resolution(build)
-        report["offlineResolution"] = "All five locks resolved from dependencies bundled with verified source packages"
+        report["offlineResolution"] = "All chart locks resolved from dependencies bundled with verified source packages"
         for metadata in CHARTS:
             chart = metadata.parent
             info = read(metadata)
@@ -346,7 +415,7 @@ def main():
             check_oan_metadata(info, chart)
             values = read(chart / "values.yaml")
             run("lint", chart, "--strict")
-            example_name = "commons-services" if chart.name == "openg2p-commons-services" else chart.name.removeprefix("openg2p-").removesuffix("-registry")
+            example_name = {"openg2p-commons-services": "commons-services", "oan-sandbox": "sandbox"}.get(chart.name) or chart.name.removeprefix("openg2p-").removesuffix("-registry")
             example = ROOT / "examples/dev" / (example_name + ".yaml")
             run("lint", chart, "--strict", "-f", example)
             example_docs, _ = documents(run("template", "verify", chart, "--namespace", "verify-a", "-f", example), "verify-a")
@@ -372,7 +441,7 @@ def main():
                 check_url_contract(chart, upgraded)
                 assert ("render-only-private-db", "password") in secret_refs(upgraded)
                 assert deployment_env(upgraded, "verify-staff-portal-ui")["MIGRATION_PRESERVES_CUSTOM_SETTING"] == "render-only"
-            components = ["aggregationApi"] if chart.name == "openg2p-commons-services" else ["dashboardApi", "dashboardUi"]
+            components = {"openg2p-commons-services": ["aggregationApi"], "oan-sandbox": []}.get(chart.name, ["dashboardApi", "dashboardUi"])
             for component in components:
                 assert values[component]["enabled"] is False
                 fixture = {component: {"enabled": True, "image": dict(SYNTHETIC_IMAGE), "envFrom": [{"secretRef": {"name": "render-only-config"}}], "imagePullSecrets": [{"name": "render-only-pull"}]}}
@@ -457,6 +526,8 @@ def main():
                 for setting in ["consentPartnerPortal.image.repository=", "consentPartnerPortal.image.digest=sha256:invalid", "consentPartnerPortal.keycloak.url=", "openg2p-consent-manager.enabled=false"]:
                     bad = subprocess.run([HELM, "template", "verify", str(chart), "--set", "consentPartnerPortal.enabled=true", "--set", setting], capture_output=True)
                     assert bad.returncode != 0, "Portal accepts invalid prerequisites: " + setting
+            if chart.name == "oan-sandbox":
+                check_sandbox(chart, values, build, migration)
             report["charts"][chart.name] = {"lint": "strict passed", "resources": len(identities), "namespaces": ["verify-a", "verify-b"], "preservation": "upstream resource identities, selectors and Secret references match baseline", "baselineScope": upstream["scope"], "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed", "defaultImageReferences": image_refs(baseline)}
             report["charts"][chart.name]["devExample"] = str(example.relative_to(ROOT)) + ": strict lint and render passed"
             report["charts"][chart.name]["devEndpointMigration"] = "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
@@ -472,7 +543,8 @@ def main():
                 target = build / "online" / metadata.parent.name
                 shutil.copytree(metadata.parent, target)
                 run("dependency", "build", target, env=env)
-                assert read(target / "Chart.lock") == read(metadata.parent / "Chart.lock")
+                if read(metadata).get("dependencies"):
+                    assert read(target / "Chart.lock") == read(metadata.parent / "Chart.lock")
                 actual, actual_ids = documents(run("template", "verify", target, "--namespace", "verify-a"), "verify-a")
                 bundled, bundled_ids = documents(run("template", "verify", metadata.parent, "--namespace", "verify-a"), "verify-a")
                 assert actual_ids == bundled_ids
@@ -484,7 +556,7 @@ def main():
     (ROOT / "releases/validation.json").write_text(json.dumps(report, indent=2) + "\n")
     print(f"Validated {len(CHARTS)} charts: strict lint, locked dependencies, namespaces and optional workloads.")
     if args.package:
-        print("Packaged five charts; archives and relative Helm index verified over local HTTP.")
+        print(f"Packaged {len(CHARTS)} charts; archives and relative Helm index verified over local HTTP.")
     if args.release_ready:
         release = read(ROOT / f"releases/{CURRENT_VERSION}.yaml")
         assert release["readyForPublication"] is True
