@@ -1,5 +1,37 @@
 apiVersion: v1
 entries:
+  oan-sandbox:
+  - annotations:
+      catalog.cattle.io/display-name: OAN Sandbox
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-sandbox
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    apiVersion: v2
+    appVersion: develop
+    created: "2026-10-21T17:22:34.4968567+05:30"
+    description: OAN Sandbox for OpenAgriNet (OAN), developed in the COSS sandbox-platform
+      repository; developer portal with the API catalogue, participant portal, try-it
+      console and admin console. Component images have independent versions.
+    digest: 38706e0713bc1c9cb043c490b7e791c29304d776bf804a20cb3a2e91ca6ba41f
+    home: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - sandbox
+    - developer-portal
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-sandbox
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-sandbox-1.0.0-dev.6.tgz
+    version: 1.0.0-dev.6
   openg2p-commons-services:
   - annotations:
       catalog.cattle.io/display-name: OAN Commons Services (Consent Manager, Partner
@@ -1531,4 +1563,4 @@ entries:
     urls:
     - openg2p-livestock-registry-1.0.0-dev.1.tgz
     version: 1.0.0-dev.1
-generated: "2026-10-21T09:56:28.2519831+05:30"
+generated: "2026-10-21T17:22:34.4954021+05:30"
