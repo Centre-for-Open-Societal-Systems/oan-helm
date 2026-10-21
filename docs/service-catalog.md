@@ -1,8 +1,8 @@
 # OAN services and their Helm owners
 
 Start with the editable sources in [`charts/`](../charts/). This repository has
-five charts. Each registry owns its domain services; Commons Services owns the
-shared applications. `repository/*.tgz` are the packaged downloads used by Rancher.
+six charts. Each registry owns its domain services; Commons Services owns the
+shared applications; OAN Sandbox is the developer portal. `repository/*.tgz` are the packaged downloads used by Rancher.
 They are generated from these sources, not replacements for the source trees.
 
 ## Where are COSS Consent Manager and Aggregation?
@@ -40,7 +40,7 @@ Consent uses per-binding `consent_method`; old global subject-consent flags are
 absent. OTP remains unavailable pending SMS. Follow the
 [current prerequisites](consent-aggregation-prerequisites.md).
 
-## Five installable chart entries
+## Six installable chart entries
 
 | Chart source | What it installs | Existing dev release / namespace |
 | --- | --- | --- |
@@ -49,6 +49,7 @@ absent. OTP remains unavailable pending SMS. Follow the
 | [Livestock](../charts/openg2p-livestock-registry/) | Livestock APIs/UI, workers, seed/test jobs, reporting, configurable dashboard API/UI | `livestock-registry` / `livestock` |
 | [DA](../charts/openg2p-da-registry/) | DA APIs/UI, workers and initialization, plus configurable dashboard API/UI | Namespace unconfirmed; components disabled pending images/configuration |
 | [Commons Services](../charts/openg2p-commons-services/) | Shared application services, including COSS Consent and configurable Aggregation | `commons-services` / `commons` |
+| [OAN Sandbox](../charts/oan-sandbox/) | Developer portal: API catalogue, participant portal with try-it console, admin console; API, web and one route (`/oan` to the API) | Planned `sandbox` / `sandbox`; disabled until its images are published |
 
 ## COSS repository-to-service map
 
@@ -58,6 +59,7 @@ absent. OTP remains unavailable pending SMS. Follow the
 | `cropsown-regsitry` | Same services for Crop Sown | [Crop values](../charts/openg2p-cropsown-registry/values.yaml), `registry.*` | Verified COSS images, individually pinned digests |
 | `livestock-registry` | Same services for Livestock | [Livestock values](../charts/openg2p-livestock-registry/values.yaml), `registry.*` | Verified COSS images, individually pinned digests |
 | `da-registry` | DA registry domain services | [DA values](../charts/openg2p-da-registry/values.yaml), `registry.*` | Source included; unavailable backend images keep workloads/initialization disabled |
+| `sandbox-platform` | OAN Sandbox API (FastAPI) and web (Next.js) | [Sandbox values](../charts/oan-sandbox/values.yaml), `api.*`, `web.*`, `virtualService.*`; dev overlay [sandbox.yaml](../environments/dev/values/sandbox.yaml) | Source included; images not yet published, so all workloads are disabled |
 | `farmer-registry-dashboard-api` | Farmer chart-data API | [API template](../charts/openg2p-farmer-registry/templates/dashboard-api.yaml), `dashboardApi.*` | Verified image; configurable; dev example enabled after reporting/identity prerequisites |
 | `cropsown-registry-dashboard-api` | Crop chart-data API | [API template](../charts/openg2p-cropsown-registry/templates/dashboard-api.yaml), `dashboardApi.*` | Verified image; configurable; dev example enabled after reporting/identity prerequisites |
 | `livestock-registry-dashbaord-api` | Livestock chart-data API (upstream repository spelling retained) | [API template](../charts/openg2p-livestock-registry/templates/dashboard-api.yaml), `dashboardApi.*` | Verified image; disabled pending reporting preparation |
@@ -120,7 +122,7 @@ tar -tzf charts/openg2p-commons-services/charts/openg2p-consent-manager-1.0.2.tg
 ```
 
 Commons Base remains upstream and separate. Connectors, the existing shared
-`oan-dashboards` release and unrelated COSS applications are outside these five
+`oan-dashboards` release and unrelated COSS applications are outside these six
 charts. Existing independent Helm owners are retained. See the
 [readiness table](readiness.md), [URL migration](dev-urls.md) and
 [Rancher guide](rancher-dev.md) for manual use.

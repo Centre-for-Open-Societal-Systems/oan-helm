@@ -1,0 +1,24 @@
+# OAN Sandbox (charts/oan-sandbox) in the dev environment.
+# Release `sandbox` in namespace `sandbox` (planned; not yet installed).
+# Merge with private values holding the images and the Secret name.
+global:
+  hostname: sandbox.development.oanstaging.com
+config:
+  appEnv: sandbox
+  db:
+    host: commons-postgresql.commons.svc.cluster.local
+    port: 5432
+    name: sandbox_db_oan
+    user: sandbox
+  gateway:
+    enabled: true
+    # Dev APISIX (grievance cluster). A2C routes are not on it yet.
+    sandboxUrl: https://grievance-backend-dev.oanstaging.com
+    sync:
+      # The Admin API is internal to the grievance cluster; enable once it is
+      # reachable from this cluster with a viewer key in GATEWAY_ADMIN_TOKEN.
+      enabled: false
+      type: apisix
+      adminUrl: ""
+virtualService:
+  gateway: istio-system/development

@@ -1,6 +1,6 @@
 # Dev readiness and provenance
 
-All five charts are packageable. Installing a package still requires the
+All six charts are packageable. Installing a package still requires the
 environment's private values, pull credentials and service prerequisites.
 Rendering does not prove runtime compatibility or migration safety.
 
@@ -20,7 +20,8 @@ distinguish installed components from partner/staff workflows still awaiting set
 | DA dashboard API/UI | Optional configurable workloads included | Disabled pending images and confirmed runtime/database contracts |
 | COSS Consent API/UI/sanity | Current `48e64c249056` images published and digest-pinned; 195 tests pass with disposable PostgreSQL | Fresh live DB copy passed migration twice with row counts/IDs preserved. Retain current owner, private values and key; OTP unavailable pending SMS. See current evidence. |
 | Aggregation API | Current `a5fa17fd7e7f` image published; 171 unit tests pass; cluster ECR pull access now works | Stateless: no own DB/queue/migration. Default disabled; persistent signing, catalog, staff auth/roles and partner bindings required. Stored-consent calls await partner realm/usable consent. |
-| Connectors / shared OAN dashboard | Existing independent releases confirmed in dev | Remain outside these five charts; keep current owners |
+| OAN Sandbox | Chart added for `sandbox-platform`; renders verified by `validate.py` | API, web and route disabled by default. Publish both images (web built for `https://sandbox.development.oanstaging.com/oan`), create DB/user on `commons-postgresql` and the namespace Secret, then enable. Packaged as `oan-sandbox-1.0.0-dev.6.tgz` |
+| Connectors / shared OAN dashboard | Existing independent releases confirmed in dev | Remain outside these six charts; keep current owners |
 | Commons Base | New preparation pin `2.3.4-rc.245`; dev currently `commons/commons` at `2.3.3` | Install directly from OpenG2P under existing owner; infrastructure upgrade is separate work |
 
 `releases/provenance.json` records commits, imported-file hashes, dependency pins

@@ -3,6 +3,20 @@
   "chartVersion": "1.0.0-dev.6",
   "clusterAccess": false,
   "charts": {
+    "oan-sandbox": {
+      "lint": "strict passed",
+      "resources": 0,
+      "namespaces": [
+        "verify-a",
+        "verify-b"
+      ],
+      "preservation": "upstream resource identities, selectors and Secret references match baseline",
+      "baselineScope": "new chart in 1.0.0-dev.6: every workload disabled by default, so the default render has no resources; enabled renders are checked by validate.py",
+      "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
+      "defaultImageReferences": [],
+      "devExample": "examples\\dev\\sandbox.yaml: strict lint and render passed",
+      "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
+    },
     "openg2p-commons-services": {
       "lint": "strict passed",
       "resources": 155,
@@ -159,9 +173,9 @@
     }
   },
   "upstreamResolution": "not attempted",
-  "offlineResolution": "All five locks resolved from dependencies bundled with verified source packages",
-  "packages": 30,
-  "currentPackages": 5,
+  "offlineResolution": "All chart locks resolved from dependencies bundled with verified source packages",
+  "packages": 31,
+  "currentPackages": 6,
   "historicalPackages": 25,
   "index": "Relative URLs, SHA-256, HTTP download, exact Helm version selection and repository-based renders verified against loopback server"
 }
