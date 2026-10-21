@@ -47,8 +47,8 @@ binding to make a demo pass.
 | Aggregation signing | Persistent Secret `aggregation-api-signing`, shared by all workers. Register its public key in Partner Management as `PARTNER_AGGREGATION_LAYER` for sender `aggregation-layer`. Distinct from Consent's receipt key. |
 | Registry catalog | `aggregation-api-catalog`: actual cross-namespace partner/staff Services, controller IDs, scope names, identity matching and reviewed field allowlists. Verify source mappings against each environment before data release. |
 | Partner bindings | PM identity/key registration and explicit CM bindings matching catalog audience/controller/scopes/purposes and current `consent_method`. Do not widen existing partner policies. |
-| Stored consent | `authorize.consent_id` requires a verified partner-realm issuer/JWKS, correct `partner_id` claim and stored grant for `aggregation_layer`. The inspected dev environment has no partner realm. Empty issuer refuses this path. |
-| Partner portal / OTP | Portal image and Helm workload are included in dev.6. Prepare partner realm/client/roles/claims and use the reviewed route/overlay. SMS remains a separate prerequisite for OTP; see the [portal guide](consent-partner-portal.md). |
+| Stored consent | `authorize.consent_id` requires a verified partner-realm issuer/JWKS, correct `partner_id` claim and stored grant for `aggregation_layer`. The partner realm and portal browser client are prepared. Aggregation partner issuer/JWKS and the appropriate integration identities/bindings still need configuration; an empty issuer refuses this path. |
+| Partner portal / OTP | Portal is deployed on new-dev using dev.6, with partner realm/client/roles/claims and same-origin routing. Prepare those resources before enabling another environment. SMS remains a separate prerequisite for OTP; see the [portal guide](consent-partner-portal.md). |
 | Public route | Optional `aggregationApi.virtualService` uses `aggregation.development.oanstaging.com` and `istio-system/development`. Existing wildcard DNS/TLS handles it. |
 
 ## Rancher values

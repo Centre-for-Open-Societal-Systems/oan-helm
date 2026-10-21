@@ -16,10 +16,12 @@ Current chart version is **`1.0.0-dev.6`**, using
 `<service>.development.oanstaging.com` and the shared Istio Gateway. It retains
 OAN display names and direct COSS source links. Earlier packages remain unchanged.
 Component image versions are independent; automatic synchronization is deferred.
+See the [versioning guideline](docs/versioning.md) for when to increment the dev
+counter, patch, minor or major version and how a package becomes a stable release.
 Old application URLs remain compatible until explicit migration completion;
 browser navigations redirect temporarily and API requests retain their methods.
 
-The new-dev `commons-services/commons` release now runs dev.5 with **Aggregation
+The new-dev `commons-services/commons` release now runs dev.6 with **Aggregation
 enabled** and the new Consent images. See [installed Rancher status and remaining
 prerequisites](docs/rancher-consent-aggregation-status.md). Defaults remain disabled
 for new installations until their runtime configuration is ready.

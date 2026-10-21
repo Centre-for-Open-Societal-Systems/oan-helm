@@ -115,7 +115,7 @@ def main():
         'uniqueScenariosExecuted':len(seen),'requiredScenarios':len(required),
         'tabsOpened':sum(name.strip()=='15 Open every returned tab' for name in names),
         'identity':'Dedicated service accounts, not admin or nina.patel',
-        'consentPartnerOtp':{'status':'blocked','prerequisites':['Partner realm/client and claims','Reviewed Consent and internal registry bindings plus PM signing key','SMS delivery; OTP remains disabled']},
+        'consentPartnerOtp':{'status':'blocked','prerequisites':['Aggregation partner authentication and appropriate integration clients','Reviewed Consent and internal registry bindings plus PM signing key','SMS delivery; OTP remains disabled']},
         'rawReportsPrivate':True}
     (args.output/'report.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
     print(json.dumps(report))

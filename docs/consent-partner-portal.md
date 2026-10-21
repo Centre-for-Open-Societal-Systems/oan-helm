@@ -9,6 +9,11 @@ The new-dev target is:
 
 <https://consent-partner-portal.development.oanstaging.com/>
 
+Deployed and verified on 21 October 2026: `commons-services/commons`, chart
+`1.0.0-dev.6`, Helm revision **18**. Browser PKCE login and all three portal pages
+pass; the portal API passes **25** assertions and the existing staff regression
+passes **107**. See [live evidence](../releases/live-consent-partner-portal-20261021.json).
+
 The separate `consent-manager-partner.development.oanstaging.com` host remains
 the partner API for validation, receipts and JWKS. It is not the browser portal.
 
@@ -71,8 +76,8 @@ renderer; `--no-hooks` alone does not suppress non-hook bootstrap Jobs.
 
 Before upgrading, back up release values/manifests, identity configuration and
 the Consent database privately. Compare the complete proposed manifest against
-the installed release. Only the new portal resources and the staff Consent API's
-partner-auth configuration should change. Helm rollback does not undo database
+the installed release. Only the new portal resources and the shared Consent
+API/init/expiry partner-auth configuration should change. Helm rollback does not undo database
 migrations or separately prepared identity resources.
 
 Verify HTTPS UI and deep links, noncached runtime configuration, PKCE sign-in,
@@ -81,3 +86,12 @@ Check Pod readiness and the exact image digest, then rerun the
 [automated staff regression](automated-staff-test.md) to catch regressions in
 existing Consent and Aggregation endpoints. Keep browser traces, credentials and
 raw response bodies private.
+
+On the prepared operator workspace, run
+`Temp/consent-partner-portal-20261019/Run-Portal-Test.cmd` for an unattended combined
+check. It obtains the dedicated test credentials privately, refreshes staff test
+tokens, signs in through the real browser PKCE flow, runs both Postman collections
+and saves a private combined report. It does not create consents or enable OTP.
+Reusable test sources are
+[`test-partner-portal-browser.py`](../scripts/test-partner-portal-browser.py) and
+[`COSS-Partner-Portal.postman_collection.json`](../postman/COSS-Partner-Portal.postman_collection.json).
