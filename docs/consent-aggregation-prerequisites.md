@@ -1,10 +1,13 @@
 # Consent Manager and Aggregation: current dev setup
 
-Current chart: **1.0.0-dev.5**. Consent comes from COSS commit
+Current chart: **1.0.0-dev.6**. Consent comes from COSS commit
 `48e64c249056a1aed3ce728c61c1bc059a288a50`; Aggregation comes from
 `a5fa17fd7e7f50eb9a8649c267a9cc59223c934c`. Four images are published to the
 existing ECR repositories and selected by digest. See [current evidence](../releases/consent-aggregation-20261019.json).
-Historical candidate/integration reports describe older images only.
+Historical candidate/integration reports describe older images only. The optional
+[partner portal](consent-partner-portal.md) adds an independently pinned image
+from merged commit `d911269106b0`; that merge changes documentation only relative
+to the current API source.
 
 The existing dev release is now upgraded, with Aggregation enabled. Runtime
 Secrets, catalog and registry service identity are prepared; see
@@ -45,7 +48,7 @@ binding to make a demo pass.
 | Registry catalog | `aggregation-api-catalog`: actual cross-namespace partner/staff Services, controller IDs, scope names, identity matching and reviewed field allowlists. Verify source mappings against each environment before data release. |
 | Partner bindings | PM identity/key registration and explicit CM bindings matching catalog audience/controller/scopes/purposes and current `consent_method`. Do not widen existing partner policies. |
 | Stored consent | `authorize.consent_id` requires a verified partner-realm issuer/JWKS, correct `partner_id` claim and stored grant for `aggregation_layer`. The inspected dev environment has no partner realm. Empty issuer refuses this path. |
-| Partner portal / OTP | Requires partner realm/client/roles/claims, published portal image, reviewed route and SMS. Deferred. No guessed image/client values. |
+| Partner portal / OTP | Portal image and Helm workload are included in dev.6. Prepare partner realm/client/roles/claims and use the reviewed route/overlay. SMS remains a separate prerequisite for OTP; see the [portal guide](consent-partner-portal.md). |
 | Public route | Optional `aggregationApi.virtualService` uses `aggregation.development.oanstaging.com` and `istio-system/development`. Existing wildcard DNS/TLS handles it. |
 
 ## Rancher values

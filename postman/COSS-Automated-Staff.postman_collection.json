@@ -1,0 +1,783 @@
+{
+  "info": {
+    "name": "COSS automated new-dev staff regression",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Run through the authorized local launcher: fixture setup and fresh test service tokens are automatic. Tests live staff access and registry data, Consent routing and access denial. Full partner OTP flow remains blocked pending SMS and partner setup."
+  },
+  "item": [
+    {
+      "name": "01 Aggregation health",
+      "request": {
+        "method": "GET",
+        "url": "{{agg_url}}/ping",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "['tab_queue','first_tab','observed_roots'].forEach(k=>pm.collectionVariables.unset(k));",
+              "pm.collectionVariables.set('tabs_expected',0);pm.collectionVariables.set('tabs_checked',0);",
+              "['staff_access_token','peer_access_token','no_role_access_token'].forEach(k=>{if(!pm.environment.get(k))throw new Error('Run the automated launcher to provision fresh test tokens');});"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([200]).to.include(pm.response.code));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 Public catalog",
+      "request": {
+        "method": "GET",
+        "url": "{{agg_url}}/aggregation/v1/registries",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([200]).to.include(pm.response.code));",
+              "const j=pm.response.json();",
+              "pm.test('Exactly the configured registry set',()=>pm.expect(j.registries.map(r=>r.registryCode).sort()).to.eql(['CROPSOWN_REGISTRY','FARMER_REGISTRY','LIVESTOCK_REGISTRY']));",
+              "pm.test('No internal service URLs in public catalog',()=>pm.expect(pm.response.text()).not.to.include('svc.cluster.local'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 Consent UI",
+      "request": {
+        "method": "GET",
+        "url": "https://consent-manager.development.oanstaging.com/",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([200]).to.include(pm.response.code));",
+              "pm.test('HTML UI',()=>pm.expect(pm.response.headers.get('Content-Type')).to.include('text/html'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 Consent partner health",
+      "request": {
+        "method": "GET",
+        "url": "https://consent-manager-partner.development.oanstaging.com/api/consent-manager-partner/ping",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([200]).to.include(pm.response.code));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 Consent rejects anonymous administration",
+      "request": {
+        "method": "GET",
+        "url": "https://consent-manager.development.oanstaging.com/consent/v1/partners",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([401, 403]).to.include(pm.response.code));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 Aggregation viewer has no Consent administration",
+      "request": {
+        "method": "GET",
+        "url": "https://consent-manager.development.oanstaging.com/consent/v1/partners",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{staff_access_token}}",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([403]).to.include(pm.response.code));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 Missing staff token",
+      "request": {
+        "method": "POST",
+        "url": "{{agg_url}}/aggregation/v1/staff/registry/search",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "noauth"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"foundationalId\": \"{{foundational_id}}\", \"purpose\": \"synthetic_e2e_validation\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([401]).to.include(pm.response.code));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 Invalid staff token",
+      "request": {
+        "method": "POST",
+        "url": "{{agg_url}}/aggregation/v1/staff/registry/search",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{invalid_access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"foundationalId\": \"{{foundational_id}}\", \"purpose\": \"synthetic_e2e_validation\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([401]).to.include(pm.response.code));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "09 Valid token without viewer role",
+      "request": {
+        "method": "POST",
+        "url": "{{agg_url}}/aggregation/v1/staff/registry/search",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{no_role_access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"foundationalId\": \"{{foundational_id}}\", \"purpose\": \"synthetic_e2e_validation\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([403]).to.include(pm.response.code));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "10 Missing foundational ID",
+      "request": {
+        "method": "POST",
+        "url": "{{agg_url}}/aggregation/v1/staff/registry/search",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{staff_access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([400]).to.include(pm.response.code));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "11 Unknown registry",
+      "request": {
+        "method": "POST",
+        "url": "{{agg_url}}/aggregation/v1/staff/registry/search",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{staff_access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"foundationalId\": \"{{foundational_id}}\", \"purpose\": \"synthetic_e2e_validation\", \"registryFilter\": [\"OAN_E2E_UNKNOWN\"]}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([400]).to.include(pm.response.code));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "12 Absent synthetic subject",
+      "request": {
+        "method": "POST",
+        "url": "{{agg_url}}/aggregation/v1/staff/registry/search",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{staff_access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"foundationalId\": \"OAN-E2E-ABSENT-0001\", \"purpose\": \"synthetic_e2e_validation\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([200]).to.include(pm.response.code));",
+              "const j=pm.response.json();",
+              "pm.test('All registries answered with proven absence',()=>{pm.expect(j.registries).to.have.lengthOf(3);j.registries.forEach(r=>{pm.expect(r.status).to.equal('not_found');pm.expect(r.complete).to.equal(true);pm.expect(r.records).to.eql([]);pm.expect(r.error).to.be.oneOf([null,undefined]);});});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "13 Substring cannot identify a subject",
+      "request": {
+        "method": "POST",
+        "url": "{{agg_url}}/aggregation/v1/staff/registry/search",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{staff_access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"foundationalId\": \"E2E-UIN-0001\", \"purpose\": \"synthetic_e2e_validation\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([200]).to.include(pm.response.code));",
+              "const j=pm.response.json();",
+              "pm.test('All registries answered with proven absence',()=>{pm.expect(j.registries).to.have.lengthOf(3);j.registries.forEach(r=>{pm.expect(r.status).to.equal('not_found');pm.expect(r.complete).to.equal(true);pm.expect(r.records).to.eql([]);pm.expect(r.error).to.be.oneOf([null,undefined]);});});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14 Exact synthetic subject across registries",
+      "request": {
+        "method": "POST",
+        "url": "{{agg_url}}/aggregation/v1/staff/registry/search",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{staff_access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"foundationalId\": \"{{foundational_id}}\", \"purpose\": \"synthetic_e2e_validation\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([200]).to.include(pm.response.code));",
+              "const j=pm.response.json(); const expected=JSON.parse(pm.collectionVariables.get('expected_records'));",
+              "pm.test('Search contract and subject',()=>{pm.expect(j.schemaVersion).to.equal('1');pm.expect(j.foundationalId).to.equal(pm.environment.get('foundational_id'));pm.expect(j.searchId).to.be.a('string').and.not.empty;pm.expect(Date.parse(j.expiresAt)).to.be.above(Date.now());});",
+              "pm.test('Exact fixture IDs, complete results, no registry errors',()=>{",
+              " pm.expect(j.registries).to.have.lengthOf(3);",
+              " j.registries.forEach(r=>{const wanted=expected.filter(e=>e.registryCode===r.registryCode);pm.expect(r.status,r.registryCode).to.equal('found');pm.expect(r.complete).to.equal(true);pm.expect(r.error).to.be.oneOf([null,undefined]);pm.expect(r.records.map(x=>x.recordId).sort()).to.eql(wanted.map(x=>x.recordId).sort());r.records.forEach(x=>{const e=wanted.find(e=>e.recordId===x.recordId);pm.expect(x.summary.functionalId).to.equal(e.functionalId);pm.expect([x.summary.foundationalId,x.summary.linkFoundationalId]).to.include(pm.environment.get('foundational_id'));pm.expect(x.tabs.length).to.be.above(0);});});",
+              "});",
+              "const queue=[];(j.registries||[]).forEach(r=>(r.records||[]).forEach(record=>(record.tabs||[]).forEach(t=>{",
+              " pm.test('Tab request stays on the intended record',()=>{pm.expect(t.request.method).to.equal('POST');pm.expect(t.request.url).to.equal('/aggregation/v1/staff/registry/tab');pm.expect(t.request.body.recordId).to.equal(record.recordId);pm.expect(t.request.body.registryCode).to.equal(r.registryCode);});queue.push(t.request.body);",
+              "})));",
+              "pm.collectionVariables.set('tab_queue',JSON.stringify(queue));pm.collectionVariables.set('tabs_expected',queue.length);",
+              "if(queue.length)pm.collectionVariables.set('first_tab',JSON.stringify(queue[0]));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "15 Open every returned tab",
+      "request": {
+        "method": "POST",
+        "url": "{{agg_url}}/aggregation/v1/staff/registry/tab",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{staff_access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{{current_tab}}"
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const queue=JSON.parse(pm.collectionVariables.get('tab_queue')||'[]');",
+              "if(!queue.length)throw new Error('No fixture tabs were returned; refusing a vacuous pass');",
+              "pm.variables.set('current_tab',JSON.stringify(queue.shift()));pm.collectionVariables.set('tab_queue',JSON.stringify(queue));"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([200]).to.include(pm.response.code));",
+              "const j=pm.response.json();const sent=JSON.parse(pm.variables.get('current_tab'));",
+              "const expected=JSON.parse(pm.collectionVariables.get('expected_records'));const roots=JSON.parse(pm.collectionVariables.get('observed_roots')||'[]');",
+              "pm.test('Tab identity and schema match its search request',()=>{pm.expect(j.schemaVersion).to.equal('1');['registryCode','recordId','registerId','tabId','searchId'].forEach(k=>pm.expect(j[k],k).to.equal(sent[k]));pm.expect(j.sections).to.be.an('array');});",
+              "pm.test('Sections, fixture values and pagination',()=>{j.sections.forEach(s=>{pm.expect(s.fields).to.be.an('array');pm.expect(s.records).to.be.an('array');if(s.isList){pm.expect(s.pagination.page).to.equal(1);pm.expect(s.pagination.totalItems).to.be.at.least(s.records.length);}s.records.forEach(row=>{pm.expect(row.created_by).to.equal('oan-aggregation-e2e');pm.expect(expected.map(e=>e.recordId)).to.include(row.internal_record_id);if(row.internal_record_id===sent.recordId){const e=expected.find(e=>e.recordId===sent.recordId);pm.expect(row.functional_record_id).to.equal(e.functionalId);Object.entries(e.fields).forEach(([key,value])=>{pm.expect(row,key).to.have.property(key);pm.expect(row[key],key).to.equal(value);});if(!roots.includes(sent.recordId))roots.push(sent.recordId);}});});});",
+              "pm.collectionVariables.set('observed_roots',JSON.stringify(roots));pm.collectionVariables.set('tabs_checked',Number(pm.collectionVariables.get('tabs_checked'))+1);",
+              "const left=JSON.parse(pm.collectionVariables.get('tab_queue')||'[]');",
+              "if(left.length)pm.execution.setNextRequest(pm.info.requestName);",
+              "else {pm.test('Every offered tab executed and every root fixture returned',()=>{pm.expect(Number(pm.collectionVariables.get('tabs_checked'))).to.equal(Number(pm.collectionVariables.get('tabs_expected')));pm.expect(roots.sort()).to.eql(expected.map(e=>e.recordId).sort());});}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "16 Missing token on tab",
+      "request": {
+        "method": "POST",
+        "url": "{{agg_url}}/aggregation/v1/staff/registry/tab",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "noauth"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{{negative_tab}}"
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const b=JSON.parse(pm.collectionVariables.get('first_tab')||'null');if(!b)throw new Error('Positive search must return a tab first');",
+              "pm.variables.set('negative_tab',JSON.stringify(b));"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([401]).to.include(pm.response.code));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "17 Other viewer cannot reuse a ticket",
+      "request": {
+        "method": "POST",
+        "url": "{{agg_url}}/aggregation/v1/staff/registry/tab",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{peer_access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{{negative_tab}}"
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const b=JSON.parse(pm.collectionVariables.get('first_tab')||'null');if(!b)throw new Error('Positive search must return a tab first');",
+              "pm.variables.set('negative_tab',JSON.stringify(b));"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([404]).to.include(pm.response.code));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "18 Tampered ticket rejected",
+      "request": {
+        "method": "POST",
+        "url": "{{agg_url}}/aggregation/v1/staff/registry/tab",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{staff_access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{{negative_tab}}"
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const b=JSON.parse(pm.collectionVariables.get('first_tab')||'null');if(!b)throw new Error('Positive search must return a tab first');",
+              "b.searchId += 'tampered';pm.variables.set('negative_tab',JSON.stringify(b));"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([404]).to.include(pm.response.code));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "19 Different record rejected",
+      "request": {
+        "method": "POST",
+        "url": "{{agg_url}}/aggregation/v1/staff/registry/tab",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{staff_access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{{negative_tab}}"
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const b=JSON.parse(pm.collectionVariables.get('first_tab')||'null');if(!b)throw new Error('Positive search must return a tab first');",
+              "b.recordId='00000000-0000-0000-0000-000000000000';pm.variables.set('negative_tab',JSON.stringify(b));"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([400]).to.include(pm.response.code));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "20 Unknown tab rejected",
+      "request": {
+        "method": "POST",
+        "url": "{{agg_url}}/aggregation/v1/staff/registry/tab",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{staff_access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{{negative_tab}}"
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const b=JSON.parse(pm.collectionVariables.get('first_tab')||'null');if(!b)throw new Error('Positive search must return a tab first');",
+              "b.tabId='OAN_E2E_UNKNOWN';pm.variables.set('negative_tab',JSON.stringify(b));"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP status', () => pm.expect([400]).to.include(pm.response.code));"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "expected_records",
+      "value": "[{\"registryCode\": \"FARMER_REGISTRY\", \"database\": \"farmer_registry\", \"table\": \"g2p_register_farmers\", \"register\": \"Farmer\", \"functionalId\": \"OAN-E2E-FARMER-0001\", \"fields\": {\"foundational_id\": \"OAN-E2E-UIN-0001\"}, \"recordId\": \"5ff8b99c-3724-5d10-96a0-6751b8dc015b\"}, {\"registryCode\": \"CROPSOWN_REGISTRY\", \"database\": \"cropsown_registry\", \"table\": \"g2p_register_crop_sowns\", \"register\": \"CropSown\", \"functionalId\": \"OAN-E2E-CROP-0001\", \"fields\": {\"link_foundational_id\": \"OAN-E2E-UIN-0001\", \"fayda_fan_id\": \"OAN-E2E-UIN-0001\", \"farmer_id\": \"OAN-E2E-FARMER-0001\", \"farmer_name\": \"OAN AUTOMATED TEST\", \"status\": \"APPROVED\"}, \"recordId\": \"90aecdea-dab6-59ad-b40a-c24c06cd0dfa\"}, {\"registryCode\": \"LIVESTOCK_REGISTRY\", \"database\": \"livestock_registry\", \"table\": \"g2p_register_farmers\", \"register\": \"Farmer\", \"functionalId\": \"OAN-E2E-LIVESTOCK-FARMER-0001\", \"fields\": {\"link_foundational_id\": \"OAN-E2E-UIN-0001\", \"fayda_fan_id\": \"OAN-E2E-UIN-0001\", \"farmer_id\": \"OAN-E2E-FARMER-0001\", \"farmer_name\": \"OAN AUTOMATED TEST\"}, \"recordId\": \"b603f72f-f23b-5c50-b23b-6516b0e6d42a\"}, {\"registryCode\": \"LIVESTOCK_REGISTRY\", \"database\": \"livestock_registry\", \"table\": \"g2p_register_livestocks\", \"register\": \"Livestock\", \"functionalId\": \"OAN-E2E-LIVESTOCK-0001\", \"fields\": {\"link_foundational_id\": \"OAN-E2E-UIN-0001\", \"fayda_fan_id\": \"OAN-E2E-UIN-0001\", \"farmer_id\": \"OAN-E2E-FARMER-0001\", \"farmer_name\": \"OAN AUTOMATED TEST\", \"oan_id\": \"OAN-E2E-HOLDING-0001\", \"status\": \"VERIFIED\", \"state\": \"VERIFIED\", \"source_system\": \"MANUAL\"}, \"recordId\": \"ffabef0b-7bf9-5811-91fc-de7a0336633d\"}]"
+    },
+    {
+      "key": "foundational_id",
+      "value": "OAN-E2E-UIN-0001"
+    },
+    {
+      "key": "agg_url",
+      "value": "https://aggregation.development.oanstaging.com"
+    },
+    {
+      "key": "invalid_access_token",
+      "value": "invalid-regression-token"
+    }
+  ]
+}

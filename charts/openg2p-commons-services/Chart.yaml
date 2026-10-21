@@ -1,5 +1,6 @@
 annotations:
-  catalog.cattle.io/display-name: OAN Commons Services (Consent Manager & Aggregation)
+  catalog.cattle.io/display-name: OAN Commons Services (Consent Manager, Partner Portal
+    & Aggregation)
   catalog.cattle.io/release-name: commons-services
   openg2p.org/add-to-rancher: openg2p.org/add-to-rancher
   org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
@@ -10,6 +11,7 @@ annotations:
   oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-commons-services
   coss.org/upstream-source: https://github.com/OpenG2P/commons
   coss.org/upstream-source-revision: 32638189178ca451d354316a099918574c6730a5
+  oan.org/consent-partner-portal-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
 apiVersion: v2
 appVersion: 2.3.4-rc.247
 dependencies:
@@ -79,7 +81,7 @@ description: OAN Commons Services including OAN Consent Manager and Aggregation 
 icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
 name: openg2p-commons-services
 type: application
-version: 1.0.0-dev.5
+version: 1.0.0-dev.6
 home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
 sources:
 - https://github.com/Centre-for-Open-Societal-Systems/oan-helm

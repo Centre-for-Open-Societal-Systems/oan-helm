@@ -1,0 +1,15 @@
+{
+  "profile": "oan-new-dev-staff-e2e-v1",
+  "issuer": "https://keycloak.development.oanstaging.com/realms/staff",
+  "aggregationUrl": "https://aggregation.development.oanstaging.com",
+  "foundationalId": "OAN-E2E-UIN-0001",
+  "absentFoundationalId": "OAN-E2E-ABSENT-0001",
+  "substringFoundationalId": "E2E-UIN-0001",
+  "marker": "oan-aggregation-e2e",
+  "records": [
+    {"registryCode":"FARMER_REGISTRY","database":"farmer_registry","table":"g2p_register_farmers","register":"Farmer","functionalId":"OAN-E2E-FARMER-0001","fields":{"foundational_id":"OAN-E2E-UIN-0001"}},
+    {"registryCode":"CROPSOWN_REGISTRY","database":"cropsown_registry","table":"g2p_register_crop_sowns","register":"CropSown","functionalId":"OAN-E2E-CROP-0001","fields":{"link_foundational_id":"OAN-E2E-UIN-0001","fayda_fan_id":"OAN-E2E-UIN-0001","farmer_id":"OAN-E2E-FARMER-0001","farmer_name":"OAN AUTOMATED TEST","status":"APPROVED"}},
+    {"registryCode":"LIVESTOCK_REGISTRY","database":"livestock_registry","table":"g2p_register_farmers","register":"Farmer","functionalId":"OAN-E2E-LIVESTOCK-FARMER-0001","fields":{"link_foundational_id":"OAN-E2E-UIN-0001","fayda_fan_id":"OAN-E2E-UIN-0001","farmer_id":"OAN-E2E-FARMER-0001","farmer_name":"OAN AUTOMATED TEST"}},
+    {"registryCode":"LIVESTOCK_REGISTRY","database":"livestock_registry","table":"g2p_register_livestocks","register":"Livestock","functionalId":"OAN-E2E-LIVESTOCK-0001","fields":{"link_foundational_id":"OAN-E2E-UIN-0001","fayda_fan_id":"OAN-E2E-UIN-0001","farmer_id":"OAN-E2E-FARMER-0001","farmer_name":"OAN AUTOMATED TEST","oan_id":"OAN-E2E-HOLDING-0001","status":"VERIFIED","state":"VERIFIED","source_system":"MANUAL"}}
+  ]
+}
