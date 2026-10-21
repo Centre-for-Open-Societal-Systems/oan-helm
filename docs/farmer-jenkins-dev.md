@@ -34,7 +34,8 @@ Normal dev builds refuse to upgrade until the approved OAN chart is installed.
 2. Create fresh private evidence as described in Farmer's
    `docs/oan-dev-chart.md`. Review the exact completed Job records removed from
    Helm tracking. An active or unfinished affected Job blocks the cutover.
-3. Download and verify the approved package, reconcile installed literals and
+3. First run Farmer's `ci/deploy/cutover-dev.sh --rehearse` for read-only
+   preflight without a backup assertion. Download and verify the approved package, reconcile installed literals and
    Secret references through supported values, lint and render with cluster
    lookups. Compare named environments in application and init containers.
 4. Cutover suppresses all hooks with `--no-hooks` and removes all ordinary Jobs
@@ -55,18 +56,26 @@ Normal builds retain schema, seed, provenance and readiness gates. Migrations
 remain explicit and separately recoverable. Helm rollback cannot restore a DB;
 never automatically roll back across an unreviewed migration.
 
-## Current compatibility blocker
+## Verified compatibility, 2026-10-21
 
-A read-only server render of this exact public archive against Farmer dev
-revision **39**, inspected on **2026-10-21**, was rejected by the metadata-only
-guard. The chart adds environment defaults in four API/Celery workloads,
-including their postgres-checker init containers. Its reporting refresh CronJob
-also changes an embedded command's Unicode em-dash encoding. There is no public
-values field to replace that command. Saved values and exact installed image
-pins alone therefore do not establish a safe metadata-only cutover.
+A corrected read-only server rehearsal of this exact public archive against
+Farmer dev revision **39** passes metadata-only preservation of all **32**
+persistent resources and installed images. Helm reintroduces some nulled
+environment defaults during parent/child values coalescing. Farmer's reviewed
+deployment adapter removes only a fixed allowlist of those defaults when both
+prepared environment maps explicitly suppress the name. It applies to app/init
+containers during both dev rendering and upgrade; unknown changes remain
+rejected by the independent preservation guard. It does not alter commands,
+images, routes, credentials or chart sources/packages.
 
-No upgrade was performed. This profile documents the requested pin, but is not
-evidence that live cutover is ready. Resolve this incompatibility through a
-reviewed decision before merging/enabling the Farmer integration; the current
-plan disallows both chart-source changes and nonmetadata cutover differences.
-Do not use the pending dev.6 package as an implicit replacement.
+The initially reported command-encoding mismatch came from Windows subprocess
+decoding in the rehearsal tool. With explicit UTF-8 decoding, the reporting
+refresh command matches exactly. No command rewrite or guard exception is used.
+
+No upgrade was performed. The production rehearsal shell passed using a
+host-Python container adapter because the dev host lacks Docker; CI separately
+verifies container helpers. Backup recovery and live operational acceptance
+remain required. Merge the OAN profile first, pause automatic Farmer dev deploys,
+then merge Farmer, perform the backup-gated chart-only cutover, complete
+acceptance and resume normal builds. Dev.5 remains pinned independently of
+newer packages on `main`.
