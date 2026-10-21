@@ -1,0 +1,80 @@
+# Upstream chart apisix/apisix 2.18.2 (APISIX 3.19.0) from
+# https://apache.github.io/apisix-helm-chart, with its bundled
+# apisix-ingress-controller subchart. Not vendored or repackaged here.
+# Target: the grievance RKE2 node (13.233.56.204, ingress-nginx), not the OpenG2P cluster
+# that `server` in ../endpoints.yaml names.
+# Release: name `apisix`, namespace `apisix`. See docs/apisix-gateway.md.
+
+apisix:
+  # OAN routes use `:param` path segments.
+  router:
+    http: radixtree_uri_with_parameter
+  # Rate limits key on the client address. ingress-nginx sets X-Real-IP; trust it only
+  # from Pods (10.42.0.0/16 is the RKE2 default cluster CIDR, confirm on the node).
+  nginx:
+    http:
+      realIpHeader: X-Real-IP
+      realIpFrom:
+        - 127.0.0.1
+        - "unix:"
+        - 10.42.0.0/16
+  # Metrics on containerPort 9091 at /apisix/prometheus/metrics; the prometheus global
+  # rule below records them for every route.
+  prometheus:
+    enabled: true
+  admin:
+    credentials:
+      # Namespace-local Secret with keys `admin` and `viewer`, provisioned through the
+      # environment's secret process. Never commit the keys.
+      secretName: apisix-admin-credentials
+    allow:
+      # Narrow to the cluster Pod CIDR once confirmed; the chart default allows any address.
+      ingressControllerExtraIpList:
+        - 0.0.0.0/0
+
+# ingress-nginx on the node keeps public traffic and TLS (Let's Encrypt) and forwards the
+# grievance host to this Service, so it stays internal.
+service:
+  type: ClusterIP
+
+# Built-in etcd is meant for development only. Use externalEtcd in production.
+etcd:
+  enabled: true
+
+ingress-controller:
+  enabled: true
+  config:
+    kubernetes:
+      ingressClass: apisix
+  gatewayProxy:
+    createDefault: true
+    # Gateway-wide plugins (APISIX global rules), applied to every route of every app.
+    # App charts own their routes' plugins (CORS, body size, rate limits, auth).
+    plugins:
+      - name: request-id
+        enabled: true
+        config:
+          header_name: X-Request-Id
+          include_in_response: true
+      - name: prometheus
+        enabled: true
+        config:
+          # Label metrics by route and service name, not id.
+          prefer_name: true
+    provider:
+      controlPlane:
+        service:
+          name: apisix-admin
+          port: 9180
+        auth:
+          adminKey:
+            value: ""
+            valueFrom:
+              secretKeyRef:
+                name: apisix-admin-credentials
+                key: admin
+  apisix:
+    adminService:
+      namespace: apisix
+      name: apisix-admin
+      port: 9180
