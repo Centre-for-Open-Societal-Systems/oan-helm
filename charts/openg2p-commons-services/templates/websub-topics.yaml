@@ -1,0 +1,61 @@
+{{- if and .Values.websub.enabled .Values.websubTopicProvisioning.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-websub-topics-{{ .Release.Revision }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    oan.org/purpose: websub-topic-provisioning
+spec:
+  backoffLimit: 3
+  activeDeadlineSeconds: 300
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        oan.org/purpose: websub-topic-provisioning
+    spec:
+      restartPolicy: OnFailure
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        fsGroup: 1001
+      containers:
+        - name: provision
+          image: {{ .Values.websubTopicProvisioning.image | quote }}
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: '1'
+              memory: 768Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+          env:
+            - name: BOOTSTRAP_SERVERS
+              value: {{ required "websubTopicProvisioning.bootstrapServers is required" .Values.websubTopicProvisioning.bootstrapServers | quote }}
+            - name: KAFKA_HEAP_OPTS
+              value: -Xmx256m -Xms128m
+          command: [/bin/bash, -ec]
+          args:
+            - |
+              export PATH="/opt/bitnami/kafka/bin:$PATH"
+              {{- range .Values.websubTopicProvisioning.topics }}
+              topic={{ . | quote }}
+              kafka-topics.sh --bootstrap-server "$BOOTSTRAP_SERVERS" --create --if-not-exists \
+                --topic "$topic" --partitions 1 --replication-factor 1 \
+                --config retention.ms=-1 --config retention.bytes=-1
+              description=$(kafka-topics.sh --bootstrap-server "$BOOTSTRAP_SERVERS" --describe --topic "$topic")
+              echo "$description" | grep -Eq 'PartitionCount: *1([[:space:]]|$)'
+              echo "$description" | grep -Eq 'ReplicationFactor: *1([[:space:]]|$)'
+              kafka-configs.sh --bootstrap-server "$BOOTSTRAP_SERVERS" --entity-type topics \
+                --entity-name "$topic" --alter --add-config retention.ms=-1,retention.bytes=-1
+              {{- end }}
+{{- end }}

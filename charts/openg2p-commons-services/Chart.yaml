@@ -15,6 +15,10 @@ annotations:
 apiVersion: v2
 appVersion: 2.3.4-rc.247
 dependencies:
+- name: websub
+  version: 1.3.2
+  repository: https://openg2p.github.io/openg2p-helm
+  condition: websub.enabled
 - alias: master-data
   condition: master-data.enabled
   name: openg2p-master-data
@@ -81,7 +85,7 @@ description: OAN Commons Services including OAN Consent Manager and Aggregation 
 icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
 name: openg2p-commons-services
 type: application
-version: 1.0.0-dev.6
+version: 1.0.0-dev.7
 home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
 sources:
 - https://github.com/Centre-for-Open-Societal-Systems/oan-helm

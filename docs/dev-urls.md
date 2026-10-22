@@ -93,6 +93,15 @@ compatibility on a timer. Other servers and Rancher/Jenkins management URLs rema
 outside this change. Private backups retain the exact pre-cutover records and
 identity/release settings for recovery.
 
+ODK also retains `odk.commons-dev.oanstaging.com` as a proxy alias for existing
+Enketo survey references. Its existing Commons wildcard Nginx/TLS configuration
+forwards the original Host, so both the legacy Gateway and ODK VirtualService
+must list this hostname. `prepare-legacy-compatibility.py` retains it whenever
+the canonical ODK route is present. On 21 October, the missing alias caused
+Farmer form retrieval to return 404; adding only these two host entries restored
+authenticated formList, form XML and all four media downloads. Canonical URLs
+and document storage were preserved; no Farmer code or form republish was needed.
+
 The migration does not enable Aggregation, DA or unavailable components. Reserved
 future hostnames are not evidence of running services. Use the
 [service onboarding and enablement guide](service-onboarding.md) for new services.
@@ -158,3 +167,11 @@ python scripts/test-registry-public-browser.py --output .build/registry-browser
 This checks anonymous navigation, including the expected `/api/me` 401 that
 starts sign-in. It does not submit credentials or prove an authenticated registry
 session. CI chart validation remains independent of live cluster reachability.
+
+The dev Commons renderer also preserves the
+[Partner Management session cookie guard](partner-session-cookie-guard.md).
+It selects dev cookies when a staging parent-domain cookie has the same name.
+Ship the renderer with `partner_session_guard.py` and
+`partner-session-cookie-guard.cjs`. The live repair was a guarded Deployment
+patch; the current Helm revision does not contain it until reconciled through
+the updated renderer. Keep this integration on subsequent dev upgrades.

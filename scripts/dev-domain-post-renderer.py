@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""URL-only compatibility renderer for the exact installed legacy dev charts.
+"""Compatibility renderer for the exact installed legacy dev charts.
 
 Use with Helm --post-renderer during this migration. New chart dev.4 defaults
 already select the shared gateway. Private/test hosts retain their gateways.
+The PM UI also receives the dev session-cookie guard; ship its sibling files.
 """
 import base64
 import copy
@@ -10,6 +11,7 @@ import json
 import re
 import sys
 import yaml
+from partner_session_guard import configure as configure_partner_session_guard
 
 DOMAIN='development.oanstaging.com'
 GATEWAY='istio-system/development'
@@ -49,8 +51,22 @@ def transform(obj):
 
 def main():
     documents=[transform(d) for d in yaml.safe_load_all(sys.stdin) if d]
+    guard_maps=[]
+    for index,document in enumerate(documents):
+        if document.get('kind')=='Deployment' and document['metadata']['name'].endswith('-pm-staff-portal-ui'):
+            documents[index],config=configure_partner_session_guard(document)
+            guard_maps.append(config)
+    for config in guard_maps:
+        matches=[d for d in documents if d.get('kind')=='ConfigMap' and d['metadata']['name']==config['metadata']['name']]
+        if matches:
+            assert len(matches)==1 and matches[0]['data']==config['data'], 'Conflicting session guard ConfigMap'
+        else:documents.append(config)
     if '--skip-initialization-jobs' in sys.argv:
-        documents=[d for d in documents if d['kind']!='Job']
+        # Keep only the reviewed, metadata-only WebSub provisioning Job.
+        documents=[d for d in documents if d['kind']!='Job' or (
+            d['metadata'].get('labels',{}).get('oan.org/purpose')=='websub-topic-provisioning'
+            and re.fullmatch(r'commons-services-websub-topics-\d+',d['metadata']['name'])
+            and d['metadata'].get('namespace')=='commons')]
     # No logs: Helm consumes stdout as the complete manifest.
     yaml.safe_dump_all(documents,sys.stdout,sort_keys=False,width=100)
 
