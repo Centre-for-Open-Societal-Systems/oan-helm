@@ -44,6 +44,13 @@ topic, challenge response, signed callback and recovery after each component
 restarts. Reject `hub.mode=denied` even if HTTP is 200. Remove the synthetic
 subscription/callback afterwards; never log its secret.
 
+The New Dev acceptance run observed `Content-Type: application/json` with a
+form-shaped JSON envelope containing `hub.mode`, `hub.topic` and `hub.content`.
+The synthetic event is inside `hub.content`. For the future consumer, verify
+HMAC-SHA256 over the complete raw body before decoding that envelope; do not
+assume the event is the top-level JSON object. Match the final consumer contract
+to a captured event from the deployed hub version.
+
 Back up release values, manifests and cluster resources privately before upgrade.
 Rollback to the previous Commons revision restores application manifests; keep
 the Kafka metadata topics and broker storage. Do not delete them as rollback.
