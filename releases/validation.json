@@ -1,6 +1,6 @@
 {
-  "helm": "v3.19.0+g3d8990f",
-  "chartVersion": "1.0.0-dev.6",
+  "helm": "v3.17.3+ge4da497",
+  "chartVersion": "1.0.0-dev.7",
   "clusterAccess": false,
   "charts": {
     "oan-sandbox": {
@@ -14,7 +14,7 @@
       "baselineScope": "new chart in 1.0.0-dev.6: every workload disabled by default, so the default render has no resources; enabled renders are checked by validate.py",
       "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
       "defaultImageReferences": [],
-      "devExample": "examples\\dev\\sandbox.yaml: strict lint and render passed",
+      "devExample": "examples/dev/sandbox.yaml: strict lint and render passed",
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-commons-services": {
@@ -66,7 +66,7 @@
         "openg2p/postgres-init:1.2.0",
         "postgres:15-alpine"
       ],
-      "devExample": "examples\\dev\\commons-services.yaml: strict lint and render passed",
+      "devExample": "examples/dev/commons-services.yaml: strict lint and render passed",
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-cropsown-registry": {
@@ -95,7 +95,7 @@
         "openg2p/postgres-init:1.2.0",
         "openg2p/postgres-init:develop"
       ],
-      "devExample": "examples\\dev\\cropsown.yaml: strict lint and render passed",
+      "devExample": "examples/dev/cropsown.yaml: strict lint and render passed",
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-da-registry": {
@@ -109,7 +109,7 @@
       "baselineScope": "original 1.0.0-dev.1 resource names/selectors/Secret references; Commons Superset and Certify disabled to match inspected dev configuration",
       "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
       "defaultImageReferences": [],
-      "devExample": "examples\\dev\\da.yaml: strict lint and render passed",
+      "devExample": "examples/dev/da.yaml: strict lint and render passed",
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-farmer-registry": {
@@ -139,7 +139,7 @@
         "openg2p/postgres-init:1.2.0",
         "openg2p/postgres-init:develop"
       ],
-      "devExample": "examples\\dev\\farmer.yaml: strict lint and render passed",
+      "devExample": "examples/dev/farmer.yaml: strict lint and render passed",
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-livestock-registry": {
@@ -168,14 +168,14 @@
         "openg2p/postgres-init:1.2.0",
         "openg2p/postgres-init:develop"
       ],
-      "devExample": "examples\\dev\\livestock.yaml: strict lint and render passed",
+      "devExample": "examples/dev/livestock.yaml: strict lint and render passed",
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     }
   },
   "upstreamResolution": "not attempted",
   "offlineResolution": "All chart locks resolved from dependencies bundled with verified source packages",
-  "packages": 31,
+  "packages": 37,
   "currentPackages": 6,
-  "historicalPackages": 25,
+  "historicalPackages": 31,
   "index": "Relative URLs, SHA-256, HTTP download, exact Helm version selection and repository-based renders verified against loopback server"
 }
