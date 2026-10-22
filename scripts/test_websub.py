@@ -31,6 +31,10 @@ class WebsubContract(unittest.TestCase):
             if d['kind']=='Deployment':
                 self.assertEqual(d['spec']['replicas'],1)
                 self.assertIn('commons-kafka',str(d))
+                init=d['spec']['template']['spec']['initContainers']
+                self.assertEqual(init[0]['name'],'wait-for-websub-topics')
+                self.assertIn('--describe --topic',init[0]['args'][0])
+                self.assertNotIn('--create',init[0]['args'][0])
         jobs=[d for d in hub if d['kind']=='Job']
         self.assertEqual(len(jobs),1)
         command=jobs[0]['spec']['template']['spec']['containers'][0]['args'][0]

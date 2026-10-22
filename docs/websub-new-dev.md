@@ -21,6 +21,8 @@ replication factor one. `retention.ms=-1` and `retention.bytes=-1` prevent the
 broker's two-hour default from erasing subscriptions. No existing topic or
 broker defaults change. Monitor broker disk usage and metadata growth; unlimited
 metadata retention requires an explicit future retention/compaction design.
+Both WebSub processes wait for the provisioned one-partition topics before
+starting, preventing Kafka auto-creation from applying its three-partition default.
 Application WebSub topic names are values in metadata messages, not separate
 Kafka topics containing Farmer changes.
 
