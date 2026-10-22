@@ -1,3 +1,27 @@
+websub:
+  enabled: false
+  securityOn: false
+  kafka:
+    enabled: false
+  kafkaInstallationName: '{{ tpl .Values.global.kafkaInstallationName $ }}'
+  istio:
+    enabled: false
+  consolidator:
+    istio:
+      enabled: false
+      virtualservice:
+        enabled: false
+
+websubTopicProvisioning:
+  enabled: false
+  image: docker.io/openg2p/kafka:3.7.1-debian-12-r4
+  bootstrapServers: ''
+  topics:
+    - registered-websub-topics
+    - consolidated-websub-topics
+    - registered-websub-subscribers
+    - consolidated-websub-subscribers
+
 global:
   baseDomain: development.oanstaging.com
   keycloakBaseUrl: https://keycloak.development.oanstaging.com

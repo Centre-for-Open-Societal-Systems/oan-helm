@@ -62,7 +62,11 @@ def main():
             assert len(matches)==1 and matches[0]['data']==config['data'], 'Conflicting session guard ConfigMap'
         else:documents.append(config)
     if '--skip-initialization-jobs' in sys.argv:
-        documents=[d for d in documents if d['kind']!='Job']
+        # Keep only the reviewed, metadata-only WebSub provisioning Job.
+        documents=[d for d in documents if d['kind']!='Job' or (
+            d['metadata'].get('labels',{}).get('oan.org/purpose')=='websub-topic-provisioning'
+            and re.fullmatch(r'commons-services-websub-topics-\d+',d['metadata']['name'])
+            and d['metadata'].get('namespace')=='commons')]
     # No logs: Helm consumes stdout as the complete manifest.
     yaml.safe_dump_all(documents,sys.stdout,sort_keys=False,width=100)
 
