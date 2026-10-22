@@ -10,7 +10,7 @@ admin console (participants, products and end-points, CMS, masters, queries).
 | OAN application | [sandbox-platform](https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform) |
 | OAN Helm sources | [oan-helm](https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-sandbox) |
 
-Chart version **1.0.0-dev.6**. It has no OpenG2P dependency and owns no existing
+Chart version **1.0.0-dev.7**. It has no OpenG2P dependency and owns no existing
 release, so installing it changes no other chart's resources.
 
 ## What it installs
