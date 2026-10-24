@@ -20,9 +20,12 @@ global:
   auditManagerUrl: http://commons-services-auditmanager.commons.svc.cluster.local:80
   aweHostname: awe.development.oanstaging.com
   aweBaseUrl: http://commons-services-awe.commons.svc.cluster.local
-  aweDefaultCallbackUrl: http://{{ .Release.Name }}-staff-portal-api.{{ .Release.Namespace }}.svc.cluster.local/awe/webhooks/decision
-  idGeneratorInternalUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace }}.svc.cluster.local/v1
-  idGeneratorApiUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace }}.svc.cluster.local/v1
+  aweDefaultCallbackUrl: http://{{ .Release.Name }}-staff-portal-api.{{ .Release.Namespace
+    }}.svc.cluster.local/awe/webhooks/decision
+  idGeneratorInternalUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace
+    }}.svc.cluster.local/v1
+  idGeneratorApiUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace
+    }}.svc.cluster.local/v1
   notificationEnabled: false
   notificationApiHostname: ''
   notificationWsHostname: ''
@@ -65,8 +68,8 @@ registry:
       REGISTRY_STAFF_PORTAL_API_PARTNER_MGMT_ADMIN_API_URL: http://commons-services-pm-staff-portal-api.commons.svc.cluster.local
       REGISTRY_STAFF_PORTAL_API_PARTNER_MGMT_ADMIN_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
       REGISTRY_STAFF_PORTAL_API_AWE_BASE_URL: http://commons-services-awe.commons.svc.cluster.local
-      REGISTRY_STAFF_PORTAL_API_AWE_DEFAULT_CALLBACK_URL: http://{{ .Release.Name }}-staff-portal-api.{{
-        .Release.Namespace }}.svc.cluster.local/awe/webhooks/decision
+      REGISTRY_STAFF_PORTAL_API_AWE_DEFAULT_CALLBACK_URL: http://{{ .Release.Name
+        }}-staff-portal-api.{{ .Release.Namespace }}.svc.cluster.local/awe/webhooks/decision
       REGISTRY_STAFF_PORTAL_API_AUDIT_MANAGER_URL: http://commons-services-auditmanager.commons.svc.cluster.local:80
       COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       NOTIFICATION_ENABLED: 'false'
@@ -123,13 +126,16 @@ registry:
       ODK_HOOKS_ENABLED: 'true'
       REGISTRY_CELERY_WORKERS_AWE_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
       REGISTRY_CELERY_WORKERS_AWE_TOKEN_ISSUER_BASE_URL: https://keycloak.development.oanstaging.com
-      REGISTRY_CELERY_WORKERS_AWE_CLIENT_ID: '{{ tpl .Values.global.authClientId $ }}'
+      REGISTRY_CELERY_WORKERS_AWE_CLIENT_ID: '{{ tpl .Values.global.authClientId $
+        }}'
       REGISTRY_CELERY_WORKERS_AWE_ENABLED: '{{ .Values.global.aweEnabled }}'
       REGISTRY_CELERY_WORKERS_AWE_BASE_URL: http://commons-services-awe.commons.svc.cluster.local
-      REGISTRY_CELERY_WORKERS_AWE_HTTP_TIMEOUT_SECONDS: '{{ .Values.global.aweHttpTimeoutSeconds }}'
+      REGISTRY_CELERY_WORKERS_AWE_HTTP_TIMEOUT_SECONDS: '{{ .Values.global.aweHttpTimeoutSeconds
+        }}'
       REGISTRY_CELERY_WORKERS_AWE_DEFAULT_CALLBACK_URL: http://{{ .Release.Name }}-staff-portal-api.{{
         .Release.Namespace }}.svc.cluster.local/awe/webhooks/decision
-      REGISTRY_CELERY_WORKERS_AWE_CALLBACK_SECRET_ID: '{{ tpl .Values.global.aweCallbackSecretId $ }}'
+      REGISTRY_CELERY_WORKERS_AWE_CALLBACK_SECRET_ID: '{{ tpl .Values.global.aweCallbackSecretId
+        $ }}'
       REGISTRY_CELERY_WORKERS_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CELERY_WORKERS_MASTER_DATA_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
       REGISTRY_CELERY_WORKERS_MASTER_DATA_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
@@ -150,7 +156,8 @@ registry:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/celery
       tag: bf78e69a5fd6@sha256:982e8272993305d90d34ea5a449f915c5ad21689ba0788c48806fd003b1c143a
     envVars:
-      CELERY_OPTS: worker --beat --loglevel=info --schedule=/tmp/celery-beat-schedule.db --concurrency=4
+      CELERY_OPTS: worker --beat --loglevel=info --schedule=/tmp/celery-beat-schedule.db
+        --concurrency=4
       ODK_HOOKS_ENABLED: 'true'
       COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       NOTIFICATION_ENABLED: 'false'
@@ -297,6 +304,12 @@ dashboardApi:
       memory: 512Mi
   imagePullSecrets: []
   envFrom: []
+  auth:
+    enabled: true
+    issuer: ''
+    iamUrl: ''
+    audience: livestock-registry-dashboard-api
+    role: charts:read
 dashboardUi:
   enabled: false
   nameOverride: ''

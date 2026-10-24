@@ -1,6 +1,6 @@
 {
   "helm": "v3.19.0+g3d8990f",
-  "chartVersion": "1.0.0-dev.8",
+  "chartVersion": "1.0.0-dev.9",
   "clusterAccess": false,
   "charts": {
     "oan-sandbox": {
@@ -18,56 +18,10 @@
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-commons-services": {
-      "lint": "strict passed",
-      "resources": 155,
-      "namespaces": [
-        "verify-a",
-        "verify-b"
-      ],
-      "preservation": "upstream resource identities, selectors and Secret references match baseline",
-      "baselineScope": "original 1.0.0-dev.1 resource names/selectors/Secret references; Commons Superset and Certify disabled to match inspected dev configuration",
-      "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
-      "defaultImageReferences": [
-        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api:dev-48e64c249056@sha256:cca3273868b8ed28d193642b346fc3369b450ad7feefd42d02e91e84cb074831",
-        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-sanity:dev-48e64c249056@sha256:e5d2a30e5a30c252f30849fb7c61c772691f7521906c575ab3fb22584c2358e7",
-        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-ui:dev-48e64c249056@sha256:423f78a0d99b8bd65605848bf72e6d0abf84cb07303fdd6d8cf9fd424c5620c7",
-        "apache/kafka:3.7.2",
-        "busybox:1.36",
-        "curlimages/curl:8.11.0",
-        "curlimages/curl:8.11.1",
-        "docker.io/alpine:3.20",
-        "ghcr.io/enketo/enketo:7.5.1",
-        "ghcr.io/getodk/central-nginx:v2025.2.1",
-        "ghcr.io/getodk/pyxform-http:v3.1.0",
-        "jbergknoff/postgresql-client:latest",
-        "mosipid/artifactory-server:1.4.1-ES",
-        "mosipid/esignet:1.4.1",
-        "mosipid/kernel-keymanager-service:1.2.1.0",
-        "mosipid/keys-generator:1.2.1.0",
-        "mosipid/mock-identity-system:0.9.3",
-        "mosipid/oidc-ui:1.4.1",
-        "mosipid/postgres-init:1.2.0.1-B4",
-        "mosipid/postgres-init:1.2.0.2",
-        "openg2p/iam-agent-portal-api:1.4.4-rc.125",
-        "openg2p/iam-staff-portal-api:1.4.4-rc.125",
-        "openg2p/iam-staff-ui:1.4.4-rc.125",
-        "openg2p/keycloak-init:1.2.0",
-        "openg2p/master-data-api:1.1.4-rc.106",
-        "openg2p/master-data-db-seed:1.1.4-rc.106",
-        "openg2p/master-data-ui:1.1.4-rc.106",
-        "openg2p/odk-central-backend:v2025.2.1",
-        "openg2p/openg2p-audit-manager:1.2.0",
-        "openg2p/openg2p-awe-ui:1.2.2",
-        "openg2p/openg2p-awe:1.2.2",
-        "openg2p/openg2p-staff-portal-ui:1.2.0",
-        "openg2p/partner-management-partner-api:1.0.2",
-        "openg2p/partner-management-staff-portal-api:1.0.2",
-        "openg2p/partner-management-staff-portal-ui:1.0.2",
-        "openg2p/postgres-init:1.2.0",
-        "postgres:15-alpine"
-      ],
-      "devExample": "examples\\dev\\commons-services.yaml: strict lint and render passed",
-      "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
+      "promotionReady": false,
+      "platformVersion": "2.3.4-rc.247",
+      "validation": "dependency resolution and explicit fail-closed render gate verified",
+      "preservation": "NOT VERIFIED; full application/restored-data acceptance required before gate removal"
     },
     "openg2p-cropsown-registry": {
       "promotionReady": false,
@@ -128,8 +82,8 @@
   },
   "upstreamResolution": "not attempted",
   "offlineResolution": "All chart locks resolved from dependencies bundled with verified source packages",
-  "packages": 46,
+  "packages": 52,
   "currentPackages": 6,
-  "historicalPackages": 40,
+  "historicalPackages": 46,
   "index": "Relative URLs, SHA-256, HTTP download, exact Helm version selection and repository-based renders verified against loopback server"
 }

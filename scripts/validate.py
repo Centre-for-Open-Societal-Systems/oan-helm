@@ -29,7 +29,7 @@ CURRENT_VERSION = yaml.safe_load((ROOT / "releases/current.yaml").read_text())["
 HELM = os.environ.get("HELM", "helm")
 CHARTS = sorted((ROOT / "charts").glob("*/Chart.yaml"))
 EXPECTED = {f"openg2p-{x}-registry" for x in ["farmer", "cropsown", "livestock", "da"]} | {"openg2p-commons-services", "oan-sandbox"}
-BLOCKED_REGISTRIES = {"openg2p-cropsown-registry", "openg2p-livestock-registry"}
+BLOCKED_REGISTRIES = {"openg2p-cropsown-registry", "openg2p-livestock-registry", "openg2p-commons-services"}
 REFACTOR_GATE = "develop-refactor is incomplete:"
 ADDON_RENDER_ARGS = ("--set","image.repository=example.invalid/verification-dashboard","--set","image.tag=verification",
     "--set","ecrPullSecret.enabled=false","--set","iam.url=https://iam.verification.invalid",
@@ -272,6 +272,9 @@ def check_sandbox(chart, values, build, migration):
 
 
 def offline_resolution(build):
+    # Preserve relative file:// dependency layout in both resolution copies.
+    # The bundled native snapshot is pinned by source SHA and parent archive.
+    shutil.copytree(ROOT / "upstream-snapshots", build / "upstream-snapshots")
     mirror = build / "mirror"
     mirror.mkdir()
     urls = set()
@@ -279,6 +282,8 @@ def offline_resolution(build):
         chart = metadata.parent
         config = read(metadata)
         for dep in config.get("dependencies", []):
+            if dep["repository"].startswith("file://"):
+                continue
             urls.add(dep["repository"])
             dest = mirror / f'{dep["name"]}-{dep["version"]}.tgz'
             if dest.exists():
@@ -383,7 +388,7 @@ def package(report):
                     assert hashlib.sha256(data).hexdigest() == entry["digest"]
                     selected = yaml.safe_load(run("show", "chart", "coss/" + entry["name"], "--version", entry["version"], env=env))
                     assert selected["name"] == entry["name"] and selected["version"] == entry["version"]
-                    if entry["name"] in BLOCKED_REGISTRIES and entry["version"] == CURRENT_VERSION:
+                    if selected.get("annotations", {}).get("oan.org/promotion-ready") == "false":
                         verify_refactor_gate(public / Path(url).name, "http-check")
                     elif (ROOT / "addons/registry-dashboards" / entry["name"] / "Chart.yaml").exists():
                         documents(run("template", "http-check", "coss/" + entry["name"], "--version", entry["version"], "--namespace", "http-check", *ADDON_RENDER_ARGS, env=env), "http-check")
@@ -436,13 +441,21 @@ def main():
             check_oan_metadata(info, chart)
             values = read(chart / "values.yaml")
             if chart.name in BLOCKED_REGISTRIES:
-                assert info["appVersion"] == "1.2.2-rc.557"
-                assert info["dependencies"][0]["version"] == info["appVersion"]
+                if chart.name == "openg2p-commons-services":
+                    master_data = next(dep for dep in info["dependencies"] if dep["name"] == "openg2p-master-data")
+                    assert master_data["version"] == "0.0.0-develop"
+                    assert master_data["repository"].startswith("file://")
+                    for component in ("masterDataAPI", "masterDataUi", "geoSeed"):
+                        assert values["master-data"][component]["image"]["tag"] == "0.0.0-develop.118"
+                    assert values["master-data"]["geoSeed"]["enabled"] is False
+                else:
+                    assert info["appVersion"] == "1.2.2-rc.557"
+                    assert info["dependencies"][0]["version"] == info["appVersion"]
                 assert info["annotations"]["oan.org/promotion-ready"] == "false"
                 for ns in ("verify-a","verify-b"):
                     verify_refactor_gate(chart,ns)
                 report["charts"][chart.name] = {"promotionReady":False,
-                    "platformVersion":info["appVersion"],"validation":"dependency resolution and explicit fail-closed render gate verified",
+                    "platformVersion":info.get("appVersion", "Commons 2.3.4-rc.247 / Master Data develop.118"),"validation":"dependency resolution and explicit fail-closed render gate verified",
                     "preservation":"NOT VERIFIED; full application/restored-data acceptance required before gate removal"}
                 continue
             run("lint", chart, "--strict")
@@ -549,7 +562,7 @@ def main():
             online_cache.mkdir()
             online_config = build / "online-repositories.yaml"
             env = dict(os.environ, HELM_REPOSITORY_CONFIG=str(online_config), HELM_REPOSITORY_CACHE=str(online_cache))
-            urls = sorted({dep["repository"] for metadata in CHARTS for dep in read(metadata).get("dependencies", [])})
+            urls = sorted({dep["repository"] for metadata in CHARTS for dep in read(metadata).get("dependencies", []) if not dep["repository"].startswith("file://")})
             for i, url in enumerate(urls):
                 run("repo", "add", f"upstream-{i}", url, env=env)
             for metadata in CHARTS:

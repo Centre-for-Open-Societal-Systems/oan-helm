@@ -1,0 +1,25 @@
+{{- if .Values.iamRegister.enabled }}
+# Catalog this master-data release pushes into IAM (tile + roles + permissions).
+# Release-specific application_mnemonic and application_url are placeholders
+# ("__APPLICATION_MNEMONIC__" / "__APPLICATION_URL__") substituted at runtime by
+# the iam-register Job, so this file stays release-agnostic.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "gen2MasterData.iamRegisterPrefix" . }}-iam-register-payload
+  labels:
+    app.kubernetes.io/name: iam-register
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  {{- /* Hook annotations only when runAsHook (default true). An umbrella chart sets
+       runAsHook: false so this runs as a regular resource: nulls in a parent chart's
+       values.yaml cannot remove a subchart's default annotations. */}}
+  {{- if ne (toString .Values.iamRegister.runAsHook) "false" }}
+  {{- with .Values.iamRegister.payloadAnnotations }}
+  annotations: {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
+data:
+  payload.json: |-
+{{ .Files.Get "files/iam-registration/payload.json" | indent 4 }}
+{{- end }}

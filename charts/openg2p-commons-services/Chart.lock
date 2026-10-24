@@ -3,8 +3,8 @@ dependencies:
   repository: https://openg2p.github.io/openg2p-helm
   version: 1.3.2
 - name: openg2p-master-data
-  repository: https://openg2p.github.io/openg2p-helm
-  version: 1.1.4-rc.106
+  repository: file://../../upstream-snapshots/master-data-location/openg2p-master-data
+  version: 0.0.0-develop
 - name: artifactory
   repository: https://openg2p.github.io/openg2p-helm
   version: 12.0.3
@@ -47,5 +47,5 @@ dependencies:
 - name: keycloak-init
   repository: https://openg2p.github.io/openg2p-helm
   version: 1.2.0
-digest: sha256:b8d13750e32b28a8cae7ac73211fea161aeb90d270de0fb0c9f0fcba99d5c388
-generated: "2026-10-22T19:00:37.9292612+05:30"
+digest: sha256:c372273529af5f39ed6ca5819646cbabd0f4e66401653ccb0361e04866ef65e9
+generated: "2026-10-25T01:05:46.7897626+05:30"

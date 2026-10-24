@@ -1,0 +1,239 @@
+{{- if .Values.geoSeed.enabled }}
+{{/*
+Seed the geo hierarchy from a country pack.
+
+MDS owns geography, so it seeds its own. Previously the only geo loader in the
+platform shipped with the registry db-seed image, which meant master data was
+populated as a side effect of installing a registry — and anything else needing
+MDS geo depended on a registry install having run first.
+
+geoSeed.countryPack selects WHICH country this environment carries. It is
+declared here and nowhere else: one Master Data Service per environment means
+one geography, and letting a registry chart also declare a country is how you
+end up with registry records pointing at places MDS has never heard of.
+
+It defaults to XKM — Kamuntu, a fictitious country — so an install that nobody
+configured does not put invented figures against a real place's name. Real
+country packs are a value change away, and carry the licence obligations their
+manifest records.
+
+Catalogue-aware and idempotent: the first load of a list / the geography is
+published as version 1; a later run whose pack differs from the published
+version leaves a DRAFT for approval in Master Data (geoSeed.autoPublish
+publishes it at once, development only); an unchanged pack creates nothing.
+Boundaries go to the object store under immutable per-version keys.
+*/}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  {{/*
+  Lowercased deliberately. This template runs at the chart ROOT, so
+  common.names.fullname resolves to "<release>-<chart name>" — and for an
+  aliased dependency Helm sets .Chart.Name to the ALIAS. The commons-services
+  umbrella aliases this chart `masterData`, which yields
+  "commons-services-masterData-geo-seed"; Kubernetes rejects any object name
+  with a capital in it, the hook fails, and the whole release goes to `failed`
+  with nothing seeded. The API templates never hit this because they render
+  against a scoped context whose nameOverride is already lowercase.
+  */}}
+  name: {{ printf "%s-geo-seed" (include "common.names.fullname" . | lower | replace "_" "-" | trunc 53 | trimSuffix "-") }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/name: geo-seed
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    # Weight 5: after postgres-init has created the database, and comfortably
+    # before any registry seed (weight 10) that will reference this geography.
+    helm.sh/hook-weight: "5"
+    helm.sh/hook-delete-policy: before-hook-creation
+spec:
+  backoffLimit: {{ .Values.geoSeed.backoffLimit }}
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/name: geo-seed
+    spec:
+      restartPolicy: OnFailure
+      initContainers:
+        - name: wait-for-postgres
+          image: {{ .Values.geoSeed.waitImage }}
+          command:
+            - sh
+            - -c
+            - |
+              # Wait for the master-data SCHEMA, not just the server. The schema is
+              # created by the API's startup migration, which races with this hook;
+              # pg_isready alone let this Job run against an empty database and die
+              # with `relation "g2p_geo_levels" does not exist`, failing the whole
+              # Helm release.
+              #
+              # Wait on the LAST table the migration creates, not the first. The
+              # API creates them in a fixed, awaited order —
+              #
+              #   g2p_geo_levels -> g2p_geo_level_values -> g2p_partners
+              #     -> g2p_attributes -> g2p_attribute_values
+              #     -> g2p_sample_individuals -> g2p_sample_households
+              #
+              # — so the last one existing proves all of them do, while waiting on
+              # g2p_geo_levels only proves the migration STARTED. With the default
+              # --load geo,codelists,samples that gap is exactly wide enough for
+              # the loader to finish geo and then die on g2p_sample_households:
+              # the same failure this guard exists to prevent, just later in the
+              # run, and only when the migration happens to be slow.
+              #
+              # If the migration ever gains a table created after this one, move
+              # the check to that one.
+              i=0
+              until pg_isready -h "$PGHOST" -p "$PGPORT" >/dev/null 2>&1; do
+                i=$((i+1))
+                if [ "$i" -gt "${DB_WAIT_TRIES:-100}" ]; then
+                  echo "postgres not reachable after $((i*3))s — giving up"; exit 1
+                fi
+                echo "waiting for postgres..."; sleep 3
+              done
+              i=0
+              until [ "$(psql -tAc "SELECT to_regclass('public.g2p_sample_households') IS NOT NULL" 2>/dev/null)" = "t" ]; do
+                i=$((i+1))
+                if [ "$i" -gt "${SCHEMA_WAIT_TRIES:-100}" ]; then
+                  echo "master-data schema not present after $((i*3))s — giving up"; exit 1
+                fi
+                echo "waiting for the master-data migration to finish (g2p_sample_households)..."; sleep 3
+              done
+              # On an UPGRADE the sample tables already exist, so they prove
+              # nothing about THIS release's migration. The catalogue migration
+              # records its schema version last; the loader needs at least
+              # CATALOGUE_SCHEMA_VERSION (catalogue_sql.py) to find its tables
+              # and functions.
+              i=0
+              until [ "$(psql -tAc "SELECT coalesce((SELECT int_value FROM g2p_catalogue_state WHERE key = 'schema_version'), 0) >= ${CATALOGUE_SCHEMA_VERSION}" 2>/dev/null)" = "t" ]; do
+                i=$((i+1))
+                if [ "$i" -gt "${SCHEMA_WAIT_TRIES:-100}" ]; then
+                  echo "catalogue schema ${CATALOGUE_SCHEMA_VERSION} not present after $((i*3))s — giving up"; exit 1
+                fi
+                echo "waiting for the master-data catalogue migration (schema ${CATALOGUE_SCHEMA_VERSION})..."; sleep 3
+              done
+              echo "master-data schema is ready."
+          env:
+            # Must match CATALOGUE_SCHEMA_VERSION in master-data-api catalogue_sql.py.
+            - name: CATALOGUE_SCHEMA_VERSION
+              value: "5"
+            - name: PGHOST
+              value: {{ tpl .Values.global.postgresqlHost $ | quote }}
+            - name: PGPORT
+              value: {{ .Values.global.masterDataDBPort | default 5432 | quote }}
+            - name: PGUSER
+              value: {{ tpl .Values.global.masterDataDBUser $ | quote }}
+            - name: PGDATABASE
+              value: {{ tpl .Values.global.masterDataDB $ | quote }}
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ tpl .Values.global.masterDataDBSecret $ | quote }}
+                  key: {{ tpl .Values.global.masterDataDBUserPasswordKey $ | quote }}
+      containers:
+        - name: geo-seed
+          image: {{ .Values.geoSeed.image.repository }}:{{ .Values.geoSeed.image.tag }}
+          command:
+            - python
+            - /seed/load_geo_pack.py
+            - --pack
+            - {{ printf "%s/%s" .Values.geoSeed.packRoot .Values.geoSeed.countryPack | quote }}
+            {{/* Sections to load. Built from the values so the default stays
+                 "geo" — byte-for-byte the behaviour before code lists existed. */}}
+            - --load
+            - {{ without (list (ternary "geo" "" .Values.geoSeed.load.geo) (ternary "codelists" "" .Values.geoSeed.load.codelists) (ternary "samples" "" (.Values.geoSeed.load.samples | default false))) "" | join "," | quote }}
+            {{- /* domains: a list, or a comma-separated string (Rancher questions). */}}
+            {{- $domains := .Values.geoSeed.domains }}
+            {{- if kindIs "string" $domains }}{{ $domains = splitList "," $domains }}{{ end }}
+            {{- $domains = without (compact (default list $domains)) "" }}
+            {{- with $domains }}
+            - --domains
+            - {{ join "," . | nospace | quote }}
+            {{- end }}
+          env:
+            # Catalogue: first load of a subject publishes version 1; later
+            # loads leave drafts for approval unless autoPublish (dev only).
+            - name: PACK_PUBLISH_INITIAL
+              value: {{ .Values.geoSeed.publishInitial | default false | quote }}
+            - name: PACK_AUTO_PUBLISH
+              value: {{ .Values.geoSeed.autoPublish | default false | quote }}
+            - name: PACK_OWNER_ORG
+              value: {{ .Values.geoSeed.ownerOrg | default "" | quote }}
+            - name: AUDIT_MANAGER_URL
+              value: {{ tpl (.Values.masterDataAPI.catalogue.auditManagerUrl | default "") $ | quote }}
+            - name: PGHOST
+              value: {{ tpl .Values.global.postgresqlHost $ | quote }}
+            - name: PGPORT
+              value: {{ .Values.global.masterDataDBPort | default 5432 | quote }}
+            - name: MDS_DB
+              value: {{ tpl .Values.global.masterDataDB $ | quote }}
+            - name: PGUSER
+              value: {{ tpl .Values.global.masterDataDBUser $ | quote }}
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ tpl .Values.global.masterDataDBSecret $ | quote }}
+                  key: {{ tpl .Values.global.masterDataDBUserPasswordKey $ | quote }}
+            {{- if .Values.geoSeed.objectStore.endpoint }}
+            {{/* Boundary geometry is bulk binary that only ever gets served as
+                 files, so it goes to object storage and MDS records the URL.
+                 Without this the hierarchy still loads; only the map layer is
+                 missing. */}}
+            - name: S3_ENDPOINT
+              value: {{ .Values.geoSeed.objectStore.endpoint | quote }}
+            - name: S3_BUCKET
+              value: {{ .Values.geoSeed.objectStore.bucket | quote }}
+            - name: BOUNDARY_BASE_URL
+              value: {{ .Values.geoSeed.objectStore.publicBaseUrl | default .Values.geoSeed.objectStore.endpoint | quote }}
+            - name: S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.geoSeed.objectStore.existingSecret | quote }}
+                  key: {{ .Values.geoSeed.objectStore.accessKeyKey | quote }}
+            - name: S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.geoSeed.objectStore.existingSecret | quote }}
+                  key: {{ .Values.geoSeed.objectStore.secretKeyKey | quote }}
+            {{- end }}
+          resources: {{- toYaml .Values.geoSeed.resources | nindent 12 }}
+        {{- $awe := .Values.masterDataAPI.catalogue.awe }}
+        {{- if and (eq .Values.masterDataAPI.catalogue.approvalMode "awe") $awe.seed.enabled }}
+        {{/* Approval mode awe: register Master Data's AWE policies (approvers =
+             the client role below, self-approval forbidden) and the callback
+             secret in the shared AWE database. Idempotent. */}}
+        - name: awe-seed
+          image: {{ .Values.geoSeed.image.repository }}:{{ .Values.geoSeed.image.tag }}
+          command: ["python", "/seed/seed_awe.py"]
+          env:
+            - name: AWE_PGHOST
+              value: {{ tpl $awe.seed.dbHost $ | quote }}
+            - name: AWE_PGPORT
+              value: {{ $awe.seed.dbPort | quote }}
+            - name: AWE_PGDATABASE
+              value: {{ $awe.seed.db | quote }}
+            - name: AWE_PGUSER
+              value: {{ $awe.seed.dbUser | quote }}
+            - name: AWE_PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $awe.seed.dbSecret | quote }}
+                  key: {{ $awe.seed.dbPasswordKey | quote }}
+            - name: AWE_POLICY_KEY_LIST
+              value: {{ $awe.policyKeyList | quote }}
+            - name: AWE_POLICY_KEY_GEO
+              value: {{ $awe.policyKeyGeo | quote }}
+            - name: AWE_APPROVER_ROLE
+              value: {{ $awe.seed.approverRole | quote }}
+            - name: AWE_APPROVER_CLIENT
+              value: {{ tpl $awe.seed.approverClient $ | quote }}
+            - name: AWE_CALLBACK_SECRET_ID
+              value: {{ tpl $awe.callbackSecretId $ | quote }}
+            - name: AWE_CALLBACK_CALLER_SERVICE
+              value: {{ tpl $awe.callbackUrl $ | quote }}
+            - name: AWE_CALLBACK_HMAC_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ tpl $awe.hmacSecretName $ | quote }}
+                  key: {{ $awe.hmacSecretKey | quote }}
+        {{- end }}
+{{- end }}
