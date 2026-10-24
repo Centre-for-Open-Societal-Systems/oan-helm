@@ -19,7 +19,13 @@ jobs:
       - name: Verify URL migration preserves private routes and configuration
         run: python -m unittest discover -s scripts -p 'test_*.py'
       - name: Validate sources, locks, workload options and packaged repository
-        run: python scripts/validate.py --package --release-ready
+        run: |
+          args=(--package)
+          if [[ "$GITHUB_REF_NAME" != "develop-refactor" ]]; then
+            args+=(--release-ready)
+          fi
+          python scripts/validate.py "${args[@]}"
+          python scripts/validate_registry_addons.py --package
       - name: Retain validation evidence
         uses: actions/upload-artifact@v4
         with:

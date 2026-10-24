@@ -29,6 +29,11 @@ CURRENT_VERSION = yaml.safe_load((ROOT / "releases/current.yaml").read_text())["
 HELM = os.environ.get("HELM", "helm")
 CHARTS = sorted((ROOT / "charts").glob("*/Chart.yaml"))
 EXPECTED = {f"openg2p-{x}-registry" for x in ["farmer", "cropsown", "livestock", "da"]} | {"openg2p-commons-services", "oan-sandbox"}
+BLOCKED_REGISTRIES = {"openg2p-cropsown-registry", "openg2p-livestock-registry"}
+REFACTOR_GATE = "develop-refactor is incomplete:"
+ADDON_RENDER_ARGS = ("--set","image.repository=example.invalid/verification-dashboard","--set","image.tag=verification",
+    "--set","ecrPullSecret.enabled=false","--set","iam.url=https://iam.verification.invalid",
+    "--set","iam.cookieDomain=.verification.invalid","--set","domain=verification.invalid")
 SYNTHETIC_IMAGE = {"repository": "example.invalid/render-only", "digest": "sha256:" + "a" * 64}
 COSS = "https://github.com/Centre-for-Open-Societal-Systems/"
 APPLICATION_SOURCES = {
@@ -60,6 +65,13 @@ def run(*args, env=None):
     if result.returncode:
         raise RuntimeError(f"helm {' '.join(map(str, args))}:\n{result.stdout}\n{result.stderr}")
     return result.stdout
+
+
+def verify_refactor_gate(chart, namespace="verify-a", env=None):
+    result = subprocess.run([HELM,"template","verify",str(chart),"--namespace",namespace],
+                            cwd=ROOT,capture_output=True,text=True,encoding="utf-8",env=env)
+    assert result.returncode != 0 and REFACTOR_GATE in result.stderr, "Candidate must fail at the explicit promotion gate"
+    assert not result.stdout.strip(), "Blocked candidate emitted workload manifests"
 
 
 def read(path):
@@ -300,6 +312,10 @@ def offline_resolution(build):
             if read(metadata).get("dependencies"):
                 assert read(target / "Chart.lock") == read(metadata.parent / "Chart.lock")
             for ns in ["verify-a", "verify-b"]:
+                if metadata.parent.name in BLOCKED_REGISTRIES:
+                    verify_refactor_gate(target, ns)
+                    verify_refactor_gate(metadata.parent, ns)
+                    continue
                 original, identities = documents(run("template", "verify", metadata.parent, "--namespace", ns), ns)
                 resolved, new_identities = documents(run("template", "verify", target, "--namespace", ns), ns)
                 assert identities == new_identities
@@ -327,6 +343,10 @@ def package(report):
                 shutil.copy2(temp / archive_name, archive)
                 prior[archive_name] = {"sha256": digest(archive), "sourceSha256": source_sha}
             for ns in ["verify-a", "verify-b"]:
+                if chart.name in BLOCKED_REGISTRIES:
+                    verify_refactor_gate(archive, ns)
+                    verify_refactor_gate(chart, ns)
+                    continue
                 packaged_docs, from_package = documents(run("template", "verify", archive, "--namespace", ns), ns)
                 source_docs, from_source = documents(run("template", "verify", chart, "--namespace", ns), ns)
                 assert from_package == from_source
@@ -363,7 +383,12 @@ def package(report):
                     assert hashlib.sha256(data).hexdigest() == entry["digest"]
                     selected = yaml.safe_load(run("show", "chart", "coss/" + entry["name"], "--version", entry["version"], env=env))
                     assert selected["name"] == entry["name"] and selected["version"] == entry["version"]
-                    documents(run("template", "http-check", "coss/" + entry["name"], "--version", entry["version"], "--namespace", "http-check", env=env), "http-check")
+                    if entry["name"] in BLOCKED_REGISTRIES and entry["version"] == CURRENT_VERSION:
+                        verify_refactor_gate(public / Path(url).name, "http-check")
+                    elif (ROOT / "addons/registry-dashboards" / entry["name"] / "Chart.yaml").exists():
+                        documents(run("template", "http-check", "coss/" + entry["name"], "--version", entry["version"], "--namespace", "http-check", *ADDON_RENDER_ARGS, env=env), "http-check")
+                    else:
+                        documents(run("template", "http-check", "coss/" + entry["name"], "--version", entry["version"], "--namespace", "http-check", env=env), "http-check")
     recorded.write_text(json.dumps(prior, indent=2) + "\n")
     (public / "SHA256SUMS").write_text("".join(f"{digest(p)}  {p.name}\n" for p in sorted(public.glob("*.tgz"))), encoding="utf-8")
     report["packages"] = len(list(public.glob("*.tgz")))
@@ -410,6 +435,16 @@ def main():
             assert info["version"] == CURRENT_VERSION
             check_oan_metadata(info, chart)
             values = read(chart / "values.yaml")
+            if chart.name in BLOCKED_REGISTRIES:
+                assert info["appVersion"] == "1.2.2-rc.557"
+                assert info["dependencies"][0]["version"] == info["appVersion"]
+                assert info["annotations"]["oan.org/promotion-ready"] == "false"
+                for ns in ("verify-a","verify-b"):
+                    verify_refactor_gate(chart,ns)
+                report["charts"][chart.name] = {"promotionReady":False,
+                    "platformVersion":info["appVersion"],"validation":"dependency resolution and explicit fail-closed render gate verified",
+                    "preservation":"NOT VERIFIED; full application/restored-data acceptance required before gate removal"}
+                continue
             run("lint", chart, "--strict")
             example_name = {"openg2p-commons-services": "commons-services", "oan-sandbox": "sandbox"}.get(chart.name) or chart.name.removeprefix("openg2p-").removesuffix("-registry")
             example = ROOT / "examples/dev" / (example_name + ".yaml")
@@ -523,6 +558,10 @@ def main():
                 run("dependency", "build", target, env=env)
                 if read(metadata).get("dependencies"):
                     assert read(target / "Chart.lock") == read(metadata.parent / "Chart.lock")
+                if metadata.parent.name in BLOCKED_REGISTRIES:
+                    verify_refactor_gate(target)
+                    verify_refactor_gate(metadata.parent)
+                    continue
                 actual, actual_ids = documents(run("template", "verify", target, "--namespace", "verify-a"), "verify-a")
                 bundled, bundled_ids = documents(run("template", "verify", metadata.parent, "--namespace", "verify-a"), "verify-a")
                 assert actual_ids == bundled_ids
@@ -532,7 +571,7 @@ def main():
         if args.package:
             package(report)
     (ROOT / "releases/validation.json").write_text(json.dumps(report, indent=2) + "\n")
-    print(f"Validated {len(CHARTS)} charts: strict lint, locked dependencies, namespaces and optional workloads.")
+    print(f"Validated {len(CHARTS)-len(BLOCKED_REGISTRIES)} existing charts and {len(BLOCKED_REGISTRIES)} blocked refactor candidates; candidate workload/preservation acceptance is NOT VERIFIED.")
     if args.package:
         print(f"Packaged {len(CHARTS)} charts; archives and relative Helm index verified over local HTTP.")
     if args.release_ready:

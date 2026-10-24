@@ -1,5 +1,11 @@
 # OpenAgriNet (OAN) Helm repository
 
+The `develop-refactor` candidate is **1.0.0-dev.8**: Crop/Livestock dependencies
+are rc.557 and their promotion gates remain active. It also centralizes the three
+independent dashboard-release charts under `addons/registry-dashboards/`.
+See [ownership and verification limits](docs/registry-refactor.md). The stable
+COSS `main` releases and existing environments are unchanged by this branch.
+
 Start with the [service catalog](docs/service-catalog.md): it maps every included
 COSS service to its chart, source/configuration and enablement status. The
 [six editable source charts](charts/README.md) are Farmer, Crop Sown, Livestock,
