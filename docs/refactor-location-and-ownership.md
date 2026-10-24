@@ -6,7 +6,7 @@ SHA-256; they do not resolve dependencies or mutate chart versions in Jenkins.
 Dashboard applications retain independent COSS source repositories and
 registry-owned CI, ECR, releases, authentication and reporting views.
 
-Candidate 1.0.0-dev.9 keeps the registry platform at rc.557 and incorporates
+Candidate 1.0.0-dev.10 keeps the registry platform at rc.557 and incorporates
 Farmer's native Master Data develop.118 location contract. The exact unmodified
 upstream chart snapshot, source hashes and resolved image digests are recorded in
 `upstream-snapshots/master-data-location/SOURCE.json`. The upstream checkout and
@@ -31,6 +31,11 @@ reserved AUTH_* overrides. Digest images, image-pull Secrets, envFrom and the
 reporting database Secret contracts are preserved. Public environment overlays
 are central; credential values stay outside this repository.
 
-Validation: 19 unit tests, six core package/index checks (three fail-closed
+Validation: 20 unit tests, six core package/index checks (three fail-closed
 candidates), three independent dashboard source/package renders, two namespaces,
 and exact snapshot file hashes. No Kubernetes environment was changed.
+
+Hosted Linux CI rejected the dev.9 Commons source seal because the Windows
+working copy contained CRLF while Git stored LF. Dev.10 fixes the source and
+checks repository LF bytes before packaging. Published dev.9 archives and their
+SHA-256 records are retained; no immutable artifact was overwritten.

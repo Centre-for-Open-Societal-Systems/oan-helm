@@ -88,7 +88,10 @@ def fingerprint(chart):
     # Hash portable relative strings so a fresh Linux checkout has the same seal.
     for path in sorted(chart.rglob("*"), key=lambda p: p.relative_to(chart).as_posix()):
         if path.is_file():
-            h.update(path.relative_to(chart).as_posix().encode() + b"\0" + path.read_bytes() + b"\0")
+            data = path.read_bytes()
+            if path.suffix in {".yaml", ".yml", ".tpl", ".md", ".json", ".sh", ".lock"} or path.name == ".helmignore":
+                assert b"\r\n" not in data, f"Chart source must use repository LF line endings before packaging: {path}"
+            h.update(path.relative_to(chart).as_posix().encode() + b"\0" + data + b"\0")
     return h.hexdigest()
 
 

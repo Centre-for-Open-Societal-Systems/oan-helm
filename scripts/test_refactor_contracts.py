@@ -8,12 +8,23 @@ import subprocess
 import tempfile
 import unittest
 import yaml
+from validate import fingerprint
 
 ROOT = Path(__file__).resolve().parents[1]
 HELM = os.environ.get('HELM', 'helm')
 
 
 class RefactorContracts(unittest.TestCase):
+    def test_chart_seal_rejects_windows_only_source_bytes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            chart=Path(tmp)
+            source=chart/'Chart.yaml'
+            source.write_bytes(b'apiVersion: v2\r\nname: verification\r\n')
+            with self.assertRaisesRegex(AssertionError,'repository LF line endings'):
+                fingerprint(chart)
+            source.write_bytes(b'apiVersion: v2\nname: verification\n')
+            self.assertEqual(len(fingerprint(chart)),64)
+
     def test_master_data_snapshot_is_exact_and_pinned(self):
         folder = ROOT/'upstream-snapshots/master-data-location'
         source = json.loads((folder/'SOURCE.json').read_text(encoding='utf-8'))

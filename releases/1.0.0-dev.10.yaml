@@ -1,0 +1,83 @@
+chartVersion: 1.0.0-dev.10
+status: blocked-refactor-candidate
+readyForPublication: false
+versionPolicy: Immutable after publication; component images retain independent versions.
+charts:
+- name: openg2p-farmer-registry
+  release: farmer-registry
+  namespace: farmer
+  sourceCommit: 90811b61a59fef107178341f753693cf9c62749e
+  platformVersion: 1.2.2-rc.544
+- name: openg2p-cropsown-registry
+  release: cropsown-registry
+  namespace: crop
+  sourceCommit: f5be6d22a6b9947e3a62aaaf207adff74253e91e
+  platformVersion: 1.2.2-rc.557
+  promotionReady: false
+- name: openg2p-livestock-registry
+  release: livestock-registry
+  namespace: livestock
+  sourceCommit: bf78e69a5fd60786b8d1852c69b4fefdd70dffc1
+  platformVersion: 1.2.2-rc.557
+  promotionReady: false
+- name: openg2p-da-registry
+  release: da-registry
+  namespace: null
+  sourceCommit: 9714c3c5307a7e61f4379b613229837a4b76e952
+  platformVersion: 1.2.2-rc.544
+- name: openg2p-commons-services
+  release: commons-services
+  namespace: commons
+  upstreamVersion: 2.3.4-rc.247
+  sourceCommit: 32638189178ca451d354316a099918574c6730a5
+  upstreamArchiveSha256: 96ab00f327652a4cc3d511525e1ac5260813d744a11620054e2491b698206272
+  promotionReady: false
+  masterDataSourceCommit: e569a59b8e9f61f809e07791e9263e50b2a7e0da
+  masterDataImageVersion: 0.0.0-develop.118
+- name: oan-sandbox
+  release: sandbox
+  namespace: null
+  sourceCommit: 66964713b571cad98cbe77a054b413eac55b4385
+  note: New chart; API, web and route disabled until the sandbox images are published.
+- name: oan-sandbox
+  release: oan-sandbox
+  namespace: null
+  deployment: unchanged; disabled by default
+commonsBase:
+  repository: https://openg2p.github.io/openg2p-helm
+  chart: openg2p-commons-base
+  version: 2.3.4-rc.245
+  archiveSha256: 09969e54f5e48594ce2038ffa258d4b9bfe431b2b3e311172df2d241a9319e2b
+  policy: Install directly from OpenG2P under its existing owner; not bundled here.
+componentsAwaitingImages:
+- Current standalone registry dashboard UIs (legacy Crop UI is not substituted).
+- DA backend/dashboard workloads; da-registry-frontend is a different app.
+- OAN Sandbox API and web (sandbox-platform images not yet published).
+publicationBlockers:
+- Crop/Livestock full refactor and preservation acceptance remains incomplete; their
+  charts fail closed before rendering workloads.
+- Commons native Master Data develop.118 source chart/image upgrade requires restored-data,
+  geography, IAM and AWE preservation acceptance.
+installationPrerequisites:
+- Upgrade existing commons-services/commons only after private backup, migration rehearsal
+  and unrelated-resource comparison.
+- Configure Aggregation signing Secret, reviewed catalog, staff issuer/JWKS and optional
+  staff service-account/view roles.
+- Register Partner Management key and matching per-registry Consent bindings before
+  consent-based searches.
+- Keep OTP unavailable pending SMS. Partner-realm authentication and OTP delivery
+  remain separate prerequisites for consent_id flows.
+- Current CM signing key is retained for compatibility; dedicated private-key rotation
+  needs a separate retention/trust plan.
+- The new Aggregation is stateless and requires no own database, queue or migration.
+- Rancher can use the published fork preview until upstream PRs are reviewed and merged.
+- DA and unavailable dashboard UIs remain disabled.
+- 'WebSub: prepare immutable commons-websub-encryption Secret and preserve the dev
+  post-renderer, live values and existing release owner.'
+changes:
+- Add opt-in WebSub 1.3.2 hub and consolidator using existing Commons Kafka.
+- Add repeatable topic provisioning with topic-specific unlimited retention.
+- Preserve dev URL compatibility and Partner Management cookie issuer guard.
+supersedesCandidate: 1.0.0-dev.9
+candidateCorrection: Preserve all published dev.9 bytes; fix the Commons source gate
+  LF seal and reject non-portable chart source before packaging.
