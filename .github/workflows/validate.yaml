@@ -22,7 +22,7 @@ jobs:
         run: |
           args=(--package)
           # A pull request is judged by the branch it targets.
-          if [[ "${GITHUB_BASE_REF:-$GITHUB_REF_NAME}" != "develop-refactor" ]]; then
+          if [[ "${{ github.event_name }}" == "push" && "$GITHUB_REF_NAME" == "main" ]]; then
             args+=(--release-ready)
           fi
           python scripts/validate.py "${args[@]}"
