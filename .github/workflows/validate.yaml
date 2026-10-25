@@ -21,7 +21,8 @@ jobs:
       - name: Validate sources, locks, workload options and packaged repository
         run: |
           args=(--package)
-          if [[ "$GITHUB_REF_NAME" != "develop-refactor" ]]; then
+          # A pull request is judged by the branch it targets.
+          if [[ "${GITHUB_BASE_REF:-$GITHUB_REF_NAME}" != "develop-refactor" ]]; then
             args+=(--release-ready)
           fi
           python scripts/validate.py "${args[@]}"
