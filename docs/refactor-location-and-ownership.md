@@ -6,7 +6,7 @@ SHA-256; they do not resolve dependencies or mutate chart versions in Jenkins.
 Dashboard applications retain independent COSS source repositories and
 registry-owned CI, ECR, releases, authentication and reporting views.
 
-Candidate 1.0.0-dev.10 keeps the registry platform at rc.557 and incorporates
+Candidate 1.0.0-dev.11 keeps the registry platform at rc.557 and incorporates
 Farmer's native Master Data develop.118 location contract. The exact unmodified
 upstream chart snapshot, source hashes and resolved image digests are recorded in
 `upstream-snapshots/master-data-location/SOURCE.json`. The upstream checkout and
@@ -23,7 +23,18 @@ Geo seeding is disabled. Geography, country-pack catalogue values, existing
 geographic assignments, identity policies and open AWE tasks must be reconciled
 through supported administration and tested on restored copies before promotion.
 ETH-OAN with agriculture is the intended configuration; existing data must not be
-replaced by a demo seed. Crop's historic lookup SQL is retained under `reference/`
+replaced by a demo seed.
+
+Upstream's develop.118 seed image carries only ETH and XKM, so `geoSeed.image` pins
+`ghcr.io/asmitonweb/master-data-db-seed:0.0.0-develop.118-oan.1` by digest: the
+upstream image, by digest, with `/openg2p-data` replaced by the OAN openg2p-data
+fork at the commit recorded in `releases/1.0.0-dev.11.yaml`. Its loader, scripts
+and packages are upstream's, byte for byte. The fork builds it from
+`docker/master-data-db-seed/Dockerfile` when a `master-data-db-seed/<tag>` tag is
+pushed. ETH-OAN passes the pack's `validate_pack.py`, and seeding it into an empty
+Master Data develop.118 database published 21,037 units and 74 lists as version 1;
+a second run changed nothing. Moving the API to another build means a seed image on
+that build's base digest. Crop's historic lookup SQL is retained under `reference/`
 for that reconciliation and is never executed against a registry database.
 
 Dashboard API templates retain the required auth configuration and reject

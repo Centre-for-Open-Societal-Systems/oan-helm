@@ -36,6 +36,19 @@ class RefactorContracts(unittest.TestCase):
         self.assertFalse(values['geoSeed']['autoPublish'])
         self.assertEqual(len(source['images']),3)
 
+    def test_seed_image_is_the_recorded_eth_oan_build(self):
+        version = yaml.safe_load((ROOT/'releases/current.yaml').read_text(encoding='utf-8'))['chartVersion']
+        release = yaml.safe_load((ROOT/f'releases/{version}.yaml').read_text(encoding='utf-8'))
+        commons = next(c for c in release['charts'] if c['name']=='openg2p-commons-services')
+        recorded = commons['masterDataSeedImage']
+        values = yaml.safe_load((ROOT/'charts/openg2p-commons-services/values.yaml').read_text(encoding='utf-8'))['master-data']
+        self.assertEqual(values['geoSeed']['image']['repository'],recorded['repository'])
+        self.assertEqual(values['geoSeed']['image']['tag'],recorded['tag']+'@'+recorded['digest'])
+        self.assertEqual(values['geoSeed']['countryPack'],recorded['countryPack'])
+        source = json.loads((ROOT/'upstream-snapshots/master-data-location/SOURCE.json').read_text(encoding='utf-8'))
+        base, digest = recorded['base'].split('@')
+        self.assertEqual(source['images'][base],digest)
+
     def render(self, chart, *args):
         return subprocess.run([HELM,'template','test',str(chart),*args],capture_output=True,text=True,encoding='utf-8')
 
