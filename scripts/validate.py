@@ -29,7 +29,7 @@ CURRENT_VERSION = yaml.safe_load((ROOT / "releases/current.yaml").read_text())["
 HELM = os.environ.get("HELM", "helm")
 CHARTS = sorted((ROOT / "charts").glob("*/Chart.yaml"))
 EXPECTED = {f"openg2p-{x}-registry" for x in ["farmer", "cropsown", "livestock", "da"]} | {"openg2p-commons-services", "oan-sandbox"}
-BLOCKED_REGISTRIES = {"openg2p-cropsown-registry", "openg2p-livestock-registry", "openg2p-commons-services"}
+BLOCKED_REGISTRIES = {"openg2p-farmer-registry", "openg2p-cropsown-registry", "openg2p-livestock-registry", "openg2p-commons-services"}
 REFACTOR_GATE = "develop-refactor is incomplete:"
 ADDON_RENDER_ARGS = ("--set","image.repository=example.invalid/verification-dashboard","--set","image.tag=verification",
     "--set","ecrPullSecret.enabled=false","--set","iam.url=https://iam.verification.invalid",

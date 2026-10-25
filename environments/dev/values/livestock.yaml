@@ -94,6 +94,8 @@ registry:
       KEYCLOAK_BASE_URL: https://keycloak.development.oanstaging.com
       REGISTRY_STAFF_PORTAL_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CORE_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
+      REGISTRY_STAFF_PORTAL_API_VALIDATE_ATTRIBUTE_VALUES: 'true'
     hostname: staff-livestock.development.oanstaging.com
     istio:
       virtualservice:
@@ -116,6 +118,7 @@ registry:
       NOTIFICATION_PROVIDER_URL: ''
       KEYCLOAK_BASE_URL: https://keycloak.development.oanstaging.com
       REGISTRY_PARTNER_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
     hostname: partner-livestock.development.oanstaging.com
     istio:
       virtualservice:
@@ -140,6 +143,7 @@ registry:
       NOTIFICATION_ENABLED: 'false'
       NOTIFICATION_PROVIDER_URL: ''
       REGISTRY_CELERY_WORKERS_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
   celeryBeat:
     envVars:
       COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
@@ -147,6 +151,7 @@ registry:
       NOTIFICATION_PROVIDER_URL: ''
       REGISTRY_CELERY_BEAT_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CELERY_BEAT_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
   beneApi:
     istio:
       virtualservice:

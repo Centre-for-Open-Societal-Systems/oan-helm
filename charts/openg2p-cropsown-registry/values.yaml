@@ -62,6 +62,8 @@ registry:
       NOTIFICATION_PROVIDER_URL: ''
       REGISTRY_STAFF_PORTAL_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CORE_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
+      REGISTRY_STAFF_PORTAL_API_VALIDATE_ATTRIBUTE_VALUES: 'true'
     envVarsFrom:
       AUTH_CLIENT_SECRET:
         secretKeyRef:
@@ -101,6 +103,7 @@ registry:
       NOTIFICATION_PROVIDER_URL: ''
       KEYCLOAK_BASE_URL: https://keycloak.development.oanstaging.com
       REGISTRY_PARTNER_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
   celeryWorker:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/celery
@@ -123,6 +126,7 @@ registry:
       NOTIFICATION_ENABLED: 'false'
       NOTIFICATION_PROVIDER_URL: ''
       KEYCLOAK_BASE_URL: https://keycloak.development.oanstaging.com
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
   celeryBeat:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/celery
@@ -134,6 +138,7 @@ registry:
       NOTIFICATION_PROVIDER_URL: ''
       REGISTRY_CELERY_BEAT_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CELERY_BEAT_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
   dbSeed:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/db-seed
@@ -178,7 +183,8 @@ registry:
       APP_URL: https://crop-registry.development.oanstaging.com
       REDIRECT_URL: https://crop-registry.development.oanstaging.com
       VERIFY_SERVICE_URL: https://crop-registry.development.oanstaging.com/v1/verify
-      CSP_SRC_IMG: 'self blob: data: https://minio-farmer.development.oanstaging.com https://tile.openstreetmap.org'
+      CSP_SRC_IMG: 'self blob: data: https://minio-farmer.development.oanstaging.com
+        https://tile.openstreetmap.org'
       MASTERDATA_BACKEND_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
       PARTNER_INGEST_URL: https://partner-crop.development.oanstaging.com/partner/ingest_data?data_model=dcivc
       NOTIFICATION_BACKEND_URL: ''
@@ -292,3 +298,37 @@ dashboardUi:
       memory: 256Mi
     limits:
       memory: 768Mi
+odkGeoSync:
+  enabled: false
+  schedule: 17 1 * * *
+  runOnInstall: false
+  image:
+    repository: ''
+    tag: ''
+    digest: ''
+  masterData:
+    apiUrl: '{{ .Values.global.masterDataApiUrl }}'
+    tokenUrl: '{{ .Values.global.masterDataTokenUrl }}'
+    clientId: ''
+    clientSecret:
+      name: ''
+      key: client_secret
+  odk:
+    url: ''
+    projectId: ''
+    credentialsSecret:
+      name: ''
+      emailKey: email
+      passwordKey: password
+  levels:
+  - region
+  - zone
+  - woreda
+  - kebele
+  dryRun: false
+  resources:
+    requests:
+      cpu: 50m
+      memory: 96Mi
+    limits:
+      memory: 256Mi

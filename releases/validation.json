@@ -1,6 +1,6 @@
 {
   "helm": "v3.19.0+g3d8990f",
-  "chartVersion": "1.0.0-dev.11",
+  "chartVersion": "1.0.0-dev.12",
   "clusterAccess": false,
   "charts": {
     "oan-sandbox": {
@@ -14,7 +14,7 @@
       "baselineScope": "new chart in 1.0.0-dev.6: every workload disabled by default, so the default render has no resources; enabled renders are checked by validate.py",
       "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
       "defaultImageReferences": [],
-      "devExample": "examples/dev/sandbox.yaml: strict lint and render passed",
+      "devExample": "examples\\dev\\sandbox.yaml: strict lint and render passed",
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-commons-services": {
@@ -40,38 +40,14 @@
       "baselineScope": "original 1.0.0-dev.1 resource names/selectors/Secret references; Commons Superset and Certify disabled to match inspected dev configuration",
       "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
       "defaultImageReferences": [],
-      "devExample": "examples/dev/da.yaml: strict lint and render passed",
+      "devExample": "examples\\dev\\da.yaml: strict lint and render passed",
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-farmer-registry": {
-      "lint": "strict passed",
-      "resources": 45,
-      "namespaces": [
-        "verify-a",
-        "verify-b"
-      ],
-      "preservation": "upstream resource identities, selectors and Secret references match baseline",
-      "baselineScope": "original 1.0.0-dev.1 resource names/selectors/Secret references; Commons Superset and Certify disabled to match inspected dev configuration",
-      "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
-      "defaultImageReferences": [
-        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/celery:90811b61a59f@sha256:15273f1e29b54f02df09b0bb69c5cf21d68432c1c34f0dd6521a1fbfe64b49c2",
-        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/db-seed:90811b61a59f@sha256:0b48d9f90be2734a131bcea08219c79cb9251307f13b422ead94f56fb7a00cd9",
-        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/partner-api:90811b61a59f@sha256:800b7b097a4fd8bf7a09ef0e24969ed374e0126933d9aa79c47e186644f4315c",
-        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/sanity-tests:90811b61a59f@sha256:baceebd88b20c4eefc9ed85473f1f9fe21a2ed86c9ee776da05e6ae47ed4e95d",
-        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/staff-api:90811b61a59f@sha256:b8116e52f51c85d228d26ab97113b75cf293a9dfba120a062c16d97727039ed5",
-        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/staff-ui:90811b61a59f@sha256:e7e5c7d8d0935f8e2957019afe68cad168de8d08f34b52cffc8c91fe92d7cbc4",
-        "apachesuperset.docker.scarf.sh/apache/superset:4.0.1",
-        "busybox:1.36",
-        "curlimages/curl:8.11.1",
-        "docker.io/openg2p/redis:7.2.5-debian-12-r4",
-        "jbergknoff/postgresql-client:latest",
-        "openg2p/keycloak-init:1.2.0",
-        "openg2p/openg2p-id-generator:1.1.2",
-        "openg2p/postgres-init:1.2.0",
-        "openg2p/postgres-init:develop"
-      ],
-      "devExample": "examples/dev/farmer.yaml: strict lint and render passed",
-      "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
+      "promotionReady": false,
+      "platformVersion": "1.2.2-rc.557",
+      "validation": "dependency resolution and explicit fail-closed render gate verified",
+      "preservation": "NOT VERIFIED; full application/restored-data acceptance required before gate removal"
     },
     "openg2p-livestock-registry": {
       "promotionReady": false,
@@ -82,8 +58,8 @@
   },
   "upstreamResolution": "not attempted",
   "offlineResolution": "All chart locks resolved from dependencies bundled with verified source packages",
-  "packages": 64,
+  "packages": 70,
   "currentPackages": 6,
-  "historicalPackages": 58,
+  "historicalPackages": 64,
   "index": "Relative URLs, SHA-256, HTTP download, exact Helm version selection and repository-based renders verified against loopback server"
 }

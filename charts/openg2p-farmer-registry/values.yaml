@@ -28,9 +28,12 @@ global:
   auditManagerUrl: http://commons-services-auditmanager.commons.svc.cluster.local:80
   aweHostname: awe.development.oanstaging.com
   aweBaseUrl: http://commons-services-awe.commons.svc.cluster.local
-  aweDefaultCallbackUrl: http://{{ .Release.Name }}-staff-portal-api.{{ .Release.Namespace }}.svc.cluster.local/awe/webhooks/decision
-  idGeneratorInternalUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace }}.svc.cluster.local/v1
-  idGeneratorApiUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace }}.svc.cluster.local/v1
+  aweDefaultCallbackUrl: http://{{ .Release.Name }}-staff-portal-api.{{ .Release.Namespace
+    }}.svc.cluster.local/awe/webhooks/decision
+  idGeneratorInternalUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace
+    }}.svc.cluster.local/v1
+  idGeneratorApiUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace
+    }}.svc.cluster.local/v1
   notificationEnabled: false
   notificationApiHostname: ''
   notificationWsHostname: ''
@@ -52,7 +55,8 @@ registry:
       APP_URL: https://farmer-registry.development.oanstaging.com
       REDIRECT_URL: https://farmer-registry.development.oanstaging.com
       VERIFY_SERVICE_URL: https://farmer-registry.development.oanstaging.com/v1/verify
-      CSP_SRC_IMG: 'self blob: data: https://minio-farmer.development.oanstaging.com https://tile.openstreetmap.org'
+      CSP_SRC_IMG: 'self blob: data: https://minio-farmer.development.oanstaging.com
+        https://tile.openstreetmap.org'
       MASTERDATA_BACKEND_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
       PARTNER_INGEST_URL: https://partner-farmer.development.oanstaging.com/partner/ingest_data?data_model=dcivc
       NOTIFICATION_BACKEND_URL: ''
@@ -72,7 +76,7 @@ registry:
     envVars:
       REGISTRY_STAFF_PORTAL_API_AUTH_REDIS_URL: redis://commons-redis-master.commons.svc.cluster.local:6379/0
       REGISTRY_CORE_REGISTRANT_AUTH_REDIS_URL: redis://commons-redis-master.commons.svc.cluster.local:6379/0
-      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: "true"
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
       REGISTRY_STAFF_PORTAL_API_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_STAFF_PORTAL_API_MASTER_DATA_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
       REGISTRY_STAFF_PORTAL_API_MASTER_DATA_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
@@ -80,8 +84,8 @@ registry:
       REGISTRY_STAFF_PORTAL_API_PARTNER_MGMT_ADMIN_API_URL: http://commons-services-pm-staff-portal-api.commons.svc.cluster.local
       REGISTRY_STAFF_PORTAL_API_PARTNER_MGMT_ADMIN_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
       REGISTRY_STAFF_PORTAL_API_AWE_BASE_URL: http://commons-services-awe.commons.svc.cluster.local
-      REGISTRY_STAFF_PORTAL_API_AWE_DEFAULT_CALLBACK_URL: http://{{ .Release.Name }}-staff-portal-api.{{
-        .Release.Namespace }}.svc.cluster.local/awe/webhooks/decision
+      REGISTRY_STAFF_PORTAL_API_AWE_DEFAULT_CALLBACK_URL: http://{{ .Release.Name
+        }}-staff-portal-api.{{ .Release.Namespace }}.svc.cluster.local/awe/webhooks/decision
       REGISTRY_STAFF_PORTAL_API_AUDIT_MANAGER_URL: http://commons-services-auditmanager.commons.svc.cluster.local:80
       COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       NOTIFICATION_ENABLED: 'false'
@@ -89,6 +93,7 @@ registry:
       KEYCLOAK_BASE_URL: https://keycloak.development.oanstaging.com
       REGISTRY_STAFF_PORTAL_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CORE_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_STAFF_PORTAL_API_VALIDATE_ATTRIBUTE_VALUES: 'true'
     hostname: staff-farmer.development.oanstaging.com
     istio:
       virtualservice:
@@ -114,6 +119,7 @@ registry:
       NOTIFICATION_PROVIDER_URL: ''
       KEYCLOAK_BASE_URL: https://keycloak.development.oanstaging.com
       REGISTRY_PARTNER_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
     hostname: partner-farmer.development.oanstaging.com
     istio:
       virtualservice:
@@ -141,6 +147,7 @@ registry:
       NOTIFICATION_ENABLED: 'false'
       NOTIFICATION_PROVIDER_URL: ''
       REGISTRY_CELERY_WORKERS_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
   celeryBeat:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/celery
@@ -151,6 +158,7 @@ registry:
       NOTIFICATION_PROVIDER_URL: ''
       REGISTRY_CELERY_BEAT_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CELERY_BEAT_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
   dbSeed:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/db-seed
@@ -367,3 +375,37 @@ dashboardUi:
       memory: 256Mi
     limits:
       memory: 768Mi
+odkGeoSync:
+  enabled: false
+  schedule: 17 1 * * *
+  runOnInstall: false
+  image:
+    repository: ''
+    tag: ''
+    digest: ''
+  masterData:
+    apiUrl: '{{ .Values.global.masterDataApiUrl }}'
+    tokenUrl: '{{ .Values.global.masterDataTokenUrl }}'
+    clientId: ''
+    clientSecret:
+      name: ''
+      key: client_secret
+  odk:
+    url: ''
+    projectId: ''
+    credentialsSecret:
+      name: ''
+      emailKey: email
+      passwordKey: password
+  levels:
+  - region
+  - zone
+  - woreda
+  - kebele
+  dryRun: false
+  resources:
+    requests:
+      cpu: 50m
+      memory: 96Mi
+    limits:
+      memory: 256Mi
