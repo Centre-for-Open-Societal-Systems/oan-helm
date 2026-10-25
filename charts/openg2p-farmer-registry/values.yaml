@@ -72,6 +72,7 @@ registry:
     envVars:
       REGISTRY_STAFF_PORTAL_API_AUTH_REDIS_URL: redis://commons-redis-master.commons.svc.cluster.local:6379/0
       REGISTRY_CORE_REGISTRANT_AUTH_REDIS_URL: redis://commons-redis-master.commons.svc.cluster.local:6379/0
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: "true"
       REGISTRY_STAFF_PORTAL_API_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_STAFF_PORTAL_API_MASTER_DATA_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
       REGISTRY_STAFF_PORTAL_API_MASTER_DATA_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
