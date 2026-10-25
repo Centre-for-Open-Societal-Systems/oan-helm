@@ -170,9 +170,9 @@ questions:
 # it serves — registries read the geography, code lists and sample people from
 # Master Data and name no country of their own.
 - variable: master-data.geoSeed.countryPack
-  description: "Directory name of the pack to seed, from packs/ in github.com/openg2p/openg2p-data — ETH (Ethiopia) or XKM (Kamuntu, fictitious, for demos). Any other pack in that folder works; use its exact directory name."
+  description: "Directory name of the pack to seed, from packs/ in the db-seed image's openg2p-data — ETH-OAN (Ethiopia down to kebele, the OAN catalogue), ETH (Ethiopia, OCHA COD-AB) or XKM (Kamuntu, fictitious, for demos). Use its exact directory name."
   type: string
-  default: XKM
+  default: ETH-OAN
   label: Country Pack
   group: Master Data
   show_if: master-data.enabled=true
@@ -188,7 +188,7 @@ questions:
 - variable: master-data.geoSeed.load.samples
   description: "Seed the pack's sample people — a couple of dozen, coherent with the geography and the code lists — so a fresh install shows something rather than an empty registry. Not bulk analytics data, which each registry generates for itself."
   type: boolean
-  default: true
+  default: false
   label: Seed Sample People
   group: Master Data
   show_if: master-data.enabled=true
@@ -196,7 +196,7 @@ questions:
 - variable: master-data.geoSeed.domains
   description: "Domain code lists to seed on top of the core ones, comma-separated. Use 'agriculture' (crops, livestock) when a Farmer Registry will use this environment; a social registry never reads them. Leave empty otherwise."
   type: string
-  default: ""
+  default: agriculture
   label: Domain Code Lists
   group: Master Data
   show_if: master-data.enabled=true

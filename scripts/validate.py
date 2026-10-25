@@ -448,8 +448,13 @@ def main():
                     master_data = next(dep for dep in info["dependencies"] if dep["name"] == "openg2p-master-data")
                     assert master_data["version"] == "0.0.0-develop"
                     assert master_data["repository"].startswith("file://")
-                    for component in ("masterDataAPI", "masterDataUi", "geoSeed"):
+                    for component in ("masterDataAPI", "masterDataUi"):
                         assert values["master-data"][component]["image"]["tag"] == "0.0.0-develop.118"
+                    # The seed image is upstream's develop.118 with the ETH-OAN pack, by digest.
+                    seed = values["master-data"]["geoSeed"]["image"]
+                    assert seed["repository"] == "ghcr.io/asmitonweb/master-data-db-seed"
+                    assert re.fullmatch(r"0\.0\.0-develop\.118-oan\.\d+@sha256:[0-9a-f]{64}", seed["tag"])
+                    assert values["master-data"]["geoSeed"]["countryPack"] == "ETH-OAN"
                     assert values["master-data"]["geoSeed"]["enabled"] is False
                 else:
                     assert info["appVersion"] == "1.2.2-rc.557"
