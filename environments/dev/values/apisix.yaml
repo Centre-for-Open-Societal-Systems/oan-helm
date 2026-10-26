@@ -61,13 +61,21 @@ service:
     # Port 80 stays open for the ACME HTTP-01 challenge and the redirect to HTTPS.
     hostPort: 80
 
-# Built-in etcd is meant for development only. Use externalEtcd in production.
+# etcd runs outside this release, as in production: three members on separate machines
+# (docs/apisix-gateway.md, "etcd"). The chart's built-in etcd is single-member and meant
+# for development only. Set the member URLs at install, not here:
+#   --set 'externalEtcd.host={http://<m1>:2379,http://<m2>:2379,http://<m3>:2379}'
+# Use https URLs when the members have TLS. The password of `user` is read from the
+# Secret, key `etcd-root-password`, created outside Git:
+#   kubectl -n apisix create secret generic apisix-etcd-credentials --from-literal=etcd-root-password=...
+# Set `user: ""` for an etcd without authentication.
 etcd:
-  enabled: true
-  replicaCount: 1
-  persistence:
-    storageClass: local-path-shared
-    size: 1Gi
+  enabled: false
+externalEtcd:
+  host: []
+  user: root
+  existingSecret: apisix-etcd-credentials
+  secretPasswordKey: etcd-root-password
 
 ingress-controller:
   enabled: true

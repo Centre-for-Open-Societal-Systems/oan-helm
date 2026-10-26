@@ -30,13 +30,17 @@ upstream chart (`erpnext` 8.0.89, alias `frappe`). Its site-config job waits for
 writes `siteConfig` and the JWT key, adds the OpenG2P credentials when their Secret
 exists, and runs `bench migrate`.
 
+MariaDB runs outside the cluster and the sites volume is on NFS; see
+[external-db-and-nfs.md](external-db-and-nfs.md). There is one set of values for every
+environment.
+
 ## 2. Secrets
 
 Created by hand, never in values files.
 
 | Secret | Cluster | Namespace | Keys | Used for |
 |---|---|---|---|---|
-| `oan-a2c-db` | A2C | `a2c-develop` | `password` | MariaDB root password |
+| `oan-a2c-db` | A2C | `a2c-develop` | `password` | Password of `frappe_admin` on the external MariaDB ([setup](external-db-and-nfs.md)) |
 | `oan-a2c-admin` | A2C | `a2c-develop` | `password` | Frappe `Administrator` password |
 | `oan-a2c-jwt` | A2C | `a2c-develop` | `jwt_v1.pem` | RS256 signing key for `oan_auth_service` |
 | `oan-a2c-openg2p` | A2C | `a2c-develop` | `username`, `password` | Optional: OpenG2P portal agent login |
@@ -54,7 +58,7 @@ Same order as grievance. The A2C cluster:
 
 ```sh
 kubectl create namespace a2c-develop
-kubectl -n a2c-develop create secret generic oan-a2c-db --from-literal=password="$(openssl rand -hex 16)"
+kubectl -n a2c-develop create secret generic oan-a2c-db --from-literal=password='<frappe_admin password>'
 kubectl -n a2c-develop create secret generic oan-a2c-admin --from-literal=password="$(openssl rand -hex 12)"
 openssl genrsa -out jwt_v1.pem 2048
 kubectl -n a2c-develop create secret generic oan-a2c-jwt --from-file=jwt_v1.pem=jwt_v1.pem
@@ -64,7 +68,7 @@ helm dependency build charts/oan-a2c
 helm upgrade --install a2c charts/oan-a2c -n a2c-develop \
   -f environments/dev/values/oan-a2c.yaml \
   --set-string frappe.image.tag=<develop-build> \
-  --set-string "frappe.mariadb-sts.rootPassword=$(kubectl -n a2c-develop get secret oan-a2c-db -o jsonpath='{.data.password}' | base64 -d)" \
+  --set-string frappe.dbHost=<mariadb host> \
   --wait --wait-for-jobs --timeout 25m
 kubectl -n a2c-develop get svc a2c-gateway-web          # NodePort 30810
 ```
@@ -81,7 +85,7 @@ checkout at the deployed commit:
 ```sh
 helm upgrade --install oan-a2c-gateway <oan_a2c>/apisix/k8s -n a2c \
   -f environments/dev/values/oan-a2c-gateway.yaml \
-  --set-string web.externalHost=<A2C node private IP> --wait
+  --set "web.externalHosts={<A2C node private IP>}" --wait
 ```
 
 Point DNS for the A2C host at the gateway node.
@@ -125,7 +129,7 @@ Same releases and values on the one local cluster, as in
    `frappe.image.tag=develop`.
 2. **Certificate:** sign a second certificate for `a2c-backend-dev.oanstaging.com` with the
    same local CA, and create `oan-a2c-tls` in namespace `a2c`.
-3. **Routes:** `--set-string web.externalHost=<node IP>` (for example `192.168.139.2`).
+3. **Routes:** `--set "web.externalHosts={<node IP>}"` (for example `192.168.139.2`).
 4. **`/etc/hosts`:** a line for the A2C host next to the grievance one.
 5. **Memory:** grievance and A2C together, with Rancher, overload an 8 GB Docker VM
    (load average above 30). Probes then time out, and a first install fails with

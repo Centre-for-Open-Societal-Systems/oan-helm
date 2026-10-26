@@ -6,7 +6,8 @@
 #
 # Set at install, not here:
 # - frappe.image.tag: the Jenkins tag `develop-<build>-<sha>` (locally: `develop`)
-# - frappe.mariadb-sts.rootPassword: from Secret oan-grievance-db, with --set-string
+# - frappe.dbHost: the external MariaDB server (docs/external-db-and-nfs.md)
+# Secret oan-grievance-db (key `password`): password of frappe.dbRootUser on that server
 
 siteName: develop.grievance.test
 
@@ -32,23 +33,47 @@ frappe:
   # ECR pull Secret, see docs/ecr-pull-access.md.
   imagePullSecrets: []
 
-  # MariaDB 11.8 (official image) inside the release. The upstream chart reads the root
-  # password only from this value, so it is passed at install from Secret
-  # oan-grievance-db, never written here.
+  # MariaDB runs outside the cluster. The create-site job reads the password of dbRootUser
+  # from Secret oan-grievance-db.
+  dbHost: ""
+  dbPort: 3306
+  dbRootUser: frappe_admin
+  dbExistingSecret: oan-grievance-db
+  dbExistingSecretPasswordKey: password
   mariadb-sts:
-    enabled: true
-    image:
-      tag: "11.8"
-    persistence:
-      storageClass: local-path-shared
-      size: 8Gi
+    enabled: false
 
   persistence:
     worker:
       # ReadWriteMany: every Frappe Pod mounts the sites volume. See local-path-shared.yaml.
-      storageClass: local-path-shared
+      # ReadWriteMany from the NFS server, see nfs-csi.yaml.
+      storageClass: nfs-csi
       size: 8Gi
 
   jobs:
+    configure:
+      # The NFS export maps every client to uid/gid 1000 (all_squash), so the volume is
+      # already owned by the Frappe user. The upstream root `chown -R` only races with Pods
+      # that write into sites/ while the jobs run, and its failure fails the job.
+      fixVolume: false
+      # Upstream jobs are not Helm hooks and run while the Pods start; retry instead of failing once.
+      backoffLimit: 3
+      # The upstream script plus the two TLS settings. MariaDB requires TLS
+      # (docs/external-db-and-nfs.md); the image trusts the database CA in its system store.
+      # The TLS lines come first: the create-site job starts as soon as db_host and the
+      # Redis addresses exist, and must find the TLS settings already written.
+      args:
+      - |
+        ls -1 apps > sites/apps.txt;
+        [[ -f sites/common_site_config.json ]] || echo "{}" > sites/common_site_config.json;
+        bench set-config -g db_ssl_ca /etc/ssl/certs/ca-certificates.crt;
+        bench set-config -gp db_ssl_check_hostname True;
+        bench set-config -gp db_port $DB_PORT;
+        bench set-config -g db_host $DB_HOST;
+        bench set-config -g redis_cache $REDIS_CACHE;
+        bench set-config -g redis_queue $REDIS_QUEUE;
+        bench set-config -g redis_socketio $REDIS_QUEUE;
+        bench set-config -gp socketio_port $SOCKETIO_PORT;
     createSite:
+      backoffLimit: 3
       siteName: develop.grievance.test

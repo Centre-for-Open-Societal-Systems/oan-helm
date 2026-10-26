@@ -6,8 +6,10 @@
 # (gatewayAccess in oan-grievance-service.yaml). See docs/apisix-gateway.md.
 #
 # Set at install, not here:
-# - web.externalHost and socket.externalHost: the grievance app node's private address,
-#   from the gateway cluster's network (locally: the OrbStack node address)
+# - web.externalHosts and socket.externalHosts: the private addresses of the grievance
+#   app nodes, from the gateway cluster's network. One entry per node; APISIX balances
+#   across them and drops a node that fails its health check. Adding a node is an edit
+#   to these lists and a `helm upgrade` of this release.
 
 ingressClassName: apisix
 
@@ -23,17 +25,47 @@ tls:
 # selects the site from it. Must equal siteName in oan-grievance-service.yaml.
 siteName: develop.grievance.test
 
-# With externalHost set, serviceName only names the ApisixUpstream, and port is the node
+# With externalHosts set, serviceName only names the ApisixUpstream, and port is the node
 # port of oan-grievance-service.yaml gatewayAccess. Without it, serviceName and port are a
 # Service in this namespace (APISIX and Frappe in one cluster).
 web:
   serviceName: grievance-frappe-gunicorn
-  externalHost: ""
+  externalHosts: []
   port: 30800
+  # Probe each node's port through the Service. Without this, APISIX keeps sending
+  # requests to a node that is down. `host` is the Frappe site name.
+  healthCheck:
+    active:
+      type: http
+      httpPath: /api/method/ping
+      host: develop.grievance.test
+      timeout: 3
+      healthy:
+        interval: 5s
+        successes: 2
+        httpCodes: [200]
+      unhealthy:
+        interval: 5s
+        httpFailures: 3
+        tcpFailures: 3
+        timeout: 3
+        httpCodes: [500, 502, 503, 504]
 socket:
   serviceName: grievance-frappe-socketio
-  externalHost: ""
+  externalHosts: []
   port: 30900
+  # socket.io has no ping route: check that the port accepts connections.
+  healthCheck:
+    active:
+      type: tcp
+      timeout: 3
+      healthy:
+        interval: 5s
+        successes: 2
+      unhealthy:
+        interval: 5s
+        tcpFailures: 3
+        timeout: 3
 
 # Limit-count counters, in the gateway cluster (valkey-gateway.yaml).
 redis:

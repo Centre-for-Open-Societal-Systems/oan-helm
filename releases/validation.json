@@ -1,5 +1,5 @@
 {
-  "helm": "v3.17.3+ge4da497",
+  "helm": "v4.2.4+g3900f43",
   "chartVersion": "1.0.0-dev.16",
   "clusterAccess": false,
   "charts": {
@@ -14,7 +14,7 @@
       "baselineScope": "new chart in 1.0.0-dev.6: every workload disabled by default, so the default render has no resources; enabled renders are checked by validate.py",
       "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
       "defaultImageReferences": [],
-      "devExample": "examples\\dev\\sandbox.yaml: strict lint and render passed",
+      "devExample": "examples/dev/sandbox.yaml: strict lint and render passed",
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-commons-services": {
@@ -40,7 +40,7 @@
       "baselineScope": "original 1.0.0-dev.1 resource names/selectors/Secret references; Commons Superset and Certify disabled to match inspected dev configuration",
       "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
       "defaultImageReferences": [],
-      "devExample": "examples\\dev\\da.yaml: strict lint and render passed",
+      "devExample": "examples/dev/da.yaml: strict lint and render passed",
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-farmer-registry": {
@@ -58,8 +58,8 @@
   },
   "upstreamResolution": "not attempted",
   "offlineResolution": "All chart locks resolved from dependencies bundled with verified source packages",
-  "packages": 94,
+  "packages": 96,
   "currentPackages": 6,
-  "historicalPackages": 88,
+  "historicalPackages": 90,
   "index": "Relative URLs, SHA-256, HTTP download, exact Helm version selection and repository-based renders verified against loopback server"
 }

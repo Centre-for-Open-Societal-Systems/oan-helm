@@ -4,8 +4,9 @@
 # oan-a2c.yaml. See docs/apisix-gateway.md and docs/a2c.md.
 #
 # Set at install, not here:
-# - web.externalHost: the A2C app node's private address, from the gateway cluster's
-#   network (locally: the OrbStack node address)
+# - web.externalHosts: the private addresses of the A2C app nodes, from the gateway
+#   cluster's network. One entry per node; APISIX balances across them and drops a node
+#   that fails its health check.
 
 ingressClassName: apisix
 
@@ -23,13 +24,31 @@ tls:
 # siteName in oan-a2c.yaml.
 siteName: develop.a2c.test
 
-# With externalHost set, serviceName only names the ApisixUpstream, and port is the node
+# With externalHosts set, serviceName only names the ApisixUpstream, and port is the node
 # port of oan-a2c.yaml gatewayAccess. Without it, serviceName and port are a Service in
 # this namespace (APISIX and Frappe in one cluster).
 web:
   serviceName: a2c-frappe-gunicorn
-  externalHost: ""
+  externalHosts: []
   port: 30810
+  # Probe each node's port through the Service. Without this, APISIX keeps sending
+  # requests to a node that is down. `host` is the Frappe site name.
+  healthCheck:
+    active:
+      type: http
+      httpPath: /api/method/ping
+      host: develop.a2c.test
+      timeout: 3
+      healthy:
+        interval: 5s
+        successes: 2
+        httpCodes: [200]
+      unhealthy:
+        interval: 5s
+        httpFailures: 3
+        tcpFailures: 3
+        timeout: 3
+        httpCodes: [500, 502, 503, 504]
 
 # Limit-count counters, in the gateway cluster (valkey-gateway.yaml).
 redis:

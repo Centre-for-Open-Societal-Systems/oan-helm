@@ -1,0 +1,69 @@
+# Values for the grafana/loki chart 7.5.0 (repo https://grafana.github.io/helm-charts).
+# Target: the `observability` namespace of the cluster that runs the log store. Single
+# binary Loki; chunks live in an S3-compatible object store (MinIO), in every
+# environment. See docs/logging.md.
+#
+# Set at install, not here:
+# - minio.rootPassword, minio.users[0].secretKey: object store credentials
+#   (use --set-string; the chart takes no existing Secret for them)
+# For an object store outside this release, set minio.enabled=false and
+# loki.storage.s3.* (endpoint, accessKeyId, secretAccessKey) instead.
+
+deploymentMode: SingleBinary
+
+loki:
+  auth_enabled: false
+  commonConfig:
+    replication_factor: 1
+  storage:
+    type: s3
+    bucketNames:
+      chunks: chunks
+      ruler: ruler
+      admin: admin
+  schemaConfig:
+    configs:
+      - from: "2024-04-01"
+        store: tsdb
+        object_store: s3
+        schema: v13
+        index:
+          prefix: loki_index_
+          period: 24h
+  limits_config:
+    retention_period: 336h
+  compactor:
+    retention_enabled: true
+    delete_request_store: s3
+
+singleBinary:
+  replicas: 1
+  persistence:
+    size: 5Gi
+
+minio:
+  enabled: true
+  replicas: 1
+  rootUser: root-user
+  rootPassword: ""
+  users:
+    - accessKey: logs-user
+      secretKey: ""
+      policy: readwrite
+  persistence:
+    size: 10Gi
+
+backend:
+  replicas: 0
+read:
+  replicas: 0
+write:
+  replicas: 0
+chunksCache:
+  enabled: false
+resultsCache:
+  enabled: false
+lokiCanary:
+  enabled: false
+test:
+  enabled: false

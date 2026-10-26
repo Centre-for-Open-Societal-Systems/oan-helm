@@ -23,37 +23,42 @@ client -> DNS (dev) or /etc/hosts (local): grievance-backend-dev.oanstaging.com 
 
 There is no nginx anywhere on this path. APISIX terminates TLS and proxies straight to
 gunicorn and socket.io. The routes cannot name a Service in another cluster, so the
-gateway chart sets `web.externalHost` and `socket.externalHost` to the grievance node's
-private address, and the grievance chart opens node ports for them (`gatewayAccess`).
+gateway chart sets `web.externalHosts` and `socket.externalHosts` to the grievance
+nodes' private addresses, and the grievance chart opens node ports for them (`gatewayAccess`).
 The hop between the clusters is plain HTTP: it must stay on a private network, and the
 node ports must accept only the gateway cluster's addresses.
 
 | Cluster | Release | Chart | Namespace | Values |
 | --- | --- | --- | --- | --- |
-| both | `local-path-shared` | `rancher/local-path-provisioner` v0.0.37 (from a Git checkout) | `local-path-shared` | [local-path-shared.yaml](../environments/dev/values/local-path-shared.yaml) |
+| grievance, A2C | `csi-driver-nfs` | `csi-driver-nfs/csi-driver-nfs` 4.13.6 | `kube-system` | [nfs-csi.yaml](../environments/dev/values/nfs-csi.yaml) |
 | gateway | `apisix` | `apisix/apisix` 2.18.2 | `apisix` | [apisix.yaml](../environments/dev/values/apisix.yaml) |
 | gateway | `apisix-valkey` | `valkey/valkey` 0.11.0 | `apisix` | [valkey-gateway.yaml](../environments/dev/values/valkey-gateway.yaml) |
 | grievance | `grievance` | [charts/oan-grievance-service](../charts/oan-grievance-service) | `develop` | [oan-grievance-service.yaml](../environments/dev/values/oan-grievance-service.yaml) |
 | gateway | `oan-grievance-gateway` | `apisix/k8s` in the oan_grievance_service repository | `grievance` | [oan-grievance-gateway.yaml](../environments/dev/values/oan-grievance-gateway.yaml) |
 
-Install them in that order: storage, gateway, app, routes. A2C adds its own app cluster
+Outside Kubernetes: a MariaDB server, an NFS server, and three etcd members for APISIX
+([external-db-and-nfs.md](external-db-and-nfs.md), [apisix-gateway.md](apisix-gateway.md)
+section 10). Install the releases in this order: storage driver, gateway, app, routes. A2C adds its own app cluster
 and one more release in the gateway cluster, `oan-a2c-gateway` in namespace `a2c`; see
 [apisix-gateway.md](apisix-gateway.md), section 8.
 
 ### Storage
 
-Every Frappe Pod mounts the sites volume, so it must be ReadWriteMany (RWX). The
-`local-path-shared` StorageClass provides RWX on a single node: each volume is a
-directory under `/opt/local-path-shared` on the node. MariaDB, and etcd in the gateway
-cluster, use the same class. Its reclaim policy is `Retain`, so deleting a release or namespace keeps the
-data; delete the PersistentVolumes yourself to remove it. Before the cluster gets a
-second node, move to a real shared filesystem (NFS or EFS).
+Every Frappe Pod mounts the sites volume, so it must be ReadWriteMany (RWX). The base
+values take it from NFS (`nfs-csi`) and use MariaDB outside the cluster; set both up with
+[external-db-and-nfs.md](external-db-and-nfs.md) before the app install.
+
+Nothing in the default setup uses `local-path-shared` any more: the gateway's etcd is
+external too. `environments/dev/values/local-path-shared.yaml` is left in the repository
+for a single-node cluster without NFS, but no guide installs it. The `nfs-csi` class
+keeps `Retain`, so deleting a release or namespace keeps the data; delete the
+PersistentVolumes and the directories on the NFS server yourself to remove it.
 
 ### What the grievance chart adds to the upstream Frappe chart
 
 The chart depends on the upstream `frappe/helm` chart `erpnext` 8.0.89, aliased
 `frappe`. Upstream provides gunicorn, socket.io, the scheduler, the default, short and
-long workers, MariaDB (`mariadb-sts`), Valkey cache and queue, and the create-site job.
+long workers, Valkey cache and queue, and the create-site job.
 Its values sit under the `frappe:` key. The chart adds what upstream cannot do:
 
 - **Grievance queue workers.** Upstream workers listen only on `default`, `short` and
@@ -76,8 +81,9 @@ Upstream details that shaped the chart:
   because the site does not exist yet, so it stays disabled and the site-config job
   migrates instead. The create-site job treats "already exists" as success.
 - Upstream reads the MariaDB root password only from the plain value
-  `frappe.mariadb-sts.rootPassword`. It is passed at install with `--set-string`, from
-  the Secret, never written in a file.
+  `frappe.mariadb-sts.rootPassword`. Our values use an external server and
+  `dbExistingSecret`, which reads the password from the Secret, so no value is passed. The
+  in-chart MariaDB is off (`frappe.mariadb-sts.enabled: false`).
 - The site name is set twice, as `siteName` and `frappe.jobs.createSite.siteName`,
   because a subchart cannot read its parent's values. A mismatch stops the render.
 - Upstream always renders an nginx Deployment. Its replicas are 0, so nothing runs.
@@ -131,7 +137,7 @@ dev value in the team's secret manager.
 | --- | --- | --- | --- | --- |
 | `apisix-admin-credentials` | gateway | `apisix` | `admin`, `viewer` | APISIX Admin API keys |
 | `oan-grievance-tls` | gateway | `grievance` | `tls.crt`, `tls.key` | Certificate APISIX serves for the host |
-| `oan-grievance-db` | grievance | `develop` | `password` | MariaDB root password |
+| `oan-grievance-db` | grievance | `develop` | `password` | Password of `frappe_admin` on the external MariaDB ([setup](external-db-and-nfs.md)) |
 | `oan-grievance-admin` | grievance | `develop` | `password` | Frappe `Administrator` password |
 | `oan-grievance-jwt` | grievance | `develop` | `jwt_v1.pem` | RS256 signing key for `oan_auth_service` |
 | `oan-grievance-sentry` | grievance | `develop` | `dsn` | Optional: Sentry DSN |
@@ -185,15 +191,9 @@ hop between them crosses the internet in plain HTTP: add a VPN or TLS before goi
    kubectl get pods -A -o wide | grep -i -E 'ingress|nginx|traefik'   # no output
    ```
 
-3. **Install the storage class** (etcd keeps the gateway's configuration on it).
-
-   ```sh
-   git clone --depth 1 --branch v0.0.37 https://github.com/rancher/local-path-provisioner /tmp/lpp
-   helm upgrade --install local-path-shared /tmp/lpp/deploy/chart/local-path-provisioner \
-     -n local-path-shared --create-namespace \
-     -f environments/dev/values/local-path-shared.yaml --wait
-   kubectl get sc local-path-shared
-   ```
+3. **Have the three etcd members running** and note their URLs. APISIX keeps its
+   configuration there, so the install in step 5 fails to start without them. How to
+   run them: [apisix-gateway.md](apisix-gateway.md), section 10.
 
 4. **Create the Secret.**
 
@@ -230,7 +230,7 @@ hop between them crosses the internet in plain HTTP: add a VPN or TLS before goi
 
    ```sh
    kubectl create namespace develop
-   kubectl -n develop create secret generic oan-grievance-db --from-literal=password="$(openssl rand -hex 16)"
+   kubectl -n develop create secret generic oan-grievance-db --from-literal=password='<frappe_admin password>'
    kubectl -n develop create secret generic oan-grievance-admin --from-literal=password="$(openssl rand -hex 12)"
    openssl genrsa -out jwt_v1.pem 2048
    kubectl -n develop create secret generic oan-grievance-jwt --from-file=jwt_v1.pem=jwt_v1.pem
@@ -246,7 +246,7 @@ hop between them crosses the internet in plain HTTP: add a VPN or TLS before goi
    helm upgrade --install grievance charts/oan-grievance-service -n develop \
      -f environments/dev/values/oan-grievance-service.yaml \
      --set-string frappe.image.tag=<develop-build-sha> \
-     --set-string "frappe.mariadb-sts.rootPassword=$(kubectl -n develop get secret oan-grievance-db -o jsonpath='{.data.password}' | base64 -d)" \
+     --set-string frappe.dbHost=<mariadb host> \
      --wait --wait-for-jobs --timeout 20m
    kubectl -n develop get pods
    kubectl -n develop get svc grievance-gateway-web grievance-gateway-socket   # NodePort 30800, 30900
@@ -284,8 +284,8 @@ hop between them crosses the internet in plain HTTP: add a VPN or TLS before goi
    ```sh
    helm upgrade --install oan-grievance-gateway <oan_grievance_service>/apisix/k8s -n grievance \
      -f environments/dev/values/oan-grievance-gateway.yaml \
-     --set-string web.externalHost=<grievance private IP> \
-     --set-string socket.externalHost=<grievance private IP> --wait
+     --set "web.externalHosts={<grievance private IP>}" \
+     --set "socket.externalHosts={<grievance private IP>}" --wait
    kubectl -n grievance get apisixtls,apisixroute,apisixupstream
    ```
 
@@ -390,7 +390,7 @@ It needs about 8 GB of memory for the cluster, of which ClamAV takes 1.5 GB.
    ```sh
    helm upgrade --install oan-grievance-gateway <oan_grievance_service>/apisix/k8s -n grievance \
      -f environments/dev/values/oan-grievance-gateway.yaml \
-     --set-string web.externalHost=192.168.139.2 --set-string socket.externalHost=192.168.139.2 --wait
+     --set "web.externalHosts={192.168.139.2}" --set "socket.externalHosts={192.168.139.2}" --wait
    ```
 
 7. **Check**, as in dev step 10:
@@ -406,6 +406,5 @@ It needs about 8 GB of memory for the cluster, of which ClamAV takes 1.5 GB.
    ```
 
 Tear down: `helm uninstall` the five releases, delete the namespaces `grievance`,
-`develop`, `apisix` and `local-path-shared`, then delete the retained volumes
-(`kubectl get pv`, then `kubectl delete pv <name>`; the data is under
-`/opt/local-path-shared` on the node).
+`develop` and `apisix`, then delete the retained volumes (`kubectl get pv`, then
+`kubectl delete pv <name>`; the data is in the `pvc-...` directories on the NFS server).

@@ -57,10 +57,11 @@ as `/v1/auth/*` (oan_auth_service runs in each bench), so every app's chart must
 `hosts`. An empty list matches any host.
 
 The Ingress Controller resolves only Services in its own cluster. An app chart therefore
-points its ApisixUpstreams at the app cluster's private address (`web.externalHost`,
-`socket.externalHost`): the upstream lists that address as its only node, and the routes
-reference the upstream by name. Without `externalHost` the same chart targets an
-in-cluster Service, for a gateway in the app's own cluster. The app cluster exposes
+points its ApisixUpstreams at the app cluster's private addresses (`web.externalHosts`,
+`socket.externalHosts`, one entry per app node): the upstream lists each address as a
+node, APISIX balances across them and drops one that fails its health check
+(`web.healthCheck`), and the routes reference the upstream by name. With an empty list
+the same chart targets an in-cluster Service, for a gateway in the app's own cluster. The app cluster exposes
 Frappe on node ports that accept only the gateway cluster's addresses. That hop is plain
 HTTP, so it must stay on a private network (one VPC, or peering).
 
@@ -91,7 +92,7 @@ Collect these facts first. They are the values the install needs.
 | Fact                                                                                                             | How to get it                                                                         | Goes in                                         |
 | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ----------------------------------------------- |
 | What holds ports 80 and 443 on the node today (APISIX needs them) | `kubectl get pods -A -o wide \| grep -i -E 'ingress\|nginx\|traefik'` | section 4 |
-| Private address of each app node, reachable from the gateway cluster | the cloud console | `--set-string web.externalHost=...` (section 5) |
+| Private address of each app node, reachable from the gateway cluster | the cloud console | `--set "web.externalHosts={...}"` (section 5) |
 | Browser origins of the grievance UI | ask the UI team | `corsOriginRegexes`, `realtimeAllowedOrigins` |
 
 The upstream names, node ports and the Valkey for rate-limit counters are already in
@@ -118,6 +119,14 @@ kubectl -n apisix create secret generic apisix-admin-credentials \
 
 Keep the `admin` value in the team's secret manager. It is the gateway's Admin API key.
 
+APISIX keeps its routes in an etcd outside the release (section 10). Create its
+password Secret before the install, and have the etcd members running:
+
+```sh
+kubectl -n apisix create secret generic apisix-etcd-credentials \
+  --from-literal=etcd-root-password="$(openssl rand -hex 16)"
+```
+
 Then edit the values, in a branch of this repo, and get the change reviewed:
 
 - `environments/dev/values/oan-grievance-gateway.yaml`: the origin lists. `siteName`,
@@ -133,10 +142,13 @@ helm repo add apisix https://apache.github.io/apisix-helm-chart && helm repo upd
 
 # Read the plan first.
 helm template apisix apisix/apisix --version 2.18.2 -n apisix \
-  -f environments/dev/values/apisix.yaml | less
+  -f environments/dev/values/apisix.yaml \
+  --set 'externalEtcd.host={http://<m1>:2379,http://<m2>:2379,http://<m3>:2379}' | less
 
 helm upgrade --install apisix apisix/apisix --version 2.18.2 -n apisix \
-  -f environments/dev/values/apisix.yaml --wait --timeout 10m
+  -f environments/dev/values/apisix.yaml \
+  --set 'externalEtcd.host={http://<m1>:2379,http://<m2>:2379,http://<m3>:2379}' \
+  --wait --timeout 10m
 
 helm repo add valkey https://valkey.io/valkey-helm/ && helm repo update valkey
 helm upgrade --install apisix-valkey valkey/valkey --version 0.11.0 -n apisix \
@@ -176,7 +188,7 @@ CHART=<path to oan_grievance_service>/apisix/k8s
 VALUES=environments/dev/values/oan-grievance-gateway.yaml
 
 APP_HOST=<grievance node private IP>
-SET="--set-string web.externalHost=$APP_HOST --set-string socket.externalHost=$APP_HOST"
+SET="--set web.externalHosts={$APP_HOST} --set socket.externalHosts={$APP_HOST}"
 
 helm lint "$CHART" -f "$VALUES" $SET
 helm template oan-grievance-gateway "$CHART" -n grievance -f "$VALUES" $SET | less   # read it
@@ -260,7 +272,7 @@ namespace `a2c`, from the `oan_a2c` checkout at the deployed commit:
 ```sh
 helm upgrade --install oan-a2c-gateway <oan_a2c>/apisix/k8s -n a2c --create-namespace \
   -f environments/dev/values/oan-a2c-gateway.yaml \
-  --set-string web.externalHost=<A2C node private IP> --atomic --wait
+  --set "web.externalHosts={<A2C node private IP>}" --atomic --wait
 ```
 
 `hosts` is set in `oan-a2c-gateway.yaml` (confirm the real name): routes of both apps
@@ -286,9 +298,11 @@ A2C needs secrets that grievance does not, all provisioned outside Git:
 - **Gateway cluster.** Not provisioned yet: its public IP (DNS for every app host), and
   a private network shared with each app cluster. The hop to the app node ports is plain
   HTTP; without a private network it needs a VPN or TLS on that hop.
-- **One node per app.** `web.externalHost` is one address. An app cluster with several
-  nodes needs an internal load balancer in front of its node ports
-  (`gatewayAccess.type: LoadBalancer`), and its address in `externalHost`.
+- **Several nodes per app.** `web.externalHosts` takes one address per node. Adding or
+  removing a node is an edit to that list and a `helm upgrade` of the routes release.
+  Rendered, and accepted by a server-side dry run against the controller's CRD; not
+  tried with real traffic. If nodes change often, put an internal load balancer in front
+  of the node ports (`gatewayAccess.type: LoadBalancer`) and list its address once.
 - **socket.io `Origin`.** The socket routes set `Origin: http://<siteName>:8000`. The socket.io
   server calls Frappe back at that address, and Frappe also requires `Origin` and `Host` to
   name the same host. `develop.grievance.test` probably does not resolve inside the cluster,
@@ -312,6 +326,58 @@ A2C needs secrets that grievance does not, all provisioned outside Git:
   APISIX has no certificate to answer HTTPS with yet.
 - **ADC and APISIX 3.19.** The Ingress Controller uses ADC internally, and ADC's documented
   support stops at APISIX 3.17. Watch the controller logs on the first sync.
-- **etcd.** The bundled etcd is for development. Use `externalEtcd` before production.
+- **etcd.** `apisix.yaml` uses `externalEtcd`; see section 10. Not yet installed against
+  a real etcd.
 - **Global plugins.** Confirm `request-id` and `prometheus` take effect: `X-Request-Id` in
   responses and the `apisix_http_status` metric.
+
+## 10. etcd
+
+APISIX keeps its routes, upstreams and certificates in etcd. The Ingress Controller does
+not write to etcd: it translates the `Apisix*` resources (through ADC, which runs inside
+the controller Pod) and pushes them to APISIX's Admin API (`apisix-admin`, port 9180),
+and APISIX stores them. The controller is the source of truth, so a lost etcd is rebuilt
+from the resources at the next sync (not tried here). Never edit the gateway by hand with
+the Admin API or `adc sync`.
+
+`apisix.yaml` sets `etcd.enabled: false` and `externalEtcd`, the same shape in every
+environment:
+
+| | Value |
+|---|---|
+| Members | three, each on its own machine, in different availability zones. The members vote, and a change counts only when a majority agrees, so one can fail. Three services on one machine would fail together. |
+| URLs | `--set 'externalEtcd.host={...}'` at install. Use `https` when TLS is on. |
+| Authentication | `externalEtcd.user: root`, password in Secret `apisix-etcd-credentials`, key `etcd-root-password`. |
+| Storage | fast local SSD, never NFS or EFS. |
+| Ports | 2379 (clients) from the APISIX nodes only, 2380 (peers) between the members only. |
+| Backup | scheduled `etcdctl snapshot save`, copied off the machine. Not set up. |
+
+The chart's built-in etcd is a single member and is for development only. In the lab,
+run the three members as separate processes on one VM with different ports
+(`homelab-fedora-rke2.local.md`). That tests the configuration and one member failing,
+not a machine failing. RKE2 runs its own etcd on 2379 to 2381, so use other ports there.
+Never point APISIX at the cluster's own etcd: it holds every Secret.
+
+Who runs the production members, on which machines, and where snapshots go is not
+decided. Dedicated small servers are cleaner than one member on each gateway node, where
+a node failure takes an APISIX Pod and a member together.
+
+Not checked: that chart `apisix/apisix` 2.18.2 and controller 1.3.0 run cleanly against
+a three-member external etcd. `helm template` renders the three URLs into APISIX's
+configuration.
+
+## 11. TLS
+
+There are four separate jobs. None is automated by this repository.
+
+| Job | Today | In production |
+|---|---|---|
+| Public certificate, clients to APISIX | Secret `oan-grievance-tls` (and `oan-a2c-tls`), referenced by `ApisixTls`. Lab: a local CA, made by hand. The dev values say cert-manager writes the Secret in dev; that is not in this repository and I have not seen it. | Whoever issues the certificate (an ACME service such as Let's Encrypt, a company CA, or a bought certificate) writes the Secret before it expires, and the controller syncs the new one into APISIX without a restart. Let's Encrypt certificates last 90 days, so renewal must be automatic. Expiry needs an alert. |
+| APISIX to the apps, port 30800, 30900, 30810 | Plain HTTP over a private network, node ports open to the gateway's addresses only | Same, if the network is private. If this hop must be encrypted, it needs certificates from an internal CA on both sides (mutual TLS). Not set up, and not yet required by anyone I know of. |
+| APISIX to etcd | Plain HTTP in the lab | `https` URLs with certificates from an internal CA, reissued on a schedule. |
+| Kubernetes internals (RKE2) | RKE2 creates and rotates them itself. As I recall they last a year and rotate when the server restarts near expiry; I have not checked the current numbers. | Same. |
+
+Open questions for the platform owners: who issues the public certificate in dev and
+production, who owns renewal and the expiry alert, and whether the hop to the apps must
+be encrypted. No certificate manager is added to `oan-helm` until that is decided and
+the first releases of grievance and A2C are in place.

@@ -1,0 +1,31 @@
+# Values for the grafana chart 10.5.15 (repo https://grafana.github.io/helm-charts).
+# Target: the `observability` namespace, next to Loki. Loki is the only data source.
+# See docs/logging.md.
+#
+# Set at install, not here:
+# - the admin password: create Secret `grafana-admin` (keys admin-user, admin-password)
+
+admin:
+  existingSecret: grafana-admin
+  userKey: admin-user
+  passwordKey: admin-password
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Loki
+        type: loki
+        access: proxy
+        url: http://loki.observability.svc:3100
+        isDefault: true
+
+persistence:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    memory: 256Mi
