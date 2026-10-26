@@ -1,6 +1,6 @@
 # OpenAgriNet (OAN) Helm repository
 
-The `develop-refactor` candidate is **1.0.0-dev.12**: Crop/Livestock dependencies
+The `develop-refactor` candidate is **1.0.0-dev.13**: Crop/Livestock dependencies
 and Farmer dependencies are rc.557 and their promotion gates remain active. It also centralizes the three
 independent dashboard-release charts under `addons/registry-dashboards/`.
 See [ownership and verification limits](docs/registry-refactor.md). The stable
@@ -19,7 +19,7 @@ Aggregation is a local Commons template, disabled pending runtime preparation.
 The current chart pins new Consent and Aggregation images from the recorded
 COSS commits by ECR digest. See [the current setup guide](docs/consent-aggregation-prerequisites.md).
 
-Current chart version is **`1.0.0-dev.12`**, using
+Current chart version is **`1.0.0-dev.13`**, using
 `<service>.development.oanstaging.com` and the shared Istio Gateway. It retains
 OAN display names and direct COSS source links. Earlier packages remain unchanged.
 Component image versions are independent; automatic synchronization is deferred.
@@ -129,3 +129,5 @@ are included.
 New Dev Kafka/WebSub preparation is documented in [the WebSub guide](docs/websub-new-dev.md).
 
 Each registry needs its own eSignet provider and callback in deployment administration: [registry eSignet onboarding](docs/registry-esignet-onboarding.md). ODK Entity-List synchronization is available as an optional CronJob for Farmer, Crop and Livestock; enabling it requires its own immutable image and Secret references.
+
+Farmer reporting creation and geography-label synchronization are owned by the registry seed image and central chart hook; see [reporting ownership](docs/farmer-reporting.md). Existing dev.5 Jenkins profile is retained as the current-environment preservation reference; refactor deployment pins are independently gated.

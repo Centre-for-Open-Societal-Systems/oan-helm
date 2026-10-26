@@ -221,6 +221,7 @@ registry:
       virtualservice:
         gateway: istio-system/development
 analytics:
+  imagePullSecrets: []
   image:
     repository: ''
     tag: ''
@@ -231,6 +232,16 @@ analytics:
   reportingViews:
     enabled: true
     generate: false
+    waitForSchemaSeconds: 600
+    masterData:
+      apiUrl: '{{ .Values.global.masterDataApiUrl }}'
+      tokenUrl: '{{ .Values.global.masterDataTokenUrl }}'
+      # Same supported MDS service-account contract as the native registry.
+      # Override with a reporting-only read client when provisioned by IAM.
+      clientId: commons-services-staff-portal
+      clientSecret:
+        name: commons-services-staff-portal
+        key: client_secret
     refreshSchedule: 0 * * * *
     devOverlay:
       configMap: ''
