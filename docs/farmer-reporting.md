@@ -15,7 +15,7 @@ reader ACLs/owners, and refuses unknown dependents instead of cascading them.
 Master Data `/geo/get_all_geo_levels` HTTP contract, with client credentials.
 Labels come from the configured hierarchy even on an empty registry. Missing,
 ambiguous or unavailable definitions block the hook; no country or level fallback
-is invented. The reporting client defaults to the native registry MDS account;
+is invented. The reporting client defaults to the existing registry-owned analytics API client;
 configure an IAM-managed read-only reporting account/Secret when provisioned.
 No Master Data database credentials are passed to this job. Registry DB and MDS
 credentials use separate existing Secret references. Configure

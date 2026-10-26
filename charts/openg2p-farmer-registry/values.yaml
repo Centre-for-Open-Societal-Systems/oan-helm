@@ -236,12 +236,12 @@ analytics:
     masterData:
       apiUrl: '{{ .Values.global.masterDataApiUrl }}'
       tokenUrl: '{{ .Values.global.masterDataTokenUrl }}'
-      # Same supported MDS service-account contract as the native registry.
+      # Preserve the existing registry-owned analytics API client/Secret.
       # Override with a reporting-only read client when provisioned by IAM.
-      clientId: commons-services-staff-portal
+      clientId: '{{ .Values.global.authClientId }}'
       clientSecret:
-        name: commons-services-staff-portal
-        key: client_secret
+        name: '{{ .Values.global.authClientSecret }}'
+        key: '{{ .Values.global.authClientSecretKey }}'
     refreshSchedule: 0 * * * *
     devOverlay:
       configMap: ''

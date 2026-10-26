@@ -61,16 +61,16 @@ spec:
                   name: {{ tpl .Values.global.registryDBSecret $ | quote }}
                   key: {{ tpl .Values.global.registryDBUserPasswordKey $ | quote }}
             - name: MDS_API_URL
-              value: {{ tpl $settings.masterData.apiUrl $ | quote }}
+              value: {{ tpl (tpl $settings.masterData.apiUrl $) $ | quote }}
             - name: MDS_TOKEN_URL
-              value: {{ tpl $settings.masterData.tokenUrl $ | quote }}
+              value: {{ tpl (tpl $settings.masterData.tokenUrl $) $ | quote }}
             - name: MDS_CLIENT_ID
-              value: {{ tpl $settings.masterData.clientId $ | quote }}
+              value: {{ tpl (tpl $settings.masterData.clientId $) $ | quote }}
             - name: MDS_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ tpl $settings.masterData.clientSecret.name $ | quote }}
-                  key: {{ $settings.masterData.clientSecret.key | quote }}
+                  name: {{ tpl (tpl $settings.masterData.clientSecret.name $) $ | quote }}
+                  key: {{ tpl (tpl $settings.masterData.clientSecret.key $) $ | quote }}
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
