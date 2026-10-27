@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-10-27
 
+### openg2p-commons-services 1.0.0-dev.24
+
+Previous version: 1.0.0-dev.23.
+
+- feat(commons): make every Job safe for one-click Rancher upgrades (754a463)
+
+## 2026-10-27
+
 ### openg2p-commons-services 1.0.0-dev.23
 
 Previous version: 1.0.0-dev.22.
