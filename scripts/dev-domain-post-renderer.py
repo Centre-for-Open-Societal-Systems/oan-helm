@@ -11,6 +11,7 @@ import json
 import re
 import sys
 import yaml
+from partner_session_guard import chart_managed as partner_session_guard_in_chart
 from partner_session_guard import configure as configure_partner_session_guard
 
 DOMAIN='development.oanstaging.com'
@@ -53,7 +54,8 @@ def main():
     documents=[transform(d) for d in yaml.safe_load_all(sys.stdin) if d]
     guard_maps=[]
     for index,document in enumerate(documents):
-        if document.get('kind')=='Deployment' and document['metadata']['name'].endswith('-pm-staff-portal-ui'):
+        if (document.get('kind')=='Deployment' and document['metadata']['name'].endswith('-pm-staff-portal-ui')
+                and not partner_session_guard_in_chart(document)):
             documents[index],config=configure_partner_session_guard(document)
             guard_maps.append(config)
     for config in guard_maps:

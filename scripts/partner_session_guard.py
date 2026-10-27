@@ -1,10 +1,34 @@
 """Prepare the dev-only PM cookie selector without rebuilding a shared image."""
+import base64
 import copy
 import hashlib
+import json
 from pathlib import Path
 
 ISSUER='https://keycloak.development.oanstaging.com/realms/staff'
 MOUNT='/opt/oan/session-cookie-guard.cjs'
+SOURCE=Path(__file__).with_name('partner-session-cookie-guard.cjs')
+
+
+def node_options():
+    """NODE_OPTIONS preloading the guard with no mounted file, for the chart's envVars.
+
+    The PM UI subchart accepts environment variables only. An ES module data URL
+    imports node:http and evaluates the unchanged CommonJS guard against it.
+    """
+    source=SOURCE.read_text(encoding='utf-8')
+    wrapper=('import http from "node:http";\nconst module={exports:{}};\n'
+        'new Function("require","module","exports",'+json.dumps(source)+')'
+        '((name)=>{if(name==="node:http")return http;throw new Error("Unsupported module "+name);},module,module.exports);\n')
+    return '--import=data:text/javascript;base64,'+base64.b64encode(wrapper.encode()).decode()
+
+
+def chart_managed(deployment):
+    """True when the chart already preloads the guard through its environment."""
+    containers=deployment['spec']['template']['spec']['containers']
+    return any(e.get('name')=='OAN_SESSION_COOKIE_GUARD' and 'valueFrom' not in e and
+        not any(m.get('mountPath')==MOUNT for m in c.get('volumeMounts',[]))
+        for c in containers for e in c.get('env',[]))
 
 
 def configure(deployment):
@@ -19,7 +43,7 @@ def configure(deployment):
         e.get('value')==ISSUER+'/protocol/openid-connect/logout' for e in c.get('env',[]))]
     assert len(matches)==1, 'Expected one dev PM UI container'
     container=matches[0]
-    source=Path(__file__).with_name('partner-session-cookie-guard.cjs').read_text(encoding='utf-8')
+    source=SOURCE.read_text(encoding='utf-8')
     digest=hashlib.sha256(source.encode()).hexdigest()
     cm_name=name.removesuffix('-staff-portal-ui')+'-session-cookie-guard'
     release=result['metadata'].get('labels',{}).get('app.kubernetes.io/instance',name.removesuffix('-pm-staff-portal-ui'))

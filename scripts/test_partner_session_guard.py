@@ -4,7 +4,7 @@ import subprocess
 import sys
 import unittest
 import yaml
-from partner_session_guard import configure,ISSUER
+from partner_session_guard import ISSUER,chart_managed,configure,node_options
 
 
 class PartnerSessionGuardTests(unittest.TestCase):
@@ -54,6 +54,24 @@ class PartnerSessionGuardTests(unittest.TestCase):
         maps=[d for d in documents if d['kind']=='ConfigMap']
         self.assertEqual(len(maps),1)
         self.assertIn('function filterAuthCookies',maps[0]['data']['session-cookie-guard.cjs'])
+
+    def test_chart_default_preloads_current_guard(self):
+        values=yaml.safe_load((Path(__file__).resolve().parents[1]/'charts/openg2p-commons-services/values.yaml').read_text(encoding='utf-8'))
+        env=values['partner-management']['staffPortalUi']['envVars']
+        self.assertEqual(env['NODE_OPTIONS'],node_options(),'Regenerate NODE_OPTIONS with partner_session_guard.node_options()')
+        self.assertEqual(env['OAN_SESSION_COOKIE_GUARD'],'1')
+        self.assertEqual(env['OAN_SESSION_EXPECTED_ISSUER'],ISSUER)
+
+    def test_post_renderer_leaves_chart_guard_alone(self):
+        deployment=self.fixture()
+        env=deployment['spec']['template']['spec']['containers'][0]['env']
+        env[2]['value']=node_options()
+        env+=[{'name':'OAN_SESSION_COOKIE_GUARD','value':'1'},{'name':'OAN_SESSION_EXPECTED_ISSUER','value':ISSUER}]
+        self.assertTrue(chart_managed(deployment))
+        self.assertFalse(chart_managed(configure(self.fixture())[0]))
+        command=[sys.executable,str(Path(__file__).with_name('dev-domain-post-renderer.py'))]
+        out=subprocess.run(command,input=yaml.safe_dump(deployment),text=True,capture_output=True,check=True).stdout
+        self.assertEqual(list(yaml.safe_load_all(out)),[deployment])
 
 
 if __name__=='__main__':unittest.main()
