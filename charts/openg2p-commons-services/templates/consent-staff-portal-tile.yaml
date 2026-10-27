@@ -1,0 +1,72 @@
+{{- $tile := .Values.consentStaffPortalTile }}
+{{- $cm := index .Values "openg2p-consent-manager" }}
+{{- if $tile.enabled }}
+{{- if not (and $cm.enabled $cm.ui.enabled) }}
+{{- fail "consentStaffPortalTile requires the Consent Manager UI to be enabled" }}
+{{- end }}
+{{- $mnemonic := required "consentStaffPortalTile.clientId is required" $tile.clientId }}
+{{- $iamUrl := required "consentStaffPortalTile.iamUrl is required" (tpl $tile.iamUrl .) }}
+{{- $tokenUrl := required "consentStaffPortalTile.tokenUrl is required" (tpl $tile.tokenUrl .) }}
+{{- $url := printf "https://%s" (required "Consent staff console hostname is required" (tpl $cm.global.consentManagerHostname .)) }}
+{{- $permissions := list (dict "permission_mnemonic" "consent:admin" "active" true) (dict "permission_mnemonic" "consent:approve" "active" true) }}
+{{- $roles := list (dict "role_mnemonic" $cm.global.consentManagerAdminRole "active" true "permissions" (list "consent:admin")) (dict "role_mnemonic" $cm.global.consentManagerApproverRole "active" true "permissions" (list "consent:approve")) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-consent-staff-tile
+data:
+  application.json: |
+    {{- dict "iamUrl" $iamUrl "tokenUrl" $tokenUrl "clientId" $mnemonic "application" (dict "application_mnemonic" $mnemonic "application_description" "Consent Manager" "application_url" $url "icon_base64" $tile.iconBase64 "width" 80 "order" $tile.order "active" true "permissions" $permissions "roles" $roles) | toPrettyJson | nindent 4 }}
+  register.py: |
+    {{- .Files.Get "files/register-consent-tile.py" | nindent 4 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-consent-staff-tile
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "20"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 2
+  activeDeadlineSeconds: 900
+  template:
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+      {{- with $tile.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: register
+          image: {{ required "consentStaffPortalTile.image is required" $tile.image | quote }}
+          command: [python, -B, /catalog/register.py]
+          env:
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ required "consentStaffPortalTile.clientSecret.name is required" $tile.clientSecret.name | quote }}
+                  key: {{ required "consentStaffPortalTile.clientSecret.key is required" $tile.clientSecret.key | quote }}
+          volumeMounts:
+            - name: catalog
+              mountPath: /catalog
+              readOnly: true
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+          resources:
+            requests: {cpu: 20m, memory: 32Mi}
+            limits: {memory: 96Mi}
+      volumes:
+        - name: catalog
+          configMap:
+            name: {{ .Release.Name }}-consent-staff-tile
+{{- end }}

@@ -87,7 +87,7 @@ def fingerprint(chart):
     # pathlib uses platform-specific ordering (Windows compares case-insensitively).
     # Hash portable relative strings so a fresh Linux checkout has the same seal.
     for path in sorted(chart.rglob("*"), key=lambda p: p.relative_to(chart).as_posix()):
-        if path.is_file():
+        if path.is_file() and "__pycache__" not in path.relative_to(chart).parts and path.suffix != ".pyc":
             data = path.read_bytes()
             if path.suffix in {".yaml", ".yml", ".tpl", ".md", ".json", ".sh", ".lock"} or path.name == ".helmignore":
                 assert b"\r\n" not in data, f"Chart source must use repository LF line endings before packaging: {path}"
