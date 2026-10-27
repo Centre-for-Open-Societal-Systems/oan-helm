@@ -39,6 +39,12 @@ master-data:
   global:
     masterDataHostname: master-data.development.oanstaging.com
     masterDataUiHostname: master-data-ui.development.oanstaging.com
+  # Load the ETH-OAN pack on every upgrade (an unchanged pack creates nothing;
+  # a new or changed list is published at once: development only).
+  geoSeed:
+    enabled: true
+    publishInitial: true
+    autoPublish: true
   masterDataUi:
     iamPublicUrl: https://staff-iam.development.oanstaging.com
     envVars:
