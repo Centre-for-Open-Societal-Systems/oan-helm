@@ -18,7 +18,7 @@ import shutil
 import subprocess
 import tarfile
 
-from validate import ROOT, build_directory, digest, fingerprint, merge_index, read, run
+from validate import ROOT, build_directory, digest, fingerprint, merge_index, package_chart, read
 
 CHARTS = sorted(ROOT.glob("charts/*/Chart.yaml")) + sorted(ROOT.glob("addons/registry-dashboards/*/Chart.yaml"))
 PUBLIC = ROOT / "repository"
@@ -156,8 +156,7 @@ def main(dry_run=False):
             if read(chart / "Chart.yaml")["version"] != version:
                 set_version(chart / "Chart.yaml", version)
             archive_name = f"{chart.name}-{version}.tgz"
-            run("package", chart, "--destination", temp)
-            shutil.copy2(temp / archive_name, PUBLIC / archive_name)
+            shutil.copy2(package_chart(chart, temp), PUBLIC / archive_name)
             artifacts[archive_name] = {"sha256": digest(PUBLIC / archive_name), "sourceSha256": fingerprint(chart)}
             archives.append(PUBLIC / archive_name)
     merge_index(PUBLIC, archives)

@@ -3,6 +3,7 @@ import unittest
 from pathlib import Path
 
 from release import CHANGELOG_MARKER, next_version, set_version
+from validate import is_subchart_doc
 
 
 class ReleaseVersioningTest(unittest.TestCase):
@@ -34,6 +35,16 @@ class ReleaseVersioningTest(unittest.TestCase):
     def test_changelog_keeps_its_marker(self):
         changelog = Path(__file__).resolve().parents[1] / 'CHANGELOG.md'
         self.assertIn(CHANGELOG_MARKER, changelog.read_text(encoding='utf-8'))
+
+    def test_only_bundled_dependency_docs_are_dropped(self):
+        for kept in ('c/README.md', 'c/templates/NOTES.txt', 'c/charts/kafka/values.yaml',
+                     'c/charts/kafka/templates/ci.yaml', 'c/charts/kafka/files/payload.json'):
+            with self.subTest(kept=kept):
+                self.assertFalse(is_subchart_doc(kept))
+        for dropped in ('c/charts/kafka/README.md', 'c/charts/websub/charts/kafka/README.md',
+                        'c/charts/kafka/ci/values-test.yaml', 'c/charts/kafka/CHANGELOG.md'):
+            with self.subTest(dropped=dropped):
+                self.assertTrue(is_subchart_doc(dropped))
 
 
 if __name__ == '__main__':

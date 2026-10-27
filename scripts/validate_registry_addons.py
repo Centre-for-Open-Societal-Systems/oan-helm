@@ -5,7 +5,7 @@ import shutil
 import tarfile
 
 from validate import (ROOT, ADDON_RENDER_ARGS, SEMVER, build_directory, digest, documents,
-                      fingerprint, image_refs, merge_index, read, run, secret_refs)
+                      fingerprint, image_refs, merge_index, package_chart, read, run, secret_refs)
 
 CHARTS = sorted((ROOT / "addons/registry-dashboards").glob("*/Chart.yaml"))
 
@@ -41,12 +41,10 @@ def main(package=False):
                     assert artifacts[filename]["sha256"] == digest(destination)
                     if artifacts[filename]["sourceSha256"] != source_sha:
                         # Versioned on merge by scripts/release.py; verify a scratch package.
-                        run("package",chart,"--destination",build)
-                        destination = build / filename
+                        destination = package_chart(chart,build)
                         unreleased.append(chart.name)
                 else:
-                    run("package",chart,"--destination",build)
-                    shutil.copy2(build / filename,destination)
+                    shutil.copy2(package_chart(chart,build),destination)
                     artifacts[filename] = {"sha256":digest(destination),"sourceSha256":source_sha}
                     added.append(destination)
                 packaged_docs, packaged_ids = documents(run("template","verify",destination,"--namespace","verify-a",*ADDON_RENDER_ARGS),"verify-a")
