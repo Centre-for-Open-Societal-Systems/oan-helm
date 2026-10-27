@@ -370,3 +370,13 @@ dashboardUi:
       memory: 256Mi
     limits:
       memory: 768Mi
+
+# Explicit opt-in; requires a db-seed image containing staff_access.py.
+staffAccess:
+  enabled: false
+  existingSecret: ""
+  imagePullSecrets: []
+  clientId: ""
+  dashboardClientId: ""
+  twoStages: false
+  policyKeys: []
