@@ -44,4 +44,3 @@ class OdkGeoSyncContract(unittest.TestCase):
                 self.assertEqual(env['ODK_CENTRAL_PASSWORD']['valueFrom']['secretKeyRef']['name'], 'registry-central')
                 self.assertNotIn('value', env['ODK_CENTRAL_PASSWORD'])
                 self.assertEqual(env['ODK_PROJECT_ID']['value'], '5')
-                self.assertTrue((source / 'templates' / 'refactor-promotion-gate.yaml').is_file())

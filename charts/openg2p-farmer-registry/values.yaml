@@ -421,12 +421,6 @@ odkGeoSync:
     limits:
       memory: 256Mi
 
-# Set only by the preserving New Dev pipeline after native migration and backup.
-farmerAdoption:
-  mode: disabled
-  sourceCommit: ""
-  chartSha256: ""
-
 # Disabled legacy staff-provisioning hook; see docs/registry-staff-access.md.
 staffAccess:
   enabled: false
