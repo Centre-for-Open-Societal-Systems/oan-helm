@@ -40,3 +40,17 @@ Git. Set `esignetBaseUrl` (the public eSignet URL) and `callbackUrl`
 (`https://<staff api host>/registrant-auth/callback`) per environment. The
 register must have `requires_registrant_authentication` set in its metadata, which
 the OAN seed does. See `docs/registry-esignet-onboarding.md`.
+
+## DCI response signing
+
+`dciSigning` gives the partner API a stable RSA key for signing its DCI search
+responses, which consuming registries (Crop Sown's Farmer reference) pin. A
+pre-install/pre-upgrade hook generates the key the first time into the
+`dciSigning.keySecret` Secret (`signing.p12`, `password`, `public-key.pem`,
+`kid`) and reuses it afterwards; the private key never appears in values, logs
+or Git. The public key is printed in the hook log and published in ConfigMap
+`<release>-dci-signing-public`. Mount the Secret on the partner API and set
+`REGISTRY_PARTNER_API_CRYPTO_SIGNING_KEY_PATH` (the bundle),
+`REGISTRY_PARTNER_API_CRYPTO_SIGNING_KEY_PASSWORD` (from the Secret) and
+`REGISTRY_PARTNER_API_CRYPTO_SIGNING_KEY_KID` (`dciSigning.kid`) through
+`registry.partnerApi` per environment.
