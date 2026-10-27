@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-10-27
 
+### openg2p-livestock-registry 1.0.0-dev.17
+
+Previous version: 1.0.0-dev.16.
+
+- Wire the Farmer reference on New Dev for Crop Sown and Livestock (74761c9)
+
+## 2026-10-27
+
 ### openg2p-cropsown-registry 1.0.0-dev.17
 
 Previous version: 1.0.0-dev.16.

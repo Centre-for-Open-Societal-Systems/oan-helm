@@ -1,12 +1,12 @@
 {
-  "helm": "v3.16.4+g7877b45",
+  "helm": "v3.19.0+g3d8990f",
   "chartVersions": {
     "oan-sandbox": "1.0.0-dev.16",
     "openg2p-commons-services": "1.0.0-dev.25",
     "openg2p-cropsown-registry": "1.0.0-dev.17",
     "openg2p-da-registry": "1.0.0-dev.16",
     "openg2p-farmer-registry": "1.0.0-dev.18",
-    "openg2p-livestock-registry": "1.0.0-dev.16"
+    "openg2p-livestock-registry": "1.0.0-dev.17"
   },
   "clusterAccess": false,
   "charts": {
@@ -185,5 +185,10 @@
     }
   },
   "upstreamResolution": "not attempted",
-  "offlineResolution": "All chart locks resolved from dependencies bundled with verified source packages"
+  "offlineResolution": "All chart locks resolved from dependencies bundled with verified source packages",
+  "packages": 109,
+  "currentPackages": 6,
+  "historicalPackages": 103,
+  "unreleasedCharts": [],
+  "index": "Relative URLs, SHA-256, HTTP download, exact Helm version selection and repository-based renders verified against loopback server"
 }
