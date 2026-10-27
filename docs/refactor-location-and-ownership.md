@@ -7,11 +7,11 @@ Dashboard applications retain independent COSS source repositories and
 registry-owned CI, ECR, releases, authentication and reporting views.
 
 Candidate 1.0.0-dev.11 keeps the registry platform at rc.557 and incorporates
-Farmer's native Master Data develop.118 location contract. The exact unmodified
-upstream chart snapshot, source hashes and resolved image digests are recorded in
-`upstream-snapshots/master-data-location/SOURCE.json`. The upstream checkout and
-Farmer checkout were not changed. The snapshot has a source-chart version of
-0.0.0-develop; there is no claim of a published develop.118 Helm chart.
+Farmer's native Master Data develop.118 location contract. Commons depends on
+OpenG2P's published `openg2p-master-data` chart `0.0.0-develop.118` (vendored under
+`charts/openg2p-commons-services/charts/`), and its values pin the API and UI images
+by digest. Earlier candidates bundled an unmodified upstream snapshot of the same
+chart; it was removed once the chart was published.
 
 Commons, Crop and Livestock candidates refuse to render workloads while their
 acceptance remains incomplete. Local dependency, archive, routing and isolated
@@ -34,8 +34,10 @@ and packages are upstream's, byte for byte. The fork builds it from
 pushed. ETH-OAN passes the pack's `validate_pack.py`, and seeding it into an empty
 Master Data develop.118 database published 21,037 units and 74 lists as version 1;
 a second run changed nothing. Moving the API to another build means a seed image on
-that build's base digest. Crop's historic lookup SQL is retained under `reference/`
-for that reconciliation and is never executed against a registry database.
+that build's base digest. Crop's historic lookup SQL, the input for that
+reconciliation, is in the Crop repository at commit `4ed8a1f`
+(`cropsown-extension/src/openg2p_registry_cropsown_extension/meta_data/lookup-data/`);
+it is never executed against a registry database.
 
 Dashboard API templates retain the required auth configuration and reject
 reserved AUTH_* overrides. Digest images, image-pull Secrets, envFrom and the

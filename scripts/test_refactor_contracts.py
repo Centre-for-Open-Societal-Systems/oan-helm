@@ -1,6 +1,4 @@
 """Isolated template contracts; candidate promotion gates remain unconditional."""
-import hashlib
-import json
 import os
 from pathlib import Path
 import shutil
@@ -25,16 +23,14 @@ class RefactorContracts(unittest.TestCase):
             source.write_bytes(b'apiVersion: v2\nname: verification\n')
             self.assertEqual(len(fingerprint(chart)),64)
 
-    def test_master_data_snapshot_is_exact_and_pinned(self):
-        folder = ROOT/'upstream-snapshots/master-data-location'
-        source = json.loads((folder/'SOURCE.json').read_text(encoding='utf-8'))
-        for name, digest in source['sourceFilesSha256'].items():
-            self.assertEqual(hashlib.sha256((folder/'openg2p-master-data'/name).read_bytes()).hexdigest(),digest,name)
+    def test_master_data_images_are_pinned_and_seed_is_off(self):
         values = yaml.safe_load((ROOT/'charts/openg2p-commons-services/values.yaml').read_text(encoding='utf-8'))['master-data']
+        for component in ('masterDataAPI','masterDataUi'):
+            self.assertEqual(values[component]['image']['tag'],'0.0.0-develop.118')
+            self.assertRegex(values[component]['image']['digest'],r'^sha256:[0-9a-f]{64}$')
         self.assertFalse(values['geoSeed']['enabled'])
         self.assertFalse(values['geoSeed']['load']['samples'])
         self.assertFalse(values['geoSeed']['autoPublish'])
-        self.assertEqual(len(source['images']),3)
 
     def test_seed_image_is_the_recorded_eth_oan_build(self):
         # The newest release-train manifest that records the seed image.
@@ -46,9 +42,9 @@ class RefactorContracts(unittest.TestCase):
         self.assertEqual(values['geoSeed']['image']['repository'],recorded['repository'])
         self.assertEqual(values['geoSeed']['image']['tag'],recorded['tag']+'@'+recorded['digest'])
         self.assertEqual(values['geoSeed']['countryPack'],recorded['countryPack'])
-        source = json.loads((ROOT/'upstream-snapshots/master-data-location/SOURCE.json').read_text(encoding='utf-8'))
-        base, digest = recorded['base'].split('@')
-        self.assertEqual(source['images'][base],digest)
+        # The seed loader must come from the same Master Data build as the API.
+        base = recorded['base'].split('@')[0]
+        self.assertEqual(base.rsplit(':',1)[1],values['masterDataAPI']['image']['tag'])
 
     def render(self, chart, *args):
         return subprocess.run([HELM,'template','test',str(chart),*args],capture_output=True,text=True,encoding='utf-8')
