@@ -420,3 +420,9 @@ odkGeoSync:
       memory: 96Mi
     limits:
       memory: 256Mi
+
+# Set only by the preserving New Dev pipeline after native migration and backup.
+farmerAdoption:
+  mode: disabled
+  sourceCommit: ""
+  chartSha256: ""

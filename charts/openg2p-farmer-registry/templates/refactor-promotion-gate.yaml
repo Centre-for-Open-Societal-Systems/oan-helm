@@ -1,1 +1,18 @@
-{{- fail "develop-refactor is incomplete: Farmer fresh installation, ODK, approval, outgestion and New Dev reset acceptance are required; see docs/registry-refactor.md" -}}
+{{- $blocked := "develop-refactor is incomplete: Farmer requires the preserving New Dev adoption pipeline and its verified native-ready receipt; see docs/farmer-preserving-adoption.md" -}}
+{{- $adoption := .Values.farmerAdoption | default dict -}}
+{{- if not (and .Release.IsUpgrade (eq .Release.Name "farmer-registry") (eq .Release.Namespace "farmer") (eq ($adoption.mode | default "") "preserving-upgrade")) -}}
+{{- fail $blocked -}}
+{{- end -}}
+{{- $receipt := lookup "v1" "ConfigMap" "farmer" "registry-preserve-farmer" -}}
+{{- if not $receipt -}}{{- fail $blocked -}}{{- end -}}
+{{- $record := index $receipt.data "receipt.json" | fromJson -}}
+{{- if not (and (gt (int64 ($record.expiresAt | default 0)) (now | unixEpoch | int64)) (regexMatch "^[a-f0-9]{32}$" ($record.lock | default ""))) -}}{{- fail $blocked -}}{{- end -}}
+{{- if not (and (eq ($record.state | default "") "NATIVE_READY") (eq ($record.clusterUid | default "") "a842b14f-b29f-4e78-b9d2-bfb22a17e53a") (eq ($record.sourceCommit | default "") ($adoption.sourceCommit | default "missing")) (eq ($record.chartVersion | default "") .Chart.Version) (eq ($record.chartSha256 | default "") ($adoption.chartSha256 | default "missing")) ($record.backupVerified | default false) ($record.originalBusinessPreserved | default false) ($record.lock | default "")) -}}
+{{- fail $blocked -}}
+{{- end -}}
+{{- if not (and (regexMatch "^[a-f0-9]{40}$" $record.sourceCommit) (regexMatch "^[a-f0-9]{64}$" $record.chartSha256)) -}}{{- fail $blocked -}}{{- end -}}
+{{- range $component, $role := dict "staffApi" "staff-api" "partnerApi" "partner-api" "celeryWorker" "celery" "celeryBeat" "celery" "staffUi" "staff-ui" "dbSeed" "db-seed" "sanity" "sanity-tests" -}}
+{{- $image := index $.Values.registry $component "image" -}}
+{{- $actual := printf "%s:%s" $image.repository $image.tag -}}
+{{- if not (and (eq $actual (index $record.images $role | default "missing")) (regexMatch "@sha256:[a-f0-9]{64}$" $actual)) -}}{{- fail $blocked -}}{{- end -}}
+{{- end -}}
