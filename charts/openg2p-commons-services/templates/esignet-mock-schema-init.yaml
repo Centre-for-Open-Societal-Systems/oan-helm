@@ -20,6 +20,15 @@ WHY THIS TEMPLATE EXISTS
   crashloop for ~40s until these Jobs create the schema, then recover, and
   `helm --wait` completes cleanly.
 
+SAFE TO RE-RUN ON EVERY UPGRADE (OpenG2P init-Job pattern)
+  MOSIP's postgres-init.sh runs deploy.sh, which starts with DROP DATABASE and
+  DROP ROLE. Re-running it unguarded deletes eSignet's key aliases and the mock
+  identities. Like OpenG2P's own init Jobs, these Jobs finish, delete themselves
+  after ttlSecondsAfterFinished and are recreated by each upgrade, so the script
+  is skipped whenever the schema already has tables. Only an absent or empty
+  schema is (re)created. The name carries a hash of the Job's inputs, so a
+  changed spec creates a new Job instead of patching an immutable one.
+
 KEEP IN SYNC when bumping the esignet / mock-identity-system subchart versions:
   image tag, GIT_REPO_URL, GIT_BRANCH, DB_USER, MOSIP_DB_NAME below mirror those
   subcharts' `postgresInit` defaults. The per-environment values (PostgreSQL host,
@@ -36,6 +45,7 @@ KEEP IN SYNC when bumping the esignet / mock-identity-system subchart versions:
             "dbUser" "esignetuser"
             "dbUserSecret" "esignet-db-user"
             "dbUserKey" "esignet-db-user-password"
+            "schema" "esignet"
             "gitRepo" "https://github.com/mosip/esignet"
             "gitBranch" "v1.4.1")
       (dict "name" "mock-identity-system"
@@ -43,17 +53,19 @@ KEEP IN SYNC when bumping the esignet / mock-identity-system subchart versions:
             "dbUser" "mockidsystemuser"
             "dbUserSecret" "mockid-db-user"
             "dbUserKey" "mockid-db-user-password"
+            "schema" "mockidentitysystem"
             "gitRepo" "https://github.com/mosip/esignet-mock-services"
             "gitBranch" "v0.9.3")
 -}}
 {{- range $svc := $services }}
 {{- $sub := index $ctx.Values $svc.name }}
 {{- if $sub.enabled }}
+{{- $hash := print $image $pgHost $suSecret $suKey (toJson $svc) $.Template.Name | sha256sum | trunc 8 }}
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: commons-services-{{ $svc.name }}-schema-init
+  name: commons-services-{{ $svc.name }}-schema-init-{{ $hash }}
   namespace: {{ $ctx.Release.Namespace }}
   labels:
     app.kubernetes.io/name: commons-services-{{ $svc.name }}-schema-init
@@ -61,6 +73,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ $ctx.Release.Service }}
 spec:
   backoffLimit: 10
+  ttlSecondsAfterFinished: 600
   template:
     metadata:
       labels:
@@ -76,7 +89,20 @@ spec:
           command: ["bash"]
           args:
             - -c
-            - until pg_isready -h ${DB_SERVERIP} -p ${DB_PORT}; do sleep 3; done && ./postgres-init.sh
+            - |
+              set -e
+              until pg_isready -h "${DB_SERVERIP}" -p "${DB_PORT}"; do sleep 3; done
+              export PGPASSWORD="${SU_USER_PWD}"
+              q() { psql -v ON_ERROR_STOP=1 -h "${DB_SERVERIP}" -p "${DB_PORT}" -U "${SU_USER}" -tA "$@"; }
+              if [ "$(q -d postgres -c "SELECT 1 FROM pg_database WHERE datname = '${MOSIP_DB_NAME}'")" = 1 ]; then
+                tables=$(q -d "${MOSIP_DB_NAME}" -c "SELECT count(*) FROM information_schema.tables WHERE table_schema = '${DB_SCHEMA}'")
+                if [ "${tables}" -gt 0 ]; then
+                  echo "${MOSIP_DB_NAME}.${DB_SCHEMA} already has ${tables} tables; skipping (deploy.sh drops the database)."
+                  exit 0
+                fi
+              fi
+              unset PGPASSWORD
+              ./postgres-init.sh
           env:
             - name: MOSIP_DB_NAME
               value: {{ $svc.db | quote }}
@@ -88,6 +114,8 @@ spec:
               value: "postgres"
             - name: DB_USER
               value: {{ $svc.dbUser | quote }}
+            - name: DB_SCHEMA
+              value: {{ $svc.schema | quote }}
             - name: DML_FLAG
               value: "1"
             - name: GIT_REPO_URL

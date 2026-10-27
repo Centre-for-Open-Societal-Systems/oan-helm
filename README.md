@@ -181,7 +181,10 @@ After a release, refresh the repository in Rancher (Repositories → ⋮ → Ref
      --reuse-values -f /private/reviewed-changes.yaml -f environments/dev/values/<chart>.yaml \
      --wait --timeout 15m
    ```
-5. Commons Services in dev needs bootstrap-Job suppression on upgrade; follow
+5. Commons Services upgrades are one click in Rancher: every Job and hook is safe
+   to repeat, following OpenG2P's initialization standard. Follow
+   [docs/commons-upgrades.md](docs/commons-upgrades.md). Releases still on older
+   charts keep their recorded procedure in
    [docs/rancher-consent-aggregation-status.md](docs/rancher-consent-aggregation-status.md).
    The Farmer dev Jenkins deployment is pinned in
    [`environments/dev/farmer-jenkins.json`](environments/dev/farmer-jenkins.json); a PR

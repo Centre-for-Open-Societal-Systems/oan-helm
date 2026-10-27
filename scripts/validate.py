@@ -214,7 +214,24 @@ def secret_refs(docs):
 def stable_identities(identities):
     # Upstream includes a settings hash in Keycloak initialization Job names.
     # URL changes intentionally change that hash; stable workload owners do not.
-    return {(api, kind, namespace, re.sub(r"(-keycloak-init-\d+)-[a-f0-9]{8}$", r"\1-<settings-hash>", name) if kind == "Job" else name) for api, kind, namespace, name in identities}
+    return {(api, kind, namespace, re.sub(r"(-keycloak-init-\d+|-schema-init)-[a-f0-9]{8}$", r"\1-<settings-hash>", name) if kind == "Job" else name) for api, kind, namespace, name in identities}
+
+
+def check_upgrade_safe_jobs(docs):
+    # Rancher runs a real helm upgrade: hooks run, and Jobs that deleted
+    # themselves after finishing are recreated. Every Job must survive that.
+    for doc in docs:
+        if doc["kind"] != "Job":
+            continue
+        meta, spec = doc["metadata"], doc["spec"]
+        annotations = meta.get("annotations") or {}
+        if annotations.get("helm.sh/hook"):
+            assert "before-hook-creation" in annotations.get("helm.sh/hook-delete-policy", ""), meta["name"]
+        else:
+            assert "ttlSecondsAfterFinished" in spec or re.search(r"-\d+$", meta["name"]), f"{meta['name']}: plain Job neither expires nor carries the revision"
+        pod = json.dumps(spec["template"]["spec"])
+        if "postgres-init.sh" in pod and "mosipid/" in pod:
+            assert "skipping (deploy.sh drops the database)" in pod, f"{meta['name']}: MOSIP deploy.sh drops the database; guard it"
 
 
 def check_dev_endpoints(docs):
@@ -520,6 +537,7 @@ def main():
             assert stable_identities(identities) == stable_identities({tuple(x) for x in upstream["resourceIdentities"]}), "Upstream resource names changed"
             check_dev_endpoints(baseline)
             check_url_contract(chart, baseline)
+            check_upgrade_safe_jobs(baseline)
             assert secret_refs(baseline) == {tuple(x) for x in upstream["secretKeyReferences"]}, "Upstream Secret references changed"
             selectors = {doc["kind"] + "/" + doc["metadata"]["name"]: doc["spec"].get("selector") for doc in baseline if doc["kind"] in ["Deployment", "StatefulSet", "Service"]}
             assert selectors == upstream["selectors"], "Upstream selectors changed"
