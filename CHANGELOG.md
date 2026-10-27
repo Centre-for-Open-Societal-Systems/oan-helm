@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-10-27
 
+### openg2p-commons-services 1.0.0-dev.22
+
+Previous version: 1.0.0-dev.21.
+
+- feat(commons): make the chart defaults the dev configuration (3448835)
+
+## 2026-10-27
+
 ### openg2p-commons-services 1.0.0-dev.21
 
 Previous version: 1.0.0-dev.20.

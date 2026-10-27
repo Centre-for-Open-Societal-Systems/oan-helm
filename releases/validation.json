@@ -2,7 +2,7 @@
   "helm": "v3.19.0+g3d8990f",
   "chartVersions": {
     "oan-sandbox": "1.0.0-dev.16",
-    "openg2p-commons-services": "1.0.0-dev.21",
+    "openg2p-commons-services": "1.0.0-dev.22",
     "openg2p-cropsown-registry": "1.0.0-dev.16",
     "openg2p-da-registry": "1.0.0-dev.16",
     "openg2p-farmer-registry": "1.0.0-dev.17",
@@ -26,7 +26,7 @@
     },
     "openg2p-commons-services": {
       "lint": "strict passed",
-      "resources": 154,
+      "resources": 173,
       "namespaces": [
         "verify-a",
         "verify-b"
@@ -35,6 +35,8 @@
       "baselineScope": "original 1.0.0-dev.1 resource names/selectors/Secret references; Commons Superset and Certify disabled to match inspected dev configuration",
       "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
       "defaultImageReferences": [
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/aggregation-api@sha256:3bd17245a75252bdf497cc1bab22b9e1148d0fedce376e7892a9e551bcefb7b4",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/consent-partner-portal@sha256:26f09120695896ac63de01463b0b9d762f99ee4c335293fcd03cdb5c12538ea4",
         "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api:dev-48e64c249056@sha256:cca3273868b8ed28d193642b346fc3369b450ad7feefd42d02e91e84cb074831",
         "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-sanity:dev-48e64c249056@sha256:e5d2a30e5a30c252f30849fb7c61c772691f7521906c575ab3fb22584c2358e7",
         "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-ui:dev-48e64c249056@sha256:423f78a0d99b8bd65605848bf72e6d0abf84cb07303fdd6d8cf9fd424c5620c7",
@@ -43,6 +45,10 @@
         "curlimages/curl:8.11.0",
         "curlimages/curl:8.11.1",
         "docker.io/alpine:3.20",
+        "docker.io/curlimages/curl@sha256:c1fe1679c34d9784c1b0d1e5f62ac0a79fca01fb6377cdd33e90473c6f9f9a69",
+        "docker.io/mosipid/consolidator-websub-service:1.3.2",
+        "docker.io/mosipid/websub-service:1.3.2",
+        "docker.io/openg2p/kafka:3.7.1-debian-12-r4",
         "ghcr.io/enketo/enketo:7.5.1",
         "ghcr.io/getodk/central-nginx:v2025.2.1",
         "ghcr.io/getodk/pyxform-http:v3.1.0",
@@ -134,9 +140,9 @@
   },
   "upstreamResolution": "not attempted",
   "offlineResolution": "All chart locks resolved from dependencies bundled with verified source packages",
-  "packages": 102,
+  "packages": 103,
   "currentPackages": 6,
-  "historicalPackages": 96,
+  "historicalPackages": 97,
   "unreleasedCharts": [],
   "index": "Relative URLs, SHA-256, HTTP download, exact Helm version selection and repository-based renders verified against loopback server"
 }
