@@ -103,6 +103,27 @@ ownership. Moving ownership requires a separately reviewed resource/annotation
 and rollback plan; do not use `--take-ownership`, delete resources, or uninstall
 the old release as part of these chart upgrades.
 
+### Commons Services: chart defaults are the dev configuration
+
+`openg2p-commons-services` defaults carry every non-secret dev setting: hosts,
+gateway, WebSub, the Aggregation API, the Consent partner portal and OTP
+publishing. Rancher's saved values for `commons-services` should hold only the
+private literals the chart cannot reference by Secret name:
+
+```yaml
+keymanager:
+  p12KeystorePass: <private>
+odk-central:
+  odk-central-enketo:
+    enketoApiKey: <private>
+    enketoLessSecret: <private>
+    enketoSecret: <private>
+```
+
+Rancher stores the chart archive and the saved values in one Secret capped at
+1 MiB, so a full copy of the computed values breaks the upgrade. To change a
+dev setting, change `values.yaml` in a pull request rather than the saved values.
+
 ## Verify and retain a rollback path
 
 After a manual install/upgrade, inspect Rancher workloads, ready replicas, Jobs,

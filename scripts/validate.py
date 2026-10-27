@@ -537,8 +537,10 @@ def main():
                 assert ("render-only-private-db", "password") in secret_refs(upgraded)
                 assert deployment_env(upgraded, "verify-staff-portal-ui")["MIGRATION_PRESERVES_CUSTOM_SETTING"] == "render-only"
             components = {"openg2p-commons-services": ["aggregationApi"], "oan-sandbox": []}.get(chart.name, ["dashboardApi", "dashboardUi"])
+            # Commons' Aggregation API runs in dev; its Secrets are provisioned in the namespace.
+            default_on = {"openg2p-commons-services": {"aggregationApi"}}.get(chart.name, set())
             for component in components:
-                assert values[component]["enabled"] is False
+                assert values[component]["enabled"] is (component in default_on)
                 fixture = {component: {"enabled": True, "image": dict(SYNTHETIC_IMAGE), "envFrom": [{"secretRef": {"name": "render-only-config"}}], "imagePullSecrets": [{"name": "render-only-pull"}]}}
                 test_values = build / "values.yaml"
                 test_values.write_text(yaml.safe_dump(fixture))
@@ -575,7 +577,8 @@ def main():
                 # Existing API DB Secret references must remain present.
                 assert secret_refs(baseline) <= secret_refs(enabled)
             if chart.name == "openg2p-commons-services":
-                assert values["consentPartnerPortal"]["enabled"] is False
+                # Runs in dev by default; the checks below cover its rendered contract.
+                assert values["consentPartnerPortal"]["enabled"] is True
                 portal_values = build / "partner-portal.yaml"
                 portal_values.write_text(yaml.safe_dump({"consentPartnerPortal": {
                     "enabled": True, "image": dict(SYNTHETIC_IMAGE),

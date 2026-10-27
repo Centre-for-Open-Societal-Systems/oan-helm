@@ -1,20 +1,47 @@
 websub:
-  enabled: false
+  enabled: true
+  existingSecret: commons-websub-encryption
   securityOn: false
   kafka:
     enabled: false
   kafkaInstallationName: '{{ tpl .Values.global.kafkaInstallationName $ }}'
+  replicaCount: 1
+  # Kafka auto-creation uses three partitions. Wait for explicit provisioning
+  # before either WebSub process can create metadata topics with those defaults.
+  initContainers: &websubTopicReadiness
+  - name: wait-for-websub-topics
+    image: docker.io/openg2p/kafka:3.7.1-debian-12-r4
+    imagePullPolicy: IfNotPresent
+    env:
+    - name: KAFKA_HEAP_OPTS
+      value: -Xmx256m -Xms128m
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        memory: 512Mi
+    command: [/bin/bash, -ec]
+    args:
+    - |
+      for topic in registered-websub-topics consolidated-websub-topics registered-websub-subscribers consolidated-websub-subscribers; do
+        description=$(/opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server commons-kafka:9092 --describe --topic "$topic")
+        echo "$description" | grep -Eq 'PartitionCount: *1([[:space:]]|$)'
+        echo "$description" | grep -Eq 'ReplicationFactor: *1([[:space:]]|$)'
+      done
   istio:
     enabled: false
   consolidator:
+    replicaCount: 1
+    initContainers: *websubTopicReadiness
     istio:
       enabled: false
       virtualservice:
         enabled: false
 websubTopicProvisioning:
-  enabled: false
+  enabled: true
   image: docker.io/openg2p/kafka:3.7.1-debian-12-r4
-  bootstrapServers: ''
+  bootstrapServers: commons-kafka:9092
   topics:
   - registered-websub-topics
   - consolidated-websub-topics
@@ -96,6 +123,7 @@ master-data:
     iamPublicUrl: https://staff-iam.development.oanstaging.com
     envVars:
       COOKIE_DOMAIN: .development.oanstaging.com
+      IAM_URL: https://staff-iam.development.oanstaging.com
     istio:
       virtualservice:
         gateway: istio-system/development
@@ -107,6 +135,9 @@ master-data:
     istio:
       virtualservice:
         gateway: istio-system/development
+    # Registries and the UI call the API server-side; keep the MDM behaviour.
+    envVars:
+      MASTER_DATA_API_CSRF_ENABLED: 'false'
     resources:
       requests:
         cpu: 50m
@@ -433,6 +464,10 @@ mock-identity-system:
   postgresqlInstallationName: '{{ tpl .Values.global.postgresqlHost $ }}'
   postgresInit:
     enabled: false
+  identitySeed:
+    # eSignet accepts a 4-digit PIN only (mosip.esignet.auth-challenge.PIN);
+    # the subchart default 222222 is refused at sign-in.
+    defaultPin: "2222"
   springConfig:
     names: application,mock-identity-system
     profile: default
@@ -483,6 +518,9 @@ openg2p-iam-service:
     istio:
       virtualservice:
         gateway: istio-system/development
+    envVars:
+      COMMON_AUTH_PROVIDER_API_URL: http://commons-services-iam-staff-portal-api
+      IAM_STAFF_AUTH_PROVIDER_API_URL: http://commons-services-iam-staff-portal-api
   iamAgentPortalApi:
     hostname: '{{ tpl .Values.global.agentPortalApiHostname $ }}'
     resources:
@@ -492,6 +530,8 @@ openg2p-iam-service:
     istio:
       virtualservice:
         gateway: istio-system/development
+    envVars:
+      IAM_AGENT_AUTH_PROVIDER_API_URL: ''
   global:
     iamHostname: '{{ tpl .Values.global.iamHostname $ }}'
     postgresqlHost: '{{ tpl .Values.global.postgresqlHost $ }}'
@@ -506,7 +546,8 @@ openg2p-iam-service:
     minioApplicationUrl: https://minio-console.development.oanstaging.com
     supersetApplicationUrl: ''
     iamStaffUiApplicationUrl: https://iam-staff-ui.development.oanstaging.com
-    masterDataApplicationUrl: https://master-data.development.oanstaging.com
+    # Staff portal tile target: the Master Data UI, not the API host.
+    masterDataApplicationUrl: https://master-data-ui.development.oanstaging.com
     aweApplicationUrl: https://awe.development.oanstaging.com
   postgres-init:
     enabled: true
@@ -526,6 +567,7 @@ openg2p-iam-service:
     envVars:
       COOKIE_DOMAIN: .development.oanstaging.com
       BACKEND_API_URL: https://staff-iam.development.oanstaging.com
+      MASTERDATA_API_URL: http://commons-services-master-data-api
     istio:
       virtualservice:
         gateway: istio-system/development
@@ -631,6 +673,10 @@ partner-management:
         $ }}"]'
       COMMON_AUTH_DEFAULT_JWKS_URLS: '["{{ tpl .Values.global.keycloakIssuerUrl $
         }}/protocol/openid-connect/certs"]'
+      # Accept staff tokens minted through the public host and the in-cluster
+      # host; each carries its own iss.
+      PARTNER_MANAGER_AUTH_DEFAULT_ISSUERS: '["https://keycloak.development.oanstaging.com/realms/staff","http://commons-keycloak:80/realms/staff"]'
+      PARTNER_MANAGER_AUTH_DEFAULT_JWKS_URLS: '["http://commons-keycloak:80/realms/staff/protocol/openid-connect/certs","http://commons-keycloak:80/realms/staff/protocol/openid-connect/certs"]'
   partnerApi:
     nameOverride: pm-partner-api
     istio:
@@ -689,8 +735,33 @@ openg2p-consent-manager:
       CONSENT_MANAGER_AWE_CALLBACK_URL: http://{{ .Release.Name }}-cm-api.{{ .Release.Namespace
         }}.svc.cluster.local/consent/v1/awe/webhooks/decision
       CONSENT_MANAGER_OTP_LOG_CODES: 'false'
-      CONSENT_MANAGER_OTP_PUBLISH_ENABLED: 'false'
+      # A2C reads OTPs for FIN holders from this bucket in dev.
+      CONSENT_MANAGER_OTP_PUBLISH_ENABLED: 'true'
+      CONSENT_MANAGER_OTP_PUBLISH_BUCKET: a2c-webhook
+      CONSENT_MANAGER_OTP_PUBLISH_ENDPOINT_URL: http://commons-minio.commons.svc.cluster.local:9000
+      CONSENT_MANAGER_OTP_PUBLISH_ID_TYPE: FIN
+      CONSENT_MANAGER_OTP_PUBLISH_PREFIX: otp/
+      CONSENT_MANAGER_OTP_PUBLISH_REGION: us-east-1
+      CONSENT_MANAGER_PARTNER_AUTH_ISSUER: https://keycloak.development.oanstaging.com/realms/partner
+      CONSENT_MANAGER_PARTNER_AUTH_JWKS_URL: http://commons-keycloak.commons.svc.cluster.local/realms/partner/protocol/openid-connect/certs
+      CONSENT_MANAGER_PARTNER_AUTH_ROLES: '["PARTNER_OPERATOR","PARTNER_ADMIN"]'
+    envVarsFrom:
+      CONSENT_MANAGER_OTP_PUBLISH_ACCESS_KEY:
+        secretKeyRef:
+          name: consent-manager-otp-dev
+          key: minio-access-key
+      CONSENT_MANAGER_OTP_PUBLISH_SECRET_KEY:
+        secretKeyRef:
+          name: consent-manager-otp-dev
+          key: minio-secret-key
+      CONSENT_MANAGER_OTP_SALT:
+        secretKeyRef:
+          name: consent-manager-otp-dev
+          key: otp-salt
+    signingKeyMounted: true
+    # The repository already names its registry.
     image:
+      registry: ''
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api
       tag: dev-48e64c249056@sha256:cca3273868b8ed28d193642b346fc3369b450ad7feefd42d02e91e84cb074831
   extraApis:
@@ -701,6 +772,11 @@ openg2p-consent-manager:
     signingKeyMounted: true
     hostname: '{{ tpl .Values.global.consentManagerPartnerHostname $ }}'
     openapiRootPath: /api/consent-manager-partner
+    image:
+      pullPolicy: Always
+      registry: ''
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api
+      tag: dev-48e64c249056@sha256:cca3273868b8ed28d193642b346fc3369b450ad7feefd42d02e91e84cb074831
     istio:
       enabled: true
       virtualservice:
@@ -739,6 +815,7 @@ openg2p-consent-manager:
         destination: '{{ .Release.Name }}-cm-ui'
         gateway: istio-system/development
     image:
+      registry: ''
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-ui
       tag: dev-48e64c249056@sha256:423f78a0d99b8bd65605848bf72e6d0abf84cb07303fdd6d8cf9fd424c5620c7
   postgres-init:
@@ -757,6 +834,7 @@ openg2p-consent-manager:
     baseUrl: http://{{ .Release.Name }}-cm-api
     partnerBaseUrl: http://{{ .Release.Name }}-cm-partner-api
     image:
+      registry: ''
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-sanity
       tag: dev-48e64c249056@sha256:e5d2a30e5a30c252f30849fb7c61c772691f7521906c575ab3fb22584c2358e7
 keycloak-init:
@@ -794,40 +872,95 @@ keycloak-init:
           openg2p-superset:
           - Admin
 aggregationApi:
-  enabled: false
+  enabled: true
   nameOverride: ''
   image:
     repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/aggregation-api
     tag: ''
     digest: sha256:3bd17245a75252bdf497cc1bab22b9e1148d0fedce376e7892a9e551bcefb7b4
     pullPolicy: IfNotPresent
-  imagePullSecrets: []
+  imagePullSecrets:
+  - name: ecr-pull-secret
   replicas: 1
   containerPort: 8100
   servicePort: 80
   virtualService:
-    enabled: false
+    enabled: true
     host: aggregation.development.oanstaging.com
     gateway: istio-system/development
-  env: []
-  envFrom: []
+  # Credentials come from the aggregation-api-runtime and signing Secrets,
+  # provisioned in the namespace outside this chart.
+  env:
+  - name: AGGREGATION_LAYER_CM_BASE_URL
+    value: http://commons-services-cm-partner-api.commons.svc.cluster.local
+  - name: AGGREGATION_LAYER_AUTH_ENABLED
+    value: 'true'
+  - name: AGGREGATION_LAYER_AUTH_ISSUER
+    value: https://keycloak.development.oanstaging.com/realms/staff
+  - name: AGGREGATION_LAYER_AUTH_JWKS_URL
+    value: http://commons-keycloak.commons.svc.cluster.local/realms/staff/protocol/openid-connect/certs
+  - name: AGGREGATION_LAYER_STAFF_SEARCH_ROLES
+    value: '["AGGREGATION_STAFF_VIEWER"]'
+  - name: AGGREGATION_LAYER_STAFF_API_TOKEN_URL
+    value: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
+  - name: AGGREGATION_LAYER_STAFF_API_CLIENT_ID
+    value: aggregation-layer-staff
+  - name: AGGREGATION_LAYER_REGISTRY_CATALOG_PATH
+    value: /app/config/registries.yaml
+  - name: AGGREGATION_LAYER_SIGNING_P12_PATH
+    value: /app/keys/aggregation.p12
+  - name: AGGREGATION_LAYER_SIGNING_P12_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: aggregation-api-signing-rsa-20261023
+        key: password
+  - name: AGGREGATION_LAYER_SIGNING_KID
+    value: agg-2026-01
+  - name: AGGREGATION_LAYER_PARTNER_AUTH_ISSUER
+    value: https://keycloak.development.oanstaging.com/realms/partner
+  - name: AGGREGATION_LAYER_PARTNER_AUTH_JWKS_URL
+    value: http://commons-keycloak.commons.svc.cluster.local/realms/partner/protocol/openid-connect/certs
+  - name: AGGREGATION_LAYER_PARTNER_AUTH_PARTNER_CLAIM
+    value: partner_id
+  - name: AGGREGATION_LAYER_CM_DATA_CONTROLLER
+    value: aggregation_layer
+  envFrom:
+  - secretRef:
+      name: aggregation-api-runtime
   resources:
     requests:
       cpu: 100m
       memory: 256Mi
     limits:
       memory: 768Mi
-  volumes: []
-  volumeMounts: []
+  volumes:
+  - name: signing
+    secret:
+      secretName: aggregation-api-signing-rsa-20261023
+      items:
+      - key: aggregation.p12
+        path: aggregation.p12
+  - name: catalog
+    configMap:
+      name: aggregation-api-catalog
+      defaultMode: 420
+  volumeMounts:
+  - name: signing
+    mountPath: /app/keys
+    readOnly: true
+  - name: catalog
+    mountPath: /app/config
+    readOnly: true
 consentPartnerPortal:
-  enabled: false
+  enabled: true
   nameOverride: ''
   image:
     repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/consent-partner-portal
     tag: ''
     digest: sha256:26f09120695896ac63de01463b0b9d762f99ee4c335293fcd03cdb5c12538ea4
     pullPolicy: IfNotPresent
-  imagePullSecrets: []
+  imagePullSecrets:
+  - name: ecr-pull-secret
   replicas: 1
   staffApiServiceName: ''
   apiBaseUrl: ''
@@ -865,9 +998,10 @@ consentStaffPortalTile:
 
 # Known test people for the mock identity system (templates/mock-identities.yaml),
 # in addition to whatever identitySeed loads from Master Data. Development data
-# only; PINs are 4 digits (eSignet's PIN rule). Enable per environment.
+# only; PINs are 4 digits (eSignet's PIN rule). Dev's Master Data holds no sample
+# individuals, so these are the people listed on the mock Fayda page.
 mockIdentities:
-  enabled: false
+  enabled: true
   apiBaseUrl: 'http://{{ .Release.Name }}-mock-identity-system:80/v1/mock-identity-system'
   readinessTimeoutSeconds: 300
   encodedPhoto: ''
@@ -879,4 +1013,9 @@ mockIdentities:
   resources:
     requests: {cpu: 10m, memory: 32Mi}
     limits: {memory: 128Mi}
-  people: []
+  people:
+    - {individualId: '412345678901', pin: '2222', name: Abebe Kebede Tesfaye, nameAmharic: አበበ ከበደ ተስፋዬ, gender: MALE, birthDate: '1987-05-12'}
+    - {individualId: '100000000001', pin: '2222', name: Abebe Kebede Tadesse, nameAmharic: አበበ ከበደ ታደሰ, gender: MALE, birthDate: '1988-04-12'}
+    - {individualId: '100000000002', pin: '2222', name: Almaz Desta Bekele, nameAmharic: አልማዝ ደስታ በቀለ, gender: FEMALE, birthDate: '1992-09-23'}
+    - {individualId: '100000000003', pin: '2222', name: Dawit Mekonnen Hailu, nameAmharic: ዳዊት መኮንን ሀይሉ, gender: MALE, birthDate: '1979-01-30'}
+    - {individualId: '100000000004', pin: '2222', name: Hana Tesfaye Girma, nameAmharic: ሀና ተስፋዬ ግርማ, gender: FEMALE, birthDate: '1996-06-08'}

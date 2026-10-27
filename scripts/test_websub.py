@@ -24,17 +24,17 @@ def render(enabled):
         (fixture/'Chart.yaml').write_text('apiVersion: v2\nname: websub-contract\nversion: 1.0.0\ndependencies:\n- name: websub\n  version: 1.3.2\n  condition: websub.enabled\n')
         shutil.copyfile(CHART/'values.yaml',fixture/'values.yaml')
         args=[HELM,'template','commons-services',str(fixture),'-n','commons']
-        if enabled:
-            args+=['-f',str(ROOT/'environments/dev/values/commons-services.yaml')]
+        if not enabled:
+            args+=['--set','websub.enabled=false','--set','websubTopicProvisioning.enabled=false']
         result=subprocess.run(args,capture_output=True,text=True,encoding='utf-8')
     if result.returncode:raise AssertionError(result.stderr)
     return [d for d in yaml.safe_load_all(result.stdout) if d]
 
 class WebsubContract(unittest.TestCase):
-    def test_defaults_do_not_enable_websub(self):
+    def test_disabled_websub_renders_nothing(self):
         self.assertFalse(any('websub' in d['metadata']['name'] for d in render(False)))
 
-    def test_dev_reuses_broker_without_public_routes(self):
+    def test_dev_defaults_reuse_broker_without_public_routes(self):
         docs=render(True)
         hub=[d for d in docs if 'websub' in d['metadata']['name']]
         self.assertEqual({d['metadata']['name'] for d in hub if d['kind']=='Deployment'},

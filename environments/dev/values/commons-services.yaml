@@ -1,47 +1,6 @@
-websub:
-  enabled: true
-  existingSecret: commons-websub-encryption
-  securityOn: false
-  kafka:
-    enabled: false
-  kafkaInstallationName: commons-kafka
-  replicaCount: 1
-  # Kafka auto-creation uses three partitions. Wait for explicit provisioning
-  # before either WebSub process can create metadata topics with those defaults.
-  initContainers: &websubTopicReadiness
-    - name: wait-for-websub-topics
-      image: docker.io/openg2p/kafka:3.7.1-debian-12-r4
-      imagePullPolicy: IfNotPresent
-      env:
-        - name: KAFKA_HEAP_OPTS
-          value: -Xmx256m -Xms128m
-      resources:
-        requests:
-          cpu: 100m
-          memory: 256Mi
-        limits:
-          memory: 512Mi
-      command: [/bin/bash, -ec]
-      args:
-        - |
-          for topic in registered-websub-topics consolidated-websub-topics registered-websub-subscribers consolidated-websub-subscribers; do
-            description=$(/opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server commons-kafka:9092 --describe --topic "$topic")
-            echo "$description" | grep -Eq 'PartitionCount: *1([[:space:]]|$)'
-            echo "$description" | grep -Eq 'ReplicationFactor: *1([[:space:]]|$)'
-          done
-  istio:
-    enabled: false
-  consolidator:
-    replicaCount: 1
-    initContainers: *websubTopicReadiness
-    istio:
-      enabled: false
-      virtualservice:
-        enabled: false
-websubTopicProvisioning:
-  enabled: true
-  bootstrapServers: commons-kafka:9092
-
+# URL migration for an existing commons-services release whose saved values
+# still carry old literal hosts. Every key equals the chart default, so merging
+# it over saved values restores the canonical development URLs.
 global:
   baseDomain: development.oanstaging.com
   keycloakBaseUrl: https://keycloak.development.oanstaging.com
@@ -112,10 +71,6 @@ mock-identity-system:
   istio:
     virtualservice:
       gateway: istio-system/development
-  identitySeed:
-    # eSignet accepts a 4-digit PIN only (mosip.esignet.auth-challenge.PIN);
-    # the subchart default 222222 is refused at sign-in.
-    defaultPin: "2222"
 openg2p-iam-service:
   global:
     keycloakApplicationUrl: https://keycloak.development.oanstaging.com
@@ -123,7 +78,7 @@ openg2p-iam-service:
     minioApplicationUrl: https://minio-console.development.oanstaging.com
     supersetApplicationUrl: ''
     iamStaffUiApplicationUrl: https://iam-staff-ui.development.oanstaging.com
-    masterDataApplicationUrl: https://master-data.development.oanstaging.com
+    masterDataApplicationUrl: https://master-data-ui.development.oanstaging.com
     aweApplicationUrl: https://awe.development.oanstaging.com
     staffPortalDefaultRedirectUri: https://staff-portal.development.oanstaging.com
     agentPortalDefaultRedirectUri: ''
@@ -200,19 +155,3 @@ openg2p-awe:
   istio:
     virtualservice:
       gateway: istio-system/development
-
-# Consent staff console tile in the shared staff portal; no role assignments.
-consentStaffPortalTile:
-  enabled: true
-
-# Fayda sign-in rehearsal people for the New Dev mock identity system. Master
-# Data on New Dev holds no sample individuals, so identitySeed creates nothing;
-# these are the people listed on the mock Fayda page. PIN 2222 for all.
-mockIdentities:
-  enabled: true
-  people:
-    - {individualId: '412345678901', pin: '2222', name: Abebe Kebede Tesfaye, nameAmharic: አበበ ከበደ ተስፋዬ, gender: MALE, birthDate: '1987-05-12'}
-    - {individualId: '100000000001', pin: '2222', name: Abebe Kebede Tadesse, nameAmharic: አበበ ከበደ ታደሰ, gender: MALE, birthDate: '1988-04-12'}
-    - {individualId: '100000000002', pin: '2222', name: Almaz Desta Bekele, nameAmharic: አልማዝ ደስታ በቀለ, gender: FEMALE, birthDate: '1992-09-23'}
-    - {individualId: '100000000003', pin: '2222', name: Dawit Mekonnen Hailu, nameAmharic: ዳዊት መኮንን ሀይሉ, gender: MALE, birthDate: '1979-01-30'}
-    - {individualId: '100000000004', pin: '2222', name: Hana Tesfaye Girma, nameAmharic: ሀና ተስፋዬ ግርማ, gender: FEMALE, birthDate: '1996-06-08'}
