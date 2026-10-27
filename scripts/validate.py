@@ -27,7 +27,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 SEMVER = re.compile(r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?")
 HELM = os.environ.get("HELM", "helm")
-BLOCKED_REGISTRIES = {"openg2p-farmer-registry", "openg2p-cropsown-registry", "openg2p-livestock-registry", "openg2p-commons-services"}
+BLOCKED_REGISTRIES = {"openg2p-farmer-registry", "openg2p-cropsown-registry", "openg2p-livestock-registry"}
 REFACTOR_GATE = "develop-refactor is incomplete:"
 ADDON_RENDER_ARGS = ("--set","image.repository=example.invalid/verification-dashboard","--set","image.tag=verification",
     "--set","ecrPullSecret.enabled=false","--set","iam.url=https://iam.verification.invalid",
@@ -485,23 +485,23 @@ def main():
             assert SEMVER.fullmatch(info["version"]), f"{chart.name} version is not Semantic Versioning"
             check_oan_metadata(info, chart)
             values = read(chart / "values.yaml")
+            if chart.name == "openg2p-commons-services":
+                master_data = next(dep for dep in info["dependencies"] if dep["name"] == "openg2p-master-data")
+                assert master_data["version"] == "0.0.0-develop.118"
+                assert master_data["repository"] == "https://openg2p.github.io/openg2p-helm"
+                for component in ("masterDataAPI", "masterDataUi"):
+                    assert values["master-data"][component]["image"]["tag"] == "0.0.0-develop.118"
+                    assert re.fullmatch(r"sha256:[0-9a-f]{64}", values["master-data"][component]["image"]["digest"])
+                # The seed image is upstream's develop.118 with the ETH-OAN pack, by digest.
+                seed = values["master-data"]["geoSeed"]["image"]
+                assert seed["repository"] == "ghcr.io/asmitonweb/master-data-db-seed"
+                assert re.fullmatch(r"0\.0\.0-develop\.118-oan\.\d+@sha256:[0-9a-f]{64}", seed["tag"])
+                assert values["master-data"]["geoSeed"]["countryPack"] == "ETH-OAN"
+                assert values["master-data"]["geoSeed"]["enabled"] is False
+                assert info["annotations"]["oan.org/promotion-ready"] == "true"
             if chart.name in BLOCKED_REGISTRIES:
-                if chart.name == "openg2p-commons-services":
-                    master_data = next(dep for dep in info["dependencies"] if dep["name"] == "openg2p-master-data")
-                    assert master_data["version"] == "0.0.0-develop.118"
-                    assert master_data["repository"] == "https://openg2p.github.io/openg2p-helm"
-                    for component in ("masterDataAPI", "masterDataUi"):
-                        assert values["master-data"][component]["image"]["tag"] == "0.0.0-develop.118"
-                        assert re.fullmatch(r"sha256:[0-9a-f]{64}", values["master-data"][component]["image"]["digest"])
-                    # The seed image is upstream's develop.118 with the ETH-OAN pack, by digest.
-                    seed = values["master-data"]["geoSeed"]["image"]
-                    assert seed["repository"] == "ghcr.io/asmitonweb/master-data-db-seed"
-                    assert re.fullmatch(r"0\.0\.0-develop\.118-oan\.\d+@sha256:[0-9a-f]{64}", seed["tag"])
-                    assert values["master-data"]["geoSeed"]["countryPack"] == "ETH-OAN"
-                    assert values["master-data"]["geoSeed"]["enabled"] is False
-                else:
-                    assert info["appVersion"] == "1.2.2-rc.557"
-                    assert info["dependencies"][0]["version"] == info["appVersion"]
+                assert info["appVersion"] == "1.2.2-rc.557"
+                assert info["dependencies"][0]["version"] == info["appVersion"]
                 assert info["annotations"]["oan.org/promotion-ready"] == "false"
                 for ns in ("verify-a","verify-b"):
                     verify_refactor_gate(chart,ns)

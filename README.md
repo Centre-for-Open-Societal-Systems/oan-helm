@@ -41,11 +41,13 @@ Rancher sees is a reviewed pull request.
 | `oan-a2c` | [charts/oan-a2c](charts/oan-a2c) | Access to Credit (Frappe) | `a2c` / `a2c-develop`, see [the guide](docs/a2c.md) |
 | `farmer-registry-dashboard`, `cropsown-registry-dashboard`, `livestock-registry-dashboard` | [addons/registry-dashboards](addons/registry-dashboards) | Per-registry dashboard UI and API | per registry |
 
-Farmer, Crop Sown, Livestock and Commons Services are currently **refactor candidates**.
+Farmer, Crop Sown and Livestock are currently **refactor candidates**.
 Their charts carry `oan.org/promotion-ready: "false"` and a promotion-gate template
 that fails every render, so Rancher lists them but cannot install or upgrade to them.
 Installed releases stay on their current versions until a pull request removes the
 gate after the acceptance described in [docs/registry-refactor.md](docs/registry-refactor.md).
+Commons Services passed that gate with Master Data (MDS) `0.0.0-develop.118`: its
+catalogue migration was rehearsed against a copy of the new-dev `master_data` database.
 
 [docs/service-catalog.md](docs/service-catalog.md) maps every COSS service to its
 chart, values key and source repository.

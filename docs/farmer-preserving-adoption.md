@@ -12,7 +12,7 @@ bytes. Original AWE rows survived except the native callback metadata timestamp.
 This is preparation evidence, not a live application upgrade.
 
 The dev.16 Farmer chart adds one narrow admission path. Default renders and
-fresh installs remain blocked, as do Crop, Livestock and Commons candidates.
+fresh installs remain blocked, as do Crop and Livestock candidates.
 Only an upgrade named farmer-registry in namespace farmer may request
 farmerAdoption.mode=preserving-upgrade. The chart reads the live ConfigMap
 registry-preserve-farmer; a user value cannot manufacture that receipt.
