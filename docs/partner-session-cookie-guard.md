@@ -19,7 +19,26 @@ it. The unchanged token still passes through IAM's signature and claims checks.
 Foreign-only access cookies become missing credentials, invoking the existing
 dev sign-in flow. Browser cookies are neither deleted nor rewritten.
 
-## Deployment and reconciliation
+## Chart default
+
+`openg2p-commons-services` sets the guard in
+`partner-management.staffPortalUi.envVars`, so a native Helm or Rancher upgrade
+keeps it and no post-renderer is needed. The upstream PM UI subchart accepts
+environment variables only, so no file is mounted:
+
+- `NODE_OPTIONS` is `--import=data:text/javascript;base64,…`, an ES module that
+  imports `node:http` and evaluates the unchanged
+  `scripts/partner-session-cookie-guard.cjs` against it.
+- `OAN_SESSION_COOKIE_GUARD=1` and `OAN_SESSION_EXPECTED_ISSUER` select dev.
+- A change to the module changes the environment, which rolls the UI.
+
+After editing the guard, regenerate the value with
+`partner_session_guard.node_options()`;
+`test_chart_default_preloads_current_guard` fails until it matches. The
+post-renderer leaves a Deployment that already carries the chart's guard
+unchanged.
+
+## Deployment and reconciliation (before chart support)
 
 `scripts/partner_session_guard.py` prepares a scoped, additive template change:
 
