@@ -10,6 +10,21 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-10-27
 
+### openg2p-commons-services 1.0.0-dev.21
+
+Previous version: 1.0.0-dev.20.
+
+- Configure Fayda (eSignet) sign-in from values for the farmer registry and New Dev (7d2c2af)
+
+### openg2p-farmer-registry 1.0.0-dev.17
+
+Previous version: 1.0.0-dev.16.
+
+- Configure Fayda (eSignet) sign-in from values for the farmer registry and New Dev (7d2c2af)
+- Let the farmer chart render and install without the preserving-adoption gate (14d75c1)
+
+## 2026-10-27
+
 ### openg2p-commons-services 1.0.0-dev.20
 
 Previous version: 1.0.0-dev.19.
