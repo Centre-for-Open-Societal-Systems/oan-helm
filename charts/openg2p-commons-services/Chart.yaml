@@ -24,8 +24,8 @@ dependencies:
 - alias: master-data
   condition: master-data.enabled
   name: openg2p-master-data
-  repository: file://../../upstream-snapshots/master-data-location/openg2p-master-data
-  version: 0.0.0-develop
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 0.0.0-develop.118
 - condition: artifactory.enabled
   name: artifactory
   repository: https://openg2p.github.io/openg2p-helm
