@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-10-27
 
+### openg2p-commons-services 1.0.0-dev.19
+
+Previous version: 1.0.0-dev.18.
+
+- fix: keep chart archives small enough for Rancher (5137428)
+
+## 2026-10-27
+
 ### openg2p-commons-services 1.0.0-dev.18
 
 Previous version: 1.0.0-dev.17.
