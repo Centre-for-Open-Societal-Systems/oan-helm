@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-10-27
 
+### openg2p-commons-services 1.0.0-dev.18
+
+Previous version: 1.0.0-dev.17.
+
+- chore: remove the Master Data snapshot and Crop lookup reference (a7c0f1d)
+
+## 2026-10-27
+
 ### openg2p-commons-services 1.0.0-dev.17
 
 Previous version: 1.0.0-dev.16.
