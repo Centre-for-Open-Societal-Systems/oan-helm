@@ -27,7 +27,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 SEMVER = re.compile(r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?")
 HELM = os.environ.get("HELM", "helm")
-BLOCKED_REGISTRIES = {"openg2p-livestock-registry"}
+BLOCKED_REGISTRIES = set()
 REFACTOR_GATE = "develop-refactor is incomplete:"
 ADDON_RENDER_ARGS = ("--set","image.repository=example.invalid/verification-dashboard","--set","image.tag=verification",
     "--set","ecrPullSecret.enabled=false","--set","iam.url=https://iam.verification.invalid",
