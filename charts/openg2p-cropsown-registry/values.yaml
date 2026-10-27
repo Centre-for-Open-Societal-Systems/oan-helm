@@ -342,3 +342,49 @@ staffAccess:
   dashboardClientId: ''
   twoStages: false
   policyKeys: []
+
+# Farmer reference: signed DCI lookup of the source Farmer, Farmer updates through
+# outgestion (Kafka/WebSub) and the Crop connector, AWE delivery. Enabled per
+# environment; see README "Farmer reference" for the Secrets and the env/mounts.
+farmerReference:
+  enabled: false
+  # PEM public key the Farmer partner API signs its DCI responses with. The
+  # openg2p-farmer-registry chart's dciSigning hook publishes it in ConfigMap
+  # <farmer release>-dci-signing-public (key public-key.pem) and in its log.
+  sourcePublicKey: ''
+  # Server-owned mapping of the signed Farmer record onto Crop's local fields
+  # (RecordContract in the extension). Not a client trust setting.
+  recordContract:
+    source_id: farmer_reference.farmer_id
+    farmer_id: farmer_reference.farmer_id
+    uid: farmer_reference.fan
+    fin: farmer_reference.fin
+    approved_at: farmer_reference.approved_at
+    status: farmer_reference.record_status
+    source_query_field: functional_record_id
+    uid_query_field: foundational_id
+    fin_query_field: foundational_id
+    profile_paths:
+      first_name: farmer_reference.first_name
+      middle_name: farmer_reference.middle_name
+      last_name: farmer_reference.last_name
+      first_name_amh: farmer_reference.first_name_amh
+      middle_name_amh: farmer_reference.middle_name_amh
+      last_name_amh: farmer_reference.last_name_amh
+      gender: farmer_reference.gender
+      birth_date: farmer_reference.birth_date
+      mobile_number: farmer_reference.mobile_number
+      address_line_1: farmer_reference.address_line_1
+      address_line_2: farmer_reference.address_line_2
+      postal_code: farmer_reference.postal_code
+      country_code: farmer_reference.country_code
+      geo_lowest_level_value_id: farmer_reference.geo_lowest_level_value_id
+      geo_code_hierarchy_json: farmer_reference.geo_code_hierarchy_json
+      region_id: farmer_reference.region_id
+      zone_id: farmer_reference.zone_id
+      woreda_id: farmer_reference.woreda_id
+      kebele_id: farmer_reference.kebele_id
+      region_name: farmer_reference.region_name
+      zone_name: farmer_reference.zone_name
+      woreda_name: farmer_reference.woreda_name
+      kebele_name: farmer_reference.kebele_name

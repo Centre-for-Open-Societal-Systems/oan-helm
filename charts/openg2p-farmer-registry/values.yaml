@@ -437,6 +437,30 @@ staffAccess:
 # docs/registry-esignet-onboarding.md). The client's RSA key is generated into
 # keySecret on first run and never leaves the cluster. Enable per environment
 # with its public eSignet URL and this registry's Staff API callback.
+# DCI response signing: the partner API signs its DCI search responses with an
+# RSA key that consumers (Crop Sown's Farmer reference) pin. A pre-install/
+# pre-upgrade hook generates the key into keySecret the first time (PKCS#12
+# bundle, password, public key, kid) and publishes the public key in ConfigMap
+# <release>-dci-signing-public. Mount the Secret on the partner API and set
+# REGISTRY_PARTNER_API_CRYPTO_SIGNING_KEY_PATH / _PASSWORD / _KID per
+# environment; see README "DCI response signing".
+dciSigning:
+  enabled: false
+  kid: farmer-registry-dci-rsa
+  keySecret:
+    name: farmer-registry-dci-signing
+  images:
+    kubectl:
+      repository: docker.io/alpine/k8s
+      digest: sha256:b0523f0a244ddc4c8e055aa335c040d3d78b3ead5528f4544395f7f9f69c7b68
+    postgres:
+      repository: docker.io/openg2p/postgresql
+      digest: sha256:65b6faa9f30de7dc89f63f055a3dd3e4ba0334172ee95c8badf49da0d08ef1c0
+  imagePullSecrets: []
+  resources:
+    requests: {cpu: 25m, memory: 64Mi}
+    limits: {memory: 256Mi}
+
 registrantAuth:
   enabled: false
   providerId: esignet

@@ -6,7 +6,7 @@ extension image bases. Other existing chart dependencies remain unchanged.
 Earlier published packages are retained byte-for-byte. This branch does not
 upgrade New Dev or staging and does not replace a Helm owner.
 
-Crop and Livestock deliberately fail before emitting workload manifests. Their
+Livestock deliberately fails before emitting workload manifests. Its
 application/domain/source-contract and restored-data acceptance is incomplete.
 Candidate validation proves package integrity, dependency resolution and that
 blocking behavior; it does not claim successful application deployment or
@@ -16,7 +16,11 @@ Farmer left the gate behind: New Dev is a development environment that is
 rebuilt from an empty database when the schema or seed changes
 (`fresh-install` in the farmer-registry Jenkins job), so its chart renders and
 installs like any other and carries `oan.org/promotion-ready: 'true'`. Crop
-Sown and Livestock keep their gates until they take the same path.
+Sown followed once its refactor (native Farmer dependency through the signed
+DCI lookup, Kafka/WebSub update receiver and AWE routing) was proven end to end
+on the developer stack: its chart renders, installs and carries the
+`farmerReference` configuration described in its README. Livestock keeps its
+gate until it takes the same path.
 
 Registry repositories own domain models, schemas, registered services/widgets,
 metadata, translations, templates, native import mappings, thin images and
