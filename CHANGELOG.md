@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-10-27
 
+### openg2p-commons-services 1.0.0-dev.25
+
+Previous version: 1.0.0-dev.24.
+
+- Commons: seed the farmer registry's document, phone and finance lists (1654d38)
+
+## 2026-10-27
+
 ### openg2p-commons-services 1.0.0-dev.24
 
 Previous version: 1.0.0-dev.23.
