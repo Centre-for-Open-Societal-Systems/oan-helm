@@ -10,6 +10,7 @@ and deployed, and [CONTRIBUTING.md](../CONTRIBUTING.md) for the pull-request rul
 | [versioning.md](versioning.md) | Version rules and the automatic release workflow |
 | [publication.md](publication.md) | How GitHub serves `repository/` to Rancher and Helm |
 | [rancher-dev.md](rancher-dev.md) | Installing and upgrading releases in Rancher, ownership and rollback rules |
+| [commons-upgrades.md](commons-upgrades.md) | One-click Commons Services upgrades: what re-runs, why it is safe, verify and roll back |
 | [rancher-consent-aggregation-status.md](rancher-consent-aggregation-status.md) | Installed Commons Services release in dev and its upgrade controls |
 | [readiness.md](readiness.md) | Per-component readiness and image provenance |
 | [service-catalog.md](service-catalog.md) | Every COSS service, its chart, values key and source |

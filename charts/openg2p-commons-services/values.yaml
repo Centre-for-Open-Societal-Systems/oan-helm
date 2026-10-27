@@ -92,6 +92,10 @@ master-data:
     job: {}
   keycloak-init:
     nameOverride: master-data-kc-init
+  # As in OpenG2P's commons-services: a regular, revision-named Job, so a failing
+  # hook elsewhere cannot leave Master Data unregistered in IAM. It is idempotent.
+  iamRegister:
+    runAsHook: false
   masterDataUi:
     iamPublicUrl: https://staff-iam.development.oanstaging.com
     envVars:

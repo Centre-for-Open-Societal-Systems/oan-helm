@@ -74,6 +74,8 @@ renderer migrates literal URLs and encoded configuration, retains private/test
 route gateways, and can suppress initialization Jobs for this URL-only operation.
 Use `--no-hooks` and `--post-renderer-args --skip-initialization-jobs` only for the
 reviewed URL migration, not as a general substitute for required initialization.
+Current Commons Services charts need neither; see
+[commons-upgrades.md](commons-upgrades.md).
 
 ## Cutover and recovery
 
