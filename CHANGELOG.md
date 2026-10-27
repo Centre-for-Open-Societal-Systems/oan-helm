@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-10-27
 
+### openg2p-commons-services 1.0.0-dev.20
+
+Previous version: 1.0.0-dev.19.
+
+- feat(commons): promote Commons Services with Master Data 0.0.0-develop.118 (d6b6b67)
+
+## 2026-10-27
+
 ### openg2p-commons-services 1.0.0-dev.19
 
 Previous version: 1.0.0-dev.18.
