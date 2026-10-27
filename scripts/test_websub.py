@@ -2,6 +2,8 @@
 import os
 from pathlib import Path
 import subprocess
+import tempfile
+import shutil
 import unittest
 import yaml
 
@@ -10,10 +12,21 @@ CHART=ROOT/'charts/openg2p-commons-services'
 HELM=os.environ.get('HELM','helm')
 
 def render(enabled):
-    args=[HELM,'template','commons-services',str(CHART),'-n','commons']
-    if enabled:
-        args+=['-f',str(ROOT/'environments/dev/values/commons-services.yaml')]
-    result=subprocess.run(args,capture_output=True,text=True,encoding='utf-8')
+    # Isolate the unchanged WebSub resources. Commons' real promotion gate must
+    # stay closed while its independent Master Data upgrade is rehearsed.
+    with tempfile.TemporaryDirectory() as tmp:
+        fixture=Path(tmp)
+        (fixture/'templates').mkdir()
+        (fixture/'charts').mkdir()
+        for name in ('_helpers.tpl','_coss.tpl','websub-topics.yaml'):
+            shutil.copyfile(CHART/'templates'/name,fixture/'templates'/name)
+        shutil.copyfile(CHART/'charts/websub-1.3.2.tgz',fixture/'charts/websub-1.3.2.tgz')
+        (fixture/'Chart.yaml').write_text('apiVersion: v2\nname: websub-contract\nversion: 1.0.0\ndependencies:\n- name: websub\n  version: 1.3.2\n  condition: websub.enabled\n')
+        shutil.copyfile(CHART/'values.yaml',fixture/'values.yaml')
+        args=[HELM,'template','commons-services',str(fixture),'-n','commons']
+        if enabled:
+            args+=['-f',str(ROOT/'environments/dev/values/commons-services.yaml')]
+        result=subprocess.run(args,capture_output=True,text=True,encoding='utf-8')
     if result.returncode:raise AssertionError(result.stderr)
     return [d for d in yaml.safe_load_all(result.stdout) if d]
 

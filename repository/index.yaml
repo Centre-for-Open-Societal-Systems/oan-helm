@@ -1,5 +1,56 @@
 apiVersion: v1
 entries:
+  cropsown-registry-dashboard:
+  - annotations:
+      oan.org/chart-owner: oan-helm
+    apiVersion: v2
+    appVersion: 0.1.0
+    created: "2026-10-26T09:10:03.496596+05:30"
+    description: Crop sown registry dashboard (Next.js UI and its backend-for-frontend),
+      signed in through the registry's IAM.
+    digest: 3126720aef8d5ce9314195c8b253a4886d5c6c7e757a104af0303a0c617de064
+    name: cropsown-registry-dashboard
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_cropsown_dashboard
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - cropsown-registry-dashboard-0.1.2.tgz
+    version: 0.1.2
+  farmer-registry-dashboard:
+  - annotations:
+      oan.org/chart-owner: oan-helm
+    apiVersion: v2
+    appVersion: 0.1.0
+    created: "2026-10-26T09:10:03.4976519+05:30"
+    description: Farmer registry dashboard (Next.js UI and its backend-for-frontend),
+      signed in through the registry's IAM.
+    digest: fcc6601971378fb166df86424c4b96b0831e7f64acf84d17af3dd544ae8f6c79
+    name: farmer-registry-dashboard
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_farmerregistry_dashboard
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - farmer-registry-dashboard-0.1.2.tgz
+    version: 0.1.2
+  livestock-registry-dashboard:
+  - annotations:
+      oan.org/chart-owner: oan-helm
+    apiVersion: v2
+    appVersion: 0.1.0
+    created: "2026-10-26T09:10:03.4981861+05:30"
+    description: Livestock registry dashboard (Next.js UI and its backend-for-frontend),
+      signed in through the registry's IAM.
+    digest: c1a5cce9b82070b782aefa954b74a11907ace7babafe90ad913614fe0d4c9ff0
+    name: livestock-registry-dashboard
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_livestock_dashboard
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - livestock-registry-dashboard-0.1.2.tgz
+    version: 0.1.2
   oan-sandbox:
   - annotations:
       catalog.cattle.io/display-name: OAN Sandbox
@@ -9,7 +60,224 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
     apiVersion: v2
     appVersion: develop
-    created: "2026-10-22T19:05:51.7011102+05:30"
+    created: "2026-10-26T09:10:03.5024142+05:30"
+    description: OAN Sandbox for OpenAgriNet (OAN), developed in the COSS sandbox-platform
+      repository; developer portal with the API catalogue, participant portal, try-it
+      console and admin console. Component images have independent versions.
+    digest: 162a906456b2a69083978446e24f766f6bb04be5791cacef00df3ae12a8d5c9b
+    home: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - sandbox
+    - developer-portal
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-sandbox
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-sandbox-1.0.0-dev.14.tgz
+    version: 1.0.0-dev.14
+  - annotations:
+      catalog.cattle.io/display-name: OAN Sandbox
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-sandbox
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    apiVersion: v2
+    appVersion: develop
+    created: "2026-10-26T09:10:03.501359+05:30"
+    description: OAN Sandbox for OpenAgriNet (OAN), developed in the COSS sandbox-platform
+      repository; developer portal with the API catalogue, participant portal, try-it
+      console and admin console. Component images have independent versions.
+    digest: 6990c3b03159b86ef40b6a2ca677f868e576530ed1c104d2107c0c88ac2b57f3
+    home: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - sandbox
+    - developer-portal
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-sandbox
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-sandbox-1.0.0-dev.13.tgz
+    version: 1.0.0-dev.13
+  - annotations:
+      catalog.cattle.io/display-name: OAN Sandbox
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-sandbox
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    apiVersion: v2
+    appVersion: develop
+    created: "2026-10-26T09:10:03.5008354+05:30"
+    description: OAN Sandbox for OpenAgriNet (OAN), developed in the COSS sandbox-platform
+      repository; developer portal with the API catalogue, participant portal, try-it
+      console and admin console. Component images have independent versions.
+    digest: d0fc2e2f576982cf07a8f5749967d788afb62b20dcec485712cbbce5cf4fd81a
+    home: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - sandbox
+    - developer-portal
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-sandbox
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-sandbox-1.0.0-dev.12.tgz
+    version: 1.0.0-dev.12
+  - annotations:
+      catalog.cattle.io/display-name: OAN Sandbox
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-sandbox
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    apiVersion: v2
+    appVersion: develop
+    created: "2026-10-26T09:10:03.4997537+05:30"
+    description: OAN Sandbox for OpenAgriNet (OAN), developed in the COSS sandbox-platform
+      repository; developer portal with the API catalogue, participant portal, try-it
+      console and admin console. Component images have independent versions.
+    digest: 7fe983f3a03e061ca360c80e72d9842b73926f5d56fcee5df38e10b4c15acebc
+    home: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - sandbox
+    - developer-portal
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-sandbox
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-sandbox-1.0.0-dev.11.tgz
+    version: 1.0.0-dev.11
+  - annotations:
+      catalog.cattle.io/display-name: OAN Sandbox
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-sandbox
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    apiVersion: v2
+    appVersion: develop
+    created: "2026-10-26T09:10:03.4992361+05:30"
+    description: OAN Sandbox for OpenAgriNet (OAN), developed in the COSS sandbox-platform
+      repository; developer portal with the API catalogue, participant portal, try-it
+      console and admin console. Component images have independent versions.
+    digest: 3475694ee683297b49e209026c5b8962594ab78bcaaba950695e3a9b05c0765f
+    home: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - sandbox
+    - developer-portal
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-sandbox
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-sandbox-1.0.0-dev.10.tgz
+    version: 1.0.0-dev.10
+  - annotations:
+      catalog.cattle.io/display-name: OAN Sandbox
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-sandbox
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    apiVersion: v2
+    appVersion: develop
+    created: "2026-10-26T09:10:03.5055837+05:30"
+    description: OAN Sandbox for OpenAgriNet (OAN), developed in the COSS sandbox-platform
+      repository; developer portal with the API catalogue, participant portal, try-it
+      console and admin console. Component images have independent versions.
+    digest: b47351e2d8f0c54bf0768d54f0f5ed877bd334401f35b1ad3d2411625a848d70
+    home: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - sandbox
+    - developer-portal
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-sandbox
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-sandbox-1.0.0-dev.9.tgz
+    version: 1.0.0-dev.9
+  - annotations:
+      catalog.cattle.io/display-name: OAN Sandbox
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-sandbox
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    apiVersion: v2
+    appVersion: develop
+    created: "2026-10-26T09:10:03.5050581+05:30"
+    description: OAN Sandbox for OpenAgriNet (OAN), developed in the COSS sandbox-platform
+      repository; developer portal with the API catalogue, participant portal, try-it
+      console and admin console. Component images have independent versions.
+    digest: 117102b5acace16756e8957db2d43f2c74b5b4d1b55df6cd91a141811ab3ff9a
+    home: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - sandbox
+    - developer-portal
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-sandbox
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-sandbox-1.0.0-dev.8.tgz
+    version: 1.0.0-dev.8
+  - annotations:
+      catalog.cattle.io/display-name: OAN Sandbox
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-sandbox
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    apiVersion: v2
+    appVersion: develop
+    created: "2026-10-26T09:10:03.5045328+05:30"
     description: OAN Sandbox for OpenAgriNet (OAN), developed in the COSS sandbox-platform
       repository; developer portal with the API catalogue, participant portal, try-it
       console and admin console. Component images have independent versions.
@@ -40,7 +308,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
     apiVersion: v2
     appVersion: develop
-    created: "2026-10-22T19:05:51.7000576+05:30"
+    created: "2026-10-26T09:10:03.5034584+05:30"
     description: OAN Sandbox for OpenAgriNet (OAN), developed in the COSS sandbox-platform
       repository; developer portal with the API catalogue, participant portal, try-it
       console and admin console. Component images have independent versions.
@@ -75,12 +343,773 @@ entries:
       oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-commons-services
       oan.org/consent-manager-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
       oan.org/consent-partner-portal-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
+      oan.org/master-data-source: e569a59b8e9f61f809e07791e9263e50b2a7e0da
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: openg2p.org/add-to-rancher
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    apiVersion: v2
+    appVersion: 2.3.4-rc.247
+    created: "2026-10-26T09:10:03.7788111+05:30"
+    dependencies:
+    - condition: websub.enabled
+      name: websub
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.3.2
+    - alias: master-data
+      condition: master-data.enabled
+      name: openg2p-master-data
+      repository: file://../../upstream-snapshots/master-data-location/openg2p-master-data
+      version: 0.0.0-develop
+    - condition: artifactory.enabled
+      name: artifactory
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 12.0.3
+    - condition: keymanager.enabled
+      name: keymanager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 12.1.1
+    - condition: superset.enabled
+      name: superset
+      repository: https://apache.github.io/superset
+      version: 0.12.11
+    - condition: esignet.enabled
+      name: esignet
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.4.3
+    - condition: mock-identity-system.enabled
+      name: mock-identity-system
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 0.0.0-develop.9
+    - condition: odk-central.enabled
+      name: odk-central
+      repository: https://openg2p.github.io/openg2p-helm
+      version: v2025.2.2
+    - condition: openg2p-iam-service.enabled
+      name: openg2p-iam-service
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.4.4-rc.125
+    - condition: openg2p-inji-certify.enabled
+      name: openg2p-inji-certify
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 0.0.0-develop.14
+    - condition: openg2p-audit-manager.enabled
+      name: openg2p-audit-manager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    - condition: openg2p-staff-portal-ui.enabled
+      name: openg2p-staff-portal-ui
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    - condition: openg2p-awe.enabled
+      name: openg2p-awe
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2
+    - condition: partner-management.enabled
+      name: partner-management
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.0.2
+    - condition: openg2p-consent-manager.enabled
+      name: openg2p-consent-manager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.0.2
+    - condition: keycloak-init.enabled
+      name: keycloak-init
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    description: OAN Commons Services including OAN Consent Manager and Aggregation
+      API from COSS repositories, with pinned OpenG2P shared-service dependencies.
+    digest: 1636ce14bc9f55efa45c986fe9636c2a070b1048dbbd4de757613324a50c8f9b
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - consent-manager
+    - aggregation
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-commons-services
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/consent-management
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
+    - https://github.com/OpenG2P/commons
+    type: application
+    urls:
+    - openg2p-commons-services-1.0.0-dev.14.tgz
+    version: 1.0.0-dev.14
+  - annotations:
+      catalog.cattle.io/display-name: OAN Commons Services (Consent Manager, Partner
+        Portal & Aggregation)
+      catalog.cattle.io/release-name: commons-services
+      coss.org/upstream-source: https://github.com/OpenG2P/commons
+      coss.org/upstream-source-revision: 32638189178ca451d354316a099918574c6730a5
+      coss.org/upstream-version: 2.3.4-rc.247
+      oan.org/aggregation-source: https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-commons-services
+      oan.org/consent-manager-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
+      oan.org/consent-partner-portal-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
+      oan.org/master-data-source: e569a59b8e9f61f809e07791e9263e50b2a7e0da
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: openg2p.org/add-to-rancher
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    apiVersion: v2
+    appVersion: 2.3.4-rc.247
+    created: "2026-10-26T09:10:03.7342153+05:30"
+    dependencies:
+    - condition: websub.enabled
+      name: websub
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.3.2
+    - alias: master-data
+      condition: master-data.enabled
+      name: openg2p-master-data
+      repository: file://../../upstream-snapshots/master-data-location/openg2p-master-data
+      version: 0.0.0-develop
+    - condition: artifactory.enabled
+      name: artifactory
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 12.0.3
+    - condition: keymanager.enabled
+      name: keymanager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 12.1.1
+    - condition: superset.enabled
+      name: superset
+      repository: https://apache.github.io/superset
+      version: 0.12.11
+    - condition: esignet.enabled
+      name: esignet
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.4.3
+    - condition: mock-identity-system.enabled
+      name: mock-identity-system
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 0.0.0-develop.9
+    - condition: odk-central.enabled
+      name: odk-central
+      repository: https://openg2p.github.io/openg2p-helm
+      version: v2025.2.2
+    - condition: openg2p-iam-service.enabled
+      name: openg2p-iam-service
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.4.4-rc.125
+    - condition: openg2p-inji-certify.enabled
+      name: openg2p-inji-certify
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 0.0.0-develop.14
+    - condition: openg2p-audit-manager.enabled
+      name: openg2p-audit-manager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    - condition: openg2p-staff-portal-ui.enabled
+      name: openg2p-staff-portal-ui
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    - condition: openg2p-awe.enabled
+      name: openg2p-awe
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2
+    - condition: partner-management.enabled
+      name: partner-management
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.0.2
+    - condition: openg2p-consent-manager.enabled
+      name: openg2p-consent-manager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.0.2
+    - condition: keycloak-init.enabled
+      name: keycloak-init
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    description: OAN Commons Services including OAN Consent Manager and Aggregation
+      API from COSS repositories, with pinned OpenG2P shared-service dependencies.
+    digest: 68170daed67eafd08c46f1154180925f8b9ddc024b8b369fde52c0d6969342e8
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - consent-manager
+    - aggregation
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-commons-services
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/consent-management
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
+    - https://github.com/OpenG2P/commons
+    type: application
+    urls:
+    - openg2p-commons-services-1.0.0-dev.13.tgz
+    version: 1.0.0-dev.13
+  - annotations:
+      catalog.cattle.io/display-name: OAN Commons Services (Consent Manager, Partner
+        Portal & Aggregation)
+      catalog.cattle.io/release-name: commons-services
+      coss.org/upstream-source: https://github.com/OpenG2P/commons
+      coss.org/upstream-source-revision: 32638189178ca451d354316a099918574c6730a5
+      coss.org/upstream-version: 2.3.4-rc.247
+      oan.org/aggregation-source: https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-commons-services
+      oan.org/consent-manager-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
+      oan.org/consent-partner-portal-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
+      oan.org/master-data-source: e569a59b8e9f61f809e07791e9263e50b2a7e0da
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: openg2p.org/add-to-rancher
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    apiVersion: v2
+    appVersion: 2.3.4-rc.247
+    created: "2026-10-26T09:10:03.6882154+05:30"
+    dependencies:
+    - condition: websub.enabled
+      name: websub
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.3.2
+    - alias: master-data
+      condition: master-data.enabled
+      name: openg2p-master-data
+      repository: file://../../upstream-snapshots/master-data-location/openg2p-master-data
+      version: 0.0.0-develop
+    - condition: artifactory.enabled
+      name: artifactory
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 12.0.3
+    - condition: keymanager.enabled
+      name: keymanager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 12.1.1
+    - condition: superset.enabled
+      name: superset
+      repository: https://apache.github.io/superset
+      version: 0.12.11
+    - condition: esignet.enabled
+      name: esignet
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.4.3
+    - condition: mock-identity-system.enabled
+      name: mock-identity-system
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 0.0.0-develop.9
+    - condition: odk-central.enabled
+      name: odk-central
+      repository: https://openg2p.github.io/openg2p-helm
+      version: v2025.2.2
+    - condition: openg2p-iam-service.enabled
+      name: openg2p-iam-service
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.4.4-rc.125
+    - condition: openg2p-inji-certify.enabled
+      name: openg2p-inji-certify
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 0.0.0-develop.14
+    - condition: openg2p-audit-manager.enabled
+      name: openg2p-audit-manager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    - condition: openg2p-staff-portal-ui.enabled
+      name: openg2p-staff-portal-ui
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    - condition: openg2p-awe.enabled
+      name: openg2p-awe
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2
+    - condition: partner-management.enabled
+      name: partner-management
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.0.2
+    - condition: openg2p-consent-manager.enabled
+      name: openg2p-consent-manager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.0.2
+    - condition: keycloak-init.enabled
+      name: keycloak-init
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    description: OAN Commons Services including OAN Consent Manager and Aggregation
+      API from COSS repositories, with pinned OpenG2P shared-service dependencies.
+    digest: 6763692828de80ebd68f54e4d3661b6fd3ed92e0226ba5ebbc91cb147a2f6223
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - consent-manager
+    - aggregation
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-commons-services
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/consent-management
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
+    - https://github.com/OpenG2P/commons
+    type: application
+    urls:
+    - openg2p-commons-services-1.0.0-dev.12.tgz
+    version: 1.0.0-dev.12
+  - annotations:
+      catalog.cattle.io/display-name: OAN Commons Services (Consent Manager, Partner
+        Portal & Aggregation)
+      catalog.cattle.io/release-name: commons-services
+      coss.org/upstream-source: https://github.com/OpenG2P/commons
+      coss.org/upstream-source-revision: 32638189178ca451d354316a099918574c6730a5
+      coss.org/upstream-version: 2.3.4-rc.247
+      oan.org/aggregation-source: https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-commons-services
+      oan.org/consent-manager-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
+      oan.org/consent-partner-portal-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
+      oan.org/master-data-source: e569a59b8e9f61f809e07791e9263e50b2a7e0da
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: openg2p.org/add-to-rancher
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    apiVersion: v2
+    appVersion: 2.3.4-rc.247
+    created: "2026-10-26T09:10:03.634802+05:30"
+    dependencies:
+    - condition: websub.enabled
+      name: websub
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.3.2
+    - alias: master-data
+      condition: master-data.enabled
+      name: openg2p-master-data
+      repository: file://../../upstream-snapshots/master-data-location/openg2p-master-data
+      version: 0.0.0-develop
+    - condition: artifactory.enabled
+      name: artifactory
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 12.0.3
+    - condition: keymanager.enabled
+      name: keymanager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 12.1.1
+    - condition: superset.enabled
+      name: superset
+      repository: https://apache.github.io/superset
+      version: 0.12.11
+    - condition: esignet.enabled
+      name: esignet
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.4.3
+    - condition: mock-identity-system.enabled
+      name: mock-identity-system
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 0.0.0-develop.9
+    - condition: odk-central.enabled
+      name: odk-central
+      repository: https://openg2p.github.io/openg2p-helm
+      version: v2025.2.2
+    - condition: openg2p-iam-service.enabled
+      name: openg2p-iam-service
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.4.4-rc.125
+    - condition: openg2p-inji-certify.enabled
+      name: openg2p-inji-certify
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 0.0.0-develop.14
+    - condition: openg2p-audit-manager.enabled
+      name: openg2p-audit-manager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    - condition: openg2p-staff-portal-ui.enabled
+      name: openg2p-staff-portal-ui
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    - condition: openg2p-awe.enabled
+      name: openg2p-awe
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2
+    - condition: partner-management.enabled
+      name: partner-management
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.0.2
+    - condition: openg2p-consent-manager.enabled
+      name: openg2p-consent-manager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.0.2
+    - condition: keycloak-init.enabled
+      name: keycloak-init
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    description: OAN Commons Services including OAN Consent Manager and Aggregation
+      API from COSS repositories, with pinned OpenG2P shared-service dependencies.
+    digest: b0d7477d24e944c46b64da456e3e6107a8934f5a36214d47d91495be494a6940
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - consent-manager
+    - aggregation
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-commons-services
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/consent-management
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
+    - https://github.com/OpenG2P/commons
+    type: application
+    urls:
+    - openg2p-commons-services-1.0.0-dev.11.tgz
+    version: 1.0.0-dev.11
+  - annotations:
+      catalog.cattle.io/display-name: OAN Commons Services (Consent Manager, Partner
+        Portal & Aggregation)
+      catalog.cattle.io/release-name: commons-services
+      coss.org/upstream-source: https://github.com/OpenG2P/commons
+      coss.org/upstream-source-revision: 32638189178ca451d354316a099918574c6730a5
+      coss.org/upstream-version: 2.3.4-rc.247
+      oan.org/aggregation-source: https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-commons-services
+      oan.org/consent-manager-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
+      oan.org/consent-partner-portal-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
+      oan.org/master-data-source: e569a59b8e9f61f809e07791e9263e50b2a7e0da
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: openg2p.org/add-to-rancher
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    apiVersion: v2
+    appVersion: 2.3.4-rc.247
+    created: "2026-10-26T09:10:03.5951687+05:30"
+    dependencies:
+    - condition: websub.enabled
+      name: websub
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.3.2
+    - alias: master-data
+      condition: master-data.enabled
+      name: openg2p-master-data
+      repository: file://../../upstream-snapshots/master-data-location/openg2p-master-data
+      version: 0.0.0-develop
+    - condition: artifactory.enabled
+      name: artifactory
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 12.0.3
+    - condition: keymanager.enabled
+      name: keymanager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 12.1.1
+    - condition: superset.enabled
+      name: superset
+      repository: https://apache.github.io/superset
+      version: 0.12.11
+    - condition: esignet.enabled
+      name: esignet
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.4.3
+    - condition: mock-identity-system.enabled
+      name: mock-identity-system
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 0.0.0-develop.9
+    - condition: odk-central.enabled
+      name: odk-central
+      repository: https://openg2p.github.io/openg2p-helm
+      version: v2025.2.2
+    - condition: openg2p-iam-service.enabled
+      name: openg2p-iam-service
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.4.4-rc.125
+    - condition: openg2p-inji-certify.enabled
+      name: openg2p-inji-certify
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 0.0.0-develop.14
+    - condition: openg2p-audit-manager.enabled
+      name: openg2p-audit-manager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    - condition: openg2p-staff-portal-ui.enabled
+      name: openg2p-staff-portal-ui
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    - condition: openg2p-awe.enabled
+      name: openg2p-awe
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2
+    - condition: partner-management.enabled
+      name: partner-management
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.0.2
+    - condition: openg2p-consent-manager.enabled
+      name: openg2p-consent-manager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.0.2
+    - condition: keycloak-init.enabled
+      name: keycloak-init
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    description: OAN Commons Services including OAN Consent Manager and Aggregation
+      API from COSS repositories, with pinned OpenG2P shared-service dependencies.
+    digest: 512125ce4d3d6dfd978f14b6623a70a3d0e4b216a460906e98d5dd19d1494004
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - consent-manager
+    - aggregation
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-commons-services
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/consent-management
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
+    - https://github.com/OpenG2P/commons
+    type: application
+    urls:
+    - openg2p-commons-services-1.0.0-dev.10.tgz
+    version: 1.0.0-dev.10
+  - annotations:
+      catalog.cattle.io/display-name: OAN Commons Services (Consent Manager, Partner
+        Portal & Aggregation)
+      catalog.cattle.io/release-name: commons-services
+      coss.org/upstream-source: https://github.com/OpenG2P/commons
+      coss.org/upstream-source-revision: 32638189178ca451d354316a099918574c6730a5
+      coss.org/upstream-version: 2.3.4-rc.247
+      oan.org/aggregation-source: https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-commons-services
+      oan.org/consent-manager-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
+      oan.org/consent-partner-portal-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
+      oan.org/master-data-source: e569a59b8e9f61f809e07791e9263e50b2a7e0da
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: openg2p.org/add-to-rancher
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    apiVersion: v2
+    appVersion: 2.3.4-rc.247
+    created: "2026-10-26T09:10:04.1076835+05:30"
+    dependencies:
+    - condition: websub.enabled
+      name: websub
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.3.2
+    - alias: master-data
+      condition: master-data.enabled
+      name: openg2p-master-data
+      repository: file://../../upstream-snapshots/master-data-location/openg2p-master-data
+      version: 0.0.0-develop
+    - condition: artifactory.enabled
+      name: artifactory
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 12.0.3
+    - condition: keymanager.enabled
+      name: keymanager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 12.1.1
+    - condition: superset.enabled
+      name: superset
+      repository: https://apache.github.io/superset
+      version: 0.12.11
+    - condition: esignet.enabled
+      name: esignet
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.4.3
+    - condition: mock-identity-system.enabled
+      name: mock-identity-system
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 0.0.0-develop.9
+    - condition: odk-central.enabled
+      name: odk-central
+      repository: https://openg2p.github.io/openg2p-helm
+      version: v2025.2.2
+    - condition: openg2p-iam-service.enabled
+      name: openg2p-iam-service
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.4.4-rc.125
+    - condition: openg2p-inji-certify.enabled
+      name: openg2p-inji-certify
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 0.0.0-develop.14
+    - condition: openg2p-audit-manager.enabled
+      name: openg2p-audit-manager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    - condition: openg2p-staff-portal-ui.enabled
+      name: openg2p-staff-portal-ui
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    - condition: openg2p-awe.enabled
+      name: openg2p-awe
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2
+    - condition: partner-management.enabled
+      name: partner-management
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.0.2
+    - condition: openg2p-consent-manager.enabled
+      name: openg2p-consent-manager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.0.2
+    - condition: keycloak-init.enabled
+      name: keycloak-init
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    description: OAN Commons Services including OAN Consent Manager and Aggregation
+      API from COSS repositories, with pinned OpenG2P shared-service dependencies.
+    digest: 6b761ef14edae72dcda7388897fbb7c2b54e4021396f5df6e63f36137d7272f4
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - consent-manager
+    - aggregation
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-commons-services
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/consent-management
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
+    - https://github.com/OpenG2P/commons
+    type: application
+    urls:
+    - openg2p-commons-services-1.0.0-dev.9.tgz
+    version: 1.0.0-dev.9
+  - annotations:
+      catalog.cattle.io/display-name: OAN Commons Services (Consent Manager, Partner
+        Portal & Aggregation)
+      catalog.cattle.io/release-name: commons-services
+      coss.org/upstream-source: https://github.com/OpenG2P/commons
+      coss.org/upstream-source-revision: 32638189178ca451d354316a099918574c6730a5
+      coss.org/upstream-version: 2.3.4-rc.247
+      oan.org/aggregation-source: https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-commons-services
+      oan.org/consent-manager-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
+      oan.org/consent-partner-portal-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
       oan.org/owner: OpenAgriNet (OAN) / COSS
       openg2p.org/add-to-rancher: openg2p.org/add-to-rancher
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
     apiVersion: v2
     appVersion: 2.3.4-rc.247
-    created: "2026-10-22T19:05:51.9764959+05:30"
+    created: "2026-10-26T09:10:04.0552758+05:30"
+    dependencies:
+    - condition: websub.enabled
+      name: websub
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.3.2
+    - alias: master-data
+      condition: master-data.enabled
+      name: openg2p-master-data
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.1.4-rc.106
+    - condition: artifactory.enabled
+      name: artifactory
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 12.0.3
+    - condition: keymanager.enabled
+      name: keymanager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 12.1.1
+    - condition: superset.enabled
+      name: superset
+      repository: https://apache.github.io/superset
+      version: 0.12.11
+    - condition: esignet.enabled
+      name: esignet
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.4.3
+    - condition: mock-identity-system.enabled
+      name: mock-identity-system
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 0.0.0-develop.9
+    - condition: odk-central.enabled
+      name: odk-central
+      repository: https://openg2p.github.io/openg2p-helm
+      version: v2025.2.2
+    - condition: openg2p-iam-service.enabled
+      name: openg2p-iam-service
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.4.4-rc.125
+    - condition: openg2p-inji-certify.enabled
+      name: openg2p-inji-certify
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 0.0.0-develop.14
+    - condition: openg2p-audit-manager.enabled
+      name: openg2p-audit-manager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    - condition: openg2p-staff-portal-ui.enabled
+      name: openg2p-staff-portal-ui
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    - condition: openg2p-awe.enabled
+      name: openg2p-awe
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2
+    - condition: partner-management.enabled
+      name: partner-management
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.0.2
+    - condition: openg2p-consent-manager.enabled
+      name: openg2p-consent-manager
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.0.2
+    - condition: keycloak-init.enabled
+      name: keycloak-init
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.0
+    description: OAN Commons Services including OAN Consent Manager and Aggregation
+      API from COSS repositories, with pinned OpenG2P shared-service dependencies.
+    digest: ce174ddcd082e1a8efbe237ff12f7d9bd39b1504cdb83402b82da74a14d8655f
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - consent-manager
+    - aggregation
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-commons-services
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/consent-management
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
+    - https://github.com/OpenG2P/commons
+    type: application
+    urls:
+    - openg2p-commons-services-1.0.0-dev.8.tgz
+    version: 1.0.0-dev.8
+  - annotations:
+      catalog.cattle.io/display-name: OAN Commons Services (Consent Manager, Partner
+        Portal & Aggregation)
+      catalog.cattle.io/release-name: commons-services
+      coss.org/upstream-source: https://github.com/OpenG2P/commons
+      coss.org/upstream-source-revision: 32638189178ca451d354316a099918574c6730a5
+      coss.org/upstream-version: 2.3.4-rc.247
+      oan.org/aggregation-source: https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-commons-services
+      oan.org/consent-manager-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
+      oan.org/consent-partner-portal-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      openg2p.org/add-to-rancher: openg2p.org/add-to-rancher
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    apiVersion: v2
+    appVersion: 2.3.4-rc.247
+    created: "2026-10-26T09:10:04.0144582+05:30"
     dependencies:
     - condition: websub.enabled
       name: websub
@@ -187,7 +1216,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
     apiVersion: v2
     appVersion: 2.3.4-rc.247
-    created: "2026-10-22T19:05:51.9289634+05:30"
+    created: "2026-10-26T09:10:03.9662685+05:30"
     dependencies:
     - alias: master-data
       condition: master-data.enabled
@@ -288,7 +1317,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
     apiVersion: v2
     appVersion: 2.3.4-rc.247
-    created: "2026-10-22T19:05:51.8922731+05:30"
+    created: "2026-10-26T09:10:03.9323731+05:30"
     dependencies:
     - alias: master-data
       condition: master-data.enabled
@@ -389,7 +1418,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
     apiVersion: v2
     appVersion: 2.3.4-rc.247
-    created: "2026-10-22T19:05:51.855547+05:30"
+    created: "2026-10-26T09:10:03.8945929+05:30"
     dependencies:
     - alias: master-data
       condition: master-data.enabled
@@ -490,7 +1519,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
     apiVersion: v2
     appVersion: 2.3.4-rc.247
-    created: "2026-10-22T19:05:51.8179046+05:30"
+    created: "2026-10-26T09:10:03.8570699+05:30"
     dependencies:
     - alias: master-data
       condition: master-data.enabled
@@ -586,7 +1615,7 @@ entries:
       org.opencontainers.image.source: https://github.com/OpenG2P/commons
     apiVersion: v2
     appVersion: 2.3.4-rc.247
-    created: "2026-10-22T19:05:51.7813362+05:30"
+    created: "2026-10-26T09:10:03.8163029+05:30"
     dependencies:
     - alias: master-data
       condition: master-data.enabled
@@ -666,7 +1695,7 @@ entries:
       org.opencontainers.image.source: https://github.com/OpenG2P/commons
     apiVersion: v2
     appVersion: 2.3.4-rc.247
-    created: "2026-10-22T19:05:51.7426832+05:30"
+    created: "2026-10-26T09:10:03.5428427+05:30"
     dependencies:
     - alias: master-data
       condition: master-data.enabled
@@ -742,6 +1771,328 @@ entries:
       catalog.cattle.io/certified: partner
       catalog.cattle.io/display-name: OAN Crop Sown Registry
       catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 4ed8a1f3cffe7d51acc8252d1eb0f9e009742607
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-cropsown-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.557
+    created: "2026-10-26T09:10:04.1862899+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.557
+    description: OAN Crop Sown Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: 3822588613b914fee9a501477426fa59dbd769280dcefe0db93d2c2ef63c5758
+    home: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - cropsown-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-cropsown-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/cropsown-registry-dashboard-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_cropsown_dashboard
+    - https://github.com/OpenG2P/cropsown-registry
+    type: application
+    urls:
+    - openg2p-cropsown-registry-1.0.0-dev.14.tgz
+    version: 1.0.0-dev.14
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Crop Sown Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 4ed8a1f3cffe7d51acc8252d1eb0f9e009742607
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-cropsown-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.557
+    created: "2026-10-26T09:10:04.170401+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.557
+    description: OAN Crop Sown Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: 0ed7a11602e7edd02e2fe7739000f9056549a5e4e16508b3a38c7df1a796bccc
+    home: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - cropsown-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-cropsown-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/cropsown-registry-dashboard-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_cropsown_dashboard
+    - https://github.com/OpenG2P/cropsown-registry
+    type: application
+    urls:
+    - openg2p-cropsown-registry-1.0.0-dev.13.tgz
+    version: 1.0.0-dev.13
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Crop Sown Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 4ed8a1f3cffe7d51acc8252d1eb0f9e009742607
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-cropsown-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.557
+    created: "2026-10-26T09:10:04.1601433+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.557
+    description: OAN Crop Sown Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: 27be9de13fb7ef2077b39ad0003fb0775571da7723cc1988855e8aa297d2283b
+    home: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - cropsown-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-cropsown-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/cropsown-registry-dashboard-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_cropsown_dashboard
+    - https://github.com/OpenG2P/cropsown-registry
+    type: application
+    urls:
+    - openg2p-cropsown-registry-1.0.0-dev.12.tgz
+    version: 1.0.0-dev.12
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Crop Sown Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 4ed8a1f3cffe7d51acc8252d1eb0f9e009742607
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-cropsown-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.557
+    created: "2026-10-26T09:10:04.1391275+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.557
+    description: OAN Crop Sown Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: 740788e69cdc295562fa5d188b939d74a0bc84eaef259591ad7a9e7f96fd848b
+    home: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - cropsown-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-cropsown-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/cropsown-registry-dashboard-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_cropsown_dashboard
+    - https://github.com/OpenG2P/cropsown-registry
+    type: application
+    urls:
+    - openg2p-cropsown-registry-1.0.0-dev.11.tgz
+    version: 1.0.0-dev.11
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Crop Sown Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 4ed8a1f3cffe7d51acc8252d1eb0f9e009742607
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-cropsown-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.557
+    created: "2026-10-26T09:10:04.1330481+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.557
+    description: OAN Crop Sown Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: 177519ca8efa5ceb7c5152ebb6607f0390a58b2a8c91351cc8511d3dc0130b89
+    home: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - cropsown-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-cropsown-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/cropsown-registry-dashboard-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_cropsown_dashboard
+    - https://github.com/OpenG2P/cropsown-registry
+    type: application
+    urls:
+    - openg2p-cropsown-registry-1.0.0-dev.10.tgz
+    version: 1.0.0-dev.10
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Crop Sown Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 4ed8a1f3cffe7d51acc8252d1eb0f9e009742607
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-cropsown-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.557
+    created: "2026-10-26T09:10:04.2838278+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.557
+    description: OAN Crop Sown Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: dd5ec7ba5614fa0f5754085c0f532a5c44022d605dd3a46245e20966b4378c32
+    home: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - cropsown-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-cropsown-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/cropsown-registry-dashboard-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_cropsown_dashboard
+    - https://github.com/OpenG2P/cropsown-registry
+    type: application
+    urls:
+    - openg2p-cropsown-registry-1.0.0-dev.9.tgz
+    version: 1.0.0-dev.9
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Crop Sown Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 4ed8a1f3cffe7d51acc8252d1eb0f9e009742607
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-cropsown-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.557
+    created: "2026-10-26T09:10:04.2756413+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.557
+    description: OAN Crop Sown Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: 3b03e7b8621e82dc8a1c88b69dbb7001e87dc8a5a62b4b6c7f6073ccd45be13d
+    home: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - cropsown-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-cropsown-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/cropsown-registry-dashboard-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_cropsown_dashboard
+    - https://github.com/OpenG2P/cropsown-registry
+    type: application
+    urls:
+    - openg2p-cropsown-registry-1.0.0-dev.8.tgz
+    version: 1.0.0-dev.8
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Crop Sown Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
       coss.org/source-commit: f5be6d22a6b9947e3a62aaaf207adff74253e91e
       oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
       oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-cropsown-registry
@@ -750,7 +2101,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
     apiVersion: v2
     appVersion: develop
-    created: "2026-10-22T19:05:52.0662083+05:30"
+    created: "2026-10-26T09:10:04.2631043+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -795,7 +2146,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
     apiVersion: v2
     appVersion: develop
-    created: "2026-10-22T19:05:52.052185+05:30"
+    created: "2026-10-26T09:10:04.243521+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -840,7 +2191,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
     apiVersion: v2
     appVersion: develop
-    created: "2026-10-22T19:05:52.0401711+05:30"
+    created: "2026-10-26T09:10:04.2322892+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -885,7 +2236,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
     apiVersion: v2
     appVersion: develop
-    created: "2026-10-22T19:05:52.0276491+05:30"
+    created: "2026-10-26T09:10:04.2221757+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -930,7 +2281,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
     apiVersion: v2
     appVersion: develop
-    created: "2026-10-22T19:05:52.0151061+05:30"
+    created: "2026-10-26T09:10:04.2125138+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -971,7 +2322,7 @@ entries:
       openg2p.org/add-to-rancher: ""
     apiVersion: v2
     appVersion: develop
-    created: "2026-10-22T19:05:52.0020821+05:30"
+    created: "2026-10-26T09:10:04.1964074+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1004,7 +2355,7 @@ entries:
       openg2p.org/add-to-rancher: ""
     apiVersion: v2
     appVersion: develop
-    created: "2026-10-22T19:05:51.98952+05:30"
+    created: "2026-10-26T09:10:04.1181591+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1039,7 +2390,280 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
     apiVersion: v2
     appVersion: develop
-    created: "2026-10-22T19:05:52.1553642+05:30"
+    created: "2026-10-26T09:10:04.3562291+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.544
+    description: OAN DA Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: c688c3b66865506533206e64a133aafd99cb7d974d5670bdb41575a2d38ec7b2
+    home: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - da-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-da-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - openg2p-da-registry-1.0.0-dev.14.tgz
+    version: 1.0.0-dev.14
+  - annotations:
+      catalog.cattle.io/display-name: OAN DA Registry
+      coss.org/source-commit: 9714c3c5307a7e61f4379b613229837a4b76e952
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-da-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    apiVersion: v2
+    appVersion: develop
+    created: "2026-10-26T09:10:04.3479894+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.544
+    description: OAN DA Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: 09e79d69ca0537175728dec2a31ecd6d0c570f4f803b70f0f55fb2a964838296
+    home: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - da-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-da-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - openg2p-da-registry-1.0.0-dev.13.tgz
+    version: 1.0.0-dev.13
+  - annotations:
+      catalog.cattle.io/display-name: OAN DA Registry
+      coss.org/source-commit: 9714c3c5307a7e61f4379b613229837a4b76e952
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-da-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    apiVersion: v2
+    appVersion: develop
+    created: "2026-10-26T09:10:04.3356446+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.544
+    description: OAN DA Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: 0d3bf2dad71ab2f3fcc4e1bab8ce471a00071fa6394f1de094a640d671d381a1
+    home: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - da-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-da-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - openg2p-da-registry-1.0.0-dev.12.tgz
+    version: 1.0.0-dev.12
+  - annotations:
+      catalog.cattle.io/display-name: OAN DA Registry
+      coss.org/source-commit: 9714c3c5307a7e61f4379b613229837a4b76e952
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-da-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    apiVersion: v2
+    appVersion: develop
+    created: "2026-10-26T09:10:04.3237403+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.544
+    description: OAN DA Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: b78b090e20b609bfd041f02705cc4f12141c9b09fd916fade423328ae57a2c98
+    home: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - da-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-da-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - openg2p-da-registry-1.0.0-dev.11.tgz
+    version: 1.0.0-dev.11
+  - annotations:
+      catalog.cattle.io/display-name: OAN DA Registry
+      coss.org/source-commit: 9714c3c5307a7e61f4379b613229837a4b76e952
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-da-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    apiVersion: v2
+    appVersion: develop
+    created: "2026-10-26T09:10:04.3078951+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.544
+    description: OAN DA Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: d27abd61b53ffa22061b35bd9253bfc7c5925b4134d09a8aad27d85d9afb4bcc
+    home: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - da-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-da-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - openg2p-da-registry-1.0.0-dev.10.tgz
+    version: 1.0.0-dev.10
+  - annotations:
+      catalog.cattle.io/display-name: OAN DA Registry
+      coss.org/source-commit: 9714c3c5307a7e61f4379b613229837a4b76e952
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-da-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    apiVersion: v2
+    appVersion: develop
+    created: "2026-10-26T09:10:04.4580702+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.544
+    description: OAN DA Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: 41ef23acb86bae2d7eabe24e47365099bfbf4c27e593377746a19b0cafc2fe49
+    home: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - da-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-da-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - openg2p-da-registry-1.0.0-dev.9.tgz
+    version: 1.0.0-dev.9
+  - annotations:
+      catalog.cattle.io/display-name: OAN DA Registry
+      coss.org/source-commit: 9714c3c5307a7e61f4379b613229837a4b76e952
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-da-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    apiVersion: v2
+    appVersion: develop
+    created: "2026-10-26T09:10:04.4475917+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.544
+    description: OAN DA Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: c1f3e418d377ff6b52e1d7e87efdcf404f90266a9d9e4e2647b26952cce6a0e3
+    home: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - da-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-da-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - openg2p-da-registry-1.0.0-dev.8.tgz
+    version: 1.0.0-dev.8
+  - annotations:
+      catalog.cattle.io/display-name: OAN DA Registry
+      coss.org/source-commit: 9714c3c5307a7e61f4379b613229837a4b76e952
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-da-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    apiVersion: v2
+    appVersion: develop
+    created: "2026-10-26T09:10:04.4364671+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1078,7 +2702,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
     apiVersion: v2
     appVersion: develop
-    created: "2026-10-22T19:05:52.1428527+05:30"
+    created: "2026-10-26T09:10:04.4235723+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1117,7 +2741,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
     apiVersion: v2
     appVersion: develop
-    created: "2026-10-22T19:05:52.1307482+05:30"
+    created: "2026-10-26T09:10:04.411295+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1156,7 +2780,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
     apiVersion: v2
     appVersion: develop
-    created: "2026-10-22T19:05:52.1180258+05:30"
+    created: "2026-10-26T09:10:04.3972333+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1195,7 +2819,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
     apiVersion: v2
     appVersion: develop
-    created: "2026-10-22T19:05:52.1055178+05:30"
+    created: "2026-10-26T09:10:04.3768772+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1229,7 +2853,7 @@ entries:
       coss.org/source-commit: 9714c3c5307a7e61f4379b613229837a4b76e952
     apiVersion: v2
     appVersion: develop
-    created: "2026-10-22T19:05:52.0930125+05:30"
+    created: "2026-10-26T09:10:04.371235+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1256,7 +2880,7 @@ entries:
       coss.org/source-commit: 9714c3c5307a7e61f4379b613229837a4b76e952
     apiVersion: v2
     appVersion: develop
-    created: "2026-10-22T19:05:52.0777414+05:30"
+    created: "2026-10-26T09:10:04.2941558+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1288,11 +2912,336 @@ entries:
       oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
       oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-farmer-registry
       oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.557
+    created: "2026-10-26T09:10:04.5505532+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.557
+    description: OAN Farmer Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: 0cf49e4f3dc5569aded408ce66240c33379fdc37763d160f7b6af33d54afac83
+    home: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - farmer-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-farmer-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/farmer-registry-dashboard-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_farmerregistry_dashboard
+    - https://github.com/OpenG2P/farmer-registry
+    - https://github.com/OpenG2P/registry-connector
+    type: application
+    urls:
+    - openg2p-farmer-registry-1.0.0-dev.14.tgz
+    version: 1.0.0-dev.14
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Farmer Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 90811b61a59fef107178341f753693cf9c62749e
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-farmer-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.557
+    created: "2026-10-26T09:10:04.5399911+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.557
+    description: OAN Farmer Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: 625a2ab2b3db3bc4dcc00c7a863f586fef40907b49a48521db157995adfbfa79
+    home: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - farmer-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-farmer-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/farmer-registry-dashboard-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_farmerregistry_dashboard
+    - https://github.com/OpenG2P/farmer-registry
+    - https://github.com/OpenG2P/registry-connector
+    type: application
+    urls:
+    - openg2p-farmer-registry-1.0.0-dev.13.tgz
+    version: 1.0.0-dev.13
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Farmer Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 90811b61a59fef107178341f753693cf9c62749e
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-farmer-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.557
+    created: "2026-10-26T09:10:04.5195697+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.557
+    description: OAN Farmer Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: e84bf3a66a35f72ca6f58ca32c8c8db7905b346fe88bf2407147b64c9654c40f
+    home: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - farmer-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-farmer-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/farmer-registry-dashboard-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_farmerregistry_dashboard
+    - https://github.com/OpenG2P/farmer-registry
+    - https://github.com/OpenG2P/registry-connector
+    type: application
+    urls:
+    - openg2p-farmer-registry-1.0.0-dev.12.tgz
+    version: 1.0.0-dev.12
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Farmer Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 90811b61a59fef107178341f753693cf9c62749e
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-farmer-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
       openg2p.org/add-to-rancher: ""
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.544
-    created: "2026-10-22T19:05:52.251516+05:30"
+    created: "2026-10-26T09:10:04.4989267+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.544
+    description: OAN Farmer Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: d43407bbb94e32f2bff70572bbbb77790e9d717810f638ce003ba173e15706f8
+    home: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - farmer-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-farmer-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/farmer-registry-dashboard-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_farmerregistry_dashboard
+    - https://github.com/OpenG2P/farmer-registry
+    - https://github.com/OpenG2P/registry-connector
+    type: application
+    urls:
+    - openg2p-farmer-registry-1.0.0-dev.11.tgz
+    version: 1.0.0-dev.11
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Farmer Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 90811b61a59fef107178341f753693cf9c62749e
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-farmer-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.544
+    created: "2026-10-26T09:10:04.4909101+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.544
+    description: OAN Farmer Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: 97889d13298d4442e3bb8aa9e3def5afa95f17e95a4e4fddd358034250fbe414
+    home: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - farmer-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-farmer-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/farmer-registry-dashboard-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_farmerregistry_dashboard
+    - https://github.com/OpenG2P/farmer-registry
+    - https://github.com/OpenG2P/registry-connector
+    type: application
+    urls:
+    - openg2p-farmer-registry-1.0.0-dev.10.tgz
+    version: 1.0.0-dev.10
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Farmer Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 90811b61a59fef107178341f753693cf9c62749e
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-farmer-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.544
+    created: "2026-10-26T09:10:04.6663392+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.544
+    description: OAN Farmer Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: b8568b5868279fa166d2ad1d0ba497e352a9426343cd2d4776c21b8276c57b26
+    home: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - farmer-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-farmer-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/farmer-registry-dashboard-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_farmerregistry_dashboard
+    - https://github.com/OpenG2P/farmer-registry
+    - https://github.com/OpenG2P/registry-connector
+    type: application
+    urls:
+    - openg2p-farmer-registry-1.0.0-dev.9.tgz
+    version: 1.0.0-dev.9
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Farmer Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 90811b61a59fef107178341f753693cf9c62749e
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-farmer-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.544
+    created: "2026-10-26T09:10:04.6525419+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.544
+    description: OAN Farmer Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: dd3ffa26095dda9a741695ac24b3f0b41b6c34f364b701c5f9e837a1812e0ff0
+    home: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - farmer-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-farmer-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/farmer-registry-dashboard-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_farmerregistry_dashboard
+    - https://github.com/OpenG2P/farmer-registry
+    - https://github.com/OpenG2P/registry-connector
+    type: application
+    urls:
+    - openg2p-farmer-registry-1.0.0-dev.8.tgz
+    version: 1.0.0-dev.8
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Farmer Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 90811b61a59fef107178341f753693cf9c62749e
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-farmer-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.544
+    created: "2026-10-26T09:10:04.638465+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1338,7 +3287,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.544
-    created: "2026-10-22T19:05:52.2374926+05:30"
+    created: "2026-10-26T09:10:04.6233235+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1384,7 +3333,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.544
-    created: "2026-10-22T19:05:52.2239785+05:30"
+    created: "2026-10-26T09:10:04.6077863+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1430,7 +3379,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.544
-    created: "2026-10-22T19:05:52.2089589+05:30"
+    created: "2026-10-26T09:10:04.5912607+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1476,7 +3425,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.544
-    created: "2026-10-22T19:05:52.1964446+05:30"
+    created: "2026-10-26T09:10:04.5807469+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1518,7 +3467,7 @@ entries:
       openg2p.org/add-to-rancher: ""
     apiVersion: v2
     appVersion: 1.2.2-rc.544
-    created: "2026-10-22T19:05:52.182422+05:30"
+    created: "2026-10-26T09:10:04.5661305+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1555,7 +3504,7 @@ entries:
       openg2p.org/add-to-rancher: ""
     apiVersion: v2
     appVersion: 1.2.2-rc.544
-    created: "2026-10-22T19:05:52.1683752+05:30"
+    created: "2026-10-26T09:10:04.4718354+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1589,6 +3538,328 @@ entries:
       catalog.cattle.io/certified: partner
       catalog.cattle.io/display-name: OAN Livestock Registry
       catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 4c9b5eda31b063b6e4f30cae851d4b00626b865c
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-livestock-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.557
+    created: "2026-10-26T09:10:04.7458607+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.557
+    description: OAN Livestock Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: db13541b43ad4d9768c7cd74843f0e6c376623b99ee70df1949f4e211bb1864a
+    home: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - livestock-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-livestock-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/livestock-registry-dashbaord-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_livestock_dashboard
+    - https://github.com/OpenG2P/livestock-registry
+    type: application
+    urls:
+    - openg2p-livestock-registry-1.0.0-dev.14.tgz
+    version: 1.0.0-dev.14
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Livestock Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 4c9b5eda31b063b6e4f30cae851d4b00626b865c
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-livestock-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.557
+    created: "2026-10-26T09:10:04.7348733+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.557
+    description: OAN Livestock Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: 7e8f4b407c69ebf5e6a566b38f0e85d9581a868560c3eae9ad8fa42cb9d9ffec
+    home: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - livestock-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-livestock-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/livestock-registry-dashbaord-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_livestock_dashboard
+    - https://github.com/OpenG2P/livestock-registry
+    type: application
+    urls:
+    - openg2p-livestock-registry-1.0.0-dev.13.tgz
+    version: 1.0.0-dev.13
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Livestock Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 4c9b5eda31b063b6e4f30cae851d4b00626b865c
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-livestock-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.557
+    created: "2026-10-26T09:10:04.7216482+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.557
+    description: OAN Livestock Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: 25689a28932298991195bc2e3f0fd56aa9977d7e9aae747374a6ef969aa34028
+    home: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - livestock-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-livestock-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/livestock-registry-dashbaord-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_livestock_dashboard
+    - https://github.com/OpenG2P/livestock-registry
+    type: application
+    urls:
+    - openg2p-livestock-registry-1.0.0-dev.12.tgz
+    version: 1.0.0-dev.12
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Livestock Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 4c9b5eda31b063b6e4f30cae851d4b00626b865c
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-livestock-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.557
+    created: "2026-10-26T09:10:04.7064299+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.557
+    description: OAN Livestock Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: cea8736e8b7a15cb8d783a9479b3a3041d51b9c44bcc1632804bdd32e1368a31
+    home: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - livestock-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-livestock-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/livestock-registry-dashbaord-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_livestock_dashboard
+    - https://github.com/OpenG2P/livestock-registry
+    type: application
+    urls:
+    - openg2p-livestock-registry-1.0.0-dev.11.tgz
+    version: 1.0.0-dev.11
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Livestock Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 4c9b5eda31b063b6e4f30cae851d4b00626b865c
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-livestock-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.557
+    created: "2026-10-26T09:10:04.6939414+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.557
+    description: OAN Livestock Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: 2b8f5c3af1773a6a0cdc121f9600ebd7f7cc4c799871856cde8a21e9f8c85cee
+    home: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - livestock-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-livestock-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/livestock-registry-dashbaord-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_livestock_dashboard
+    - https://github.com/OpenG2P/livestock-registry
+    type: application
+    urls:
+    - openg2p-livestock-registry-1.0.0-dev.10.tgz
+    version: 1.0.0-dev.10
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Livestock Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 4c9b5eda31b063b6e4f30cae851d4b00626b865c
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-livestock-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.557
+    created: "2026-10-26T09:10:04.8481948+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.557
+    description: OAN Livestock Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: 939ebdb19cd281ca52cde869fed2885106c64d5c1c2766e4837c2bb6263127cc
+    home: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - livestock-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-livestock-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/livestock-registry-dashbaord-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_livestock_dashboard
+    - https://github.com/OpenG2P/livestock-registry
+    type: application
+    urls:
+    - openg2p-livestock-registry-1.0.0-dev.9.tgz
+    version: 1.0.0-dev.9
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Livestock Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      coss.org/source-commit: 4c9b5eda31b063b6e4f30cae851d4b00626b865c
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-livestock-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/promotion-ready: "false"
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.557
+    created: "2026-10-26T09:10:04.8378621+05:30"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.557
+    description: OAN Livestock Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: ca0a66e3760f371db665f2599687b640d57f975a623904be4d5a10e31a44d03a
+    home: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - livestock-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-livestock-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/livestock-registry-dashbaord-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_livestock_dashboard
+    - https://github.com/OpenG2P/livestock-registry
+    type: application
+    urls:
+    - openg2p-livestock-registry-1.0.0-dev.8.tgz
+    version: 1.0.0-dev.8
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Livestock Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
       coss.org/source-commit: bf78e69a5fd60786b8d1852c69b4fefdd70dffc1
       oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
       oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-livestock-registry
@@ -1597,7 +3868,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.544
-    created: "2026-10-22T19:05:52.3407177+05:30"
+    created: "2026-10-26T09:10:04.8175114+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1642,7 +3913,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.544
-    created: "2026-10-22T19:05:52.3266926+05:30"
+    created: "2026-10-26T09:10:04.8112402+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1687,7 +3958,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.544
-    created: "2026-10-22T19:05:52.3146769+05:30"
+    created: "2026-10-26T09:10:04.7985007+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1732,7 +4003,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.544
-    created: "2026-10-22T19:05:52.3021652+05:30"
+    created: "2026-10-26T09:10:04.7868439+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1777,7 +4048,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.544
-    created: "2026-10-22T19:05:52.2901409+05:30"
+    created: "2026-10-26T09:10:04.7666466+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1818,7 +4089,7 @@ entries:
       openg2p.org/add-to-rancher: ""
     apiVersion: v2
     appVersion: 1.2.2-rc.544
-    created: "2026-10-22T19:05:52.27663+05:30"
+    created: "2026-10-26T09:10:04.7559707+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1851,7 +4122,7 @@ entries:
       openg2p.org/add-to-rancher: ""
     apiVersion: v2
     appVersion: 1.2.2-rc.544
-    created: "2026-10-22T19:05:52.2630257+05:30"
+    created: "2026-10-26T09:10:04.6731139+05:30"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -1876,4 +4147,4 @@ entries:
     urls:
     - openg2p-livestock-registry-1.0.0-dev.1.tgz
     version: 1.0.0-dev.1
-generated: "2026-10-22T19:05:51.6990164+05:30"
+generated: "2026-10-26T09:10:03.4955478+05:30"

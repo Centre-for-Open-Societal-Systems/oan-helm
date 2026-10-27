@@ -12,6 +12,8 @@ annotations:
   coss.org/upstream-source: https://github.com/OpenG2P/commons
   coss.org/upstream-source-revision: 32638189178ca451d354316a099918574c6730a5
   oan.org/consent-partner-portal-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
+  oan.org/promotion-ready: 'false'
+  oan.org/master-data-source: e569a59b8e9f61f809e07791e9263e50b2a7e0da
 apiVersion: v2
 appVersion: 2.3.4-rc.247
 dependencies:
@@ -22,8 +24,8 @@ dependencies:
 - alias: master-data
   condition: master-data.enabled
   name: openg2p-master-data
-  repository: https://openg2p.github.io/openg2p-helm
-  version: 1.1.4-rc.106
+  repository: file://../../upstream-snapshots/master-data-location/openg2p-master-data
+  version: 0.0.0-develop
 - condition: artifactory.enabled
   name: artifactory
   repository: https://openg2p.github.io/openg2p-helm
@@ -85,7 +87,7 @@ description: OAN Commons Services including OAN Consent Manager and Aggregation 
 icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
 name: openg2p-commons-services
 type: application
-version: 1.0.0-dev.7
+version: 1.0.0-dev.14
 home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
 sources:
 - https://github.com/Centre-for-Open-Societal-Systems/oan-helm

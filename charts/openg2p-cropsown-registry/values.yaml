@@ -6,7 +6,8 @@ global:
   idGeneratorHostname: '{{ .Release.Name }}-id-generator.{{ .Release.Namespace }}.svc.cluster.local'
   aweHostname: awe.development.oanstaging.com
   aweBaseUrl: http://commons-services-awe.commons.svc.cluster.local
-  aweDefaultCallbackUrl: http://{{ .Release.Name }}-staff-portal-api.{{ .Release.Namespace }}.svc.cluster.local/awe/webhooks/decision
+  aweDefaultCallbackUrl: http://{{ .Release.Name }}-staff-portal-api.{{ .Release.Namespace
+    }}.svc.cluster.local/awe/webhooks/decision
   baseDomain: development.oanstaging.com
   keycloakRealm: staff
   keycloakIssuerUrl: https://keycloak.development.oanstaging.com/realms/staff
@@ -22,8 +23,10 @@ global:
   consentManagerUrl: http://commons-services-cm-partner-api.commons.svc.cluster.local
   consentManagerStaffUrl: http://commons-services-cm-api.commons.svc.cluster.local
   auditManagerUrl: http://commons-services-auditmanager.commons.svc.cluster.local:80
-  idGeneratorInternalUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace }}.svc.cluster.local/v1
-  idGeneratorApiUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace }}.svc.cluster.local/v1
+  idGeneratorInternalUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace
+    }}.svc.cluster.local/v1
+  idGeneratorApiUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace
+    }}.svc.cluster.local/v1
   notificationEnabled: false
   notificationApiHostname: ''
   notificationWsHostname: ''
@@ -43,6 +46,7 @@ registry:
       AUTH_CLIENT_ID: '{{ tpl (default (printf "%s-staff-portal" .Release.Name) .Values.global.authClientId)
         $ }}'
       REGISTRY_STAFF_PORTAL_API_AUTH_REDIS_URL: redis://commons-redis-master.commons.svc.cluster.local:6379/0
+      REGISTRY_CORE_REGISTRANT_AUTH_REDIS_URL: redis://commons-redis-master.commons.svc.cluster.local:6379/0
       REGISTRY_STAFF_PORTAL_API_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_STAFF_PORTAL_API_MASTER_DATA_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
       REGISTRY_STAFF_PORTAL_API_MASTER_DATA_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
@@ -50,20 +54,23 @@ registry:
       REGISTRY_STAFF_PORTAL_API_PARTNER_MGMT_ADMIN_API_URL: http://commons-services-pm-staff-portal-api.commons.svc.cluster.local
       REGISTRY_STAFF_PORTAL_API_PARTNER_MGMT_ADMIN_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
       REGISTRY_STAFF_PORTAL_API_AWE_BASE_URL: http://commons-services-awe.commons.svc.cluster.local
-      REGISTRY_STAFF_PORTAL_API_AWE_DEFAULT_CALLBACK_URL: http://{{ .Release.Name }}-staff-portal-api.{{
-        .Release.Namespace }}.svc.cluster.local/awe/webhooks/decision
+      REGISTRY_STAFF_PORTAL_API_AWE_DEFAULT_CALLBACK_URL: http://{{ .Release.Name
+        }}-staff-portal-api.{{ .Release.Namespace }}.svc.cluster.local/awe/webhooks/decision
       REGISTRY_STAFF_PORTAL_API_AUDIT_MANAGER_URL: http://commons-services-auditmanager.commons.svc.cluster.local:80
       COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       NOTIFICATION_ENABLED: 'false'
       NOTIFICATION_PROVIDER_URL: ''
       REGISTRY_STAFF_PORTAL_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CORE_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
+      REGISTRY_STAFF_PORTAL_API_VALIDATE_ATTRIBUTE_VALUES: 'true'
     envVarsFrom:
       AUTH_CLIENT_SECRET:
         secretKeyRef:
           name: '{{ tpl (default (printf "%s-staff-portal" .Release.Name) .Values.global.authClientSecret)
             $ }}'
-          key: '{{ tpl (default "client_secret" .Values.global.authClientSecretKey) $ }}'
+          key: '{{ tpl (default "client_secret" .Values.global.authClientSecretKey)
+            $ }}'
     hostname: staff-crop.development.oanstaging.com
     istio:
       virtualservice:
@@ -96,6 +103,7 @@ registry:
       NOTIFICATION_PROVIDER_URL: ''
       KEYCLOAK_BASE_URL: https://keycloak.development.oanstaging.com
       REGISTRY_PARTNER_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
   celeryWorker:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/celery
@@ -118,6 +126,7 @@ registry:
       NOTIFICATION_ENABLED: 'false'
       NOTIFICATION_PROVIDER_URL: ''
       KEYCLOAK_BASE_URL: https://keycloak.development.oanstaging.com
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
   celeryBeat:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/celery
@@ -129,6 +138,7 @@ registry:
       NOTIFICATION_PROVIDER_URL: ''
       REGISTRY_CELERY_BEAT_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CELERY_BEAT_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
   dbSeed:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/gen2/cropsown-registry/db-seed
@@ -173,7 +183,8 @@ registry:
       APP_URL: https://crop-registry.development.oanstaging.com
       REDIRECT_URL: https://crop-registry.development.oanstaging.com
       VERIFY_SERVICE_URL: https://crop-registry.development.oanstaging.com/v1/verify
-      CSP_SRC_IMG: 'self blob: data: https://minio-farmer.development.oanstaging.com'
+      CSP_SRC_IMG: 'self blob: data: https://minio-farmer.development.oanstaging.com
+        https://tile.openstreetmap.org'
       MASTERDATA_BACKEND_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
       PARTNER_INGEST_URL: https://partner-crop.development.oanstaging.com/partner/ingest_data?data_model=dcivc
       NOTIFICATION_BACKEND_URL: ''
@@ -260,6 +271,13 @@ dashboardApi:
       memory: 512Mi
   imagePullSecrets: []
   envFrom: []
+  auth:
+    enabled: true
+    issuer: '{{ tpl .Values.global.keycloakBaseUrl $ }}/realms/{{ .Values.global.keycloakRealm
+      | default "staff" }}'
+    iamUrl: ''
+    audience: cropsown-registry-dashboard-api
+    role: charts:read
 dashboardUi:
   enabled: false
   nameOverride: ''
@@ -280,3 +298,37 @@ dashboardUi:
       memory: 256Mi
     limits:
       memory: 768Mi
+odkGeoSync:
+  enabled: false
+  schedule: 17 1 * * *
+  runOnInstall: false
+  image:
+    repository: ''
+    tag: ''
+    digest: ''
+  masterData:
+    apiUrl: '{{ .Values.global.masterDataApiUrl }}'
+    tokenUrl: '{{ .Values.global.masterDataTokenUrl }}'
+    clientId: ''
+    clientSecret:
+      name: ''
+      key: client_secret
+  odk:
+    url: ''
+    projectId: ''
+    credentialsSecret:
+      name: ''
+      emailKey: email
+      passwordKey: password
+  levels:
+  - region
+  - zone
+  - woreda
+  - kebele
+  dryRun: false
+  resources:
+    requests:
+      cpu: 50m
+      memory: 96Mi
+    limits:
+      memory: 256Mi

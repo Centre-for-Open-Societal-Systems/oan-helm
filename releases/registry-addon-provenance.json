@@ -1,0 +1,54 @@
+{
+  "source_layout": "addons/registry-dashboards/<chart>",
+  "runtime_ownership_changed": false,
+  "charts": {
+    "cropsown": {
+      "source_commit": "4ed8a1f3cffe7d51acc8252d1eb0f9e009742607",
+      "source_prefix": "helm/cropsown-registry-dashboard/",
+      "unchanged_templates_and_defaults": {
+        "templates/_helpers.tpl": "3d0a18774ba92493c42f869e4d0d5242f926e884d5ccb4416e10e3a178f0ce37",
+        "templates/client-secret.yaml": "eadbfbef9b32226d9fa6e1fbca7b838b3aba085f747bb572db26c96608c8cce9",
+        "templates/deployment.yaml": "137b60deb79f62a109181a6942dd68855abe197315424addaec2d93c503f40ef",
+        "templates/ecr-pull-secret.yaml": "187b2a3b5f2fa91941bfa7f2fcd94cb05ca0bf2a117018b68d199c6668e918e9",
+        "templates/iam-setup-job.yaml": "8e0e8b7405b09f7e23d729979b91e66165f3d51c755b0a81290787ea72c82d46",
+        "templates/routing.yaml": "0a72b648674f6d2f8fd3d63713890449adc80e02c8f5cf108087c337496be10f",
+        "templates/service.yaml": "d14f6e7815e7390a4bf08fcb6ba327bab6d747fbaa605b07b92191d491792ada",
+        "templates/serviceaccount.yaml": "4b40e972db1e871fba84bdac4df4c0fafefb7806b63b5359ac615743187957ae",
+        "templates/smoke-job.yaml": "b3d275fd74dd733dbf01959bc85989065ccbd22c4d2c8a65b28675553d49cc6a",
+        "values.yaml": "7adc294be2b747d659c4307baa32c3cb9a27d1f14be567adf4fcf5d9c50a2737"
+      }
+    },
+    "livestock": {
+      "source_commit": "4c9b5eda31b063b6e4f30cae851d4b00626b865c",
+      "source_prefix": "helm/livestock-registry-dashboard/",
+      "unchanged_templates_and_defaults": {
+        "templates/_helpers.tpl": "3d0a18774ba92493c42f869e4d0d5242f926e884d5ccb4416e10e3a178f0ce37",
+        "templates/client-secret.yaml": "eadbfbef9b32226d9fa6e1fbca7b838b3aba085f747bb572db26c96608c8cce9",
+        "templates/deployment.yaml": "137b60deb79f62a109181a6942dd68855abe197315424addaec2d93c503f40ef",
+        "templates/ecr-pull-secret.yaml": "187b2a3b5f2fa91941bfa7f2fcd94cb05ca0bf2a117018b68d199c6668e918e9",
+        "templates/iam-setup-job.yaml": "8e0e8b7405b09f7e23d729979b91e66165f3d51c755b0a81290787ea72c82d46",
+        "templates/routing.yaml": "0a72b648674f6d2f8fd3d63713890449adc80e02c8f5cf108087c337496be10f",
+        "templates/service.yaml": "d14f6e7815e7390a4bf08fcb6ba327bab6d747fbaa605b07b92191d491792ada",
+        "templates/serviceaccount.yaml": "4b40e972db1e871fba84bdac4df4c0fafefb7806b63b5359ac615743187957ae",
+        "templates/smoke-job.yaml": "b3d275fd74dd733dbf01959bc85989065ccbd22c4d2c8a65b28675553d49cc6a",
+        "values.yaml": "80a64833c72beefd3f09a6b3891ea4240263f1ab6cecd4d71e756d181de88dfa"
+      }
+    },
+    "farmer": {
+      "source_commit": "75bb62b58d6ee5a3bd398be40d4ad9a80b5f88ca",
+      "source_prefix": "helm/farmer-registry-dashboard/",
+      "unchanged_templates_and_defaults": {
+        "templates/_helpers.tpl": "1142a6b94e84af81f3ff036b2a720440e82f4eab481b922da24dda63e59f802a",
+        "templates/client-secret.yaml": "eadbfbef9b32226d9fa6e1fbca7b838b3aba085f747bb572db26c96608c8cce9",
+        "templates/deployment.yaml": "137b60deb79f62a109181a6942dd68855abe197315424addaec2d93c503f40ef",
+        "templates/ecr-pull-secret.yaml": "187b2a3b5f2fa91941bfa7f2fcd94cb05ca0bf2a117018b68d199c6668e918e9",
+        "templates/iam-setup-job.yaml": "8e0e8b7405b09f7e23d729979b91e66165f3d51c755b0a81290787ea72c82d46",
+        "templates/routing.yaml": "0a72b648674f6d2f8fd3d63713890449adc80e02c8f5cf108087c337496be10f",
+        "templates/service.yaml": "d14f6e7815e7390a4bf08fcb6ba327bab6d747fbaa605b07b92191d491792ada",
+        "templates/serviceaccount.yaml": "4b40e972db1e871fba84bdac4df4c0fafefb7806b63b5359ac615743187957ae",
+        "templates/smoke-job.yaml": "b3d275fd74dd733dbf01959bc85989065ccbd22c4d2c8a65b28675553d49cc6a",
+        "values.yaml": "dfae4a886405bcc7964d5dadbd583d24217cfe84eede3481d3f7249b7c36c230"
+      }
+    }
+  }
+}

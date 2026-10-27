@@ -11,17 +11,15 @@ websub:
       enabled: false
       virtualservice:
         enabled: false
-
 websubTopicProvisioning:
   enabled: false
   image: docker.io/openg2p/kafka:3.7.1-debian-12-r4
   bootstrapServers: ''
   topics:
-    - registered-websub-topics
-    - consolidated-websub-topics
-    - registered-websub-subscribers
-    - consolidated-websub-subscribers
-
+  - registered-websub-topics
+  - consolidated-websub-topics
+  - registered-websub-subscribers
+  - consolidated-websub-subscribers
 global:
   baseDomain: development.oanstaging.com
   keycloakBaseUrl: https://keycloak.development.oanstaging.com
@@ -75,17 +73,19 @@ master-data:
     masterDataDBUserPasswordKey: master-data-db-user-password
     masterDataUiHostname: master-data-ui.development.oanstaging.com
   geoSeed:
-    countryPack: ETH
+    countryPack: ETH-OAN
     load:
       geo: true
       codelists: true
-      samples: true
-    domains: []
-  masterDataApi:
-    resources:
-      requests:
-        cpu: 50m
-        memory: 512Mi
+      samples: false
+    domains:
+    - agriculture
+    image:
+      repository: ghcr.io/asmitonweb/master-data-db-seed
+      tag: 0.0.0-develop.118-oan.1@sha256:bb7a15546765f5f578388316f937f2329ec3b619b022e3009888fd7ddeada6b8
+    enabled: false
+    autoPublish: false
+    publishInitial: false
   postgres-init:
     serviceAccount:
       name: master-data-postgres-init
@@ -99,10 +99,18 @@ master-data:
     istio:
       virtualservice:
         gateway: istio-system/development
+    image:
+      tag: 0.0.0-develop.118
   masterDataAPI:
     istio:
       virtualservice:
         gateway: istio-system/development
+    resources:
+      requests:
+        cpu: 50m
+        memory: 512Mi
+    image:
+      tag: 0.0.0-develop.118
 odk-central:
   enabled: true
   hostname: '{{ tpl .Values.global.odkHostname $ }}'
