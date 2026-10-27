@@ -332,3 +332,13 @@ odkGeoSync:
       memory: 96Mi
     limits:
       memory: 256Mi
+
+# Disabled legacy staff-provisioning hook; see docs/registry-staff-access.md.
+staffAccess:
+  enabled: false
+  existingSecret: ''
+  imagePullSecrets: []
+  clientId: ''
+  dashboardClientId: ''
+  twoStages: false
+  policyKeys: []

@@ -426,3 +426,13 @@ farmerAdoption:
   mode: disabled
   sourceCommit: ""
   chartSha256: ""
+
+# Disabled legacy staff-provisioning hook; see docs/registry-staff-access.md.
+staffAccess:
+  enabled: false
+  existingSecret: ''
+  imagePullSecrets: []
+  clientId: ''
+  dashboardClientId: ''
+  twoStages: true
+  policyKeys: []
