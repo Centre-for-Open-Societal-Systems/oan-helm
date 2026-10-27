@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-10-27
 
+### openg2p-commons-services 1.0.0-dev.23
+
+Previous version: 1.0.0-dev.22.
+
+- feat(commons): carry the PM session-cookie guard in the chart (da85a05)
+
+## 2026-10-27
+
 ### openg2p-commons-services 1.0.0-dev.22
 
 Previous version: 1.0.0-dev.21.
