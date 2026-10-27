@@ -448,8 +448,8 @@ def main():
             if chart.name in BLOCKED_REGISTRIES:
                 if chart.name == "openg2p-commons-services":
                     master_data = next(dep for dep in info["dependencies"] if dep["name"] == "openg2p-master-data")
-                    assert master_data["version"] == "0.0.0-develop"
-                    assert master_data["repository"].startswith("file://")
+                    assert master_data["version"] == "0.0.0-develop.118"
+                    assert master_data["repository"] == "https://openg2p.github.io/openg2p-helm"
                     for component in ("masterDataAPI", "masterDataUi"):
                         assert values["master-data"][component]["image"]["tag"] == "0.0.0-develop.118"
                     # The seed image is upstream's develop.118 with the ETH-OAN pack, by digest.
