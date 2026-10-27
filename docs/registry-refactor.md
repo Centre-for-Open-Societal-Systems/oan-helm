@@ -10,7 +10,7 @@ Crop and Livestock deliberately fail before emitting workload manifests. Their
 application/domain/source-contract and restored-data acceptance is incomplete.
 Candidate validation proves package integrity, dependency resolution and that
 blocking behavior; it does not claim successful application deployment or
-preservation. `--release-ready` continues to reject this candidate.
+preservation. Its chart still fails closed at the promotion gate.
 
 Farmer adds a separate, server-receipt-gated preserving New Dev upgrade path in
 dev.16. Its default render and fresh install remain blocked. See the exact

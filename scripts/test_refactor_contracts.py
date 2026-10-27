@@ -37,10 +37,11 @@ class RefactorContracts(unittest.TestCase):
         self.assertEqual(len(source['images']),3)
 
     def test_seed_image_is_the_recorded_eth_oan_build(self):
-        version = yaml.safe_load((ROOT/'releases/current.yaml').read_text(encoding='utf-8'))['chartVersion']
-        release = yaml.safe_load((ROOT/f'releases/{version}.yaml').read_text(encoding='utf-8'))
-        commons = next(c for c in release['charts'] if c['name']=='openg2p-commons-services')
-        recorded = commons['masterDataSeedImage']
+        # The newest release-train manifest that records the seed image.
+        manifests = sorted(ROOT.glob('releases/1.0.0-dev.*.yaml'),key=lambda p:int(p.stem.rsplit('.',1)[1]),reverse=True)
+        recorded = next(c['masterDataSeedImage'] for m in manifests
+                        for c in yaml.safe_load(m.read_text(encoding='utf-8'))['charts']
+                        if c['name']=='openg2p-commons-services' and 'masterDataSeedImage' in c)
         values = yaml.safe_load((ROOT/'charts/openg2p-commons-services/values.yaml').read_text(encoding='utf-8'))['master-data']
         self.assertEqual(values['geoSeed']['image']['repository'],recorded['repository'])
         self.assertEqual(values['geoSeed']['image']['tag'],recorded['tag']+'@'+recorded['digest'])

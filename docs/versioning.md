@@ -36,8 +36,10 @@ upgrade is not automatically a patch: classify its effect on that contract.
 
 ## When a version changes
 
-- A maintainer chooses and records the next version in the PR before packaging.
-  A merge, calendar date or cluster upgrade does not assign it automatically.
+- Merging a change to a chart's source into `main` gives that chart its next
+  version automatically (see [Automatic release](#automatic-release)). To choose
+  a different version, such as a minor or `rc` step, set it in the PR's
+  `Chart.yaml`; the release packages that version as it is.
 - Any change inside a published chart source requires a new chart version and
   archive. A new default image digest is a chart change too. Never replace an
   existing archive/tag, alter its checksum or repoint its index entry.
@@ -50,22 +52,44 @@ upgrade is not automatically a patch: classify its effect on that contract.
   component's real source commit and immutable digest separately; they do not
   share a synchronized build number.
 
-This repository currently publishes the six charts together under one release
-version, enforced by `scripts/validate.py` and `releases/current.yaml`. Keep that
-release train consistent until per-chart versioning is explicitly introduced.
-Publishing together does not require upgrading every installed release.
+Each chart is versioned on its own: changing Farmer releases only Farmer.
+Charts up to `1.0.0-dev.16` were published together as one release train, whose
+notes remain under `releases/<version>.yaml`. `releases/current.yaml` lists the
+latest version of every chart.
+
+## Automatic release
+
+`.github/workflows/release.yaml` runs `scripts/release.py` on every push to
+`main` that touches `charts/` or `addons/registry-dashboards/`:
+
+1. Each chart's source fingerprint is compared with the one recorded in
+   `releases/artifacts.json` for its current version's archive.
+2. A changed chart's version is raised: `1.0.0-dev.16` becomes `1.0.0-dev.17`,
+   a stable `1.0.0` becomes `1.0.1`. A version already raised in the PR, with
+   no archive yet, is kept.
+3. The chart is packaged into `repository/`, added to `index.yaml` (existing
+   entries are left untouched) and `SHA256SUMS`, and sealed in `artifacts.json`.
+4. `CHANGELOG.md` gets an entry listing the commits that touched the chart since
+   its previous archive.
+5. The full validation runs, then `github-actions[bot]` commits
+   `chore(release): ...` to `main` and pushes a `<chart>-<version>` tag.
+
+PR validation accepts a chart whose source changed without a version bump and
+reports it as unreleased: it packages a scratch archive to verify, but does not
+publish it. Run `python scripts/release.py --dry-run` to see what a merge would
+release. Upstream resource identities, selectors and Secret references are
+compared with `releases/resource-baselines-current.json`; update it in the same
+PR when a change intentionally alters them.
 
 ## Publication and promotion
 
-1. Record the version, changes, compatibility impact, prerequisites and any
-   migrations in `releases/<version>.yaml`; update all six `Chart.yaml` versions,
-   `releases/current.yaml` and the preserved resource baseline for this release.
-2. Verify image availability/digests and locked dependencies. Run strict lint,
-   representative renders, namespace/ownership/Secret checks, regression checks
-   and exact package/installability validation. Rehearse material migrations.
-3. Package once, retain source seals/checksums and add entries to the cumulative
-   relative-URL index. Existing archives remain unchanged. CI validates the PR;
-   publication to the fork is preview, and upstream merge publishes to main.
+1. Describe compatibility impact, prerequisites and migrations in the PR, and
+   for material changes in the chart's README.
+2. Verify image availability/digests and locked dependencies (`helm dependency
+   update` and commit `Chart.lock` with the bundled archive). Rehearse material
+   migrations.
+3. Merge. The release workflow versions, packages, indexes and records the chart;
+   existing archives remain unchanged. Refresh the Rancher repository to see it.
 4. Before promoting to stable, accept the intended supported chart contract and
    the upgrade/recovery evidence. Clearly identify disabled optional components
    and untested application integrations. A stable chart does not imply every

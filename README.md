@@ -19,8 +19,11 @@ Aggregation is a local Commons template, disabled pending runtime preparation.
 The current chart pins new Consent and Aggregation images from the recorded
 COSS commits by ECR digest. See [the current setup guide](docs/consent-aggregation-prerequisites.md).
 
-Current chart version is **`1.0.0-dev.16`**, using
-`<service>.development.oanstaging.com` and the shared Istio Gateway. It retains
+Charts are versioned and published automatically: merging a chart change into
+`main` gives that chart its next version, packages it into `repository/` and adds
+a [CHANGELOG](CHANGELOG.md) entry (see [Automatic release](docs/versioning.md#automatic-release)).
+`releases/current.yaml` lists each chart's latest version. Charts use
+`<service>.development.oanstaging.com` and the shared Istio Gateway. They retain
 OAN display names and direct COSS source links. Earlier packages remain unchanged.
 Component image versions are independent; automatic synchronization is deferred.
 Farmer Jenkins' pinned dev integration and guarded first cutover are described

@@ -4,8 +4,8 @@ import json
 import shutil
 import tarfile
 
-from validate import (ROOT, ADDON_RENDER_ARGS, build_directory, digest, documents,
-                      fingerprint, image_refs, read, run, secret_refs)
+from validate import (ROOT, ADDON_RENDER_ARGS, SEMVER, build_directory, digest, documents,
+                      fingerprint, image_refs, merge_index, read, run, secret_refs)
 
 CHARTS = sorted((ROOT / "addons/registry-dashboards").glob("*/Chart.yaml"))
 
@@ -18,11 +18,12 @@ def main(package=False):
     report = {"clusterAccess":False,"liveOwnershipVerified":False,"charts":{}}
     artifacts_path = ROOT / "releases/artifacts.json"
     artifacts = json.loads(artifacts_path.read_text(encoding="utf-8"))
+    added, unreleased = [], []
     with build_directory() as build:
         for metadata in CHARTS:
             chart = metadata.parent
             info = read(metadata)
-            assert info["name"] == chart.name and info["version"] == "0.1.2"
+            assert info["name"] == chart.name and SEMVER.fullmatch(info["version"])
             assert info["annotations"]["oan.org/chart-owner"] == "oan-helm"
             defaults = read(chart / "values.yaml")
             assert defaults["access"]["role"] == "Dashboard Viewer"
@@ -37,12 +38,17 @@ def main(package=False):
                 destination = ROOT / "repository" / filename
                 source_sha = fingerprint(chart)
                 if destination.exists():
-                    assert artifacts[filename]["sourceSha256"] == source_sha
                     assert artifacts[filename]["sha256"] == digest(destination)
+                    if artifacts[filename]["sourceSha256"] != source_sha:
+                        # Versioned on merge by scripts/release.py; verify a scratch package.
+                        run("package",chart,"--destination",build)
+                        destination = build / filename
+                        unreleased.append(chart.name)
                 else:
                     run("package",chart,"--destination",build)
                     shutil.copy2(build / filename,destination)
                     artifacts[filename] = {"sha256":digest(destination),"sourceSha256":source_sha}
+                    added.append(destination)
                 packaged_docs, packaged_ids = documents(run("template","verify",destination,"--namespace","verify-a",*ADDON_RENDER_ARGS),"verify-a")
                 assert identities == packaged_ids
                 assert selectors(source_docs) == selectors(packaged_docs)
@@ -57,13 +63,11 @@ def main(package=False):
                 "existingReleaseNames":"unchanged; no ownership adoption or runtime change"}
         if package:
             public = ROOT / "repository"
-            previous = build / "index.yaml"
-            shutil.copy2(public / "index.yaml",previous)
-            run("repo","index",public,"--merge",previous)
+            merge_index(public,added)
             artifacts_path.write_text(json.dumps(artifacts,indent=2)+"\n",encoding="utf-8",newline="\n")
             (public / "SHA256SUMS").write_text("".join(f"{digest(path)}  {path.name}\n" for path in sorted(public.glob("*.tgz"))),encoding="utf-8",newline="\n")
     (ROOT / "releases/registry-addon-validation.json").write_text(json.dumps(report,indent=2)+"\n",encoding="utf-8",newline="\n")
-    print(json.dumps({"registry_dashboard_charts":len(CHARTS),"source_package_verification":package,"cluster_access":False}))
+    print(json.dumps({"registry_dashboard_charts":len(CHARTS),"source_package_verification":package,"unreleased":unreleased,"cluster_access":False}))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
