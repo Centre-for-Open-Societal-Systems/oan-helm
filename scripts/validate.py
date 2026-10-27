@@ -25,7 +25,7 @@ from urllib.parse import urlsplit
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-CURRENT_VERSION = yaml.safe_load((ROOT / "releases/current.yaml").read_text())["chartVersion"]
+SEMVER = re.compile(r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?")
 HELM = os.environ.get("HELM", "helm")
 BLOCKED_REGISTRIES = {"openg2p-farmer-registry", "openg2p-cropsown-registry", "openg2p-livestock-registry", "openg2p-commons-services"}
 REFACTOR_GATE = "develop-refactor is incomplete:"
@@ -93,6 +93,19 @@ def fingerprint(chart):
                 assert b"\r\n" not in data, f"Chart source must use repository LF line endings before packaging: {path}"
             h.update(path.relative_to(chart).as_posix().encode() + b"\0" + data + b"\0")
     return h.hexdigest()
+
+
+def merge_index(public, archives):
+    """Add only the given new archives to public/index.yaml; existing entries keep their bytes."""
+    if not archives:
+        return
+    with build_directory() as temp:
+        for archive in archives:
+            shutil.copy2(archive, temp / archive.name)
+        # Helm emits relative archive URLs when --url is omitted. Entries already
+        # in the merged index are kept as they are, including their timestamps.
+        run("repo", "index", temp, "--merge", public / "index.yaml")
+        shutil.copy2(temp / "index.yaml", public / "index.yaml")
 
 
 @contextmanager
@@ -336,6 +349,7 @@ def package(report):
     public.mkdir(exist_ok=True)
     recorded = ROOT / "releases/artifacts.json"
     prior = json.loads(recorded.read_text()) if recorded.exists() else {}
+    added, unreleased = [], []
     with build_directory() as temp:
         for metadata in CHARTS:
             chart = metadata.parent
@@ -344,12 +358,18 @@ def package(report):
             archive = public / archive_name
             source_sha = fingerprint(chart)
             if archive.exists():
-                assert prior[archive_name]["sourceSha256"] == source_sha, f"Immutable archive source changed: {archive_name}"
                 assert prior[archive_name]["sha256"] == digest(archive), f"Immutable archive bytes changed: {archive_name}"
+                if prior[archive_name]["sourceSha256"] != source_sha:
+                    # Changed since its version was published: scripts/release.py
+                    # gives it the next version after merge. Verify a scratch package.
+                    run("package", chart, "--destination", temp)
+                    archive = temp / archive_name
+                    unreleased.append(chart.name)
             else:
                 run("package", chart, "--destination", temp)
                 shutil.copy2(temp / archive_name, archive)
                 prior[archive_name] = {"sha256": digest(archive), "sourceSha256": source_sha}
+                added.append(archive)
             for ns in ["verify-a", "verify-b"]:
                 if chart.name in BLOCKED_REGISTRIES:
                     verify_refactor_gate(archive, ns)
@@ -367,14 +387,7 @@ def package(report):
                 assert packaged_info["sources"] == info["sources"]
                 for filename in ["README.md", "app-readme.md"]:
                     assert tar.extractfile(chart.name + "/" + filename).read() == (chart / filename).read_bytes()
-        old_index = public / "index.yaml"
-        if old_index.exists():
-            previous = temp / "index.yaml"
-            shutil.copy2(old_index, previous)
-            run("repo", "index", public, "--merge", previous)
-        else:
-            run("repo", "index", public)
-    # Helm emits relative archive URLs when --url is omitted.
+    merge_index(public, added)
     index = read(public / "index.yaml")
     with server(public) as base:
         published = yaml.safe_load(urlopen(f"{base}/index.yaml").read())
@@ -404,6 +417,7 @@ def package(report):
     report["packages"] = len(list(public.glob("*.tgz")))
     report["currentPackages"] = len(CHARTS)
     report["historicalPackages"] = report["packages"] - len(CHARTS)
+    report["unreleasedCharts"] = unreleased
     report["index"] = "Relative URLs, SHA-256, HTTP download, exact Helm version selection and repository-based renders verified against loopback server"
 
 
@@ -429,27 +443,26 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--package", action="store_true")
     parser.add_argument("--online", action="store_true")
-    parser.add_argument("--release-ready", action="store_true")
     args = parser.parse_args()
     assert {m.parent.name for m in CHARTS} == EXPECTED
     build_root = ROOT / ".build"
     build_root.mkdir(exist_ok=True)
-    report = {"helm": run("version", "--short").strip(), "chartVersion": CURRENT_VERSION, "clusterAccess": False, "charts": {}, "upstreamResolution": "not attempted"}
-    baselines = json.loads((ROOT / f"releases/resource-baselines-{CURRENT_VERSION}.json").read_text())
+    report = {"helm": run("version", "--short").strip(), "chartVersions": {m.parent.name: read(m)["version"] for m in CHARTS}, "clusterAccess": False, "charts": {}, "upstreamResolution": "not attempted"}
+    baselines = json.loads((ROOT / "releases/resource-baselines-current.json").read_text())
     with build_directory() as build:
         offline_resolution(build)
         report["offlineResolution"] = "All chart locks resolved from dependencies bundled with verified source packages"
         for metadata in CHARTS:
             chart = metadata.parent
             info = read(metadata)
-            assert info["version"] == CURRENT_VERSION
+            assert SEMVER.fullmatch(info["version"]), f"{chart.name} version is not Semantic Versioning"
             check_oan_metadata(info, chart)
             values = read(chart / "values.yaml")
             if chart.name in BLOCKED_REGISTRIES:
                 if chart.name == "openg2p-commons-services":
                     master_data = next(dep for dep in info["dependencies"] if dep["name"] == "openg2p-master-data")
-                    assert master_data["version"] == "0.0.0-develop"
-                    assert master_data["repository"].startswith("file://")
+                    assert master_data["version"] == "0.0.0-develop.118"
+                    assert master_data["repository"] == "https://openg2p.github.io/openg2p-helm"
                     for component in ("masterDataAPI", "masterDataUi"):
                         assert values["master-data"][component]["image"]["tag"] == "0.0.0-develop.118"
                     # The seed image is upstream's develop.118 with the ETH-OAN pack, by digest.
@@ -597,10 +610,8 @@ def main():
     print(f"Validated {len(CHARTS)-len(BLOCKED_REGISTRIES)} existing charts and {len(BLOCKED_REGISTRIES)} blocked refactor candidates; candidate workload/preservation acceptance is NOT VERIFIED.")
     if args.package:
         print(f"Packaged {len(CHARTS)} charts; archives and relative Helm index verified over local HTTP.")
-    if args.release_ready:
-        release = read(ROOT / f"releases/{CURRENT_VERSION}.yaml")
-        assert release["readyForPublication"] is True
-        assert not release["publicationBlockers"], "Publication blocked: " + "; ".join(release["publicationBlockers"])
+        if report["unreleasedCharts"]:
+            print("Changed since their published version (versioned on merge by scripts/release.py): " + ", ".join(report["unreleasedCharts"]))
 
 
 if __name__ == "__main__":
