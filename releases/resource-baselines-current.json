@@ -1236,6 +1236,12 @@
         "apps/v1",
         "Deployment",
         "verify-a",
+        "verify-aggregation-api"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
         "verify-artifactory"
       ],
       [
@@ -1267,6 +1273,12 @@
         "Deployment",
         "verify-a",
         "verify-cm-partner-api"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-cm-partner-portal"
       ],
       [
         "apps/v1",
@@ -1377,6 +1389,18 @@
         "verify-staff-portal-ui"
       ],
       [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-websub"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-websub-consolidator"
+      ],
+      [
         "batch/v1",
         "CronJob",
         "verify-a",
@@ -1470,7 +1494,7 @@
         "batch/v1",
         "Job",
         "verify-a",
-        "verify-keycloak-init-1-52417914"
+        "verify-keycloak-init-1-9c31f7f6"
       ],
       [
         "batch/v1",
@@ -1483,6 +1507,12 @@
         "Job",
         "verify-a",
         "verify-master-data-kc-init-1-51ccd588"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-mock-identities"
       ],
       [
         "batch/v1",
@@ -1519,6 +1549,12 @@
         "Job",
         "verify-a",
         "verify-postgres-init-master-data"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-websub-topics-1"
       ],
       [
         "monitoring.coreos.com/v1",
@@ -1635,6 +1671,18 @@
         "verify-staff-portal-ui"
       ],
       [
+        "networking.istio.io/v1beta1",
+        "VirtualService",
+        "verify-a",
+        "verify-aggregation-api"
+      ],
+      [
+        "networking.istio.io/v1beta1",
+        "VirtualService",
+        "verify-a",
+        "verify-cm-partner-portal"
+      ],
+      [
         "rbac.authorization.k8s.io/v1",
         "Role",
         "verify-a",
@@ -1687,6 +1735,12 @@
         "ConfigMap",
         "verify-a",
         "verify-cm-kc-init-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-cm-partner-portal-config"
       ],
       [
         "v1",
@@ -1752,6 +1806,12 @@
         "v1",
         "ConfigMap",
         "verify-a",
+        "verify-mock-identities"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
         "verify-mock-identity-system-startup"
       ],
       [
@@ -1789,6 +1849,30 @@
         "ConfigMap",
         "verify-a",
         "verify-pm-kc-init-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-websub-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-websub-consolidator-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-websub-consolidator-startup"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-websub-startup"
       ],
       [
         "v1",
@@ -1926,6 +2010,12 @@
         "v1",
         "Service",
         "verify-a",
+        "verify-aggregation-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
         "verify-artifactory"
       ],
       [
@@ -1957,6 +2047,12 @@
         "Service",
         "verify-a",
         "verify-cm-partner-api"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-cm-partner-portal"
       ],
       [
         "v1",
@@ -2068,6 +2164,18 @@
       ],
       [
         "v1",
+        "Service",
+        "verify-a",
+        "verify-websub"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-websub-consolidator"
+      ],
+      [
+        "v1",
         "ServiceAccount",
         "verify-a",
         "master-data-postgres-init"
@@ -2155,12 +2263,22 @@
         "ServiceAccount",
         "verify-a",
         "verify-pm-staff-portal-ui"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-websub"
       ]
     ],
     "secretKeyReferences": [
       [
         "agent-portal",
         "client_secret"
+      ],
+      [
+        "aggregation-api-signing-rsa-20261023",
+        "password"
       ],
       [
         "audit-manager",
@@ -2203,12 +2321,28 @@
         "security-pin"
       ],
       [
+        "commons-websub-encryption",
+        "encryption-key"
+      ],
+      [
         "consent-manager",
         "client_secret"
       ],
       [
         "consent-manager-db",
         "consent-manager-db-user"
+      ],
+      [
+        "consent-manager-otp-dev",
+        "minio-access-key"
+      ],
+      [
+        "consent-manager-otp-dev",
+        "minio-secret-key"
+      ],
+      [
+        "consent-manager-otp-dev",
+        "otp-salt"
       ],
       [
         "consent-manager-signing",
@@ -2419,6 +2553,22 @@
         "app.kubernetes.io/name": "partner-management",
         "app.kubernetes.io/component": "partner-management-staff-portal-ui"
       },
+      "Service/verify-websub-consolidator": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/name": "websub-consolidator"
+      },
+      "Service/verify-websub": {
+        "app.kubernetes.io/name": "websub",
+        "app.kubernetes.io/instance": "verify"
+      },
+      "Service/verify-aggregation-api": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/component": "aggregation-api"
+      },
+      "Service/verify-cm-partner-portal": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/component": "consent-manager-partner-portal"
+      },
       "Deployment/verify-artifactory": {
         "matchLabels": {
           "app.kubernetes.io/name": "artifactory",
@@ -2576,6 +2726,30 @@
           "app.kubernetes.io/instance": "verify",
           "app.kubernetes.io/name": "partner-management",
           "app.kubernetes.io/component": "partner-management-staff-portal-ui"
+        }
+      },
+      "Deployment/verify-websub-consolidator": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/name": "websub-consolidator"
+        }
+      },
+      "Deployment/verify-websub": {
+        "matchLabels": {
+          "app.kubernetes.io/name": "websub",
+          "app.kubernetes.io/instance": "verify"
+        }
+      },
+      "Deployment/verify-aggregation-api": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/component": "aggregation-api"
+        }
+      },
+      "Deployment/verify-cm-partner-portal": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/component": "consent-manager-partner-portal"
         }
       }
     }
