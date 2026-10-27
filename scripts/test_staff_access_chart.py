@@ -10,7 +10,7 @@ with tempfile.TemporaryDirectory(prefix='staff-hook-validation-') as directory:
  (root/'Chart.yaml').write_text('apiVersion: v2\nname: staff-hook-test\nversion: 0.0.1\n')
  for item in ITEMS:
   (root/'templates/staff-access-job.yaml').write_text(item['template'])
-  values={'openg2p-registry':{'dbSeed':{'image':{'repository':'example.invalid/seed','tag':'fixture'}}},'staffAccess':{'enabled':False,'existingSecret':'fixture-secret','twoStages':item['registry']=='farmer','policyKeys':['registry.intake_form.'+item['registry']]}}
+  values={'registry':{'dbSeed':{'image':{'repository':'example.invalid/seed','tag':'fixture'}}},'staffAccess':{'enabled':False,'existingSecret':'fixture-secret','twoStages':item['registry']=='farmer','policyKeys':['registry.intake_form.'+item['registry']]}}
   def render():
    (root/'values.yaml').write_text(yaml.safe_dump(values))
    return subprocess.run(['helm','template','fixture',str(root)],text=True,capture_output=True)

@@ -21,7 +21,7 @@ class FarmerAdoptionGate(unittest.TestCase):
         source = 'a' * 40
         images = {role:'example.invalid/' + role + ':' + source[:12] + '@sha256:' + 'b' * 64 for role in set(ROLES.values())}
         receipt = {'state':'NATIVE_READY','clusterUid':'a842b14f-b29f-4e78-b9d2-bfb22a17e53a',
-                   'sourceCommit':source,'chartVersion':'1.0.0-dev.15','chartSha256':'c' * 64,
+                   'sourceCommit':source,'chartVersion':'1.0.0-dev.16','chartSha256':'c' * 64,
                    'backupVerified':True,'originalBusinessPreserved':True,'lock':'d' * 32,
                    'expiresAt':int(time.time()) + 3600,'images':images}
         values = {'farmerAdoption':{'mode':'preserving-upgrade','sourceCommit':source,'chartSha256':'c' * 64},
@@ -39,7 +39,7 @@ class FarmerAdoptionGate(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             chart = Path(tmp)
             (chart/'templates').mkdir()
-            (chart/'Chart.yaml').write_text('apiVersion: v2\nname: gate-fixture\nversion: 1.0.0-dev.15\n')
+            (chart/'Chart.yaml').write_text('apiVersion: v2\nname: gate-fixture\nversion: 1.0.0-dev.16\n')
             (chart/'templates/gate.yaml').write_text(source)
             (chart/'values.yaml').write_text(yaml.safe_dump(values))
             args = [HELM,'template',release,str(chart),'-n',namespace]
@@ -79,6 +79,11 @@ class FarmerAdoptionGate(unittest.TestCase):
         values['_fixtureReceipt']=None
         self.assertNotEqual(self.render(values).returncode,0)
         self.assertNotEqual(self.render({}).returncode,0)
+
+    def test_adoption_cannot_run_legacy_identity_provisioning(self):
+        values,_=self.fixture()
+        values['staffAccess']={'enabled':True}
+        self.assertNotEqual(self.render(values).returncode,0)
 
 
 if __name__ == '__main__': unittest.main()

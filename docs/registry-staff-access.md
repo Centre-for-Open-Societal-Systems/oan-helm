@@ -1,5 +1,15 @@
 # Dedicated registry staff accounts
 
+This is the retained **legacy provisioning proposal** from PR8, consolidated
+into PR16. Its hooks remain disabled. The native refactor seed images do not
+contain `/seed/staff_access.py`; do not enable the hooks against those images.
+Farmer preserving adoption explicitly rejects `staffAccess.enabled=true` and
+does not modify identity grants or replace reviewers through this proposal.
+Current approvals use the OpenG2P two-stage defaults for all three registries;
+the single-stage descriptions below document the older environment only.
+Configure future staff/approval assignments through supported IAM/AWE
+administration after verifying the selected image and policy contracts.
+
 The new-dev accounts are `<registry>.intake`, `<registry>.l1`, and
 `<registry>.l2` (registry: farmer, livestock, cropsown). Intake can create/submit;
 L1 approves the existing first stage; Farmer L2 approves its second stage.

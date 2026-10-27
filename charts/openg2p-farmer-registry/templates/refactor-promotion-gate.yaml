@@ -1,5 +1,6 @@
 {{- $blocked := "develop-refactor is incomplete: Farmer requires the preserving New Dev adoption pipeline and its verified native-ready receipt; see docs/farmer-preserving-adoption.md" -}}
 {{- $adoption := .Values.farmerAdoption | default dict -}}
+{{- if (.Values.staffAccess | default dict).enabled -}}{{- fail $blocked -}}{{- end -}}
 {{- if not (and .Release.IsUpgrade (eq .Release.Name "farmer-registry") (eq .Release.Namespace "farmer") (eq ($adoption.mode | default "") "preserving-upgrade")) -}}
 {{- fail $blocked -}}
 {{- end -}}

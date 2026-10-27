@@ -1,6 +1,6 @@
 # Registry refactor candidates and central chart ownership
 
-The current candidate prepares central chart `1.0.0-dev.15`. Crop and Livestock use
+The current candidate prepares central chart `1.0.0-dev.16`. Crop and Livestock use
 the unchanged published OpenG2P registry dependency `1.2.2-rc.557`, matching their
 extension image bases. Other existing chart dependencies remain unchanged.
 Earlier published packages are retained byte-for-byte. This branch does not
@@ -13,7 +13,7 @@ blocking behavior; it does not claim successful application deployment or
 preservation. `--release-ready` continues to reject this candidate.
 
 Farmer adds a separate, server-receipt-gated preserving New Dev upgrade path in
-dev.15. Its default render and fresh install remain blocked. See the exact
+dev.16. Its default render and fresh install remain blocked. See the exact
 [Farmer adoption contract](farmer-preserving-adoption.md); packaging does not
 establish a live upgrade or application acceptance. Other registry and Commons
 promotion gates remain unconditional.

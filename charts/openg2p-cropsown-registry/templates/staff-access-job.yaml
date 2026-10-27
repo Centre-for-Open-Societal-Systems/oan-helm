@@ -2,7 +2,7 @@
 {{- if not .Values.staffAccess.policyKeys }}
 {{- fail "staffAccess.policyKeys must list the environment's existing intake policies" }}
 {{- end }}
-{{- $registry := index .Values "openg2p-registry" }}
+{{- $registry := .Values.registry }}
 apiVersion: batch/v1
 kind: Job
 metadata:
