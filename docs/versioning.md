@@ -74,7 +74,9 @@ latest version of every chart.
 5. The full validation runs, then `github-actions[bot]` commits
    `chore(release): ...` to `main` and pushes a `<chart>-<version>` tag.
 
-PR validation accepts a chart whose source changed without a version bump and
+Pull requests may not edit `repository/`, `releases/artifacts.json`,
+`releases/current.yaml` or `CHANGELOG.md`; the `protected-paths` check enforces
+this. PR validation accepts a chart whose source changed without a version bump and
 reports it as unreleased: it packages a scratch archive to verify, but does not
 publish it. Run `python scripts/release.py --dry-run` to see what a merge would
 release. Upstream resource identities, selectors and Secret references are

@@ -57,7 +57,10 @@ jobs:
           while read -r tag; do git tag "$tag"; done < <(cat .build/release-tags.txt 2>/dev/null || true)
           # A merge that landed meanwhile is released by the queued run.
           git push origin HEAD:main
-          if [[ -s .build/release-tags.txt ]]; then git push origin $(cat .build/release-tags.txt); fi
+          if [[ -s .build/release-tags.txt ]]; then
+            git push origin $(cat .build/release-tags.txt)
+            { echo '### Released'; echo; tail -n +3 .build/release-message.txt; } >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Retain validation evidence
         if: always()
         uses: actions/upload-artifact@v7

@@ -2,29 +2,26 @@
 
 For the currently installed Consent/Aggregation release, start with
 [live Rancher status and upgrade controls](rancher-consent-aggregation-status.md).
-It is already running dev.5 at revision 17. Native UI upgrades still require
-reviewed bootstrap-Job suppression and complete URL/Gateway values; see that page.
+Native UI upgrades of that release still require reviewed bootstrap-Job
+suppression and complete URL/Gateway values; see that page.
 
 Complete [readiness prerequisites](readiness.md) for components being enabled.
 For Consent/Aggregation, follow the [component preparation guide](consent-aggregation-prerequisites.md).
-Use the six packages after repository publication. No
-ownership migration has been performed. The separate dev URL cutover is recorded
+Charts reach Rancher only through the release workflow after a merge; see the
+[README](../README.md#how-a-change-reaches-a-cluster). No ownership migration has been performed. The separate dev URL cutover is recorded
 in `releases/live-domain-migration.json`; it retains installed chart/image versions.
 
 ## Add the repository
 
-1. After the upstream PR is merged, confirm the committed
-   `repository/index.yaml` and archives are readable from GitHub's raw URLs.
-2. Open the intended Rancher cluster and **Apps → Repositories → Create**.
+1. Open the intended Rancher cluster and **Apps → Repositories → Create**.
    Use the Helm repository URL
    `https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/`.
-   For the current fork preview, use
-   `https://raw.githubusercontent.com/asmitonweb/oan-helm/feat/consent-aggregation-rancher/repository/`.
-   The preview uses the same relative archive paths. GitHub Pages is not required.
-   Enter the raw directory URL, not GitHub's HTML `tree`/`blob` URL or the index filename.
-3. Confirm `/index.yaml` and its `.tgz` archive URLs are available, refresh the
-   repository, and select exact version **`1.0.0-dev.5`**, including its prerelease
-   suffix. Version `1.0.0-dev.1` is retained for history and has old URL defaults.
+   Enter the raw directory URL, not GitHub's HTML `tree`/`blob` URL or the index
+   filename. GitHub Pages is not required.
+2. Refresh the repository after every release, then select the **exact version**,
+   including its prerelease suffix. `releases/current.yaml` lists each chart's latest
+   version and [CHANGELOG.md](../CHANGELOG.md) what changed. Older versions stay
+   available for history and carry their original defaults.
 
 ## New releases
 
@@ -90,7 +87,7 @@ An equivalent CLI upgrade, once those checks are complete, is:
 
 ```sh
 helm upgrade farmer-registry coss/openg2p-farmer-registry \
-  --namespace farmer --version 1.0.0-dev.5 \
+  --namespace farmer --version <version> \
   --reuse-values -f /private/reviewed-changes.yaml \
   -f environments/dev/values/farmer.yaml --wait --timeout 15m
 ```
@@ -123,8 +120,8 @@ prepared recovery procedure.
 
 ## OAN names and GitHub sources in Rancher
 
-Refresh the repository and select exact version `1.0.0-dev.5` to see the OAN
-metadata and embedded README. Earlier versions retain their historical metadata and URL defaults.
+Select a chart version to see its OAN metadata and embedded README. Versions from
+`1.0.0-dev.3` on carry the OAN display names.
 Rancher may show either a display name or the Helm identifier depending on its
 view; the chart Home, Sources and README link directly to the COSS repositories.
 
@@ -145,4 +142,4 @@ Changing these labels does not enable Aggregation or select newer candidate
 images. Use the explicit candidate overlays only after the prerequisites.
 
 For new or previously disabled services, follow [service onboarding](service-onboarding.md).
-Version dev.4 requires the environment wildcard DNS/TLS and shared Gateway.
+Versions from `1.0.0-dev.4` on require the environment wildcard DNS/TLS and shared Gateway.
