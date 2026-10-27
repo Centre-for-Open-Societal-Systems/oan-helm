@@ -862,3 +862,21 @@ consentStaffPortalTile:
   imagePullSecrets: []
   order: 40
   iconBase64: PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHJ4PSI4IiBmaWxsPSIjRTdGM0VFIi8+CiAgPHJlY3QgeD0iOSIgeT0iMjEiIHdpZHRoPSI1IiBoZWlnaHQ9IjEwIiByeD0iMS41IiBmaWxsPSIjMEU3QTVBIi8+CiAgPHJlY3QgeD0iMTcuNSIgeT0iMTQiIHdpZHRoPSI1IiBoZWlnaHQ9IjE3IiByeD0iMS41IiBmaWxsPSIjMTI5MzZEIi8+CiAgPHJlY3QgeD0iMjYiIHk9IjkiIHdpZHRoPSI1IiBoZWlnaHQ9IjIyIiByeD0iMS41IiBmaWxsPSIjMUZCMzg2Ii8+CiAgPHBhdGggZD0iTTggMzNoMjQiIHN0cm9rZT0iIzBFN0E1QSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K
+
+# Known test people for the mock identity system (templates/mock-identities.yaml),
+# in addition to whatever identitySeed loads from Master Data. Development data
+# only; PINs are 4 digits (eSignet's PIN rule). Enable per environment.
+mockIdentities:
+  enabled: false
+  apiBaseUrl: 'http://{{ .Release.Name }}-mock-identity-system:80/v1/mock-identity-system'
+  readinessTimeoutSeconds: 300
+  encodedPhoto: ''
+  biometrics: {}
+  image:
+    repository: docker.io/curlimages/curl
+    digest: sha256:c1fe1679c34d9784c1b0d1e5f62ac0a79fca01fb6377cdd33e90473c6f9f9a69
+  imagePullSecrets: []
+  resources:
+    requests: {cpu: 10m, memory: 32Mi}
+    limits: {memory: 128Mi}
+  people: []

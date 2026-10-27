@@ -160,3 +160,10 @@ analytics:
   dashboards:
     superset:
       url: http://commons-services-superset.commons.svc.cluster.local:8088
+# Fayda verification on New Dev: the Commons eSignet with its mock identity
+# system (environments/dev/values/commons-services.yaml). The farmer Staff API
+# receives the callback; the client key Secret is created on first install.
+registrantAuth:
+  enabled: true
+  esignetBaseUrl: https://esignet.development.oanstaging.com
+  callbackUrl: https://staff-farmer.development.oanstaging.com/registrant-auth/callback

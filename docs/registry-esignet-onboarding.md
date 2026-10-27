@@ -1,59 +1,62 @@
-# eSignet setup for each registry
+# eSignet (Fayda) sign-in for a registry
 
-Deploying eSignet in Commons does not configure the authentication provider in
-each registry database. Farmer, Crop Sown and Livestock each need an active
-`g2p_registrant_authentication_providers` row for their own domain register,
-plus that registry's Staff API callback in the eSignet client.
+Deploying eSignet in Commons does not by itself let a registry verify a
+registrant. Each registry needs two rows that no seed writes: an active
+`g2p_registrant_authentication_providers` row for its domain register, and its
+Staff API callback among the redirect URIs of the OIDC client in eSignet. Both
+are chart configuration.
 
-These rows and their private provider settings are **deployment data**. Do not
-put them in recurring registry metadata seeds, chart defaults or Git. A seed
-rerun must not replace credentials or another environment's callback. Charts
-provide application configuration and secret references; they do not establish
-that a registry's provider row exists.
+## Registry side: `registrantAuth`
 
-## Local callback inventory
+The farmer chart (`charts/openg2p-farmer-registry`, values `registrantAuth`) has
+a post-install/post-upgrade hook that:
 
-| Registry | Domain register | Callback |
-| --- | --- | --- |
-| Farmer | `a1a4d25a-1cd4-4356-abac-985a0b3c6bcd` | `http://staff-farmer-registry.openg2p.localtest.me/registrant-auth/callback` |
-| Crop Sown | `6b06a95a-9a6c-5a33-a33d-c1625716c59c` | `http://staff-crop-registry.openg2p.localtest.me/registrant-auth/callback` |
-| Livestock | `997676d3-7008-59f9-b23e-613ad79bbb08` | `http://staff-livestock-registry.openg2p.localtest.me/registrant-auth/callback` |
+1. ensures the client's RSA key exists in the Secret `registrantAuth.keySecret`
+   (generated on first run, reused after; never printed or committed) and
+   derives its public JWK;
+2. upserts the provider row for `registrantAuth.registerId`: adapter `esignet`,
+   the eSignet endpoints under `esignetBaseUrl`, `private_key_jwt` with the PEM
+   key as text bytes (what iam_core expects), the callback, and a provider
+   configuration with the issuer, the client id as audience, the canonical token
+   URL as `jwt_assertion_aud`, and the `individual_id` and `name` userinfo claims
+   marked essential;
+3. upserts the shared `oan-registry-intake` client in eSignet's database, with
+   this registry's callback added to the redirect URIs the other registries
+   already registered.
 
-This is the local environment inventory, not production values. For another
-environment discover the deployed register and its canonical Staff API host.
-Register the exact callback in both the provider configuration and the eSignet
-client; the Staff UI URL is not the callback. Preserve issuer, audience, signing,
-PKCE and claim mapping settings supplied by the identity owner.
+Per environment, set `registrantAuth.enabled`, `esignetBaseUrl` (the public
+eSignet URL) and `callbackUrl` (`https://<staff api host>/registrant-auth/callback`).
+New Dev: `environments/dev/values/farmer.yaml`. The register must carry
+`requires_registrant_authentication`, which the OAN metadata seed sets.
 
-## Deployment administration
+The hook runs in the registry namespace with that namespace's copy of the
+Commons PostgreSQL Secret, so it needs no access to Commons pods. eSignet caches
+client details in its Redis after first use; when an existing client's name or
+redirect URIs change, restart it:
+`kubectl -n commons rollout restart deployment commons-services-esignet`.
 
-1. Preserve the target registry's existing provider rows and the eSignet client's
-   current callback list before making an additive change. Reuse a matching
-   active provider; do not create duplicate rows or overwrite conflicting
-   settings without resolving their ownership.
-2. Through secure deployment administration, provision the target register's
-   `esignet` row using the reviewed provider configuration and its own callback.
-   Private keys and client secrets must travel through secret mounts or a secure
-   administrative channel, never terminal output, reports or committed SQL.
-   A provider row in Farmer does not automatically configure Crop or Livestock.
-3. Add the exact target callback to the authorized eSignet client. The local
-   shared client is `oan-registry-intake`; retain the other registries' callbacks.
-   If the identity service caches client details, invalidate only the changed
-   client's entry through its deployment administration. Do not flush Redis.
-4. Read back provider availability for the target register and callback membership
-   without printing private settings. Starting Verify must return an authorize
-   URL. A complete test must also return through the target registry's callback
-   and verify the signed identity against the intended intake. An authorize URL
-   alone does not prove successful identity verification.
+Crop Sown and Livestock get the same block when their charts adopt it; the
+client is shared and each registry adds only its own callback.
 
-Fayda FIN and FAN remain separate identifiers. Neither provider provisioning nor
-successful verification creates an approved Farmer reference, changes identity
-grants, or bypasses the separate Farmer/domain approvals.
+## Commons side: identities and PIN
 
-## Local serial testing
+Sign-in on New Dev uses the mock identity system. Two things decide whether a
+tester can sign in:
 
-Run Commons + Farmer + Crop, then Commons + Farmer + Livestock. Do not start
-Livestock while Crop is running. Provision and verify Livestock's provider when
-that runtime is started; a future setup note is not proof of a deployed row.
-Provider availability, successful callback binding, source lookup and approval
-acceptance are separate checks.
+- `mock-identity-system.identitySeed.defaultPin` must be 4 digits. eSignet's
+  auth-challenge rule for PIN is length 4; the subchart default `222222` is
+  refused. New Dev sets `"2222"`.
+- People must exist. `identitySeed` loads Master Data's `g2p_sample_individuals`;
+  where that table is empty (New Dev), `mockIdentities.people` lists the test
+  people explicitly and `templates/mock-identities.yaml` creates them once
+  through the identity API (no update exists: a changed person must be removed
+  first). New Dev lists the people on the mock Fayda page, all with PIN 2222.
+
+## Checking
+
+Without printing private settings: the provider count for the register is 1,
+the client's redirect URIs include the callback, and starting *Verify with
+Fayda* in the intake returns an authorize URL. The complete proof is a sign-in
+that returns through `/registrant-auth/callback` and binds the signed identity to
+the intake; an authorize URL alone is not it. FIN and FAN remain separate
+identifiers; verification neither approves a farmer nor changes identity grants.

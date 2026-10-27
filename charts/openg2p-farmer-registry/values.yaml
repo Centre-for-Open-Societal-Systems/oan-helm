@@ -430,3 +430,53 @@ staffAccess:
   dashboardClientId: ''
   twoStages: true
   policyKeys: []
+
+# Registrant authentication (Fayda through eSignet) for the farmer register:
+# the provider row in this registry and the OIDC client in eSignet, written by a
+# post-install/post-upgrade hook from these values (templates/registrant-auth.yaml;
+# docs/registry-esignet-onboarding.md). The client's RSA key is generated into
+# keySecret on first run and never leaves the cluster. Enable per environment
+# with its public eSignet URL and this registry's Staff API callback.
+registrantAuth:
+  enabled: false
+  providerId: esignet
+  providerName: eSignet
+  registerId: a1a4d25a-1cd4-4356-abac-985a0b3c6bcd
+  esignetBaseUrl: ''
+  callbackUrl: ''
+  # The client is shared by the OAN registries; each adds its own callback.
+  clientId: oan-registry-intake
+  clientName: OAN Registry Intake
+  logoUri: ''
+  scope: openid profile
+  extraAuthorizeParams:
+    claims:
+      id_token: {}
+      userinfo:
+        individual_id: {essential: true}
+        name: {essential: true}
+        gender: {essential: false}
+        birthdate: {essential: false}
+    claims_locales: en am
+  claims: [name, given_name, middle_name, family_name, gender, birthdate, phone_number, email, individual_id]
+  acrValues: ['mosip:idp:acr:static-code']
+  keySecret:
+    name: oan-registry-intake-key
+    key: private-key.pem
+  esignetDatabase:
+    name: mosip_esignet
+    user: postgres
+    secret:
+      name: commons-postgresql
+      key: postgres-password
+  images:
+    kubectl:
+      repository: docker.io/alpine/k8s
+      digest: sha256:b0523f0a244ddc4c8e055aa335c040d3d78b3ead5528f4544395f7f9f69c7b68
+    postgres:
+      repository: docker.io/openg2p/postgresql
+      digest: sha256:65b6faa9f30de7dc89f63f055a3dd3e4ba0334172ee95c8badf49da0d08ef1c0
+  imagePullSecrets: []
+  resources:
+    requests: {cpu: 25m, memory: 64Mi}
+    limits: {memory: 256Mi}
