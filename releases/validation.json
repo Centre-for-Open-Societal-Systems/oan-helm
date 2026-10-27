@@ -1,5 +1,5 @@
 {
-  "helm": "v3.19.0+g3d8990f",
+  "helm": "v3.16.4+g7877b45",
   "chartVersions": {
     "oan-sandbox": "1.0.0-dev.16",
     "openg2p-commons-services": "1.0.0-dev.25",
@@ -155,17 +155,35 @@
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-livestock-registry": {
-      "promotionReady": false,
-      "platformVersion": "1.2.2-rc.557",
-      "validation": "dependency resolution and explicit fail-closed render gate verified",
-      "preservation": "NOT VERIFIED; full application/restored-data acceptance required before gate removal"
+      "lint": "strict passed",
+      "resources": 39,
+      "namespaces": [
+        "verify-a",
+        "verify-b"
+      ],
+      "preservation": "upstream resource identities, selectors and Secret references match baseline",
+      "baselineScope": "original 1.0.0-dev.1 resource names/selectors/Secret references; Commons Superset and Certify disabled to match inspected dev configuration",
+      "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
+      "defaultImageReferences": [
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/celery:bf78e69a5fd6@sha256:982e8272993305d90d34ea5a449f915c5ad21689ba0788c48806fd003b1c143a",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/db-seed:bf78e69a5fd6@sha256:6ba640c81fc5a6eb19b4a81ae2b6b86ce78cd76dc64dc67723de26cffc5efae3",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/partner-api:bf78e69a5fd6@sha256:99c37673cb62b52476a408531ffb73fa92d8d06d5ba0e61ea8790d116297f785",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/sanity-tests:bf78e69a5fd6@sha256:4bf827ba97d8af32315021bec0fad2d4910e53c3c0a1fa449aa37058d66ddcdc",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/staff-api:bf78e69a5fd6@sha256:189809772e28eafdeea66070dddfbe92d7ea840b2633dbc068a6f4fb85ae5ed2",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/staff-ui:bf78e69a5fd6@sha256:07905855fdbc7dd452e92a36d7076eaddc86c17cc7b339332bf6fe2b2ddf4166",
+        "busybox:1.36",
+        "curlimages/curl:8.11.1",
+        "docker.io/openg2p/redis:7.2.5-debian-12-r4",
+        "jbergknoff/postgresql-client:latest",
+        "openg2p/keycloak-init:1.2.0",
+        "openg2p/openg2p-id-generator:1.1.2",
+        "openg2p/postgres-init:1.2.0",
+        "openg2p/postgres-init:develop"
+      ],
+      "devExample": "examples/dev/livestock.yaml: strict lint and render passed",
+      "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     }
   },
   "upstreamResolution": "not attempted",
-  "offlineResolution": "All chart locks resolved from dependencies bundled with verified source packages",
-  "packages": 108,
-  "currentPackages": 6,
-  "historicalPackages": 102,
-  "unreleasedCharts": [],
-  "index": "Relative URLs, SHA-256, HTTP download, exact Helm version selection and repository-based renders verified against loopback server"
+  "offlineResolution": "All chart locks resolved from dependencies bundled with verified source packages"
 }

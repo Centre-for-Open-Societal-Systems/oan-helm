@@ -75,6 +75,31 @@ registry:
       gateway:
         host: crop-registry.development.oanstaging.com
   staffApi:
+    # Farmer reference (chart README "Farmer reference"): the public files from
+    # the chart's ConfigMap, the Crop lookup key (Secret provisioned in the
+    # namespace, registered in Partner Management as Crop_sown_partner_internal)
+    # and the AWE client secret, all read-only. The anchors repeat the same
+    # wiring on the partner API, celery worker and celery beat.
+    extraVolumes: &farmerReferenceVolumes
+      - name: farmer-reference
+        configMap:
+          name: cropsown-registry-farmer-reference
+      - name: farmer-reference-key
+        secret:
+          secretName: crop-farmer-lookup-signing-ed25519
+      - name: farmer-reference-awe
+        secret:
+          secretName: cropsown-registry-staff-portal
+    extraVolumeMounts: &farmerReferenceMounts
+      - name: farmer-reference
+        mountPath: /etc/coss-farmer
+        readOnly: true
+      - name: farmer-reference-key
+        mountPath: /etc/coss-farmer-key
+        readOnly: true
+      - name: farmer-reference-awe
+        mountPath: /etc/coss-farmer-awe
+        readOnly: true
     envVars:
       REGISTRY_STAFF_PORTAL_API_AUTH_REDIS_URL: redis://commons-redis-master.commons.svc.cluster.local:6379/0
       REGISTRY_CORE_REGISTRANT_AUTH_REDIS_URL: redis://commons-redis-master.commons.svc.cluster.local:6379/0
@@ -96,6 +121,27 @@ registry:
       REGISTRY_CORE_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
       REGISTRY_STAFF_PORTAL_API_VALIDATE_ATTRIBUTE_VALUES: 'true'
+      <<: &farmerReferenceEnv
+        COSS_FARMER_DCI_URL: http://farmer-registry-partner-api.farmer.svc.cluster.local/dci/sync/search
+        COSS_FARMER_SENDER_ID: Crop_sown_partner_internal
+        COSS_FARMER_SOURCE_ID: farmer-registry
+        COSS_FARMER_SIGNING_KEY_FILE: /etc/coss-farmer-key/private-key.pem
+        COSS_FARMER_SIGNING_KID: crop-lookup-ed25519-a26349ea5e745eb0
+        COSS_FARMER_SIGNING_ALGORITHM: EdDSA
+        COSS_FARMER_SOURCE_PUBLIC_KEY_FILE: /etc/coss-farmer/source-public-key.pem
+        COSS_FARMER_SOURCE_KID: farmer-registry-dci-rsa
+        COSS_FARMER_SOURCE_ALGORITHM: RS256
+        COSS_FARMER_CONSENT_AUDIENCE: crop-registry
+        COSS_FARMER_CONSENT_CONTROLLER: farmer-registry
+        COSS_FARMER_CONSENT_PURPOSE: registry_intake
+        COSS_FARMER_CONSENT_SCOPES: farmer_personal_details,farmer_reference
+        COSS_FARMER_RECORD_CONTRACT_FILE: /etc/coss-farmer/record-contract.json
+        # Partner Management's id of the sender: what the native ingestion pipeline
+        # records as the change request's source partner.
+        COSS_FARMER_SOURCE_PARTNER_ID: PARTNER_CROP_SOWN_PARTNER_INTERNAL
+        COSS_FARMER_AWE_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
+        COSS_FARMER_AWE_CLIENT_ID: cropsown-registry-staff-portal
+        COSS_FARMER_AWE_CLIENT_SECRET_FILE: /etc/coss-farmer-awe/client_secret
     hostname: staff-crop.development.oanstaging.com
     istio:
       virtualservice:
@@ -104,6 +150,8 @@ registry:
       gateway:
         host: staff-crop.development.oanstaging.com
   partnerApi:
+    extraVolumes: *farmerReferenceVolumes
+    extraVolumeMounts: *farmerReferenceMounts
     envVars:
       REGISTRY_PARTNER_API_KEYMANAGER_API_BASE_URL: http://commons-services-keymanager.commons.svc.cluster.local/v1/keymanager
       REGISTRY_PARTNER_API_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
@@ -119,6 +167,7 @@ registry:
       KEYCLOAK_BASE_URL: https://keycloak.development.oanstaging.com
       REGISTRY_PARTNER_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
+      <<: *farmerReferenceEnv
     hostname: partner-crop.development.oanstaging.com
     istio:
       virtualservice:
@@ -127,6 +176,8 @@ registry:
       gateway:
         host: partner-crop.development.oanstaging.com
   celeryWorker:
+    extraVolumes: *farmerReferenceVolumes
+    extraVolumeMounts: *farmerReferenceMounts
     envVars:
       REGISTRY_CELERY_WORKERS_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CELERY_WORKERS_MASTER_DATA_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
@@ -145,7 +196,14 @@ registry:
       REGISTRY_CELERY_WORKERS_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       KEYCLOAK_BASE_URL: https://keycloak.development.oanstaging.com
       REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
+      <<: *farmerReferenceEnv
+      # The extension's worker starts the Farmer change-request workflow in AWE
+      # itself (upstream workers never call AWE).
+      REGISTRY_CELERY_WORKERS_AWE_ENABLED: 'true'
+      REGISTRY_CELERY_WORKERS_AWE_CALLBACK_SECRET_ID: cropsown-registry
   celeryBeat:
+    extraVolumes: *farmerReferenceVolumes
+    extraVolumeMounts: *farmerReferenceMounts
     envVars:
       COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       NOTIFICATION_ENABLED: 'false'
@@ -153,6 +211,7 @@ registry:
       REGISTRY_CELERY_BEAT_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CELERY_BEAT_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
+      <<: *farmerReferenceEnv
   beneApi:
     istio:
       virtualservice:
@@ -164,3 +223,19 @@ dashboardApi:
     iamUrl: https://staff-iam.development.oanstaging.com
     audience: cropsown-registry-dashboard-api
     role: charts:read
+# Farmer reference: the Farmer partner API's DCI response-signing public key
+# (openg2p-farmer-registry dciSigning, ConfigMap farmer-registry-dci-signing-public
+# in the farmer namespace, kid farmer-registry-dci-rsa) and the record contract
+# from the chart defaults.
+farmerReference:
+  enabled: true
+  sourcePublicKey: |
+    -----BEGIN PUBLIC KEY-----
+    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAproXZpIJzVQTZRzXglwI
+    XW7eLxrHGYSlmVMbKJaCabyr7TQI4AMbQcJLywJIbeWdLAqnBqAploEHMLdtZRZb
+    Yhe4ibglL98a9490rGSZqBVimFN+4iXPx5DguqZlOBuM5nvWNS7jsFWQ9Xc++T75
+    IoJJhEsrqSZl0e3UdzKhmyX/OKcv9UgeDJPE/93u1Wnt/DmQEfk7FIusjendsbqF
+    XAqCyTNJme4wynFvQKocMnYwncGVdDG41UJ0OuWowGDx1dE+25tQvvcC7kZdarbD
+    L0YZ615l/Q61hzRpTZelVFWV1oPkywUuEmWMglJwkPMy8dwORJ4P3bzWvhUEnX5u
+    zwIDAQAB
+    -----END PUBLIC KEY-----
