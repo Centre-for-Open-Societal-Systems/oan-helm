@@ -288,9 +288,6 @@ def check_sandbox(chart, values, build, migration):
 
 
 def offline_resolution(build):
-    # Preserve relative file:// dependency layout in both resolution copies.
-    # The bundled native snapshot is pinned by source SHA and parent archive.
-    shutil.copytree(ROOT / "upstream-snapshots", build / "upstream-snapshots")
     mirror = build / "mirror"
     mirror.mkdir()
     urls = set()
@@ -465,6 +462,7 @@ def main():
                     assert master_data["repository"] == "https://openg2p.github.io/openg2p-helm"
                     for component in ("masterDataAPI", "masterDataUi"):
                         assert values["master-data"][component]["image"]["tag"] == "0.0.0-develop.118"
+                        assert re.fullmatch(r"sha256:[0-9a-f]{64}", values["master-data"][component]["image"]["digest"])
                     # The seed image is upstream's develop.118 with the ETH-OAN pack, by digest.
                     seed = values["master-data"]["geoSeed"]["image"]
                     assert seed["repository"] == "ghcr.io/asmitonweb/master-data-db-seed"

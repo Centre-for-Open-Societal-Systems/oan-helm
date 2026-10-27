@@ -42,8 +42,9 @@ own evidence. Registry CI retains delivery ownership and existing ECR names.
 
 ## Shared Master Data prerequisite
 
-`reference/cropsown-master-data/` preserves the complete original lookup catalog
-and its source hashes. It is an administration input, not a registry SQL seed or
+The complete original Crop lookup catalog (`g2p_attributes.sql` and
+`g2p_attribute_values.sql`) is preserved in the
+[Crop repository at commit `4ed8a1f`](https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry/tree/4ed8a1f3cffe7d51acc8252d1eb0f9e009742607/cropsown-extension/src/openg2p_registry_cropsown_extension/meta_data/lookup-data). It is an administration input, not a registry SQL seed or
 an automatically executed chart hook. Existing Master Data values are unchanged.
 Migrate missing values through supported Master Data administration, preserving
 codes and relationships. Do not recreate legacy lookup tables inside a registry

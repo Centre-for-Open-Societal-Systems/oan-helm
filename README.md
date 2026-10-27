@@ -223,7 +223,6 @@ before committing: `git checkout -- repository releases`.
 | `addons/registry-dashboards/<chart>/` | Per-registry dashboard chart sources | Pull requests |
 | `environments/dev/` | Public dev overlays, endpoint inventory, Farmer Jenkins pin | Pull requests |
 | `examples/dev/` | Public configuration checklists; no private values | Pull requests |
-| `upstream-snapshots/` | Exact upstream chart snapshots with source hashes | Pull requests |
 | `scripts/` | Validation, release and environment tooling, with tests | Pull requests |
 | `docs/` | Guides and environment records ([index](docs/README.md)) | Pull requests |
 | `releases/resource-baselines-current.json` | Resource names, selectors and Secret references installed releases depend on | Pull requests, deliberately |

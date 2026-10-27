@@ -99,8 +99,10 @@ master-data:
     istio:
       virtualservice:
         gateway: istio-system/development
+    # OpenG2P rebuilds develop.N tags in place; the digest fixes the image.
     image:
       tag: 0.0.0-develop.118
+      digest: sha256:98a0f4fac7a72dcb4d0a24e11953495c5e04c39db77f54eb85ef00643c0abf9d
   masterDataAPI:
     istio:
       virtualservice:
@@ -111,6 +113,7 @@ master-data:
         memory: 512Mi
     image:
       tag: 0.0.0-develop.118
+      digest: sha256:3bc3f9d8db1e731d5b868edcda95bb080579831b08a8a6cea5a377e04959b5cf
 odk-central:
   enabled: true
   hostname: '{{ tpl .Values.global.odkHostname $ }}'
