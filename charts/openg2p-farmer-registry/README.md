@@ -27,3 +27,16 @@ See [included services](https://github.com/Centre-for-Open-Societal-Systems/oan-
 Dev URLs use `<service>.development.oanstaging.com`. The environment-owned
 wildcard DNS/TLS and `istio-system/development` Gateway must be prepared first.
 See the service onboarding and enablement guide in `docs/service-onboarding.md`.
+
+## Registrant authentication (Fayda through eSignet)
+
+`registrantAuth` configures core's registrant authentication for the farmer
+register from values: a post-install/post-upgrade hook writes the provider row
+in this registry's database and the shared `oan-registry-intake` OIDC client in
+eSignet's database, adding this registry's Staff API callback to the client's
+redirect URIs. The client's RSA key is generated into the `registrantAuth.keySecret`
+Secret the first time and reused afterwards; it never appears in values, logs or
+Git. Set `esignetBaseUrl` (the public eSignet URL) and `callbackUrl`
+(`https://<staff api host>/registrant-auth/callback`) per environment. The
+register must have `requires_registrant_authentication` set in its metadata, which
+the OAN seed does. See `docs/registry-esignet-onboarding.md`.

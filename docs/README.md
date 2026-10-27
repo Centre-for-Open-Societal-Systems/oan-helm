@@ -26,7 +26,6 @@ and deployed, and [CONTRIBUTING.md](../CONTRIBUTING.md) for the pull-request rul
 | [registry-refactor.md](registry-refactor.md) | Refactor candidates, their promotion gate and central chart ownership |
 | [refactor-location-and-ownership.md](refactor-location-and-ownership.md) | Master Data location contract and the ETH-OAN seed image |
 | [farmer-jenkins-dev.md](farmer-jenkins-dev.md) | Farmer's pinned Jenkins dev deployment |
-| [farmer-preserving-adoption.md](farmer-preserving-adoption.md) | Guarded Farmer adoption in New Dev |
 | [farmer-reporting.md](farmer-reporting.md) | Farmer reporting views and their owner |
 | [registry-esignet-onboarding.md](registry-esignet-onboarding.md) | eSignet provider and callback per registry |
 | [registry-staff-access.md](registry-staff-access.md) | Dedicated registry staff accounts |

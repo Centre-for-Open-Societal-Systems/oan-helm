@@ -1,0 +1,122 @@
+{{- if .Values.mockIdentities.enabled }}
+{{/*
+Test people for the mock identity system, from values.
+
+The mock-identity-system subchart seeds its identities from Master Data's
+g2p_sample_individuals (identitySeed). An environment whose Master Data holds
+no sample people, or that needs known test identities for Fayda sign-in
+rehearsals, lists them here. Each person is created once through the identity
+API (which answers 200 with an error body for a missing identity, so the body is
+inspected, as the subchart's seed does) and left alone when present; the API
+has no update, so a changed PIN or name needs the identity removed first.
+PINs must be 4 digits: eSignet's auth-challenge rule for PIN is length 4.
+*/}}
+{{- $v := .Values.mockIdentities }}
+{{- $seed := index .Values "mock-identity-system" "identitySeed" }}
+{{- $photo := $v.encodedPhoto | default $seed.defaultEncodedPhoto }}
+{{- $bio := $v.biometrics | default $seed.biometrics }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-mock-identities
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "20"
+    helm.sh/hook-delete-policy: before-hook-creation
+data:
+  identities.tsv: |
+    {{- range $p := $v.people }}
+    {{- if not (regexMatch "^[0-9]{4}$" (toString $p.pin)) }}
+    {{- fail (printf "mockIdentities: %s needs a 4-digit PIN" $p.individualId) }}
+    {{- end }}
+    {{- $names := list (dict "language" "eng" "value" $p.name) }}
+    {{- if $p.nameAmharic }}{{ $names = append $names (dict "language" "amh" "value" $p.nameAmharic) }}{{ end }}
+    {{- $request := dict "individualId" (toString $p.individualId) "pin" (toString $p.pin) "name" $names "gender" (list (dict "language" "eng" "value" $p.gender)) "dateOfBirth" (replace "-" "/" $p.birthDate) "locale" "eng" "encodedPhoto" $photo "individualBiometrics" (dict "format" $bio.format "version" $bio.version "value" $bio.value) }}
+    {{- if $p.phone }}{{ $_ := set $request "phone" (toString $p.phone) }}{{ end }}
+    {{ $p.individualId }}	{{ toJson (dict "request" $request) }}
+    {{- end }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-mock-identities
+  labels:
+    app.kubernetes.io/name: mock-identities
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "20"
+    helm.sh/hook-delete-policy: before-hook-creation
+spec:
+  backoffLimit: 2
+  activeDeadlineSeconds: {{ add $v.readinessTimeoutSeconds 300 }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mock-identities
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      {{- with $v.imagePullSecrets }}
+      imagePullSecrets: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: seed
+          image: {{ include "coss.image" $v.image | quote }}
+          env:
+            - name: API
+              value: {{ tpl $v.apiBaseUrl $ | quote }}
+            - name: READY_TIMEOUT
+              value: {{ $v.readinessTimeoutSeconds | quote }}
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -e
+              echo "[mock-identities] waiting for the identity API at $API ..."
+              waited=0
+              until curl -s -o /dev/null "$API/identity/readiness-probe"; do
+                waited=$((waited+3))
+                if [ "$waited" -ge "$READY_TIMEOUT" ]; then
+                  echo "[mock-identities] the identity API did not become reachable in ${READY_TIMEOUT}s." >&2
+                  exit 1
+                fi
+                sleep 3
+              done
+              created=0; skipped=0; failed=0
+              while IFS="$(printf '\t')" read -r id payload; do
+                [ -n "$id" ] || continue
+                body=$(curl -s "$API/identity/$id" 2>/dev/null | tr -d ' ')
+                case "$body" in
+                  *'"response":null'*|*errorCode*|'') : ;;
+                  *) skipped=$((skipped+1)); continue ;;
+                esac
+                stamp=$(date -u +%Y-%m-%dT%H:%M:%S.000Z)
+                out=$(printf '{"requestTime":"%s",%s' "$stamp" "${payload#\{}" | curl -s -X POST \
+                        -H 'Content-Type: application/json' --data @- "$API/identity" 2>/dev/null | tr -d ' ')
+                case "$out" in
+                  *errorCode*|'') failed=$((failed+1)); echo "[mock-identities] FAILED $id -> $(printf '%s' "$out" | cut -c1-160)" ;;
+                  *) created=$((created+1)) ;;
+                esac
+              done < /data/identities.tsv
+              echo "[mock-identities] created=$created skipped(existing)=$skipped failed=$failed"
+              [ "$failed" -eq 0 ]
+          volumeMounts:
+            - name: identities
+              mountPath: /data
+              readOnly: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 10001
+            runAsGroup: 10001
+            capabilities:
+              drop: [ALL]
+          resources: {{- toYaml $v.resources | nindent 12 }}
+      volumes:
+        - name: identities
+          configMap:
+            name: {{ .Release.Name }}-mock-identities
+{{- end }}

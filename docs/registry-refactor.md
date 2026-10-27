@@ -12,11 +12,11 @@ Candidate validation proves package integrity, dependency resolution and that
 blocking behavior; it does not claim successful application deployment or
 preservation. Its chart still fails closed at the promotion gate.
 
-Farmer adds a separate, server-receipt-gated preserving New Dev upgrade path in
-dev.16. Its default render and fresh install remain blocked. See the exact
-[Farmer adoption contract](farmer-preserving-adoption.md); packaging does not
-establish a live upgrade or application acceptance. Other registry and Commons
-promotion gates remain unconditional.
+Farmer left the gate behind: New Dev is a development environment that is
+rebuilt from an empty database when the schema or seed changes
+(`fresh-install` in the farmer-registry Jenkins job), so its chart renders and
+installs like any other and carries `oan.org/promotion-ready: 'true'`. Crop
+Sown and Livestock keep their gates until they take the same path.
 
 Registry repositories own domain models, schemas, registered services/widgets,
 metadata, translations, templates, native import mappings, thin images and

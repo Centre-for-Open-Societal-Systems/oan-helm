@@ -41,7 +41,6 @@ class FarmerReporting(unittest.TestCase):
             self.assertNotIn('value',env['PGPASSWORD'])
             self.assertNotEqual(env['MDS_CLIENT_SECRET']['valueFrom']['secretKeyRef'],env['PGPASSWORD']['valueFrom']['secretKeyRef'])
             self.assertFalse(any(name.startswith('MD_PG') for name in env))
-            self.assertTrue((source/'templates/refactor-promotion-gate.yaml').exists())
 
 
 if __name__ == '__main__': unittest.main()
