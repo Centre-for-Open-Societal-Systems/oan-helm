@@ -10,6 +10,20 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-10-27
 
+### openg2p-cropsown-registry 1.0.0-dev.17
+
+Previous version: 1.0.0-dev.16.
+
+- Let the Crop Sown chart install and carry the Farmer-reference configuration (6af1b72)
+
+### openg2p-farmer-registry 1.0.0-dev.18
+
+Previous version: 1.0.0-dev.17.
+
+- Let the Crop Sown chart install and carry the Farmer-reference configuration (6af1b72)
+
+## 2026-10-27
+
 ### openg2p-commons-services 1.0.0-dev.25
 
 Previous version: 1.0.0-dev.24.
