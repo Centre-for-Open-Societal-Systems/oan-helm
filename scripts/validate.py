@@ -95,6 +95,38 @@ def fingerprint(chart):
     return h.hexdigest()
 
 
+# Rancher stores the chart archive and the release's saved values together in one
+# helm-operation Secret, which Kubernetes caps at 1 MiB. Keep room for the values.
+MAX_ARCHIVE_BYTES = 900 * 1024
+
+
+def is_subchart_doc(member):
+    """Documentation inside a bundled dependency: never rendered, only package weight."""
+    parts = member.split("/")
+    if "charts" not in parts[1:-1]:
+        return False
+    inner = parts[parts.index("charts", 1) + 1:]
+    return parts[-1].lower().endswith(".md") or "ci" in inner[1:-1]
+
+
+def package_chart(chart, destination):
+    """helm package, minus bundled dependencies' docs; returns the archive path."""
+    run("package", chart, "--destination", destination)
+    info = read(chart / "Chart.yaml")
+    archive = Path(destination) / f'{info["name"]}-{info["version"]}.tgz'
+    slim = archive.with_suffix(".slim")
+    with tarfile.open(archive) as source, tarfile.open(slim, "w:gz") as target:
+        for member in source.getmembers():
+            if not is_subchart_doc(member.name):
+                target.addfile(member, source.extractfile(member) if member.isfile() else None)
+    slim.replace(archive)
+    size = archive.stat().st_size
+    assert size <= MAX_ARCHIVE_BYTES, (
+        f"{archive.name} is {size} bytes; Rancher cannot install archives over "
+        f"{MAX_ARCHIVE_BYTES} bytes together with saved values (1 MiB Secret limit)")
+    return archive
+
+
 def merge_index(public, archives):
     """Add only the given new archives to public/index.yaml; existing entries keep their bytes."""
     if not archives:
@@ -359,12 +391,10 @@ def package(report):
                 if prior[archive_name]["sourceSha256"] != source_sha:
                     # Changed since its version was published: scripts/release.py
                     # gives it the next version after merge. Verify a scratch package.
-                    run("package", chart, "--destination", temp)
-                    archive = temp / archive_name
+                    archive = package_chart(chart, temp)
                     unreleased.append(chart.name)
             else:
-                run("package", chart, "--destination", temp)
-                shutil.copy2(temp / archive_name, archive)
+                shutil.copy2(package_chart(chart, temp), archive)
                 prior[archive_name] = {"sha256": digest(archive), "sourceSha256": source_sha}
                 added.append(archive)
             for ns in ["verify-a", "verify-b"]:
