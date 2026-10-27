@@ -1,0 +1,54 @@
+# Values for the opentelemetry-collector chart 0.177.0 (repo https://open-telemetry.github.io/opentelemetry-helm-charts).
+# Target: the `observability` namespace of the cluster that runs Loki. Receives OTLP logs
+# from the node agents, batches them, and writes to Loki. See docs/logging.md.
+#
+# Set at install, not here:
+# - config.exporters.otlphttp/loki.endpoint, if Loki is not in this namespace
+
+mode: deployment
+replicaCount: 1
+
+image:
+  repository: otel/opentelemetry-collector-k8s
+
+config:
+  receivers:
+    jaeger: null
+    zipkin: null
+    prometheus: null
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+  processors:
+    memory_limiter:
+      check_interval: 5s
+      limit_percentage: 80
+      spike_limit_percentage: 25
+  exporters:
+    otlphttp/loki:
+      endpoint: http://loki.observability.svc:3100/otlp
+  service:
+    pipelines:
+      logs:
+        receivers: [otlp]
+        processors: [memory_limiter, batch]
+        exporters: [otlphttp/loki]
+      metrics: null
+      traces: null
+
+ports:
+  otlp: {enabled: true}
+  otlp-http: {enabled: false}
+  jaeger-compact: {enabled: false}
+  jaeger-thrift: {enabled: false}
+  jaeger-grpc: {enabled: false}
+  zipkin: {enabled: false}
+  metrics: {enabled: false}
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    memory: 256Mi

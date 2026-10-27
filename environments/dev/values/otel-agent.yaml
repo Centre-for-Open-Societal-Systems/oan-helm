@@ -1,0 +1,69 @@
+# Values for the opentelemetry-collector chart 0.177.0 (repo https://open-telemetry.github.io/opentelemetry-helm-charts).
+# Target: every cluster that runs apps or the gateway. One Pod per node reads container
+# stdout from /var/log/pods, adds Kubernetes labels, redacts personal data, and sends
+# the logs to the gateway. See docs/logging.md.
+#
+# Set at install, not here:
+# - the gateway address in config.exporters.otlp.endpoint (--set), default is the
+#   gateway in the same cluster
+#
+# The redaction rules below are ours and untested: check them on realistic log lines.
+
+mode: daemonset
+
+image:
+  repository: otel/opentelemetry-collector-k8s
+
+presets:
+  logsCollection:
+    enabled: true
+    includeCollectorLogs: false
+  kubernetesAttributes:
+    enabled: true
+
+config:
+  processors:
+    memory_limiter:
+      check_interval: 5s
+      limit_percentage: 80
+      spike_limit_percentage: 25
+    transform/redact:
+      error_mode: ignore
+      log_statements:
+        - context: log
+          statements:
+            - replace_pattern(body, "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}", "[email]")
+            - replace_pattern(body, "\\+?[0-9][0-9 -]{8,14}[0-9]", "[phone]")
+            - 'replace_pattern(body, "(?i)(authorization|bearer|token|password|secret)([\"''=: ]+)[A-Za-z0-9._~+/=-]{8,}", "$1$2[redacted]")'
+  receivers:
+    jaeger: null
+    zipkin: null
+    otlp: null
+    prometheus: null
+  exporters:
+    otlp_grpc:
+      endpoint: otel-gateway-opentelemetry-collector.observability.svc:4317
+      tls:
+        insecure: true
+  service:
+    pipelines:
+      logs:
+        receivers: [file_log]
+        processors: [memory_limiter, k8s_attributes, transform/redact, batch]
+        exporters: [otlp_grpc]
+      metrics: null
+      traces: null
+
+ports:
+  jaeger-compact: {enabled: false}
+  jaeger-thrift: {enabled: false}
+  jaeger-grpc: {enabled: false}
+  zipkin: {enabled: false}
+  metrics: {enabled: false}
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    memory: 256Mi

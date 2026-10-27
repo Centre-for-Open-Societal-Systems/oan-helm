@@ -1,0 +1,26 @@
+# Values for the csi-driver-nfs chart 4.13.6 (repo https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts).
+# Target: every app cluster that uses an NFS server for the shared Frappe sites volume
+# (the base app values). Installs the driver and a StorageClass named `nfs-csi`. See
+# docs/external-db-and-nfs.md.
+#
+# Set at install, not here:
+# - storageClass.parameters.server: the NFS server address, reachable from every node
+#   of the cluster
+#
+# The share must exist and be exported to the nodes; see the guide.
+
+storageClass:
+  create: true
+  name: nfs-csi
+  parameters:
+    server: ""
+    share: /srv/nfs/k8s
+  # Retain keeps the data when a release or PVC is deleted, as local-path-shared does.
+  reclaimPolicy: Retain
+  volumeBindingMode: Immediate
+  mountOptions:
+    - nfsvers=4.1
+
+# One controller is enough for a small cluster.
+controller:
+  replicas: 1

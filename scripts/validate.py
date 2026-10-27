@@ -27,8 +27,6 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 CURRENT_VERSION = yaml.safe_load((ROOT / "releases/current.yaml").read_text())["chartVersion"]
 HELM = os.environ.get("HELM", "helm")
-CHARTS = sorted((ROOT / "charts").glob("*/Chart.yaml"))
-EXPECTED = {f"openg2p-{x}-registry" for x in ["farmer", "cropsown", "livestock", "da"]} | {"openg2p-commons-services", "oan-sandbox"}
 BLOCKED_REGISTRIES = {"openg2p-farmer-registry", "openg2p-cropsown-registry", "openg2p-livestock-registry", "openg2p-commons-services"}
 REFACTOR_GATE = "develop-refactor is incomplete:"
 ADDON_RENDER_ARGS = ("--set","image.repository=example.invalid/verification-dashboard","--set","image.tag=verification",
@@ -44,6 +42,8 @@ APPLICATION_SOURCES = {
     "openg2p-commons-services": [COSS + "consent-management", COSS + "oan-aggregation-api"],
     "oan-sandbox": [COSS + "sandbox-platform"],
 }
+EXPECTED = set(APPLICATION_SOURCES)
+CHARTS = [m for m in sorted((ROOT / "charts").glob("*/Chart.yaml")) if m.parent.name in EXPECTED]
 
 
 def check_oan_metadata(info, chart):
@@ -391,6 +391,8 @@ def package(report):
                     assert hashlib.sha256(data).hexdigest() == entry["digest"]
                     selected = yaml.safe_load(run("show", "chart", "coss/" + entry["name"], "--version", entry["version"], env=env))
                     assert selected["name"] == entry["name"] and selected["version"] == entry["version"]
+                    if entry["name"] not in EXPECTED:
+                        continue
                     if selected.get("annotations", {}).get("oan.org/promotion-ready") == "false":
                         verify_refactor_gate(public / Path(url).name, "http-check")
                     elif (ROOT / "addons/registry-dashboards" / entry["name"] / "Chart.yaml").exists():

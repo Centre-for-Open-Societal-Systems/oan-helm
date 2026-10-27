@@ -1,0 +1,77 @@
+# Values for the oan-a2c chart (charts/oan-a2c).
+# Target: the A2C app cluster (not provisioned yet). The same file runs a local
+# single-node cluster (docs/a2c.md, "Local").
+# Release `a2c`, namespace `a2c-develop`.
+#
+# Set at install, not here:
+# - frappe.image.tag: the Jenkins tag `develop-<build>` (locally: `develop`)
+# - frappe.dbHost: the external MariaDB server (docs/external-db-and-nfs.md)
+# Secret oan-a2c-db (key `password`): password of frappe.dbRootUser on that server
+
+siteName: develop.a2c.test
+
+siteConfig:
+  host_name: https://a2c-backend-dev.oanstaging.com
+  openg2p_base_url: https://registry.oanstaging.com/
+  openg2p_db: socialregistry_staging
+
+# The central APISIX gateway runs in another cluster and reaches Frappe on this node port
+# (web.port in oan-a2c-gateway.yaml). Allow it in the node's security group from the
+# gateway cluster's addresses only.
+gatewayAccess:
+  enabled: true
+  web:
+    nodePort: 30810
+
+frappe:
+  image:
+    # Jenkinsfile ECR_REPO `oan/a2c`. A local build tagged with this name is used without
+    # a pull (pullPolicy IfNotPresent).
+    repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/a2c
+    pullPolicy: IfNotPresent
+  # ECR pull Secret, see docs/ecr-pull-access.md.
+  imagePullSecrets: []
+
+  # MariaDB runs outside the cluster. The create-site job reads the password of dbRootUser
+  # from Secret oan-a2c-db.
+  dbHost: ""
+  dbPort: 3306
+  dbRootUser: frappe_admin
+  dbExistingSecret: oan-a2c-db
+  dbExistingSecretPasswordKey: password
+  mariadb-sts:
+    enabled: false
+
+  persistence:
+    worker:
+      # ReadWriteMany from the NFS server, see nfs-csi.yaml.
+      storageClass: nfs-csi
+      size: 8Gi
+
+  jobs:
+    configure:
+      # The NFS export maps every client to uid/gid 1000 (all_squash), so the volume is
+      # already owned by the Frappe user. The upstream root `chown -R` only races with Pods
+      # that write into sites/ while the jobs run, and its failure fails the job.
+      fixVolume: false
+      # Upstream jobs are not Helm hooks and run while the Pods start; retry instead of failing once.
+      backoffLimit: 3
+      # The upstream script plus the two TLS settings. MariaDB requires TLS
+      # (docs/external-db-and-nfs.md); the image trusts the database CA in its system store.
+      # The TLS lines come first: the create-site job starts as soon as db_host and the
+      # Redis addresses exist, and must find the TLS settings already written.
+      args:
+      - |
+        ls -1 apps > sites/apps.txt;
+        [[ -f sites/common_site_config.json ]] || echo "{}" > sites/common_site_config.json;
+        bench set-config -g db_ssl_ca /etc/ssl/certs/ca-certificates.crt;
+        bench set-config -gp db_ssl_check_hostname True;
+        bench set-config -gp db_port $DB_PORT;
+        bench set-config -g db_host $DB_HOST;
+        bench set-config -g redis_cache $REDIS_CACHE;
+        bench set-config -g redis_queue $REDIS_QUEUE;
+        bench set-config -g redis_socketio $REDIS_QUEUE;
+        bench set-config -gp socketio_port $SOCKETIO_PORT;
+    createSite:
+      backoffLimit: 3
+      siteName: develop.a2c.test
