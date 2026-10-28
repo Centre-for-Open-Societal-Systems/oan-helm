@@ -32,7 +32,7 @@ global:
   notificationProviderUrl: ''
   registryHostname: crop-registry.development.oanstaging.com
   staffPortalBaseUrl: https://crop-registry.development.oanstaging.com
-  idGeneratorHostname: '{{ .Release.Name }}-id-generator.{{ .Release.Namespace }}.svc.cluster.local'
+  idGeneratorHostname: idgenerator-crop.development.oanstaging.com
 registry:
   keycloak-init:
     keycloak:
