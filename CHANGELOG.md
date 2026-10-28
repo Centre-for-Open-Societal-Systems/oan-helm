@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-10-28
 
+### openg2p-commons-services 1.0.0-dev.27
+
+Previous version: 1.0.0-dev.26.
+
+- Seed Master Data from the unified ETH-OAN pack (61a191e)
+
+## 2026-10-28
+
 ### openg2p-commons-services 1.0.0-dev.26
 
 Previous version: 1.0.0-dev.25.
