@@ -120,6 +120,37 @@ version that adds a role to an existing client (as Master Data `develop.118` did
 must say so, and the release is then not one-click. Closing this gap belongs in our
 chart (a reconciling Job), not in OpenG2P's.
 
+## One-time step: the first one-click upgrade from a CLI-installed release
+
+From `1.0.0-dev.24`, Master Data's IAM registration runs as a regular Job
+(`iamRegister.runAsHook: false`), so its payload ConfigMap
+`commons-services-master-data-iam-register-payload` is a release resource.
+A release installed earlier, or upgraded with `--no-hooks` (dev revision 26),
+still holds that ConfigMap as a leftover hook resource without Helm's ownership
+annotations. The first upgrade to `1.0.0-dev.24` or later, from Rancher or the
+CLI, then stops before changing anything:
+
+```text
+ConfigMap "commons-services-master-data-iam-register-payload" in namespace "commons"
+exists and cannot be imported into the current release: invalid ownership metadata
+```
+
+Adopt it into the release once, then upgrade as above. The ConfigMap only holds
+the catalog the registration Job posts, and the upgrade rewrites its contents:
+
+```sh
+kubectl -n commons annotate configmap commons-services-master-data-iam-register-payload \
+  meta.helm.sh/release-name=commons-services meta.helm.sh/release-namespace=commons --overwrite
+kubectl -n commons annotate configmap commons-services-master-data-iam-register-payload \
+  helm.sh/hook- helm.sh/hook-delete-policy- helm.sh/hook-weight-
+```
+
+A server-side dry run of the upgrade (`helm upgrade --dry-run=server ...`) names
+every resource it cannot import; run it first to confirm this is the only one.
+The other `*-iam-register-payload` ConfigMaps (AWE, Partner Management) are still
+hooks in these versions and need nothing. `commons-services-masterdata-iam-register-payload`
+belongs to an older chart, is no longer rendered, and is left alone.
+
 ## Releases still on older charts
 
 Charts before this version do not carry their whole dev configuration and cannot be
