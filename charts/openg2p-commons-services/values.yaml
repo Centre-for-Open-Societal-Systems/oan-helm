@@ -844,10 +844,14 @@ openg2p-consent-manager:
     nameOverride: cm
     baseUrl: http://{{ .Release.Name }}-cm-api
     partnerBaseUrl: http://{{ .Release.Name }}-cm-partner-api
+    # OpenG2P's released suite. With runE2e false it runs only the read-only
+    # smoke and contract tests, which pass against the API build above. The ECR
+    # dev build of this image has a CRLF entrypoint (env looks for "bash" plus a
+    # carriage return) and cannot start, which failed every upgrade at this gate.
     image:
       registry: ''
-      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-sanity
-      tag: dev-48e64c249056@sha256:e5d2a30e5a30c252f30849fb7c61c772691f7521906c575ab3fb22584c2358e7
+      repository: docker.io/openg2p/consent-manager-sanity
+      tag: 1.0.2@sha256:2d2c3c30384f749ddd39d148f6425d1ab6256065c80daf4a2549111778b5c9bc
 keycloak-init:
   enabled: true
   keycloak:
