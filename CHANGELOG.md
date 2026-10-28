@@ -8,6 +8,14 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-10-28
+
+### openg2p-commons-services 1.0.0-dev.26
+
+Previous version: 1.0.0-dev.25.
+
+- Run the Commons upgrade gate on OpenG2P's released sanity image (#32) (23ec863)
+
 ## 2026-10-27
 
 ### openg2p-livestock-registry 1.0.0-dev.17
