@@ -45,6 +45,16 @@ master-data:
     enabled: true
     publishInitial: true
     autoPublish: true
+    # Code lists only. New Dev's geography is the catalogue migrated on
+    # 2026-10-27 (level ids level-region..., unit ids region-ET01...), which
+    # farmer records and forms reference. The pack's geography uses other level
+    # ids, so loading it fails on the unique level mnemonic and stops every
+    # upgrade at this hook. Replacing the geography is the separate fresh
+    # geography cutover, not a side effect of an upgrade.
+    load:
+      geo: false
+      codelists: true
+      samples: false
   masterDataUi:
     iamPublicUrl: https://staff-iam.development.oanstaging.com
     envVars:
