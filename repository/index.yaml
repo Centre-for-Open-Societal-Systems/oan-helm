@@ -4080,6 +4080,45 @@ entries:
       oan.org/owner: OpenAgriNet (OAN) / COSS
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
     apiVersion: v2
+    appVersion: 1.2.2-rc.557
+    created: "2026-10-29T09:17:34.121536364Z"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.557
+    description: OAN DA Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: 653ffc61093e380a7e203293e2f84b711ba3ff233a7703f887fddbf78b15a8d5
+    home: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - da-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-da-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - openg2p-da-registry-1.0.0-dev.18.tgz
+    version: 1.0.0-dev.18
+  - annotations:
+      catalog.cattle.io/display-name: OAN DA Registry
+      coss.org/source-commit: 9714c3c5307a7e61f4379b613229837a4b76e952
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-da-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    apiVersion: v2
     appVersion: develop
     created: "2026-10-29T08:43:00.737245107Z"
     dependencies:
@@ -6283,4 +6322,4 @@ entries:
     urls:
     - openg2p-livestock-registry-1.0.0-dev.1.tgz
     version: 1.0.0-dev.1
-generated: "2026-10-29T08:43:00.724886173Z"
+generated: "2026-10-29T09:17:34.105245043Z"

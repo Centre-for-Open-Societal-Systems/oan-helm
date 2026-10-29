@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-10-29
 
+### openg2p-da-registry 1.0.0-dev.18
+
+Previous version: 1.0.0-dev.17.
+
+- Give the DA chart the platform version as its app version, as the other registry charts have (#41) (dd414b9)
+
+## 2026-10-29
+
 ### openg2p-da-registry 1.0.0-dev.17
 
 Previous version: 1.0.0-dev.16.
