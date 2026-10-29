@@ -53,3 +53,41 @@ and read-only files, never by values carrying private material:
 `environments/dev/values/livestock.yaml` is the New Dev wiring. The extension's
 deployment guard (`ci/refactor/deployment_guard.py` in the registry repository)
 checks the rendered workloads for exactly this shape before every deploy.
+
+## Registry Connector
+
+`registry.registryConnector` is the OpenG2P Registry Connector subchart (API, worker,
+beat, optional consumer and UI). It is off in the chart and on in the dev values.
+
+- Image: one image serves API, worker, beat and consumer, built from
+  `docker/registry-connector/Dockerfile` in the livestock-registry repository.
+  `registry.registryConnector.image.tag` ships unpinned; set it to
+  `<12-character commit>@sha256:<digest>` before enabling the connector anywhere.
+- Database: `global.connectorDB` is `livestock_connector_livestock`, the database the
+  existing Livestock connector uses. The connector's postgres-init creates neither the
+  database nor the role when they exist; it only sets the role password to the value in
+  the Secret `global.connectorDBSecret` (key `global.connectorDBUserPasswordKey`). If
+  that Secret does not exist, it is generated with a random password and the role
+  password is reset to it, which logs the old connector out of the database. Confirm
+  the role and Secret names on the namespace before the cutover.
+- Redis: `global.redisDb` is 3 on the shared commons Redis (0 serves the auth stores).
+  Confirm that database is unused by the existing connectors before the cutover.
+- Names: the subchart is aliased `registryConnector` and would name resources with the
+  alias, which Kubernetes rejects, so `nameOverride: registry-connector` restores the
+  chart name. The API Service becomes
+  `livestock-registry-registry-connector-api` (the old release's is
+  `livestock-connector-api`).
+- Access: `connectorAccess.enabled` renders an Istio AuthorizationPolicy per API/UI
+  workload. Webhook paths are accepted only from the `connectorAccess.hubNamespace`
+  namespace; every other path only through the ingress gateway and only for
+  `global.connectorHostname`.
+
+### Cutover from the standalone connector release
+
+1. Pin the image tag and merge; do not deploy while the old release owns the host.
+2. Update the connector's WebSub subscription `callback_url` to
+   `http://livestock-registry-registry-connector-api.livestock.svc.cluster.local/webhook/by-slug/farmer-reference-v1`
+   and trigger a hub sync.
+3. Remove the old `livestock-connector` release (it owns the VirtualService for
+   `connector-livestock-registry.development.oanstaging.com`), then upgrade
+   `livestock-registry` so this chart's VirtualService takes the host.

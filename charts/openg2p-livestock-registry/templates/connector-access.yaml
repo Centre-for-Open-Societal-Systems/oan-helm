@@ -1,0 +1,49 @@
+{{- if and .Values.connectorAccess.enabled .Values.registry.registryConnector.enabled }}
+{{- $host := required "global.connectorHostname is required" .Values.global.connectorHostname }}
+{{- $components := list "api" }}
+{{- if .Values.registry.registryConnector.ui.enabled }}{{- $components = append $components "ui" }}{{- end }}
+{{- range $component := $components }}
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ $.Release.Name }}-connector-{{ $component }}-access
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/component: connector-access
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: registry-connector
+      app.kubernetes.io/instance: {{ $.Release.Name }}
+      app.kubernetes.io/component: {{ $component }}
+  action: ALLOW
+  rules:
+    {{- if eq $component "api" }}
+    - from:
+        - source:
+            namespaces:
+              - {{ $.Values.connectorAccess.hubNamespace | quote }}
+      to:
+        - operation:
+            paths:
+              - /webhook
+              - /webhook/*
+    {{- end }}
+    - from:
+        - source:
+            principals:
+              - {{ $.Values.connectorAccess.ingressGatewayPrincipal | quote }}
+      to:
+        - operation:
+            hosts:
+              - {{ $host | quote }}
+              - {{ printf "%s:*" $host | quote }}
+            {{- if eq $component "api" }}
+            notPaths:
+              - /webhook
+              - /webhook/*
+            {{- end }}
+{{- end }}
+{{- end }}
