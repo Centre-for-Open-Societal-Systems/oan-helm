@@ -10,6 +10,32 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-10-29
 
+### openg2p-cropsown-registry 1.0.0-dev.18
+
+Previous version: 1.0.0-dev.17.
+
+- Move the Farmer, Crop Sown, Livestock and DA registries to the OpenG2P registry chart 1.2.2-rc.614 (4071396)
+
+### openg2p-da-registry 1.0.0-dev.19
+
+Previous version: 1.0.0-dev.18.
+
+- Move the Farmer, Crop Sown, Livestock and DA registries to the OpenG2P registry chart 1.2.2-rc.614 (4071396)
+
+### openg2p-farmer-registry 1.0.0-dev.19
+
+Previous version: 1.0.0-dev.18.
+
+- Move the Farmer, Crop Sown, Livestock and DA registries to the OpenG2P registry chart 1.2.2-rc.614 (4071396)
+
+### openg2p-livestock-registry 1.0.0-dev.18
+
+Previous version: 1.0.0-dev.17.
+
+- Move the Farmer, Crop Sown, Livestock and DA registries to the OpenG2P registry chart 1.2.2-rc.614 (4071396)
+
+## 2026-10-29
+
 ### openg2p-da-registry 1.0.0-dev.18
 
 Previous version: 1.0.0-dev.17.
