@@ -125,6 +125,8 @@ registry:
       REGISTRY_CORE_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
       REGISTRY_STAFF_PORTAL_API_VALIDATE_ATTRIBUTE_VALUES: 'true'
+      # Older crop policies whose open approval tasks still belong to this portal.
+      AWE_TASK_SCOPE_EXTRA_POLICY_KEYS: registry.intake_form.planning_cropsown,registry.intake_form.devplanning_cropsown,registry.change_request.devcropsown
       <<: &farmerReferenceEnv
         COSS_FARMER_DCI_URL: http://farmer-registry-partner-api.farmer.svc.cluster.local/dci/sync/search
         COSS_FARMER_SENDER_ID: Crop_sown_partner_internal
