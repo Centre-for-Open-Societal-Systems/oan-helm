@@ -30,6 +30,10 @@ publicHosts:
   livestockStaff: staff-livestock.development.oanstaging.com
   livestockPartner: partner-livestock.development.oanstaging.com
   livestockId: idgenerator-livestock.development.oanstaging.com
+  da: da-registry.development.oanstaging.com
+  daStaff: staff-da-registry.development.oanstaging.com
+  daPartner: partner-da-registry.development.oanstaging.com
+  daId: idgenerator-da.development.oanstaging.com
   consentPartnerPortal: consent-partner-portal.development.oanstaging.com
   # Planned, not yet deployed: OAN Sandbox (charts/oan-sandbox), web and /oan API on one host.
   sandbox: sandbox.development.oanstaging.com
@@ -178,6 +182,30 @@ verifiedRoutes:
   name: cropsown-registry-staff-portal-ui
   hosts:
   - crop-registry.development.oanstaging.com
+  gateways:
+  - istio-system/development
+- namespace: da-registry
+  name: da-registry-id-generator
+  hosts:
+  - idgenerator-da.development.oanstaging.com
+  gateways:
+  - istio-system/development
+- namespace: da-registry
+  name: da-registry-partner-api
+  hosts:
+  - partner-da-registry.development.oanstaging.com
+  gateways:
+  - istio-system/development
+- namespace: da-registry
+  name: da-registry-staff-portal-api
+  hosts:
+  - staff-da-registry.development.oanstaging.com
+  gateways:
+  - istio-system/development
+- namespace: da-registry
+  name: da-registry-staff-portal-ui
+  hosts:
+  - da-registry.development.oanstaging.com
   gateways:
   - istio-system/development
 - namespace: farmer
