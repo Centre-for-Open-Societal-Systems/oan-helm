@@ -247,3 +247,6 @@ farmerReference:
     L0YZ615l/Q61hzRpTZelVFWV1oPkywUuEmWMglJwkPMy8dwORJ4P3bzWvhUEnX5u
     zwIDAQAB
     -----END PUBLIC KEY-----
+# Apply the db-seed migrations (0001..) once each through the upgrade hook.
+schemaMigrations:
+  enabled: true
