@@ -886,6 +886,21 @@ keycloak-init:
         clientRoleMappings:
           openg2p-superset:
           - Admin
+# Client secrets the client-secrets-sync Job also copies into other namespaces
+# (a secretKeyRef cannot cross namespaces). Each target is written as Secret
+# `secretName`, key `client_secret`, in every listed namespace, and the Job is
+# granted get and patch on that one name there by each registry chart
+# (connectorClientSecret.sync), since a chart renders only into its own namespace. The client must exist in
+# keycloak-init (the realm is the key used there). Empty list = no copies.
+clientSecretsSync:
+  targets:
+  - realm: staff
+    clientId: registry-connector
+    secretName: registry-connector-client
+    namespaces:
+    - crop
+    - livestock
+    - farmer
 aggregationApi:
   enabled: true
   nameOverride: ''

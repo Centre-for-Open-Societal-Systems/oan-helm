@@ -53,6 +53,7 @@ data:
     upsert_secret() {
       local secret_name="$1"
       local secret_value="$2"
+      local target_ns="${3:-${NAMESPACE}}"
       local encoded
       encoded=$(printf '%s' "${secret_value}" | base64)
 
@@ -60,7 +61,7 @@ data:
       http_code=$(curl -s -o /dev/null -w "%{http_code}" \
         --cacert "${CA_CERT}" \
         -H "Authorization: Bearer ${SA_TOKEN}" \
-        "${K8S_API}/api/v1/namespaces/${NAMESPACE}/secrets/${secret_name}")
+        "${K8S_API}/api/v1/namespaces/${target_ns}/secrets/${secret_name}")
 
       if [ "$http_code" = "200" ]; then
         curl -sf --cacert "${CA_CERT}" \
@@ -68,16 +69,16 @@ data:
           -H "Authorization: Bearer ${SA_TOKEN}" \
           -H "Content-Type: application/strategic-merge-patch+json" \
           -d "{\"data\":{\"client_secret\":\"${encoded}\"}}" \
-          "${K8S_API}/api/v1/namespaces/${NAMESPACE}/secrets/${secret_name}" > /dev/null
-        echo "Patched secret ${secret_name}"
+          "${K8S_API}/api/v1/namespaces/${target_ns}/secrets/${secret_name}" > /dev/null || return 1
+        echo "Patched secret ${target_ns}/${secret_name}"
       else
         curl -sf --cacert "${CA_CERT}" \
           -X POST \
           -H "Authorization: Bearer ${SA_TOKEN}" \
           -H "Content-Type: application/json" \
-          -d "{\"apiVersion\":\"v1\",\"kind\":\"Secret\",\"metadata\":{\"name\":\"${secret_name}\",\"namespace\":\"${NAMESPACE}\"},\"type\":\"Opaque\",\"data\":{\"client_secret\":\"${encoded}\"}}" \
-          "${K8S_API}/api/v1/namespaces/${NAMESPACE}/secrets" > /dev/null
-        echo "Created secret ${secret_name}"
+          -d "{\"apiVersion\":\"v1\",\"kind\":\"Secret\",\"metadata\":{\"name\":\"${secret_name}\",\"namespace\":\"${target_ns}\"},\"type\":\"Opaque\",\"data\":{\"client_secret\":\"${encoded}\"}}" \
+          "${K8S_API}/api/v1/namespaces/${target_ns}/secrets" > /dev/null || return 1
+        echo "Created secret ${target_ns}/${secret_name}"
       fi
     }
 
@@ -119,6 +120,35 @@ data:
     fi
     {{- end }}
     {{- end }}
+    # Copy selected client secrets into other namespaces (a secretKeyRef cannot
+    # cross namespaces). Same Secret name and key in every target; a failed
+    # copy is reported and does not fail the job.
+    {{- range (default dict .Values.clientSecretsSync).targets }}
+    {{- $resolvedRealm := tpl .realm (dict "suffix" $suffix) }}
+    {{- $secretName := .secretName }}
+    REALM="{{ $resolvedRealm }}"
+    CLIENT_ID="{{ .clientId }}"
+    echo "Copying ${CLIENT_ID} in realm ${REALM} to Secret {{ $secretName }}..."
+    SECRET_VALUE=""
+    for attempt in $(seq 1 20); do
+      SECRET_VALUE=$(get_client_secret "${REALM}" "${CLIENT_ID}" "${TOKEN}") && [ -n "$SECRET_VALUE" ] && break
+      echo "  Client ${CLIENT_ID} not ready yet (attempt ${attempt}/20). Waiting..."
+      sleep 10
+      if [ $((attempt % 5)) -eq 0 ]; then
+        TOKEN=$(get_token) || true
+      fi
+    done
+    if [ -n "$SECRET_VALUE" ]; then
+      {{- range .namespaces }}
+      (upsert_secret "{{ $secretName }}" "${SECRET_VALUE}" "{{ . }}") \
+        || { echo "WARN: Could not write {{ . }}/{{ $secretName }}."; ERRORS=$((ERRORS+1)); }
+      {{- end }}
+    else
+      echo "WARN: Could not fetch secret for ${CLIENT_ID} after retries. Skipping."
+      ERRORS=$((ERRORS+1))
+    fi
+    {{- end }}
+
 
     if [ $ERRORS -gt 0 ]; then
       echo "Completed with ${ERRORS} warning(s)."
