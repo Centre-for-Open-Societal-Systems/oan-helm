@@ -173,6 +173,10 @@ registry:
       NOTIFICATION_PROVIDER_URL: ''
       KEYCLOAK_BASE_URL: https://keycloak.development.oanstaging.com
       REGISTRY_PARTNER_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      # The aggregation layer searches by id type UIN (the beneficiary's Fayda FAN). This
+      # register keeps it in fayda_fan_id; it has no foundational_id column.
+      REGISTRY_PARTNER_API_DCI_ID_TYPE_COLUMNS: '{"UIN": "fayda_fan_id", "FID": "functional_record_id"}'
+      REGISTRY_PARTNER_API_DCI_ALLOWED_SEARCH_FIELDS: '["functional_record_id", "first_name", "middle_name", "last_name", "given_name", "gender", "birth_date", "foundational_id", "record_name", "record_status", "search_text", "fayda_fan_id"]'
       REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
       <<: *farmerReferenceEnv
     hostname: partner-crop.development.oanstaging.com
