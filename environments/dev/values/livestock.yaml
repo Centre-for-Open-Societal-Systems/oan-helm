@@ -250,3 +250,8 @@ farmerReference:
 # Apply the db-seed migrations (0001..) once each through the upgrade hook.
 schemaMigrations:
   enabled: true
+# Lets the Commons client-secrets-sync Job write the Registry Connector client
+# secret (Secret registry-connector-client) into this namespace.
+connectorClientSecret:
+  sync:
+    enabled: true

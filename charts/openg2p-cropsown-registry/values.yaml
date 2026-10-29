@@ -333,6 +333,18 @@ odkGeoSync:
     limits:
       memory: 256Mi
 
+# Registry Connector client secret. Commons (client-secrets-sync) copies it from
+# Keycloak into this namespace; the connector reads it with a secretKeyRef.
+# sync.* names the Commons Job's service account that is granted access to
+# that one Secret here. Off by default (it adds resources to the base chart);
+# the dev environment values turn it on.
+connectorClientSecret:
+  secretName: registry-connector-client
+  sync:
+    enabled: false
+    serviceAccount: commons-client-secrets-sync
+    namespace: commons
+
 # Disabled legacy staff-provisioning hook; see docs/registry-staff-access.md.
 staffAccess:
   enabled: false

@@ -170,3 +170,8 @@ registrantAuth:
   enabled: true
   esignetBaseUrl: https://esignet.development.oanstaging.com
   callbackUrl: https://staff-farmer.development.oanstaging.com/registrant-auth/callback
+# Lets the Commons client-secrets-sync Job write the Registry Connector client
+# secret (Secret registry-connector-client) into this namespace.
+connectorClientSecret:
+  sync:
+    enabled: true

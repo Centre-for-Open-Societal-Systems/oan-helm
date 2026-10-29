@@ -250,3 +250,8 @@ farmerReference:
     L0YZ615l/Q61hzRpTZelVFWV1oPkywUuEmWMglJwkPMy8dwORJ4P3bzWvhUEnX5u
     zwIDAQAB
     -----END PUBLIC KEY-----
+# Lets the Commons client-secrets-sync Job write the Registry Connector client
+# secret (Secret registry-connector-client) into this namespace.
+connectorClientSecret:
+  sync:
+    enabled: true
