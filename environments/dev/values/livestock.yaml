@@ -35,6 +35,17 @@ global:
   staffPortalBaseUrl: https://livestock-registry.development.oanstaging.com
   idGeneratorHostname: idgenerator-livestock.development.oanstaging.com
 registry:
+  registryConnector:
+    enabled: true
+    # Off until the connector UI image with the admin login is pinned: the
+    # host is public and the published UI has no login of its own.
+    ui:
+      enabled: false
+    istio:
+      gateway:
+        create: false
+      virtualservice:
+        gateway: istio-system/development
   keycloak-init:
     keycloak:
       url: http://commons-keycloak.commons.svc.cluster.local:80
@@ -247,3 +258,5 @@ farmerReference:
     L0YZ615l/Q61hzRpTZelVFWV1oPkywUuEmWMglJwkPMy8dwORJ4P3bzWvhUEnX5u
     zwIDAQAB
     -----END PUBLIC KEY-----
+connectorAccess:
+  enabled: true

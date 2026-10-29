@@ -34,7 +34,46 @@ global:
   notificationProviderUrl: ''
   staffPortalBaseUrl: https://livestock-registry.development.oanstaging.com
   idGeneratorHostname: idgenerator-livestock.development.oanstaging.com
+  # Registry Connector (registry.registryConnector). Hostname and gateway are
+  # per-environment values.
+  connectorHostname: connector-livestock-registry.development.oanstaging.com
+  # Reuses the database and role of today's Livestock connector release
+  # (livestock-connector). postgres-init creates neither when they exist; it
+  # resets the role password to the Secret named here, which this release
+  # creates (the old release's Secret livestock-connector is removed with that
+  # release at cutover). Redis: commons db 1 is busy, db 3 was empty on New Dev.
+  connectorDB: livestock_connector_livestock
+  connectorDBUser: livestock_livestock_connector_user
+  connectorDBSecret: livestock-connector-livestock
+  connectorDBUserPasswordKey: livestock-connector-livestock-db-user
+  postgresqlPort: 5432
+  redisHost: commons-redis-master.commons.svc.cluster.local
+  redisPort: 6379
+  # Database 0 serves the staff and registrant auth stores; 1 is the subchart
+  # default. A distinct index keeps the connector's Celery queue apart.
+  redisDb: 3
+  partnerApiService: livestock-registry-partner-api
 registry:
+  registryConnector:
+    # Off in the chart; an environment turns it on once the image below is pinned.
+    enabled: false
+    # The subchart is aliased registryConnector and names resources after the
+    # alias, which Kubernetes rejects (upper case). This restores the chart name.
+    nameOverride: registry-connector
+    image:
+      # One image serves api, worker, beat and consumer (docker/registry-connector
+      # in the livestock-registry repository).
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/registry-connector
+      # Replace with <12-character commit>@sha256:<digest> after the image build.
+      tag: unpinned-set-after-image-build
+    postgres-init:
+      # Without this the connector's initialisation names its ServiceAccount like
+      # the registry's own (<release>-postgres-init), a duplicate in one release.
+      nameOverride: connector-postgres-init
+      postgresql:
+        host: commons-postgresql.commons.svc.cluster.local
+    ui:
+      enabled: false
   staffApi:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/staff-api
@@ -427,3 +466,40 @@ farmerReference:
       zone_name: farmer_reference.zone_name
       woreda_name: farmer_reference.woreda_name
       kebele_name: farmer_reference.kebele_name
+
+# Who may reach the Registry Connector workloads (Istio AuthorizationPolicy).
+# Webhooks are accepted only from the hub's namespace; every other path only
+# through the ingress gateway and only for the connector hostname, so a request
+# with a forged Host header or from another pod is refused.
+connectorAccess:
+  enabled: false
+  hubNamespace: commons
+  ingressGatewayPrincipal: cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account
+
+# Renews the WebSub lease of the listed connectors (see the template for why it is
+# unsubscribe, wait, subscribe). Off by default. A notice published in the gap
+# between unsubscribe and subscribe is lost. Secrets are referenced, never carried.
+connectorLeaseRenewal:
+  enabled: false
+  # Weekly; the commons hub grants 10-day leases.
+  schedule: 17 3 * * 0
+  image: curlimages/curl:8.10.1
+  # Defaults to this release's connector API Service.
+  connectorApiUrl: ''
+  verifyWaitSeconds: 15
+  syncAttempts: 3
+  adminAuth:
+    # Client credentials of the registry-connector client (its service account
+    # holds REGISTRY_CONNECTOR_ADMIN).
+    tokenUrl: http://commons-keycloak.commons.svc.cluster.local:80/realms/staff/protocol/openid-connect/token
+    clientId: registry-connector
+    clientSecret:
+      name: registry-connector
+      key: client_secret
+  # - id: farmer-reference-v1
+  #   hubUrl: http://<hub service>/hub
+  #   callbackUrl: http://livestock-registry-registry-connector-api.livestock.svc.cluster.local/webhook/by-slug/farmer-reference-v1
+  #   topics: [<topic>]
+  #   webhookSecret: {name: <secret>, key: <key>}   # the connector's webhook_secret
+  #   hubAuth: {tokenUrl: ..., clientId: ..., clientSecret: {name: ..., key: ...}}  # only if the hub needs a token
+  connectors: []

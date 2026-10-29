@@ -880,12 +880,41 @@ keycloak-init:
         redirectUris:
         - https://{{ tpl .Values.global.staffPortalApiHostname $ }}/*
         - https://{{ tpl .Values.global.staffPortalHostname $ }}/*
+      # Registry Connector administration (Farmer, Crop Sown and Livestock
+      # connectors share one pair of clients). Created once: keycloak-init skips
+      # a client that exists, so changing roles or redirect URIs later is done in
+      # Keycloak.
+      - clientId: registry-connector
+        name: Registry Connector
+        redirectUris: []
+        clientRoles:
+        - REGISTRY_CONNECTOR_ADMIN
+      - clientId: registry-connector-ui
+        name: Registry Connector UI
+        publicClient: true
+        redirectUris:
+        - https://connector-farmer-registry.development.oanstaging.com/*
+        - https://connector-cropsown-registry.development.oanstaging.com/*
+        - https://connector-livestock-registry.development.oanstaging.com/*
+        webOrigins:
+        - https://connector-farmer-registry.development.oanstaging.com
+        - https://connector-cropsown-registry.development.oanstaging.com
+        - https://connector-livestock-registry.development.oanstaging.com
       users:
       - username: admin
         email: admin@your.domain.com
         clientRoleMappings:
           openg2p-superset:
           - Admin
+          registry-connector:
+          - REGISTRY_CONNECTOR_ADMIN
+      # The registry-connector client's service account exists once the client
+      # is created (clients are processed before users), so it is found, not
+      # created, and only receives the role.
+      - username: service-account-registry-connector
+        clientRoleMappings:
+          registry-connector:
+          - REGISTRY_CONNECTOR_ADMIN
 aggregationApi:
   enabled: true
   nameOverride: ''

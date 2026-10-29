@@ -1,0 +1,111 @@
+{{- if and .Values.connectorLeaseRenewal.enabled .Values.registry.registryConnector.enabled }}
+{{/*
+Renew the WebSub lease of the connectors listed in connectorLeaseRenewal.connectors.
+
+Neither the Registry Connector nor the hub renews a subscription: the lease
+(hubLeaseSeconds, 10 days on the commons hub) simply lapses. The hub also rejects
+a second subscribe for a subscriber that is still registered ("Subscriber has
+already registered with the Hub"), so a renewal is two steps:
+
+  1. hub.mode=unsubscribe for the connector's callback and topic, with the same
+     hub.secret the connector subscribed with (the hub verifies the intent by
+     calling the callback);
+  2. POST /connectors/{id}/websub/sync-subscriptions on the connector API, which
+     registers the topic and subscribes again.
+
+Between the two steps the connector is not subscribed. A notice the hub publishes
+in that window (about 20 seconds) is not delivered to this connector and is not
+replayed. If step 1 fails nothing was changed and the job fails; if step 2 fails
+the job retries and then fails loudly, leaving the connector unsubscribed until
+the next run or a manual sync.
+
+One CronJob per connector. Secrets are referenced by name, never carried in values.
+*/}}
+{{- $cfg := .Values.connectorLeaseRenewal }}
+{{- range $connector := $cfg.connectors }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ printf "%s-lease-%s" $.Release.Name $connector.id | trunc 52 | trimSuffix "-" }}
+  labels:
+    app.kubernetes.io/name: connector-lease-renewal
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/managed-by: {{ $.Release.Service }}
+spec:
+  schedule: {{ $cfg.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  startingDeadlineSeconds: 3600
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: connector-lease-renewal
+            app.kubernetes.io/instance: {{ $.Release.Name }}
+          annotations:
+            sidecar.istio.io/inject: "false"
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: renew
+              image: {{ $cfg.image | quote }}
+              command:
+                - sh
+                - -c
+                - |
+{{ $.Files.Get "files/connector-lease-renewal.sh" | indent 18 }}
+              env:
+                - name: CONNECTOR_ID
+                  value: {{ required "connectorLeaseRenewal.connectors[].id is required" $connector.id | quote }}
+                - name: CONNECTOR_API_URL
+                  value: {{ default (printf "http://%s-registry-connector-api.%s.svc.cluster.local" $.Release.Name $.Release.Namespace) $cfg.connectorApiUrl | quote }}
+                - name: HUB_URL
+                  value: {{ required "connectorLeaseRenewal.connectors[].hubUrl is required" $connector.hubUrl | quote }}
+                - name: CALLBACK_URL
+                  value: {{ required "connectorLeaseRenewal.connectors[].callbackUrl is required" $connector.callbackUrl | quote }}
+                - name: TOPICS
+                  value: {{ required "connectorLeaseRenewal.connectors[].topics is required" (join " " $connector.topics) | quote }}
+                - name: VERIFY_WAIT_SECONDS
+                  value: {{ $cfg.verifyWaitSeconds | toString | quote }}
+                - name: SYNC_ATTEMPTS
+                  value: {{ $cfg.syncAttempts | toString | quote }}
+                - name: HUB_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ required "connectorLeaseRenewal.connectors[].webhookSecret.name is required" $connector.webhookSecret.name | quote }}
+                      key: {{ required "connectorLeaseRenewal.connectors[].webhookSecret.key is required" $connector.webhookSecret.key | quote }}
+                # Bearer token for the connector API: client credentials of the
+                # registry-connector client, whose service account holds the admin role.
+                - name: ADMIN_TOKEN_URL
+                  value: {{ required "connectorLeaseRenewal.adminAuth.tokenUrl is required" $cfg.adminAuth.tokenUrl | quote }}
+                - name: ADMIN_CLIENT_ID
+                  value: {{ $cfg.adminAuth.clientId | quote }}
+                - name: ADMIN_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ required "connectorLeaseRenewal.adminAuth.clientSecret.name is required" $cfg.adminAuth.clientSecret.name | quote }}
+                      key: {{ $cfg.adminAuth.clientSecret.key | quote }}
+                {{- with $connector.hubAuth }}
+                # The hub's own OAuth client, when it requires a bearer token.
+                - name: HUB_TOKEN_URL
+                  value: {{ .tokenUrl | quote }}
+                - name: HUB_CLIENT_ID
+                  value: {{ .clientId | quote }}
+                - name: HUB_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .clientSecret.name | quote }}
+                      key: {{ .clientSecret.key | quote }}
+                {{- end }}
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 32Mi
+                limits:
+                  memory: 128Mi
+{{- end }}
+{{- end }}
