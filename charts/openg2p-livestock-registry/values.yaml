@@ -285,6 +285,12 @@ reporting:
       memory: 128Mi
     limits:
       memory: 512Mi
+# Schema and data migrations from the db-seed image (/seed/migrations), applied
+# once each by apply-migrations.sh. Needs a db-seed image that ships them.
+# Uses reporting.db for the connection and reporting.image for the image.
+schemaMigrations:
+  enabled: false
+  waitForSchemaSeconds: 600
 odkGeoSync:
   enabled: false
   schedule: 17 1 * * *
