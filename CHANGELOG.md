@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-10-29
 
+### openg2p-da-registry 1.0.0-dev.20
+
+Previous version: 1.0.0-dev.19.
+
+- Drop the retired DA import auto-approve switch from the DA registry chart values (#48) (7470500)
+
+## 2026-10-29
+
 ### openg2p-cropsown-registry 1.0.0-dev.18
 
 Previous version: 1.0.0-dev.17.
