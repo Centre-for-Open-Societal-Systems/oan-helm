@@ -37,8 +37,10 @@ global:
 registry:
   registryConnector:
     enabled: true
+    # Off until the connector UI image with the admin login is pinned: the
+    # host is public and the published UI has no login of its own.
     ui:
-      enabled: true
+      enabled: false
     istio:
       gateway:
         create: false
