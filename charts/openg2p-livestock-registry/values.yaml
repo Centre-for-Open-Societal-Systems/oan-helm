@@ -475,3 +475,31 @@ connectorAccess:
   enabled: false
   hubNamespace: commons
   ingressGatewayPrincipal: cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account
+
+# Renews the WebSub lease of the listed connectors (see the template for why it is
+# unsubscribe, wait, subscribe). Off by default. A notice published in the gap
+# between unsubscribe and subscribe is lost. Secrets are referenced, never carried.
+connectorLeaseRenewal:
+  enabled: false
+  # Weekly; the commons hub grants 10-day leases.
+  schedule: 17 3 * * 0
+  image: curlimages/curl:8.10.1
+  # Defaults to this release's connector API Service.
+  connectorApiUrl: ''
+  verifyWaitSeconds: 15
+  syncAttempts: 3
+  adminAuth:
+    # Client credentials of the registry-connector client (its service account
+    # holds REGISTRY_CONNECTOR_ADMIN).
+    tokenUrl: http://commons-keycloak.commons.svc.cluster.local:80/realms/staff/protocol/openid-connect/token
+    clientId: registry-connector
+    clientSecret:
+      name: registry-connector
+      key: client_secret
+  # - id: farmer-reference-v1
+  #   hubUrl: http://<hub service>/hub
+  #   callbackUrl: http://livestock-registry-registry-connector-api.livestock.svc.cluster.local/webhook/by-slug/farmer-reference-v1
+  #   topics: [<topic>]
+  #   webhookSecret: {name: <secret>, key: <key>}   # the connector's webhook_secret
+  #   hubAuth: {tokenUrl: ..., clientId: ..., clientSecret: {name: ..., key: ...}}  # only if the hub needs a token
+  connectors: []

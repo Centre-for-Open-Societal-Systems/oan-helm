@@ -91,3 +91,20 @@ beat, optional consumer and UI). It is off in the chart and on in the dev values
 3. Remove the old `livestock-connector` release (it owns the VirtualService for
    `connector-livestock-registry.development.oanstaging.com`), then upgrade
    `livestock-registry` so this chart's VirtualService takes the host.
+
+### WebSub lease renewal
+
+Neither the Registry Connector nor the connector image renews a WebSub subscription, and
+the commons hub rejects a second subscribe for a subscriber that is still registered
+("Subscriber has already registered with the Hub"). `connectorLeaseRenewal` (off by
+default) renders one weekly CronJob per listed connector that renews the lease in two
+steps: `hub.mode=unsubscribe` with the connector's callback, topic and webhook secret,
+then, after `verifyWaitSeconds`, `POST /connectors/{id}/websub/sync-subscriptions`
+(which re-subscribes with the 10-day lease). The webhook secret and the OAuth client
+secrets are read from Secrets named in values, never carried in them. The connector is
+unsubscribed for about 20 seconds per run; a notice published in that window is lost.
+If the unsubscribe is refused nothing changed and the job fails; if the re-subscribe
+fails the job retries and then fails, leaving the connector unsubscribed until the next
+run or a manual sync. Weekly runs leave a 3-day margin on a 10-day lease. The Secret
+holding the `registry-connector` client credentials (`client_secret`) is created in the
+commons namespace and must also exist in this release's namespace.
