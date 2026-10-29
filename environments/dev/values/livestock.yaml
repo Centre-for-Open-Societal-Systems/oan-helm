@@ -136,9 +136,10 @@ registry:
         COSS_FARMER_CONSENT_PURPOSE: registry_intake
         COSS_FARMER_CONSENT_SCOPES: farmer_personal_details,farmer_reference
         COSS_FARMER_RECORD_CONTRACT_FILE: /etc/coss-farmer/record-contract.json
-        # Partner Management's id of the sender: what the native ingestion pipeline
-        # records as the change request's source partner.
-        COSS_FARMER_SOURCE_PARTNER_ID: PARTNER_LIVE_STOCK_PARTNER_INTERNAL
+        # The sender mnemonic the connector stamps on each ingested row; the platform
+        # worker passes it as the change request's source partner, and the Farmer
+        # reference ingestion accepts only this value. Equal to COSS_FARMER_SENDER_ID.
+        COSS_FARMER_SOURCE_PARTNER_ID: Live_stock_partner_internal
         COSS_FARMER_AWE_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
         COSS_FARMER_AWE_CLIENT_ID: livestock-registry-staff-portal
         COSS_FARMER_AWE_CLIENT_SECRET_FILE: /etc/coss-farmer-awe/client_secret
