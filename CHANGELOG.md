@@ -8,6 +8,14 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-10-29
+
+### openg2p-da-registry 1.0.0-dev.17
+
+Previous version: 1.0.0-dev.16.
+
+- Move the DA chart to registry platform 1.2.2-rc.557 and pin the live dev settings (#39) (1160613)
+
 ## 2026-10-28
 
 ### openg2p-commons-services 1.0.0-dev.27
