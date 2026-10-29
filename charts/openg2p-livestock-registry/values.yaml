@@ -37,11 +37,13 @@ global:
   # Registry Connector (registry.registryConnector). Hostname and gateway are
   # per-environment values.
   connectorHostname: connector-livestock-registry.development.oanstaging.com
-  # Reuses the database and role the Livestock connector already uses. The
-  # connector's postgres-init creates neither when they exist (it only
-  # re-syncs the role password to the Secret named here).
+  # Reuses the database and role of today's Livestock connector release
+  # (livestock-connector). postgres-init creates neither when they exist; it
+  # resets the role password to the Secret named here, which this release
+  # creates (the old release's Secret livestock-connector is removed with that
+  # release at cutover). Redis: commons db 1 is busy, db 3 was empty on New Dev.
   connectorDB: livestock_connector_livestock
-  connectorDBUser: livestock_connector_livestock_user
+  connectorDBUser: livestock_livestock_connector_user
   connectorDBSecret: livestock-connector-livestock
   connectorDBUserPasswordKey: livestock-connector-livestock-db-user
   postgresqlPort: 5432
