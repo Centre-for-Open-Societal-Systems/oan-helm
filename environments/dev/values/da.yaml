@@ -154,8 +154,13 @@ registry:
       DA_AWE_CLIENT_ID: '{{ .Release.Name }}-staff-portal'
       REGISTRY_CELERY_WORKERS_WEBSUB_BASE_URL: http://commons-services-websub.commons.svc.cluster.local
       # The upstream worker has no staff API settings, so AWE is read from the
-      # core settings (REGISTRY_CORE_AWE_*); without them no approval request
-      # is ever created for an import.
+      # core Settings.get_config(). In the worker process that returns the
+      # worker's own Settings (prefix REGISTRY_CELERY_WORKERS_), so the switch
+      # and callback settings must be set with that prefix; without them no
+      # approval request is ever created for an import. The REGISTRY_CORE_AWE_*
+      # copies cover a process where the core settings load first.
+      REGISTRY_CELERY_WORKERS_AWE_ENABLED: 'true'
+      REGISTRY_CELERY_WORKERS_AWE_CALLBACK_SECRET_ID: '{{ tpl .Values.global.aweCallbackSecretId $ }}'
       REGISTRY_CORE_AWE_ENABLED: 'true'
       REGISTRY_CORE_AWE_BASE_URL: http://commons-services-awe.commons.svc.cluster.local
       REGISTRY_CORE_AWE_DEFAULT_CALLBACK_URL: http://{{ .Release.Name }}-staff-portal-api.{{ .Release.Namespace }}.svc.cluster.local/awe/webhooks/decision
@@ -166,6 +171,10 @@ registry:
           name: '{{ .Release.Name }}-staff-portal'
           key: client_secret
       REGISTRY_CORE_AWE_CALLBACK_HMAC_SECRET:
+        secretKeyRef:
+          name: '{{ tpl .Values.global.aweCallbackHmacSecretName $ }}'
+          key: '{{ .Values.global.aweCallbackHmacSecretKey }}'
+      REGISTRY_CELERY_WORKERS_AWE_CALLBACK_HMAC_SECRET:
         secretKeyRef:
           name: '{{ tpl .Values.global.aweCallbackHmacSecretName $ }}'
           key: '{{ .Values.global.aweCallbackHmacSecretKey }}'
