@@ -44,7 +44,6 @@ global:
 registry:
   staffApi:
     envVars:
-      DA_AUTO_APPROVE_IMPORTS: 'true'
       REGISTRY_STAFF_PORTAL_API_APPLICATION_REFERENCE_FORMAT: '{DATE:%Y%b%d|upper}-{SECONDS:5}-{RAND:4}'
       REGISTRY_STAFF_PORTAL_API_AUTH_REDIS_URL: redis://commons-redis-master.commons.svc.cluster.local:6379/0
       REGISTRY_CORE_REGISTRANT_AUTH_REDIS_URL: redis://commons-redis-master.commons.svc.cluster.local:6379/0
@@ -73,7 +72,6 @@ registry:
         gateway: istio-system/development
   partnerApi:
     envVars:
-      DA_AUTO_APPROVE_IMPORTS: 'true'
       REGISTRY_PARTNER_API_APPLICATION_REFERENCE_FORMAT: '{DATE:%Y%b%d|upper}-{SECONDS:5}-{RAND:4}'
       REGISTRY_PARTNER_API_DCI_EXPRESSION_ALLOWED_FIELDS: '["functional_record_id","first_name","middle_name","last_name","given_name","gender","birth_date","foundational_id","record_name","record_status","search_text","marital_status","income_level","education_level","residency_status","disability_status","displacement_status","region_name","zone_name","woreda_name","kebele_name","geo_lowest_level_value_id","position","specialisation","upstream_reference"]'
       REGISTRY_PARTNER_API_KEYMANAGER_API_BASE_URL: http://commons-services-keymanager.commons.svc.cluster.local/v1/keymanager
@@ -98,7 +96,6 @@ registry:
         gateway: istio-system/development
   celeryWorker:
     envVars:
-      DA_AUTO_APPROVE_IMPORTS: 'true'
       REGISTRY_CELERY_WORKERS_APPLICATION_REFERENCE_FORMAT: '{DATE:%Y%b%d|upper}-{SECONDS:5}-{RAND:4}'
       REGISTRY_CELERY_WORKERS_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CELERY_WORKERS_MASTER_DATA_DB_PORT: '{{ .Values.global.masterDataDBPort }}'
