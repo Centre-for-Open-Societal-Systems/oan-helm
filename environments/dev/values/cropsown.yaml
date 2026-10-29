@@ -227,6 +227,10 @@ registry:
     istio:
       virtualservice:
         gateway: istio-system/development
+  dbSeed:
+    # Sample farmers and their records from the pinned openg2p-data checkout,
+    # entered through intake and approved at both stages (db-seed hook).
+    loadSampleData: true
 dashboardApi:
   auth:
     enabled: true
