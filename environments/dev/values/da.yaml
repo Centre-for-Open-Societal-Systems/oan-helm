@@ -89,6 +89,8 @@ registry:
       KEYCLOAK_BASE_URL: https://keycloak.development.oanstaging.com
       REGISTRY_STAFF_PORTAL_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CORE_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      DA_AWE_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
+      DA_AWE_CLIENT_ID: '{{ .Release.Name }}-staff-portal'
     istio:
       virtualservice:
         gateway: istio-system/development
@@ -96,6 +98,11 @@ registry:
       gateway:
         host: staff-da-registry.development.oanstaging.com
     hostname: staff-da-registry.development.oanstaging.com
+    envVarsFrom:
+      DA_AWE_CLIENT_SECRET:
+        secretKeyRef:
+          name: '{{ .Release.Name }}-staff-portal'
+          key: client_secret
   partnerApi:
     envVars:
       REGISTRY_PARTNER_API_KEYMANAGER_API_BASE_URL: http://commons-services-keymanager.commons.svc.cluster.local/v1/keymanager
@@ -112,6 +119,9 @@ registry:
       KEYCLOAK_BASE_URL: https://keycloak.development.oanstaging.com
       REGISTRY_PARTNER_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_PARTNER_API_DCI_EXPRESSION_ALLOWED_FIELDS: '["functional_record_id","first_name","middle_name","last_name","given_name","gender","birth_date","foundational_id","record_name","record_status","search_text","marital_status","income_level","education_level","residency_status","disability_status","displacement_status","region_name","zone_name","woreda_name","kebele_name","geo_lowest_level_value_id","position","specialisation","upstream_reference","region_code","zone_code","woreda_code","last_approved_at"]'
+      DA_AWE_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
+      DA_AWE_CLIENT_ID: '{{ .Release.Name }}-staff-portal'
+      REGISTRY_PARTNER_API_WEBSUB_BASE_URL: http://commons-services-websub.commons.svc.cluster.local
     istio:
       virtualservice:
         gateway: istio-system/development
@@ -119,6 +129,11 @@ registry:
       gateway:
         host: partner-da-registry.development.oanstaging.com
     hostname: partner-da-registry.development.oanstaging.com
+    envVarsFrom:
+      DA_AWE_CLIENT_SECRET:
+        secretKeyRef:
+          name: '{{ .Release.Name }}-staff-portal'
+          key: client_secret
   celeryWorker:
     envVars:
       REGISTRY_CELERY_WORKERS_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
@@ -135,6 +150,14 @@ registry:
       NOTIFICATION_ENABLED: 'false'
       NOTIFICATION_PROVIDER_URL: ''
       REGISTRY_CELERY_WORKERS_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      DA_AWE_TOKEN_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
+      DA_AWE_CLIENT_ID: '{{ .Release.Name }}-staff-portal'
+      REGISTRY_CELERY_WORKERS_WEBSUB_BASE_URL: http://commons-services-websub.commons.svc.cluster.local
+    envVarsFrom:
+      DA_AWE_CLIENT_SECRET:
+        secretKeyRef:
+          name: '{{ .Release.Name }}-staff-portal'
+          key: client_secret
   celeryBeat:
     envVars:
       COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
