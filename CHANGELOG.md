@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-10-29
 
+### openg2p-livestock-registry 1.0.0-dev.19
+
+Previous version: 1.0.0-dev.18.
+
+- Run the Livestock schema and data migrations as an upgrade hook (#50) (9ab4814)
+
+## 2026-10-29
+
 ### openg2p-da-registry 1.0.0-dev.20
 
 Previous version: 1.0.0-dev.19.
