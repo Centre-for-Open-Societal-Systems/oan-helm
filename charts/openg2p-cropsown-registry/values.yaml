@@ -222,6 +222,27 @@ registry:
     istio:
       virtualservice:
         gateway: istio-system/development
+# Sample data from openg2p-data (templates/sample-data.yaml). Off by default;
+# only a development deploy turns it on. The sample staff users sign in through
+# staff IAM, so its public URL is required.
+sampleData:
+  enabled: false
+  staffIamUrl: ''
+  staffApiUrl: ''
+  submitUser: alex.carter
+  approver1: alex.carter
+  approver2: nina.patel
+  password: ''
+  approveTimeoutSeconds: 300
+  ingestTimeoutSeconds: 300
+  backoffLimit: 0
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 512Mi
+
 reporting:
   db:
     host: ''

@@ -53,3 +53,13 @@ and read-only files, never by values carrying private material:
 `environments/dev/values/livestock.yaml` is the New Dev wiring. The extension's
 deployment guard (`ci/refactor/deployment_guard.py` in the registry repository)
 checks the rendered workloads for exactly this shape before every deploy.
+
+## Sample data
+
+`sampleData.enabled=true` (off by default; development deploys only) adds a
+post-install/post-upgrade Job that runs this registry's sample loader from its
+db-seed image after the db-seed Job. It enters the openg2p-data sample records
+through the staff API and approves each at stage 1 (`sampleData.approver1`) and
+stage 2 (`sampleData.approver2`); the staff users sign in through staff IAM, so
+`sampleData.staffIamUrl` and `sampleData.password` are required. Re-running it
+skips records already present.
