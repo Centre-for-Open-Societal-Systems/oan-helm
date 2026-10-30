@@ -4,8 +4,7 @@ Staging uses the base domain `oanstaging.com`. Each service host is the New Dev 
 (`<service>.development.oanstaging.com`) without the `.development` label. The values are in
 `environments/staging/values/` (`farmer.yaml`, `commons-services.yaml`); the Gateway, proxy and
 host list are in `environments/staging/ingress/` and `environments/staging/endpoints.yaml`.
-Anything marked `# staging: confirm` in those files copies the New Dev value because staging
-is not decided yet (see [Open points](#open-points)).
+Anything marked `# staging: confirm` is not yet decided (see [Open points](#open-points)).
 
 ## Hosts
 
@@ -55,6 +54,23 @@ The Keycloak client redirect URIs are applied when a client is first created (`k
 client that exists). On a rebuilt Commons that is correct; on a Keycloak that already has clients,
 change redirect URIs in Keycloak.
 
+## Cutover and rollback
+
+The farmer values use the final public hosts (`farmer-registry.oanstaging.com`,
+`connector-farmer-registry.oanstaging.com`). The legacy `far/internal` gateway serves them today, so the
+fresh `farmer` install is applied only in the runbook's cutover step: a cluster admin exports the `far`
+VirtualServices for those two hosts (`kubectl get vs -n far -o yaml`) as the rollback artefact, deletes
+them, then installs `farmer`. Rollback is re-applying the export.
+
+The Commons hosts are taken over by the Option C rebuild by design: keycloak, staff-iam, staff-portal,
+partner-management, iam-staff-ui, master-data-ui, consent-manager, and odk-central (from the retired VM).
+
+## Out of scope here
+
+Hosts in `endpoints.yaml` and the Keycloak redirects but not in the table above are promoted later:
+crop-registry, livestock-registry, da-registry, the idgenerator-, partner- and staff- hosts for crop, da
+and livestock, and the cropsown and livestock connector hosts.
+
 ## Chart prerequisite
 
 Aggregation API, consent partner portal and the connector Keycloak clients take their hosts from
@@ -96,10 +112,8 @@ the seed metadata checks (`90_checks.sql`, `check_native_metadata.py`) against t
 
 ## Open points
 
-- Gateway: all `gateway:` keys copy `istio-system/development` from New Dev. Staging's existing gateways
-  are `<namespace>/internal` and `public-oanstaging`; decide the name for the rebuilt Commons and replace
-  every `# staging: confirm` gateway line (5 in `farmer.yaml`, 20 in `commons-services.yaml`).
-- Master Data geography: staging loads the ETH-OAN geography from the pack
+- Gateway: all public VirtualServices use `istio-system/staging`, defined in `environments/staging/ingress/gateway.yaml` (hosts `*.oanstaging.com`).
+- Master Data geography: `master-data.geoSeed.load.geo: true` is for a fresh Commons only; set it false for any upgrade of an existing one.
   (`master-data.geoSeed.load.geo: true`); New Dev keeps it off to protect a migrated catalogue.
 - eSignet mock for Fayda verification is kept as on New Dev; confirm that is wanted on staging.
 - Server address in `endpoints.yaml`, the TLS certificate path in `ingress/nginx.conf` and the Gateway

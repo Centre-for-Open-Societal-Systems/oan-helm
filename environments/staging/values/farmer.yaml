@@ -60,7 +60,7 @@ registry:
       istio:
         virtualservice:
           host: '{{ tpl .Values.global.idGeneratorHostname $ }}'
-          gateway: istio-system/development  # staging: confirm
+          gateway: istio-system/staging
         gateway:
           host: '{{ tpl .Values.global.idGeneratorHostname $ }}'
   staffUi:
@@ -85,7 +85,7 @@ registry:
     istio:
       virtualservice:
         host: farmer-registry.oanstaging.com
-        gateway: istio-system/development  # staging: confirm
+        gateway: istio-system/staging
       gateway:
         host: farmer-registry.oanstaging.com
   staffApi:
@@ -114,7 +114,7 @@ registry:
     istio:
       virtualservice:
         host: staff-farmer.oanstaging.com
-        gateway: istio-system/development  # staging: confirm
+        gateway: istio-system/staging
       gateway:
         host: staff-farmer.oanstaging.com
   partnerApi:
@@ -137,7 +137,7 @@ registry:
     istio:
       virtualservice:
         host: partner-farmer.oanstaging.com
-        gateway: istio-system/development  # staging: confirm
+        gateway: istio-system/staging
       gateway:
         host: partner-farmer.oanstaging.com
   celeryWorker:
@@ -169,7 +169,7 @@ registry:
   beneApi:
     istio:
       virtualservice:
-        gateway: istio-system/development  # staging: confirm
+        gateway: istio-system/staging
 analytics:
   dashboards:
     superset:

@@ -1,9 +1,8 @@
-# Staging counterpart of the dev Gateway. Environment-owned, installed once on the rebuilt Commons cluster.
-# staging: confirm the Gateway name and namespace; staging today uses commons/internal and public-oanstaging.
+# Staging Gateway. Environment-owned, installed once on the rebuilt Commons cluster.
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
-  name: development  # staging: confirm (the name the staging values reference)
+  name: staging
   namespace: istio-system
   labels:
     app.kubernetes.io/part-of: oan-staging-ingress

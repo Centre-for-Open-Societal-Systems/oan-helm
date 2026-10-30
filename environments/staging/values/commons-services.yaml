@@ -5,7 +5,7 @@
 # New Dev. Hosts that the chart derives from global.baseDomain (aggregation API,
 # consent partner portal, registry connector Keycloak clients) need the chart
 # release that carries that derivation.
-# Lines marked "staging: confirm" copy the New Dev value where staging is not yet known.
+# Lines marked "staging: confirm" are not yet decided for staging.
 global:
   baseDomain: oanstaging.com
   keycloakBaseUrl: https://keycloak.oanstaging.com
@@ -34,12 +34,12 @@ superset:
   enabled: false
   istio:
     virtualservice:
-      gateway: istio-system/development  # staging: confirm
+      gateway: istio-system/staging
 openg2p-inji-certify:
   enabled: false
   istio:
     virtualservice:
-      gateway: istio-system/development  # staging: confirm
+      gateway: istio-system/staging
 master-data:
   global:
     masterDataHostname: master-data.oanstaging.com
@@ -47,12 +47,16 @@ master-data:
   # Fresh Commons: the ETH-OAN pack (chart default countryPack) supplies the geography
   # and the code lists, and is published at once. Staging has no migrated catalogue
   # to protect, so geo loads too. Sample data stays off.
+  # geo: true is for a FRESH Commons install only. Set it false for any upgrade of an existing
+  # Commons: the pack's level ids differ from a migrated catalogue, so loading it fails on the
+  # unique level mnemonic and stops the upgrade at this hook (the failure that left rev 12 FAILED).
+  # New Dev keeps geo false for that reason.
   geoSeed:
     enabled: true
     publishInitial: true
     autoPublish: true
     load:
-      geo: true  # staging: confirm (New Dev keeps geo false for its migrated catalogue)
+      geo: true
       codelists: true
       samples: false
   masterDataUi:
@@ -61,32 +65,32 @@ master-data:
       COOKIE_DOMAIN: .oanstaging.com
     istio:
       virtualservice:
-        gateway: istio-system/development  # staging: confirm
+        gateway: istio-system/staging
   masterDataAPI:
     istio:
       virtualservice:
-        gateway: istio-system/development  # staging: confirm
+        gateway: istio-system/staging
 odk-central:
   backend:
     envVars:
       OIDC_ISSUER_URL: https://keycloak.oanstaging.com/realms/staff
   istio:
     virtualservice:
-      gateway: istio-system/development  # staging: confirm
+      gateway: istio-system/staging
 esignet:
   hostname: esignet.oanstaging.com
   istio:
     virtualservice:
-      gateway: istio-system/development  # staging: confirm
+      gateway: istio-system/staging
   oidcUi:
     istio:
       virtualservice:
-        gateway: istio-system/development  # staging: confirm
+        gateway: istio-system/staging
 mock-identity-system:
   hostname: esignet.oanstaging.com
   istio:
     virtualservice:
-      gateway: istio-system/development  # staging: confirm
+      gateway: istio-system/staging
 openg2p-iam-service:
   global:
     keycloakApplicationUrl: https://keycloak.oanstaging.com
@@ -105,15 +109,15 @@ openg2p-iam-service:
       BACKEND_API_URL: https://staff-iam.oanstaging.com
     istio:
       virtualservice:
-        gateway: istio-system/development  # staging: confirm
+        gateway: istio-system/staging
   iamStaffPortalApi:
     istio:
       virtualservice:
-        gateway: istio-system/development  # staging: confirm
+        gateway: istio-system/staging
   iamAgentPortalApi:
     istio:
       virtualservice:
-        gateway: istio-system/development  # staging: confirm
+        gateway: istio-system/staging
 openg2p-staff-portal-ui:
   staffPortalUi:
     envVars:
@@ -121,14 +125,14 @@ openg2p-staff-portal-ui:
       IAM_URL: https://staff-iam.oanstaging.com
     istio:
       virtualservice:
-        gateway: istio-system/development  # staging: confirm
+        gateway: istio-system/staging
 openg2p-audit-manager:
   global:
     auditManagerHostname: auditmanager.oanstaging.com
   auditManager:
     istio:
       virtualservice:
-        gateway: istio-system/development  # staging: confirm
+        gateway: istio-system/staging
 partner-management:
   global:
     staffPortalUiHostname: partner-management.oanstaging.com
@@ -139,15 +143,15 @@ partner-management:
       KEYCLOAK_LOGOUT_URL: https://keycloak.oanstaging.com/realms/staff/protocol/openid-connect/logout
     istio:
       virtualservice:
-        gateway: istio-system/development  # staging: confirm
+        gateway: istio-system/staging
   staffPortalApi:
     istio:
       virtualservice:
-        gateway: istio-system/development  # staging: confirm
+        gateway: istio-system/staging
   partnerApi:
     istio:
       virtualservice:
-        gateway: istio-system/development  # staging: confirm
+        gateway: istio-system/staging
 openg2p-consent-manager:
   global:
     consentManagerHostname: consent-manager.oanstaging.com
@@ -158,19 +162,19 @@ openg2p-consent-manager:
       CONSENT_MANAGER_AWE_CALLBACK_URL: http://{{ .Release.Name }}-cm-api.{{ .Release.Namespace }}.svc.cluster.local/consent/v1/awe/webhooks/decision
     istio:
       virtualservice:
-        gateway: istio-system/development  # staging: confirm
+        gateway: istio-system/staging
   ui:
     istio:
       virtualservice:
-        gateway: istio-system/development  # staging: confirm
+        gateway: istio-system/staging
 keymanager:
   istio:
     virtualservice:
-      gateway: istio-system/development  # staging: confirm
+      gateway: istio-system/staging
 openg2p-awe:
   istio:
     virtualservice:
-      gateway: istio-system/development  # staging: confirm
+      gateway: istio-system/staging
 # Services the Farmer registry, ODK intake and enrichment need. These equal the chart
 # defaults; they are stated so a later default change cannot switch them off on staging.
 websub:
