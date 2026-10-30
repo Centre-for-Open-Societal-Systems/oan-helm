@@ -5,7 +5,7 @@
 {{- end }}
 {{- $name := $portal.nameOverride | default (printf "%s-cm-partner-portal" .Release.Name) -}}
 {{- $api := $portal.staffApiServiceName | default (printf "%s-cm-api" .Release.Name) -}}
-{{- $config := dict "apiBaseUrl" $portal.apiBaseUrl "compositeUrl" $portal.compositeUrl "keycloak" (dict "url" (required "partner portal requires a public Keycloak URL" $portal.keycloak.url) "realm" $portal.keycloak.realm "clientId" $portal.keycloak.clientId) -}}
+{{- $config := dict "apiBaseUrl" $portal.apiBaseUrl "compositeUrl" $portal.compositeUrl "keycloak" (dict "url" (tpl (required "partner portal requires a public Keycloak URL" $portal.keycloak.url) $) "realm" $portal.keycloak.realm "clientId" $portal.keycloak.clientId) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -114,7 +114,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   hosts:
-    - {{ required "partner portal requires virtualService.host" $portal.virtualService.host | quote }}
+    - {{ tpl (required "partner portal requires virtualService.host" $portal.virtualService.host) $ | quote }}
   gateways:
     - {{ $portal.virtualService.gateway | quote }}
   http:
@@ -125,7 +125,7 @@ spec:
       headers:
         request:
           set:
-            x-forwarded-host: {{ $portal.virtualService.host | quote }}
+            x-forwarded-host: {{ tpl $portal.virtualService.host $ | quote }}
             x-forwarded-proto: https
       route:
         - destination:

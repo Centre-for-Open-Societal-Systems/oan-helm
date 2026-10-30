@@ -40,7 +40,7 @@ spec:
               containerPort: {{ $component.containerPort }}
           {{- with $component.env }}
           env:
-            {{- toYaml . | nindent 12 }}
+            {{- tpl (toYaml .) $ | nindent 12 }}
           {{- end }}
           {{- with $component.envFrom }}
           envFrom:
@@ -91,7 +91,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   hosts:
-    - {{ required "aggregationApi.virtualService.host is required" $component.virtualService.host | quote }}
+    - {{ tpl (required "aggregationApi.virtualService.host is required" $component.virtualService.host) $ | quote }}
   gateways:
     - {{ required "aggregationApi.virtualService.gateway is required" $component.virtualService.gateway | quote }}
   http:

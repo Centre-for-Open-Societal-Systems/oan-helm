@@ -1,3 +1,6 @@
+# Istio gateways: charts pass `istio.virtualservice.gateway` through untouched (no tpl),
+# so it cannot follow a global. An environment that does not use istio-system/development
+# sets every `gateway:` below (about 30 keys, listed in environments/dev/values/commons-services.yaml).
 websub:
   enabled: true
   existingSecret: commons-websub-encryption
@@ -49,11 +52,11 @@ websubTopicProvisioning:
   - consolidated-websub-subscribers
 global:
   baseDomain: development.oanstaging.com
-  keycloakBaseUrl: https://keycloak.development.oanstaging.com
+  keycloakBaseUrl: 'https://keycloak.{{ .Values.global.baseDomain }}'
   keycloakInternalUrl: http://commons-keycloak.commons.svc.cluster.local:80
   keycloakRealm: staff
   keycloakIssuerUrl: http://commons-keycloak.commons.svc.cluster.local:80/realms/staff
-  keycloakExternalIssuerUrl: https://keycloak.development.oanstaging.com/realms/staff
+  keycloakExternalIssuerUrl: 'https://keycloak.{{ .Values.global.baseDomain }}/realms/staff'
   postgresqlHost: commons-postgresql
   postgresqlSecret: commons-postgresql
   postgresqlSecretKey: postgres-password
@@ -65,40 +68,40 @@ global:
   kafkaInstallationName: commons-kafka
   softhsmInstallationName: commons-softhsm
   supersetHostname: ''
-  odkHostname: odk-central.development.oanstaging.com
-  iamHostname: staff-iam.development.oanstaging.com
-  staffPortalApiHostname: staff-iam.development.oanstaging.com
-  agentPortalApiHostname: agent-iam.development.oanstaging.com
+  odkHostname: 'odk-central.{{ .Values.global.baseDomain }}'
+  iamHostname: 'staff-iam.{{ .Values.global.baseDomain }}'
+  staffPortalApiHostname: 'staff-iam.{{ .Values.global.baseDomain }}'
+  agentPortalApiHostname: 'agent-iam.{{ .Values.global.baseDomain }}'
   agentPortalHostname: ''
   certifyHostname: ''
-  staffPortalHostname: staff-portal.development.oanstaging.com
-  staffPortalCookieDomain: .development.oanstaging.com
+  staffPortalHostname: 'staff-portal.{{ .Values.global.baseDomain }}'
+  staffPortalCookieDomain: '.{{ .Values.global.baseDomain }}'
   iamServiceUrl: http://commons-services-iam-staff-portal-api.commons.svc.cluster.local
   keycloakAdminSecret: commons-keycloak
   keycloakAdminSecretKey: admin-password
   keycloakAdminUser: admin
-  aweHostname: awe.development.oanstaging.com
+  aweHostname: 'awe.{{ .Values.global.baseDomain }}'
   aweDB: awe
   aweDBPort: 5432
   aweDBUser: awe_user
   aweDBSecret: awe-db-user
   aweDBUserPasswordKey: awe-db-user-password
-  authCookieDomain: .development.oanstaging.com
-  cookieDomain: .development.oanstaging.com
-  iamUrl: https://staff-iam.development.oanstaging.com
-  masterDataHostname: master-data.development.oanstaging.com
-  masterDataUiHostname: master-data-ui.development.oanstaging.com
+  authCookieDomain: '.{{ .Values.global.baseDomain }}'
+  cookieDomain: '.{{ .Values.global.baseDomain }}'
+  iamUrl: 'https://staff-iam.{{ .Values.global.baseDomain }}'
+  masterDataHostname: 'master-data.{{ .Values.global.baseDomain }}'
+  masterDataUiHostname: 'master-data-ui.{{ .Values.global.baseDomain }}'
   masterDataApiUrl: http://commons-services-master-data-api.commons.svc.cluster.local
   aweBaseUrl: http://commons-services-awe.commons.svc.cluster.local
 master-data:
   enabled: true
   global:
-    masterDataHostname: master-data.development.oanstaging.com
+    masterDataHostname: 'master-data.{{ .Values.global.baseDomain }}'
     masterDataDB: master_data
     masterDataDBUser: master_data_user
     masterDataDBSecret: master-data-db-user
     masterDataDBUserPasswordKey: master-data-db-user-password
-    masterDataUiHostname: master-data-ui.development.oanstaging.com
+    masterDataUiHostname: 'master-data-ui.{{ .Values.global.baseDomain }}'
   geoSeed:
     countryPack: ETH-OAN
     load:
@@ -124,10 +127,10 @@ master-data:
   iamRegister:
     runAsHook: false
   masterDataUi:
-    iamPublicUrl: https://staff-iam.development.oanstaging.com
+    iamPublicUrl: 'https://staff-iam.{{ .Values.global.baseDomain }}'
     envVars:
-      COOKIE_DOMAIN: .development.oanstaging.com
-      IAM_URL: https://staff-iam.development.oanstaging.com
+      COOKIE_DOMAIN: '.{{ .Values.global.baseDomain }}'
+      IAM_URL: 'https://staff-iam.{{ .Values.global.baseDomain }}'
     istio:
       virtualservice:
         gateway: istio-system/development
@@ -195,7 +198,7 @@ odk-central:
         \  echo \"Waiting for MinIO...\"\n  sleep 2\ndone\n"
     envVars:
       OIDC_ENABLED: true
-      OIDC_ISSUER_URL: https://keycloak.development.oanstaging.com/realms/staff
+      OIDC_ISSUER_URL: 'https://keycloak.{{ .Values.global.baseDomain }}/realms/staff'
       OIDC_CLIENT_ID: '{{ tpl .Values.oidcClientId $ }}'
     envVarsFrom:
       DB_PASSWORD:
@@ -405,7 +408,7 @@ superset:
         credentialName: ''
 esignet:
   enabled: true
-  hostname: esignet.development.oanstaging.com
+  hostname: 'esignet.{{ .Values.global.baseDomain }}'
   resources:
     requests:
       cpu: 100m
@@ -451,7 +454,7 @@ esignet:
         gateway: istio-system/development
 mock-identity-system:
   enabled: true
-  hostname: esignet.development.oanstaging.com
+  hostname: 'esignet.{{ .Values.global.baseDomain }}'
   resources:
     requests:
       cpu: 50m
@@ -543,16 +546,16 @@ openg2p-iam-service:
     iamDBUser: iam_user
     iamDBSecret: iam
     iamDBUserPasswordKey: iam-db-user
-    staffPortalDefaultRedirectUri: https://staff-portal.development.oanstaging.com
+    staffPortalDefaultRedirectUri: 'https://staff-portal.{{ .Values.global.baseDomain }}'
     agentPortalDefaultRedirectUri: ''
-    keycloakApplicationUrl: https://keycloak.development.oanstaging.com
-    registryApplicationUrl: https://farmer-registry.development.oanstaging.com
-    minioApplicationUrl: https://minio-console.development.oanstaging.com
+    keycloakApplicationUrl: 'https://keycloak.{{ .Values.global.baseDomain }}'
+    registryApplicationUrl: 'https://farmer-registry.{{ .Values.global.baseDomain }}'
+    minioApplicationUrl: 'https://minio-console.{{ .Values.global.baseDomain }}'
     supersetApplicationUrl: ''
-    iamStaffUiApplicationUrl: https://iam-staff-ui.development.oanstaging.com
+    iamStaffUiApplicationUrl: 'https://iam-staff-ui.{{ .Values.global.baseDomain }}'
     # Staff portal tile target: the Master Data UI, not the API host.
-    masterDataApplicationUrl: https://master-data-ui.development.oanstaging.com
-    aweApplicationUrl: https://awe.development.oanstaging.com
+    masterDataApplicationUrl: 'https://master-data-ui.{{ .Values.global.baseDomain }}'
+    aweApplicationUrl: 'https://awe.{{ .Values.global.baseDomain }}'
   postgres-init:
     enabled: true
     nameOverride: iam-pg-init
@@ -567,10 +570,10 @@ openg2p-iam-service:
       existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey
         $ }}'
   iamStaffUi:
-    hostname: iam-staff-ui.development.oanstaging.com
+    hostname: 'iam-staff-ui.{{ .Values.global.baseDomain }}'
     envVars:
-      COOKIE_DOMAIN: .development.oanstaging.com
-      BACKEND_API_URL: https://staff-iam.development.oanstaging.com
+      COOKIE_DOMAIN: '.{{ .Values.global.baseDomain }}'
+      BACKEND_API_URL: 'https://staff-iam.{{ .Values.global.baseDomain }}'
       MASTERDATA_API_URL: http://commons-services-master-data-api
     istio:
       virtualservice:
@@ -578,7 +581,7 @@ openg2p-iam-service:
 openg2p-audit-manager:
   enabled: true
   global:
-    auditManagerHostname: auditmanager.development.oanstaging.com
+    auditManagerHostname: 'auditmanager.{{ .Values.global.baseDomain }}'
     postgresqlHost: '{{ tpl .Values.global.postgresqlHost $ }}'
     auditManagerDB: audit_manager
     auditManagerDBUser: audit_manager_user
@@ -634,8 +637,8 @@ openg2p-staff-portal-ui:
         cpu: 50m
         memory: 64Mi
     envVars:
-      COOKIE_DOMAIN: .development.oanstaging.com
-      IAM_URL: https://staff-iam.development.oanstaging.com
+      COOKIE_DOMAIN: '.{{ .Values.global.baseDomain }}'
+      IAM_URL: 'https://staff-iam.{{ .Values.global.baseDomain }}'
     istio:
       virtualservice:
         gateway: istio-system/development
@@ -661,10 +664,10 @@ partner-management:
     pmDBUser: partner_management_user
     pmDBSecret: partner-management-db
     pmDBUserPasswordKey: partner-management-db-user
-    staffPortalUiHostname: partner-management.development.oanstaging.com
+    staffPortalUiHostname: 'partner-management.{{ .Values.global.baseDomain }}'
     staffPortalApiHostname: partner-management-staff-portal-api.{{ tpl .Values.global.baseDomain
       $ }}
-    partnerApiHostname: partner-management-partner-api.development.oanstaging.com
+    partnerApiHostname: 'partner-management-partner-api.{{ .Values.global.baseDomain }}'
     cookieDomain: .{{ tpl .Values.global.baseDomain $ }}
   staffPortalApi:
     nameOverride: pm-staff-portal-api
@@ -679,7 +682,7 @@ partner-management:
         }}/protocol/openid-connect/certs"]'
       # Accept staff tokens minted through the public host and the in-cluster
       # host; each carries its own iss.
-      PARTNER_MANAGER_AUTH_DEFAULT_ISSUERS: '["https://keycloak.development.oanstaging.com/realms/staff","http://commons-keycloak:80/realms/staff"]'
+      PARTNER_MANAGER_AUTH_DEFAULT_ISSUERS: '["https://keycloak.{{ .Values.global.baseDomain }}/realms/staff","http://commons-keycloak:80/realms/staff"]'
       PARTNER_MANAGER_AUTH_DEFAULT_JWKS_URLS: '["http://commons-keycloak:80/realms/staff/protocol/openid-connect/certs","http://commons-keycloak:80/realms/staff/protocol/openid-connect/certs"]'
   partnerApi:
     nameOverride: pm-partner-api
@@ -695,14 +698,14 @@ partner-management:
         gateway: istio-system/development
     envVars:
       STAFF_PORTAL_API_URL: http://{{ .Release.Name }}-pm-staff-portal-api
-      IAM_URL: https://staff-iam.development.oanstaging.com
-      KEYCLOAK_LOGOUT_URL: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/logout
+      IAM_URL: 'https://staff-iam.{{ .Values.global.baseDomain }}'
+      KEYCLOAK_LOGOUT_URL: 'https://keycloak.{{ .Values.global.baseDomain }}/realms/staff/protocol/openid-connect/logout'
       # Dev session-cookie guard: forward only this issuer's auth cookies, so a
       # cookie from another realm on the shared domain cannot break the login.
       # Generated from scripts/partner-session-cookie-guard.cjs by
       # partner_session_guard.node_options(); a unit test keeps them in sync.
       OAN_SESSION_COOKIE_GUARD: '1'
-      OAN_SESSION_EXPECTED_ISSUER: https://keycloak.development.oanstaging.com/realms/staff
+      OAN_SESSION_EXPECTED_ISSUER: 'https://keycloak.{{ .Values.global.baseDomain }}/realms/staff'
       NODE_OPTIONS: --import=data:text/javascript;base64,aW1wb3J0IGh0dHAgZnJvbSAibm9kZTpodHRwIjsKY29uc3QgbW9kdWxlPXtleHBvcnRzOnt9fTsKbmV3IEZ1bmN0aW9uKCJyZXF1aXJlIiwibW9kdWxlIiwiZXhwb3J0cyIsIid1c2Ugc3RyaWN0JztcblxuLy8gU2VsZWN0IGNvb2tpZXMgZm9yIHRoaXMgcG9ydGFsJ3MgaXNzdWVyIGJlZm9yZSBOZXh0LmpzIGNvbGxhcHNlcyBkdXBsaWNhdGVcbi8vIGNvb2tpZSBuYW1lcy4gVGhpcyBpcyByb3V0aW5nIG9ubHk6IElBTSBzdGlsbCB2ZXJpZmllcyBzaWduYXR1cmVzIGFuZCBjbGFpbXMuXG5jb25zdCBBVVRIX05BTUVTID0gbmV3IFNldChbJ1gtQWNjZXNzLVRva2VuJywgJ1gtSUQtVG9rZW4nXSk7XG5cbmZ1bmN0aW9uIHRva2VuSXNzdWVyKHZhbHVlKSB7XG4gIHRyeSB7XG4gICAgY29uc3QgcmF3ID0gZGVjb2RlVVJJQ29tcG9uZW50KHZhbHVlLnJlcGxhY2UoL15cInxcIiQvZywgJycpKTtcbiAgICBjb25zdCBwYXJ0cyA9IHJhdy5zcGxpdCgnLicpO1xuICAgIGlmIChwYXJ0cy5sZW5ndGggIT09IDMgfHwgcmF3Lmxlbmd0aCA+IDMyNzY4KSByZXR1cm4gdW5kZWZpbmVkO1xuICAgIGNvbnN0IHBheWxvYWQgPSBKU09OLnBhcnNlKEJ1ZmZlci5mcm9tKHBhcnRzWzFdLCAnYmFzZTY0dXJsJykudG9TdHJpbmcoJ3V0ZjgnKSk7XG4gICAgcmV0dXJuIHR5cGVvZiBwYXlsb2FkLmlzcyA9PT0gJ3N0cmluZycgPyBwYXlsb2FkLmlzcyA6IHVuZGVmaW5lZDtcbiAgfSBjYXRjaCB7XG4gICAgcmV0dXJuIHVuZGVmaW5lZDtcbiAgfVxufVxuXG5mdW5jdGlvbiBmaWx0ZXJBdXRoQ29va2llcyhoZWFkZXIsIGlzc3Vlcikge1xuICBpZiAoIWhlYWRlcikgcmV0dXJuIGhlYWRlcjtcbiAgY29uc3Qgb3RoZXJzID0gW107XG4gIGNvbnN0IHNlbGVjdGVkID0gbmV3IE1hcCgpO1xuICBsZXQgaGFkQWNjZXNzVG9rZW4gPSBmYWxzZTtcbiAgZm9yIChjb25zdCBwYXJ0IG9mIGhlYWRlci5zcGxpdCgnOycpKSB7XG4gICAgY29uc3QgY29va2llID0gcGFydC50cmltKCk7XG4gICAgY29uc3Qgc2VwYXJhdG9yID0gY29va2llLmluZGV4T2YoJz0nKTtcbiAgICBpZiAoc2VwYXJhdG9yIDwgMSkgY29udGludWU7XG4gICAgY29uc3QgbmFtZSA9IGNvb2tpZS5zbGljZSgwLCBzZXBhcmF0b3IpLnRyaW0oKTtcbiAgICBpZiAoIUFVVEhfTkFNRVMuaGFzKG5hbWUpKSB7XG4gICAgICBvdGhlcnMucHVzaChjb29raWUpO1xuICAgICAgY29udGludWU7XG4gICAgfVxuICAgIGlmIChuYW1lID09PSAnWC1BY2Nlc3MtVG9rZW4nKSBoYWRBY2Nlc3NUb2tlbiA9IHRydWU7XG4gICAgaWYgKHRva2VuSXNzdWVyKGNvb2tpZS5zbGljZShzZXBhcmF0b3IgKyAxKS50cmltKCkpID09PSBpc3N1ZXIpIHtcbiAgICAgIHNlbGVjdGVkLnNldChuYW1lLCBjb29raWUpO1xuICAgIH1cbiAgfVxuICAvLyBBIGZvcmVpZ24gYWNjZXNzIGNvb2tpZSBtdXN0IHN0YXJ0IGEgZnJlc2ggbG9naW4sIHJhdGhlciB0aGFuIHRyaWdnZXIgdGhlXG4gIC8vIFVJJ3MgXCJvdmVyc2l6ZWQgdG9rZW5cIiBicmFuY2ggbWVyZWx5IGJlY2F1c2UgYW4gSUQgY29va2llIHJlbWFpbnMuXG4gIGlmIChoYWRBY2Nlc3NUb2tlbiAmJiAhc2VsZWN0ZWQuaGFzKCdYLUFjY2Vzcy1Ub2tlbicpKSBzZWxlY3RlZC5kZWxldGUoJ1gtSUQtVG9rZW4nKTtcbiAgcmV0dXJuIFsuLi5vdGhlcnMsIC4uLnNlbGVjdGVkLnZhbHVlcygpXS5qb2luKCc7ICcpO1xufVxuXG5mdW5jdGlvbiBpbnN0YWxsKGlzc3Vlcikge1xuICBjb25zdCB1cmwgPSBuZXcgVVJMKGlzc3Vlcik7XG4gIGlmICghWydodHRwOicsICdodHRwczonXS5pbmNsdWRlcyh1cmwucHJvdG9jb2wpIHx8IHVybC5zZWFyY2ggfHwgdXJsLmhhc2ggfHwgdXJsLnVzZXJuYW1lIHx8IHVybC5wYXNzd29yZCkge1xuICAgIHRocm93IG5ldyBFcnJvcignU2Vzc2lvbiBjb29raWUgZ3VhcmQgcmVxdWlyZXMgYSB2YWxpZCBleHBlY3RlZCBpc3N1ZXIgVVJMJyk7XG4gIH1cbiAgY29uc3QgaHR0cCA9IHJlcXVpcmUoJ25vZGU6aHR0cCcpO1xuICBjb25zdCBpbnN0YWxsZWQgPSBTeW1ib2wuZm9yKCdvYW4ucGFydG5lci1zZXNzaW9uLWNvb2tpZS1ndWFyZCcpO1xuICBpZiAoaHR0cC5TZXJ2ZXIucHJvdG90eXBlW2luc3RhbGxlZF0pIHJldHVybjtcbiAgY29uc3QgZW1pdCA9IGh0dHAuU2VydmVyLnByb3RvdHlwZS5lbWl0O1xuICBodHRwLlNlcnZlci5wcm90b3R5cGUuZW1pdCA9IGZ1bmN0aW9uIChldmVudCwgLi4uYXJncykge1xuICAgIGlmIChldmVudCA9PT0gJ3JlcXVlc3QnICYmIGFyZ3NbMF0/LmhlYWRlcnM/LmNvb2tpZSkge1xuICAgICAgY29uc3QgcmVxdWVzdCA9IGFyZ3NbMF07XG4gICAgICByZXF1ZXN0LmhlYWRlcnMuY29va2llID0gZmlsdGVyQXV0aENvb2tpZXMocmVxdWVzdC5oZWFkZXJzLmNvb2tpZSwgaXNzdWVyKTtcbiAgICAgIC8vIEtlZXAgdGhlIHJhdyBoZWFkZXIgY29uc2lzdGVudCBmb3IgZnJhbWV3b3JrcyB0aGF0IGluc3BlY3QgaXQgZGlyZWN0bHkuXG4gICAgICBmb3IgKGxldCBpID0gMDsgaSA8IHJlcXVlc3QucmF3SGVhZGVycy5sZW5ndGg7IGkgKz0gMikge1xuICAgICAgICBpZiAocmVxdWVzdC5yYXdIZWFkZXJzW2ldLnRvTG93ZXJDYXNlKCkgPT09ICdjb29raWUnKSByZXF1ZXN0LnJhd0hlYWRlcnNbaSArIDFdID0gcmVxdWVzdC5oZWFkZXJzLmNvb2tpZTtcbiAgICAgIH1cbiAgICB9XG4gICAgcmV0dXJuIGVtaXQuY2FsbCh0aGlzLCBldmVudCwgLi4uYXJncyk7XG4gIH07XG4gIGh0dHAuU2VydmVyLnByb3RvdHlwZVtpbnN0YWxsZWRdID0gdHJ1ZTtcbn1cblxubW9kdWxlLmV4cG9ydHMgPSB7IGZpbHRlckF1dGhDb29raWVzLCB0b2tlbklzc3VlciwgaW5zdGFsbCB9O1xuaWYgKHByb2Nlc3MuZW52Lk9BTl9TRVNTSU9OX0NPT0tJRV9HVUFSRCA9PT0gJzEnKSB7XG4gIGlmICghcHJvY2Vzcy5lbnYuT0FOX1NFU1NJT05fRVhQRUNURURfSVNTVUVSKSB0aHJvdyBuZXcgRXJyb3IoJ0V4cGVjdGVkIHNlc3Npb24gaXNzdWVyIGlzIHJlcXVpcmVkJyk7XG4gIGluc3RhbGwocHJvY2Vzcy5lbnYuT0FOX1NFU1NJT05fRVhQRUNURURfSVNTVUVSKTtcbn1cbiIpKChuYW1lKT0+e2lmKG5hbWU9PT0ibm9kZTpodHRwIilyZXR1cm4gaHR0cDt0aHJvdyBuZXcgRXJyb3IoIlVuc3VwcG9ydGVkIG1vZHVsZSAiK25hbWUpO30sbW9kdWxlLG1vZHVsZS5leHBvcnRzKTsK
   postgres-init:
     enabled: true
@@ -727,8 +730,8 @@ openg2p-consent-manager:
     consentDBUser: consent_manager_user
     consentDBSecret: consent-manager-db
     consentDBUserPasswordKey: consent-manager-db-user
-    consentManagerHostname: consent-manager.development.oanstaging.com
-    consentManagerPartnerHostname: consent-manager-partner.development.oanstaging.com
+    consentManagerHostname: 'consent-manager.{{ .Values.global.baseDomain }}'
+    consentManagerPartnerHostname: 'consent-manager-partner.{{ .Values.global.baseDomain }}'
     consentManagerBeneHostname: ''
     partnerManagementApiUrl: http://commons-services-pm-partner-api
     partnerManagementAdminApiUrl: http://commons-services-pm-staff-portal-api
@@ -753,7 +756,7 @@ openg2p-consent-manager:
       CONSENT_MANAGER_OTP_PUBLISH_ID_TYPE: FIN
       CONSENT_MANAGER_OTP_PUBLISH_PREFIX: otp/
       CONSENT_MANAGER_OTP_PUBLISH_REGION: us-east-1
-      CONSENT_MANAGER_PARTNER_AUTH_ISSUER: https://keycloak.development.oanstaging.com/realms/partner
+      CONSENT_MANAGER_PARTNER_AUTH_ISSUER: 'https://keycloak.{{ .Values.global.baseDomain }}/realms/partner'
       CONSENT_MANAGER_PARTNER_AUTH_JWKS_URL: http://commons-keycloak.commons.svc.cluster.local/realms/partner/protocol/openid-connect/certs
       CONSENT_MANAGER_PARTNER_AUTH_ROLES: '["PARTNER_OPERATOR","PARTNER_ADMIN"]'
     envVarsFrom:
@@ -893,13 +896,13 @@ keycloak-init:
         name: Registry Connector UI
         publicClient: true
         redirectUris:
-        - https://connector-farmer-registry.development.oanstaging.com/*
-        - https://connector-cropsown-registry.development.oanstaging.com/*
-        - https://connector-livestock-registry.development.oanstaging.com/*
+        - 'https://connector-farmer-registry.{{ .Values.global.baseDomain }}/*'
+        - 'https://connector-cropsown-registry.{{ .Values.global.baseDomain }}/*'
+        - 'https://connector-livestock-registry.{{ .Values.global.baseDomain }}/*'
         webOrigins:
-        - https://connector-farmer-registry.development.oanstaging.com
-        - https://connector-cropsown-registry.development.oanstaging.com
-        - https://connector-livestock-registry.development.oanstaging.com
+        - 'https://connector-farmer-registry.{{ .Values.global.baseDomain }}'
+        - 'https://connector-cropsown-registry.{{ .Values.global.baseDomain }}'
+        - 'https://connector-livestock-registry.{{ .Values.global.baseDomain }}'
       users:
       - username: admin
         email: admin@your.domain.com
@@ -930,7 +933,7 @@ aggregationApi:
   servicePort: 80
   virtualService:
     enabled: true
-    host: aggregation.development.oanstaging.com
+    host: 'aggregation.{{ .Values.global.baseDomain }}'
     gateway: istio-system/development
   # Credentials come from the aggregation-api-runtime and signing Secrets,
   # provisioned in the namespace outside this chart.
@@ -940,13 +943,13 @@ aggregationApi:
   - name: AGGREGATION_LAYER_AUTH_ENABLED
     value: 'true'
   - name: AGGREGATION_LAYER_AUTH_ISSUER
-    value: https://keycloak.development.oanstaging.com/realms/staff
+    value: 'https://keycloak.{{ .Values.global.baseDomain }}/realms/staff'
   - name: AGGREGATION_LAYER_AUTH_JWKS_URL
     value: http://commons-keycloak.commons.svc.cluster.local/realms/staff/protocol/openid-connect/certs
   - name: AGGREGATION_LAYER_STAFF_SEARCH_ROLES
     value: '["AGGREGATION_STAFF_VIEWER"]'
   - name: AGGREGATION_LAYER_STAFF_API_TOKEN_URL
-    value: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
+    value: 'https://keycloak.{{ .Values.global.baseDomain }}/realms/staff/protocol/openid-connect/token'
   - name: AGGREGATION_LAYER_STAFF_API_CLIENT_ID
     value: aggregation-layer-staff
   - name: AGGREGATION_LAYER_REGISTRY_CATALOG_PATH
@@ -961,7 +964,7 @@ aggregationApi:
   - name: AGGREGATION_LAYER_SIGNING_KID
     value: agg-2026-01
   - name: AGGREGATION_LAYER_PARTNER_AUTH_ISSUER
-    value: https://keycloak.development.oanstaging.com/realms/partner
+    value: 'https://keycloak.{{ .Values.global.baseDomain }}/realms/partner'
   - name: AGGREGATION_LAYER_PARTNER_AUTH_JWKS_URL
     value: http://commons-keycloak.commons.svc.cluster.local/realms/partner/protocol/openid-connect/certs
   - name: AGGREGATION_LAYER_PARTNER_AUTH_PARTNER_CLAIM
@@ -1010,12 +1013,12 @@ consentPartnerPortal:
   apiBaseUrl: ''
   compositeUrl: ''
   keycloak:
-    url: https://keycloak.development.oanstaging.com
+    url: 'https://keycloak.{{ .Values.global.baseDomain }}'
     realm: partner
     clientId: consent-partner-portal
   virtualService:
     enabled: true
-    host: consent-partner-portal.development.oanstaging.com
+    host: 'consent-partner-portal.{{ .Values.global.baseDomain }}'
     gateway: istio-system/development
   resources:
     requests:
