@@ -8,6 +8,14 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-10-30
+
+### openg2p-commons-services 1.0.0-dev.28
+
+Previous version: 1.0.0-dev.27.
+
+- Create the registry connector's Keycloak clients and admin role in Commons (7a1d776)
+
 ## 2026-10-29
 
 ### openg2p-livestock-registry 1.0.0-dev.19
