@@ -10,6 +10,20 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-10-30
 
+### openg2p-commons-services 1.0.0-dev.29
+
+Previous version: 1.0.0-dev.28.
+
+- Derive chart default hosts from global.baseDomain (#57) (5d8630e)
+
+### openg2p-farmer-registry 1.0.0-dev.20
+
+Previous version: 1.0.0-dev.19.
+
+- Derive chart default hosts from global.baseDomain (#57) (5d8630e)
+
+## 2026-10-30
+
 ### openg2p-commons-services 1.0.0-dev.28
 
 Previous version: 1.0.0-dev.27.
