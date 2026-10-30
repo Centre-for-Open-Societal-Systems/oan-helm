@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-10-30
 
+### openg2p-commons-services 1.0.0-dev.30
+
+Previous version: 1.0.0-dev.29.
+
+- feat(commons-services): add iam-bene-portal-api (image 1.1.0) (#59) (7fb788d)
+
+## 2026-10-30
+
 ### openg2p-commons-services 1.0.0-dev.29
 
 Previous version: 1.0.0-dev.28.
