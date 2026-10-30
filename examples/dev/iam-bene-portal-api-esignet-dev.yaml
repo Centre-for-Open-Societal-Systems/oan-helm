@@ -1,0 +1,19 @@
+# Dev eSignet (MOSIP eSignet with the mock identity system) login for the IAM
+# beneficiary portal API. Apply together with examples/dev/iam-bene-portal-api.yaml:
+#   -f examples/dev/iam-bene-portal-api.yaml -f examples/dev/iam-bene-portal-api-esignet-dev.yaml
+#
+# The issuer and discovery URL were read from the live dev instance
+# (https://esignet.development.oanstaging.com/.well-known/openid-configuration);
+# it also authenticates the client with private_key_jwt (RS256) and requires PKCE.
+#
+# Before turning seed on: register an OIDC client for this portal in dev eSignet
+# with the public key and the redirect URI
+# (https://<virtualService.host>/auth/callback), create the PEM signing key Secret
+# named in privateKeySecret, and set clientId. Image 1.1.0 does not send `jti`;
+# whether dev eSignet requires it is untested.
+iamBenePortalApi:
+  loginProvider:
+    seed: false
+    clientId: ''
+    issuer: https://esignet.development.oanstaging.com
+    # serverMetadataUrl is derived from the issuer when left empty.
