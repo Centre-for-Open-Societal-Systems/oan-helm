@@ -897,8 +897,11 @@ iamBenePortalApi:
     privateKeySecret:
       name: ''
       key: private_key
-    issuer: https://esignet.ida.fayda.et
-    serverMetadataUrl: https://esignet.ida.fayda.et/.well-known/openid-configuration
+    # Identity provider for this environment; set it in the environment values
+    # (see examples/dev/iam-bene-portal-api-fayda.yaml). Required when seed is on.
+    issuer: ''
+    # Empty: derived as <issuer>/.well-known/openid-configuration.
+    serverMetadataUrl: ''
     adapterName: esignet
     jwtAssertionAud: ''
     scope: openid profile email

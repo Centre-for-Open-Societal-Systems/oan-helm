@@ -1,0 +1,17 @@
+# Fayda (VeriFayda 2.0) login for the IAM beneficiary portal API.
+# Apply together with examples/dev/iam-bene-portal-api.yaml:
+#   -f examples/dev/iam-bene-portal-api.yaml -f examples/dev/iam-bene-portal-api-fayda.yaml
+#
+# Before turning seed on:
+#   - register the public key and the redirect URI
+#     (https://<virtualService.host>/auth/callback) with Fayda; this is manual;
+#   - create the PEM signing key Secret named in privateKeySecret;
+#   - set clientId to the Client ID Fayda issued.
+# Image 1.1.0 does not send the `jti` Fayda v1.8 requires in the client
+# assertion, so the token call is expected to fail until that is fixed.
+iamBenePortalApi:
+  loginProvider:
+    seed: false
+    clientId: ''
+    issuer: https://esignet.ida.fayda.et
+    # serverMetadataUrl is derived from the issuer when left empty.

@@ -170,7 +170,8 @@ spec:
             - { name: LP_CLIENT_ID, value: {{ required "iamBenePortalApi.loginProvider.clientId is required when seed is on" $c.loginProvider.clientId | quote }} }
             - { name: LP_AUTH_METHOD, value: {{ $c.loginProvider.tokenEndpointAuthMethod | quote }} }
             - { name: LP_ISSUER, value: {{ required "iamBenePortalApi.loginProvider.issuer is required when seed is on" $c.loginProvider.issuer | quote }} }
-            - { name: LP_METADATA_URL, value: {{ $c.loginProvider.serverMetadataUrl | quote }} }
+            {{- /* 1.1.0 does not derive the discovery URL from the issuer column, so do it here when not set. */}}
+            - { name: LP_METADATA_URL, value: {{ $c.loginProvider.serverMetadataUrl | default (printf "%s/.well-known/openid-configuration" (trimSuffix "/" $c.loginProvider.issuer)) | quote }} }
             - { name: LP_ADAPTER, value: {{ $c.loginProvider.adapterName | quote }} }
             - { name: LP_JWT_AUD, value: {{ $c.loginProvider.jwtAssertionAud | quote }} }
             - { name: LP_SCOPE, value: {{ $c.loginProvider.scope | quote }} }
