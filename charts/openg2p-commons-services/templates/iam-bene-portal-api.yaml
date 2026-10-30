@@ -6,14 +6,16 @@
   IAM_BENE_ prefix and which has NO login-provider JSON seeding, so the provider
   row is inserted by the seed Job below.
 
-  Uses its OWN database: the shared `iam` database holds the 1.4 staff/agent
-  `login_providers` table, which has a NOT NULL `user_type` column that 1.1.0
-  does not know about.
+  Uses the SAME database, user and secret as the staff and agent APIs (`iam`,
+  `iam_user`, secret `iam`), and so the same `login_providers` table: the
+  columns 1.1.0 maps are the ones the 1.4 APIs use. Row ids must not collide
+  (staff 1, agent 10, bene 20 by default).
 */ -}}
 {{- $c := .Values.iamBenePortalApi -}}
 {{- if $c.enabled }}
 {{- $name := $c.nameOverride | default (printf "%s-iam-bene-portal-api" .Release.Name) -}}
-{{- $dbSecret := printf "%s-db" $name -}}
+{{- $dbSecret := tpl $c.db.passwordSecret.name $ -}}
+{{- $dbSecretKey := tpl $c.db.passwordSecret.key $ -}}
 {{- $dbHost := tpl $c.db.hostname $ -}}
 {{- $dbName := $c.db.name -}}
 {{- $dbUser := $c.db.username -}}
@@ -24,70 +26,6 @@
 {{- $callback := $c.loginProvider.oauthCallbackUrl | default (printf "https://%s/auth/callback" $host) -}}
 {{- $labels := dict "app.kubernetes.io/name" .Chart.Name "app.kubernetes.io/instance" .Release.Name "app.kubernetes.io/component" "iam-bene-portal-api" -}}
 
-{{- /* DB password: generated once and kept across upgrades. Created as a pre-install hook so the DB bootstrap Job can read it. */ -}}
-{{- $existing := lookup "v1" "Secret" .Release.Namespace $dbSecret -}}
-apiVersion: v1
-kind: Secret
-metadata:
-  name: {{ $dbSecret }}
-  namespace: {{ .Release.Namespace }}
-  annotations:
-    helm.sh/hook: pre-install,pre-upgrade
-    helm.sh/hook-weight: "-10"
-    helm.sh/hook-delete-policy: before-hook-creation
-    helm.sh/resource-policy: keep
-type: Opaque
-data:
-  password: {{ if $existing }}{{ index $existing.data "password" }}{{ else }}{{ randAlphaNum 32 | b64enc }}{{ end }}
----
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: {{ $name }}-db-bootstrap
-  namespace: {{ .Release.Namespace }}
-  annotations:
-    helm.sh/hook: pre-install,pre-upgrade
-    helm.sh/hook-weight: "0"
-    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
-spec:
-  backoffLimit: 6
-  template:
-    spec:
-      restartPolicy: OnFailure
-      {{- with $c.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      containers:
-        - name: db-bootstrap
-          image: {{ $c.dbJobImage | quote }}
-          env:
-            - { name: DB_HOST, value: {{ $dbHost | quote }} }
-            - { name: DB_PORT, value: {{ $c.db.port | quote }} }
-            - { name: DB_NAME, value: {{ $dbName | quote }} }
-            - { name: DB_USER, value: {{ $dbUser | quote }} }
-            - name: DB_PASSWORD
-              valueFrom: { secretKeyRef: { name: {{ $dbSecret }}, key: password } }
-            - { name: PG_ADMIN_USER, value: {{ $c.db.adminUser | quote }} }
-            - name: PG_ADMIN_PASSWORD
-              valueFrom: { secretKeyRef: { name: {{ tpl .Values.global.postgresqlSecret $ | quote }}, key: {{ tpl .Values.global.postgresqlSecretKey $ | quote }} } }
-          command: ["sh", "-c"]
-          args:
-            - |
-              set -eu
-              export PGPASSWORD="$PG_ADMIN_PASSWORD"
-              until psql -h "$DB_HOST" -p "$DB_PORT" -U "$PG_ADMIN_USER" -d postgres -c 'SELECT 1' >/dev/null 2>&1; do
-                echo "waiting for postgres"; sleep 3
-              done
-              psql -h "$DB_HOST" -p "$DB_PORT" -U "$PG_ADMIN_USER" -d postgres -v ON_ERROR_STOP=1 \
-                -v dbuser="$DB_USER" -v dbpass="$DB_PASSWORD" -v dbname="$DB_NAME" <<'SQL'
-              SELECT format('CREATE ROLE %I LOGIN PASSWORD %L', :'dbuser', :'dbpass')
-                WHERE NOT EXISTS (SELECT FROM pg_roles WHERE rolname = :'dbuser') \gexec
-              SELECT format('ALTER ROLE %I PASSWORD %L', :'dbuser', :'dbpass') \gexec
-              SELECT format('CREATE DATABASE %I OWNER %I', :'dbname', :'dbuser')
-                WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = :'dbname') \gexec
-              SQL
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -129,7 +67,7 @@ spec:
             - { name: IAM_BENE_DB_DBNAME, value: {{ $dbName | quote }} }
             - { name: IAM_BENE_DB_USERNAME, value: {{ $dbUser | quote }} }
             - name: IAM_BENE_DB_PASSWORD
-              valueFrom: { secretKeyRef: { name: {{ $dbSecret }}, key: password } }
+              valueFrom: { secretKeyRef: { name: {{ $dbSecret | quote }}, key: {{ $dbSecretKey | quote }} } }
             - { name: IAM_BENE_OPENAPI_ROOT_PATH, value: "/" }
             - { name: IAM_BENE_AUTH_ENABLED, value: "true" }
             - { name: IAM_BENE_AUTH_TRANSACTION_STORE_BACKEND, value: "redis" }
@@ -225,7 +163,7 @@ spec:
             - { name: DB_NAME, value: {{ $dbName | quote }} }
             - { name: DB_USER, value: {{ $dbUser | quote }} }
             - name: PGPASSWORD
-              valueFrom: { secretKeyRef: { name: {{ $dbSecret }}, key: password } }
+              valueFrom: { secretKeyRef: { name: {{ $dbSecret | quote }}, key: {{ $dbSecretKey | quote }} } }
             - { name: LP_ID, value: {{ $c.loginProvider.id | quote }} }
             - { name: LP_NAME, value: {{ $c.loginProvider.providerName | quote }} }
             - { name: LP_DESCRIPTION, value: {{ $c.loginProvider.description | quote }} }

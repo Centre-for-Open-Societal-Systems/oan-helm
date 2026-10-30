@@ -851,7 +851,7 @@ consentPartnerPortal:
 # at login, which eSignet/Fayda do not provide. 1.1.0 has no login-provider file
 # seeding, so loginProvider.seed upserts the row with a post-install Job.
 iamBenePortalApi:
-  enabled: false
+  enabled: true
   nameOverride: ''
   image:
     repository: openg2p/iam-bene-portal-api
@@ -867,16 +867,18 @@ iamBenePortalApi:
     enabled: true
     host: bene-iam.development.oanstaging.com
     gateway: istio-system/development
-  # Own database (not the shared `iam` one, whose login_providers table is the
-  # 1.4 layout with a NOT NULL user_type column). Created by a pre-install Job
-  # using the postgres admin secret from global.postgresqlSecret; the app
-  # user's password is generated once in <name>-db and kept across upgrades.
+  # Same database, user and secret as the staff and agent APIs (the values under
+  # openg2p-iam-service.global: iamDB, iamDBUser, iamDBSecret,
+  # iamDBUserPasswordKey), so they share one login_providers table.
   db:
     hostname: '{{ tpl .Values.global.postgresqlHost $ }}'
     port: 5432
-    name: iam_bene
-    username: iam_bene_user
-    adminUser: postgres
+    name: iam
+    username: iam_user
+    passwordSecret:
+      name: iam
+      key: iam-db-user
+  # Image with psql, for the login-provider seed Job.
   dbJobImage: postgres:16-alpine
   redisDb: 2
   cookieDomain: '{{ tpl .Values.global.authCookieDomain $ }}'
@@ -885,7 +887,8 @@ iamBenePortalApi:
   corsAllowOrigins: []
   loginProvider:
     seed: false
-    id: 1
+    # Must not collide with the staff (1) and agent (10) rows in the shared table.
+    id: 20
     providerName: Fayda
     description: Login with Fayda
     clientId: ''
