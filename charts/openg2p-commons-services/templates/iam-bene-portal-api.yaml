@@ -1,0 +1,292 @@
+{{- /*
+  IAM beneficiary portal API (iam-bene-portal-api).
+
+  Defined here, not in the openg2p-iam-service subchart: that chart ships staff,
+  agent and staff-ui only. Written for image 1.1.0, whose settings use the
+  IAM_BENE_ prefix and which has NO login-provider JSON seeding, so the provider
+  row is inserted by the seed Job below.
+
+  Uses its OWN database: the shared `iam` database holds the 1.4 staff/agent
+  `login_providers` table, which has a NOT NULL `user_type` column that 1.1.0
+  does not know about.
+*/ -}}
+{{- $c := .Values.iamBenePortalApi -}}
+{{- if $c.enabled }}
+{{- $name := $c.nameOverride | default (printf "%s-iam-bene-portal-api" .Release.Name) -}}
+{{- $dbSecret := printf "%s-db" $name -}}
+{{- $dbHost := tpl $c.db.hostname $ -}}
+{{- $dbName := $c.db.name -}}
+{{- $dbUser := $c.db.username -}}
+{{- $redis := printf "redis://%s-master:6379/%v" (tpl .Values.global.redisInstallationName $) $c.redisDb -}}
+{{- $host := $c.virtualService.host -}}
+{{- $uiOrigin := tpl $c.loginProvider.defaultRedirectUri $ -}}
+{{- $cors := $c.corsAllowOrigins | default (ternary (list $uiOrigin) (list) (ne $uiOrigin "")) -}}
+{{- $callback := $c.loginProvider.oauthCallbackUrl | default (printf "https://%s/auth/callback" $host) -}}
+{{- $labels := dict "app.kubernetes.io/name" .Chart.Name "app.kubernetes.io/instance" .Release.Name "app.kubernetes.io/component" "iam-bene-portal-api" -}}
+
+{{- /* DB password: generated once and kept across upgrades. Created as a pre-install hook so the DB bootstrap Job can read it. */ -}}
+{{- $existing := lookup "v1" "Secret" .Release.Namespace $dbSecret -}}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ $dbSecret }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "-10"
+    helm.sh/hook-delete-policy: before-hook-creation
+    helm.sh/resource-policy: keep
+type: Opaque
+data:
+  password: {{ if $existing }}{{ index $existing.data "password" }}{{ else }}{{ randAlphaNum 32 | b64enc }}{{ end }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $name }}-db-bootstrap
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "0"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 6
+  template:
+    spec:
+      restartPolicy: OnFailure
+      {{- with $c.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: db-bootstrap
+          image: {{ $c.dbJobImage | quote }}
+          env:
+            - { name: DB_HOST, value: {{ $dbHost | quote }} }
+            - { name: DB_PORT, value: {{ $c.db.port | quote }} }
+            - { name: DB_NAME, value: {{ $dbName | quote }} }
+            - { name: DB_USER, value: {{ $dbUser | quote }} }
+            - name: DB_PASSWORD
+              valueFrom: { secretKeyRef: { name: {{ $dbSecret }}, key: password } }
+            - { name: PG_ADMIN_USER, value: {{ $c.db.adminUser | quote }} }
+            - name: PG_ADMIN_PASSWORD
+              valueFrom: { secretKeyRef: { name: {{ tpl .Values.global.postgresqlSecret $ | quote }}, key: {{ tpl .Values.global.postgresqlSecretKey $ | quote }} } }
+          command: ["sh", "-c"]
+          args:
+            - |
+              set -eu
+              export PGPASSWORD="$PG_ADMIN_PASSWORD"
+              until psql -h "$DB_HOST" -p "$DB_PORT" -U "$PG_ADMIN_USER" -d postgres -c 'SELECT 1' >/dev/null 2>&1; do
+                echo "waiting for postgres"; sleep 3
+              done
+              psql -h "$DB_HOST" -p "$DB_PORT" -U "$PG_ADMIN_USER" -d postgres -v ON_ERROR_STOP=1 \
+                -v dbuser="$DB_USER" -v dbpass="$DB_PASSWORD" -v dbname="$DB_NAME" <<'SQL'
+              SELECT format('CREATE ROLE %I LOGIN PASSWORD %L', :'dbuser', :'dbpass')
+                WHERE NOT EXISTS (SELECT FROM pg_roles WHERE rolname = :'dbuser') \gexec
+              SELECT format('ALTER ROLE %I PASSWORD %L', :'dbuser', :'dbpass') \gexec
+              SELECT format('CREATE DATABASE %I OWNER %I', :'dbname', :'dbuser')
+                WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = :'dbname') \gexec
+              SQL
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- toYaml $labels | nindent 4 }}
+spec:
+  replicas: {{ $c.replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: iam-bene-portal-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: iam-bene-portal-api
+    spec:
+      automountServiceAccountToken: false
+      {{- with $c.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: iam-bene-portal-api
+          image: {{ include "coss.image" $c.image | quote }}
+          imagePullPolicy: {{ $c.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ $c.containerPort }}
+          env:
+            - { name: IAM_API_HOST, value: "0.0.0.0" }
+            - { name: IAM_API_PORT, value: {{ $c.containerPort | quote }} }
+            - { name: IAM_API_NO_OF_WORKERS, value: {{ $c.workers | quote }} }
+            - { name: IAM_API_WORKER_TYPE, value: "gunicorn" }
+            - { name: IAM_BENE_DB_DRIVER, value: "postgresql+asyncpg" }
+            - { name: IAM_BENE_DB_HOSTNAME, value: {{ $dbHost | quote }} }
+            - { name: IAM_BENE_DB_PORT, value: {{ $c.db.port | quote }} }
+            - { name: IAM_BENE_DB_DBNAME, value: {{ $dbName | quote }} }
+            - { name: IAM_BENE_DB_USERNAME, value: {{ $dbUser | quote }} }
+            - name: IAM_BENE_DB_PASSWORD
+              valueFrom: { secretKeyRef: { name: {{ $dbSecret }}, key: password } }
+            - { name: IAM_BENE_OPENAPI_ROOT_PATH, value: "/" }
+            - { name: IAM_BENE_AUTH_ENABLED, value: "true" }
+            - { name: IAM_BENE_AUTH_TRANSACTION_STORE_BACKEND, value: "redis" }
+            - { name: IAM_BENE_AUTH_REDIS_URL, value: {{ $redis | quote }} }
+            - { name: IAM_BENE_AUTH_COOKIE_PATH, value: "/" }
+            - { name: IAM_BENE_AUTH_COOKIE_DOMAIN, value: {{ tpl $c.cookieDomain $ | quote }} }
+            - { name: IAM_BENE_AUTH_COOKIE_HTTPONLY, value: "true" }
+            - { name: IAM_BENE_AUTH_COOKIE_SECURE, value: {{ $c.cookieSecure | quote }} }
+            - { name: IAM_BENE_AUTH_COOKIE_MAX_AGE, value: {{ $c.cookieMaxAge | quote }} }
+            - { name: IAM_BENE_AUTH_COOKIE_SET_EXPIRES, value: "true" }
+            - { name: IAM_BENE_CORS_ALLOW_ORIGINS, value: {{ $cors | toJson | squote }} }
+            {{- with $c.env }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- with $c.envFrom }}
+          envFrom:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml $c.resources | nindent 12 }}
+          startupProbe:
+            httpGet: { path: /ping, port: http }
+            failureThreshold: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet: { path: /ping, port: http }
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /ping, port: http }
+            initialDelaySeconds: 30
+            periodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: iam-bene-portal-api
+  ports:
+    - name: http
+      port: {{ $c.servicePort }}
+      targetPort: http
+{{- if $c.virtualService.enabled }}
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  hosts:
+    - {{ required "iamBenePortalApi.virtualService.host is required" $host | quote }}
+  gateways:
+    - {{ required "iamBenePortalApi.virtualService.gateway is required" $c.virtualService.gateway | quote }}
+  http:
+    - route:
+        - destination:
+            host: {{ $name }}
+            port:
+              number: {{ $c.servicePort }}
+{{- end }}
+{{- if $c.loginProvider.seed }}
+---
+{{- /* 1.1.0 cannot load login providers from a file, so the row is upserted here once the app has created the table. */ -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $name }}-login-provider-seed
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "0"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 20
+  template:
+    spec:
+      restartPolicy: OnFailure
+      {{- with $c.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: seed
+          image: {{ $c.dbJobImage | quote }}
+          env:
+            - { name: DB_HOST, value: {{ $dbHost | quote }} }
+            - { name: DB_PORT, value: {{ $c.db.port | quote }} }
+            - { name: DB_NAME, value: {{ $dbName | quote }} }
+            - { name: DB_USER, value: {{ $dbUser | quote }} }
+            - name: PGPASSWORD
+              valueFrom: { secretKeyRef: { name: {{ $dbSecret }}, key: password } }
+            - { name: LP_ID, value: {{ $c.loginProvider.id | quote }} }
+            - { name: LP_NAME, value: {{ $c.loginProvider.providerName | quote }} }
+            - { name: LP_DESCRIPTION, value: {{ $c.loginProvider.description | quote }} }
+            - { name: LP_CLIENT_ID, value: {{ required "iamBenePortalApi.loginProvider.clientId is required when seed is on" $c.loginProvider.clientId | quote }} }
+            - { name: LP_AUTH_METHOD, value: {{ $c.loginProvider.tokenEndpointAuthMethod | quote }} }
+            - { name: LP_ISSUER, value: {{ required "iamBenePortalApi.loginProvider.issuer is required when seed is on" $c.loginProvider.issuer | quote }} }
+            - { name: LP_METADATA_URL, value: {{ $c.loginProvider.serverMetadataUrl | quote }} }
+            - { name: LP_ADAPTER, value: {{ $c.loginProvider.adapterName | quote }} }
+            - { name: LP_JWT_AUD, value: {{ $c.loginProvider.jwtAssertionAud | quote }} }
+            - { name: LP_SCOPE, value: {{ $c.loginProvider.scope | quote }} }
+            - { name: LP_PKCE, value: {{ $c.loginProvider.enablePkce | quote }} }
+            - { name: LP_EXTRA, value: {{ $c.loginProvider.extraAuthorizeParams | quote }} }
+            - { name: LP_AUDIENCES, value: {{ $c.loginProvider.audiences | quote }} }
+            - { name: LP_CALLBACK, value: {{ $callback | quote }} }
+            - { name: LP_REDIRECT, value: {{ tpl $c.loginProvider.defaultRedirectUri $ | quote }} }
+            {{- if $c.loginProvider.privateKeySecret.name }}
+            - name: LP_PRIVATE_KEY
+              valueFrom: { secretKeyRef: { name: {{ $c.loginProvider.privateKeySecret.name | quote }}, key: {{ $c.loginProvider.privateKeySecret.key | quote }} } }
+            {{- end }}
+          command: ["sh", "-c"]
+          args:
+            - |
+              set -eu
+              PSQL="psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -v ON_ERROR_STOP=1"
+              until [ "$($PSQL -tAc "SELECT to_regclass('public.login_providers') IS NOT NULL")" = "t" ]; do
+                echo "waiting for login_providers table (created by the API on start)"; sleep 5
+              done
+              $PSQL -v id="$LP_ID" -v name="$LP_NAME" -v descr="$LP_DESCRIPTION" -v cid="$LP_CLIENT_ID" \
+                -v method="$LP_AUTH_METHOD" -v issuer="$LP_ISSUER" -v meta="$LP_METADATA_URL" -v adapter="$LP_ADAPTER" \
+                -v jwtaud="$LP_JWT_AUD" -v scope="$LP_SCOPE" -v pkce="$LP_PKCE" -v extra="$LP_EXTRA" \
+                -v aud="$LP_AUDIENCES" -v callback="$LP_CALLBACK" -v redirect="$LP_REDIRECT" \
+                -v pk="${LP_PRIVATE_KEY:-}" <<'SQL'
+              INSERT INTO login_providers (
+                id, provider_name, description, client_id, client_private_key,
+                token_endpoint_auth_method, server_metadata_url, adapter_name, jwt_assertion_aud,
+                scope, enable_pkce, extra_authorize_params, issuer, audiences,
+                oauth_callback_url, default_redirect_uri, created_at, updated_at
+              ) VALUES (
+                :id, :'name', :'descr', :'cid',
+                CASE WHEN :'pk' = '' THEN NULL ELSE convert_to(:'pk', 'UTF8') END,
+                :'method'::tokenendpointauthmethod, NULLIF(:'meta', ''), NULLIF(:'adapter', ''), NULLIF(:'jwtaud', ''),
+                :'scope', :'pkce'::boolean, NULLIF(:'extra', ''), :'issuer', NULLIF(:'aud', ''),
+                :'callback', :'redirect', now(), now()
+              )
+              ON CONFLICT (id) DO UPDATE SET
+                provider_name = EXCLUDED.provider_name,
+                description = EXCLUDED.description,
+                client_id = EXCLUDED.client_id,
+                client_private_key = COALESCE(EXCLUDED.client_private_key, login_providers.client_private_key),
+                token_endpoint_auth_method = EXCLUDED.token_endpoint_auth_method,
+                server_metadata_url = EXCLUDED.server_metadata_url,
+                adapter_name = EXCLUDED.adapter_name,
+                jwt_assertion_aud = EXCLUDED.jwt_assertion_aud,
+                scope = EXCLUDED.scope,
+                enable_pkce = EXCLUDED.enable_pkce,
+                extra_authorize_params = EXCLUDED.extra_authorize_params,
+                issuer = EXCLUDED.issuer,
+                audiences = EXCLUDED.audiences,
+                oauth_callback_url = EXCLUDED.oauth_callback_url,
+                default_redirect_uri = EXCLUDED.default_redirect_uri,
+                updated_at = now();
+              SQL
+{{- end }}
+{{- end }}

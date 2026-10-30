@@ -845,6 +845,76 @@ consentPartnerPortal:
       cpu: 200m
       memory: 128Mi
 
+# IAM beneficiary portal API. Not part of the openg2p-iam-service subchart, so it
+# is defined here (templates/iam-bene-portal-api.yaml), like aggregationApi.
+# Pinned to image 1.1.0: the 1.4 line requires a refresh_token and a `sid` claim
+# at login, which eSignet/Fayda do not provide. 1.1.0 has no login-provider file
+# seeding, so loginProvider.seed upserts the row with a post-install Job.
+iamBenePortalApi:
+  enabled: false
+  nameOverride: ''
+  image:
+    repository: openg2p/iam-bene-portal-api
+    tag: 1.1.0
+    digest: ''
+    pullPolicy: IfNotPresent
+  imagePullSecrets: []
+  replicas: 1
+  workers: 2
+  containerPort: 8000
+  servicePort: 80
+  virtualService:
+    enabled: true
+    host: bene-iam.development.oanstaging.com
+    gateway: istio-system/development
+  # Own database (not the shared `iam` one, whose login_providers table is the
+  # 1.4 layout with a NOT NULL user_type column). Created by a pre-install Job
+  # using the postgres admin secret from global.postgresqlSecret; the app
+  # user's password is generated once in <name>-db and kept across upgrades.
+  db:
+    hostname: '{{ tpl .Values.global.postgresqlHost $ }}'
+    port: 5432
+    name: iam_bene
+    username: iam_bene_user
+    adminUser: postgres
+  dbJobImage: postgres:16-alpine
+  redisDb: 2
+  cookieDomain: '{{ tpl .Values.global.authCookieDomain $ }}'
+  cookieSecure: true
+  cookieMaxAge: 1800
+  corsAllowOrigins: []
+  loginProvider:
+    seed: false
+    id: 1
+    providerName: Fayda
+    description: Login with Fayda
+    clientId: ''
+    tokenEndpointAuthMethod: private_key_jwt
+    # Existing Secret holding the RSA signing key as PEM (1.1.0 reads PEM only).
+    privateKeySecret:
+      name: ''
+      key: private_key
+    issuer: https://esignet.ida.fayda.et
+    serverMetadataUrl: https://esignet.ida.fayda.et/.well-known/openid-configuration
+    adapterName: esignet
+    jwtAssertionAud: ''
+    scope: openid profile email
+    enablePkce: true
+    extraAuthorizeParams: ''
+    audiences: ''
+    # Empty: derived as https://<virtualService.host>/auth/callback. Must equal
+    # the redirect URI registered with the identity provider exactly.
+    oauthCallbackUrl: ''
+    defaultRedirectUri: ''
+  env: []
+  envFrom: []
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      memory: 768Mi
+
 # Application catalog only: keeps the existing Consent UI/client/roles and grants no users.
 # Enable after the selected IAM trusts the Consent client's staff issuer.
 consentStaffPortalTile:
