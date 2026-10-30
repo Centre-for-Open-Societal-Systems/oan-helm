@@ -851,7 +851,7 @@ consentPartnerPortal:
 # at login, which eSignet/Fayda do not provide. 1.1.0 has no login-provider file
 # seeding, so loginProvider.seed upserts the row with a post-install Job.
 iamBenePortalApi:
-  enabled: true
+  enabled: false
   nameOverride: ''
   image:
     repository: openg2p/iam-bene-portal-api

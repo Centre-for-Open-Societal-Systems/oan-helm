@@ -1,0 +1,26 @@
+# Enables the IAM beneficiary portal API (image 1.1.0) on top of the default
+# Commons values: helm upgrade ... -f examples/dev/iam-bene-portal-api.yaml
+#
+# It shares the iam database, user and secret with the staff and agent APIs, so
+# the iam database and the `iam` secret must already exist (they do whenever
+# openg2p-iam-service is enabled).
+#
+# To seed the Fayda login provider (login_providers row id 20), also create a
+# Secret holding the RSA signing key as PEM, e.g.
+#   kubectl -n commons create secret generic bene-fayda-signing \
+#     --from-file=private_key=./private_key.pem
+# and set loginProvider.seed to true below. Register the public key and the
+# redirect URI (https://<virtualService.host>/auth/callback) with Fayda first.
+iamBenePortalApi:
+  enabled: true
+  virtualService:
+    enabled: true
+    host: bene-iam.development.oanstaging.com
+    gateway: istio-system/development
+  loginProvider:
+    seed: false
+    clientId: ''
+    privateKeySecret:
+      name: bene-fayda-signing
+      key: private_key
+    defaultRedirectUri: https://bene-portal.development.oanstaging.com
