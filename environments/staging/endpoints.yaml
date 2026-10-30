@@ -1,0 +1,53 @@
+# Staging counterpart of environments/dev/endpoints.yaml. Hosts only: the dev file also records
+# routes and workloads observed on the live cluster, which do not exist until staging is rebuilt.
+# Fill `verifiedRoutes` from a read-only check after the install.
+checkedAt: null
+server: 52.66.116.220  # staging: confirm (single-node RKE2 box today)
+publicHosts:
+  keycloak: keycloak.oanstaging.com
+  iam: staff-iam.oanstaging.com
+  agentIam: agent-iam.oanstaging.com
+  staffPortal: staff-portal.oanstaging.com
+  iamUi: iam-staff-ui.oanstaging.com
+  awe: awe.oanstaging.com
+  masterData: master-data.oanstaging.com
+  masterDataUi: master-data-ui.oanstaging.com
+  consent: consent-manager.oanstaging.com
+  consentPartner: consent-manager-partner.oanstaging.com
+  partnerManagement: partner-management.oanstaging.com
+  partnerManagementApi: partner-management-partner-api.oanstaging.com
+  odk: odk-central.oanstaging.com
+  minio: minio-farmer.oanstaging.com
+  minioConsole: minio-console.oanstaging.com
+  audit: auditmanager.oanstaging.com
+  esignet: esignet.oanstaging.com
+  farmer: farmer-registry.oanstaging.com
+  farmerStaff: staff-farmer.oanstaging.com
+  farmerPartner: partner-farmer.oanstaging.com
+  farmerId: idgenerator-farmer.oanstaging.com
+  cropsown: crop-registry.oanstaging.com
+  cropsownStaff: staff-crop.oanstaging.com
+  cropsownPartner: partner-crop.oanstaging.com
+  cropsownId: idgenerator-crop.oanstaging.com
+  livestock: livestock-registry.oanstaging.com
+  livestockStaff: staff-livestock.oanstaging.com
+  livestockPartner: partner-livestock.oanstaging.com
+  livestockId: idgenerator-livestock.oanstaging.com
+  da: da-registry.oanstaging.com
+  daStaff: staff-da-registry.oanstaging.com
+  daPartner: partner-da-registry.oanstaging.com
+  daId: idgenerator-da.oanstaging.com
+  consentPartnerPortal: consent-partner-portal.oanstaging.com
+  farmerConnector: connector-farmer-registry.oanstaging.com
+  cropsownConnector: connector-cropsown-registry.oanstaging.com
+  livestockConnector: connector-livestock-registry.oanstaging.com
+  aggregation: aggregation.oanstaging.com
+sharedNamespace: commons
+unconfirmed:
+- Superset
+- Inji Certify
+- agent portal UI
+- notifications
+- DA
+- Crop and Livestock registries (not part of this promotion)
+verifiedRoutes: []

@@ -1,0 +1,185 @@
+# Staging (oanstaging.com) overlay for a freshly rebuilt Commons. It is the New Dev
+# overlay with the base domain changed; everything the chart enables by default
+# (ODK Central with Keycloak OIDC client openg2p-odk, consent manager and partner
+# portal, aggregation API, WebSub hub, eSignet mock, keymanager) stays on, as on
+# New Dev. Hosts that the chart derives from global.baseDomain (aggregation API,
+# consent partner portal, registry connector Keycloak clients) need the chart
+# release that carries that derivation.
+# Lines marked "staging: confirm" copy the New Dev value where staging is not yet known.
+global:
+  baseDomain: oanstaging.com
+  keycloakBaseUrl: https://keycloak.oanstaging.com
+  keycloakInternalUrl: http://commons-keycloak.commons.svc.cluster.local:80
+  keycloakExternalIssuerUrl: https://keycloak.oanstaging.com/realms/staff
+  keycloakIssuerUrl: http://commons-keycloak.commons.svc.cluster.local:80/realms/staff
+  iamHostname: staff-iam.oanstaging.com
+  staffPortalApiHostname: staff-iam.oanstaging.com
+  agentPortalApiHostname: agent-iam.oanstaging.com
+  staffPortalHostname: staff-portal.oanstaging.com
+  staffPortalCookieDomain: .oanstaging.com
+  authCookieDomain: .oanstaging.com
+  cookieDomain: .oanstaging.com
+  iamUrl: https://staff-iam.oanstaging.com
+  iamServiceUrl: http://commons-services-iam-staff-portal-api.commons.svc.cluster.local
+  masterDataHostname: master-data.oanstaging.com
+  masterDataUiHostname: master-data-ui.oanstaging.com
+  masterDataApiUrl: http://commons-services-master-data-api.commons.svc.cluster.local
+  aweHostname: awe.oanstaging.com
+  aweBaseUrl: http://commons-services-awe.commons.svc.cluster.local
+  odkHostname: odk-central.oanstaging.com
+  supersetHostname: ''
+  certifyHostname: ''
+  agentPortalHostname: ''
+superset:
+  enabled: false
+  istio:
+    virtualservice:
+      gateway: istio-system/development  # staging: confirm
+openg2p-inji-certify:
+  enabled: false
+  istio:
+    virtualservice:
+      gateway: istio-system/development  # staging: confirm
+master-data:
+  global:
+    masterDataHostname: master-data.oanstaging.com
+    masterDataUiHostname: master-data-ui.oanstaging.com
+  # Fresh Commons: the ETH-OAN pack (chart default countryPack) supplies the geography
+  # and the code lists, and is published at once. Staging has no migrated catalogue
+  # to protect, so geo loads too. Sample data stays off.
+  geoSeed:
+    enabled: true
+    publishInitial: true
+    autoPublish: true
+    load:
+      geo: true  # staging: confirm (New Dev keeps geo false for its migrated catalogue)
+      codelists: true
+      samples: false
+  masterDataUi:
+    iamPublicUrl: https://staff-iam.oanstaging.com
+    envVars:
+      COOKIE_DOMAIN: .oanstaging.com
+    istio:
+      virtualservice:
+        gateway: istio-system/development  # staging: confirm
+  masterDataAPI:
+    istio:
+      virtualservice:
+        gateway: istio-system/development  # staging: confirm
+odk-central:
+  backend:
+    envVars:
+      OIDC_ISSUER_URL: https://keycloak.oanstaging.com/realms/staff
+  istio:
+    virtualservice:
+      gateway: istio-system/development  # staging: confirm
+esignet:
+  hostname: esignet.oanstaging.com
+  istio:
+    virtualservice:
+      gateway: istio-system/development  # staging: confirm
+  oidcUi:
+    istio:
+      virtualservice:
+        gateway: istio-system/development  # staging: confirm
+mock-identity-system:
+  hostname: esignet.oanstaging.com
+  istio:
+    virtualservice:
+      gateway: istio-system/development  # staging: confirm
+openg2p-iam-service:
+  global:
+    keycloakApplicationUrl: https://keycloak.oanstaging.com
+    registryApplicationUrl: https://farmer-registry.oanstaging.com
+    minioApplicationUrl: https://minio-console.oanstaging.com
+    supersetApplicationUrl: ''
+    iamStaffUiApplicationUrl: https://iam-staff-ui.oanstaging.com
+    masterDataApplicationUrl: https://master-data-ui.oanstaging.com
+    aweApplicationUrl: https://awe.oanstaging.com
+    staffPortalDefaultRedirectUri: https://staff-portal.oanstaging.com
+    agentPortalDefaultRedirectUri: ''
+  iamStaffUi:
+    hostname: iam-staff-ui.oanstaging.com
+    envVars:
+      COOKIE_DOMAIN: .oanstaging.com
+      BACKEND_API_URL: https://staff-iam.oanstaging.com
+    istio:
+      virtualservice:
+        gateway: istio-system/development  # staging: confirm
+  iamStaffPortalApi:
+    istio:
+      virtualservice:
+        gateway: istio-system/development  # staging: confirm
+  iamAgentPortalApi:
+    istio:
+      virtualservice:
+        gateway: istio-system/development  # staging: confirm
+openg2p-staff-portal-ui:
+  staffPortalUi:
+    envVars:
+      COOKIE_DOMAIN: .oanstaging.com
+      IAM_URL: https://staff-iam.oanstaging.com
+    istio:
+      virtualservice:
+        gateway: istio-system/development  # staging: confirm
+openg2p-audit-manager:
+  global:
+    auditManagerHostname: auditmanager.oanstaging.com
+  auditManager:
+    istio:
+      virtualservice:
+        gateway: istio-system/development  # staging: confirm
+partner-management:
+  global:
+    staffPortalUiHostname: partner-management.oanstaging.com
+    partnerApiHostname: partner-management-partner-api.oanstaging.com
+  staffPortalUi:
+    envVars:
+      IAM_URL: https://staff-iam.oanstaging.com
+      KEYCLOAK_LOGOUT_URL: https://keycloak.oanstaging.com/realms/staff/protocol/openid-connect/logout
+    istio:
+      virtualservice:
+        gateway: istio-system/development  # staging: confirm
+  staffPortalApi:
+    istio:
+      virtualservice:
+        gateway: istio-system/development  # staging: confirm
+  partnerApi:
+    istio:
+      virtualservice:
+        gateway: istio-system/development  # staging: confirm
+openg2p-consent-manager:
+  global:
+    consentManagerHostname: consent-manager.oanstaging.com
+    consentManagerPartnerHostname: consent-manager-partner.oanstaging.com
+    consentManagerBeneHostname: ''
+  consentManagerApi:
+    envVars:
+      CONSENT_MANAGER_AWE_CALLBACK_URL: http://{{ .Release.Name }}-cm-api.{{ .Release.Namespace }}.svc.cluster.local/consent/v1/awe/webhooks/decision
+    istio:
+      virtualservice:
+        gateway: istio-system/development  # staging: confirm
+  ui:
+    istio:
+      virtualservice:
+        gateway: istio-system/development  # staging: confirm
+keymanager:
+  istio:
+    virtualservice:
+      gateway: istio-system/development  # staging: confirm
+openg2p-awe:
+  istio:
+    virtualservice:
+      gateway: istio-system/development  # staging: confirm
+# Services the Farmer registry, ODK intake and enrichment need. These equal the chart
+# defaults; they are stated so a later default change cannot switch them off on staging.
+websub:
+  enabled: true
+websubTopicProvisioning:
+  enabled: true
+aggregationApi:
+  enabled: true
+consentPartnerPortal:
+  enabled: true
+openg2p-consent-manager:
+  enabled: true
