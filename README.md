@@ -11,7 +11,7 @@ publishes them to `repository/` after every merge, so the only way to change wha
 Rancher sees is a reviewed pull request.
 
 - **Helm repository URL:** `https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/`
-- **Latest version of each chart:** [`releases/current.yaml`](releases/current.yaml)
+- **Latest version of each chart:** ![`releases/current.yaml`](releases/current.yaml)
 - **What changed in each release:** [`CHANGELOG.md`](CHANGELOG.md)
 - **How to contribute:** [`CONTRIBUTING.md`](CONTRIBUTING.md)
 
