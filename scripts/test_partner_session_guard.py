@@ -60,7 +60,10 @@ class PartnerSessionGuardTests(unittest.TestCase):
         env=values['partner-management']['staffPortalUi']['envVars']
         self.assertEqual(env['NODE_OPTIONS'],node_options(),'Regenerate NODE_OPTIONS with partner_session_guard.node_options()')
         self.assertEqual(env['OAN_SESSION_COOKIE_GUARD'],'1')
-        self.assertEqual(env['OAN_SESSION_EXPECTED_ISSUER'],ISSUER)
+        domain=values["global"]["baseDomain"]
+        resolved=env["OAN_SESSION_EXPECTED_ISSUER"].replace("{{ .Values.global.baseDomain }}",domain)
+        self.assertEqual(domain,"development.oanstaging.com")
+        self.assertEqual(resolved,ISSUER)
 
     def test_post_renderer_leaves_chart_guard_alone(self):
         deployment=self.fixture()

@@ -937,6 +937,7 @@ aggregationApi:
     gateway: istio-system/development
   # Credentials come from the aggregation-api-runtime and signing Secrets,
   # provisioned in the namespace outside this chart.
+  # This env block is passed through tpl: a literal `{{` in a value will be evaluated.
   env:
   - name: AGGREGATION_LAYER_CM_BASE_URL
     value: http://commons-services-cm-partner-api.commons.svc.cluster.local
