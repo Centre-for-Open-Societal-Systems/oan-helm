@@ -44,19 +44,19 @@ master-data:
   global:
     masterDataHostname: master-data.oanstaging.com
     masterDataUiHostname: master-data-ui.oanstaging.com
-  # Fresh Commons: the ETH-OAN pack (chart default countryPack) supplies the geography
-  # and the code lists, and is published at once. Staging has no migrated catalogue
-  # to protect, so geo loads too. Sample data stays off.
-  # geo: true is for a FRESH Commons install only. Set it false for any upgrade of an existing
-  # Commons: the pack's level ids differ from a migrated catalogue, so loading it fails on the
-  # unique level mnemonic and stops the upgrade at this hook (the failure that left rev 12 FAILED).
-  # New Dev keeps geo false for that reason.
+  # Staging Commons is upgraded in place, like New Dev: its master_data database holds the
+  # legacy catalogue (4 levels, 21053 geography values), which Master Data migrates on
+  # start. The ETH-OAN pack (chart default countryPack) adds the code lists and publishes
+  # them at once. geo stays false: the pack's level ids differ from the migrated catalogue,
+  # so loading it fails on the unique level mnemonic and stops the upgrade at this hook.
+  # Set geo true only for a fresh Commons with an empty master_data database.
+  # Sample data stays off.
   geoSeed:
     enabled: true
     publishInitial: true
     autoPublish: true
     load:
-      geo: true
+      geo: false
       codelists: true
       samples: false
   masterDataUi:
@@ -153,6 +153,8 @@ partner-management:
       virtualservice:
         gateway: istio-system/staging
 openg2p-consent-manager:
+  # Equals the chart default; stated so a later default change cannot switch it off.
+  enabled: true
   global:
     consentManagerHostname: consent-manager.oanstaging.com
     consentManagerPartnerHostname: consent-manager-partner.oanstaging.com
@@ -184,6 +186,4 @@ websubTopicProvisioning:
 aggregationApi:
   enabled: true
 consentPartnerPortal:
-  enabled: true
-openg2p-consent-manager:
   enabled: true
