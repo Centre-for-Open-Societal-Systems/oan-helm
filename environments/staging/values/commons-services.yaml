@@ -155,6 +155,52 @@ partner-management:
 openg2p-consent-manager:
   # Equals the chart default; stated so a later default change cannot switch it off.
   enabled: true
+  # extraApis is a list, so it is restated whole: only the gateway of cm-partner-api differs
+  # from the chart default (istio-system/development does not exist on staging).
+  extraApis:
+  - enabled: true
+    nameOverride: cm-partner-api
+    apiAudience: partner
+    authEnabled: 'false'
+    signingKeyMounted: true
+    hostname: '{{ tpl .Values.global.consentManagerPartnerHostname $ }}'
+    openapiRootPath: /api/consent-manager-partner
+    image:
+      pullPolicy: Always
+      registry: ''
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api
+      tag: dev-48e64c249056@sha256:cca3273868b8ed28d193642b346fc3369b450ad7feefd42d02e91e84cb074831
+    istio:
+      enabled: true
+      virtualservice:
+        enabled: true
+        host: '{{ tpl .Values.global.consentManagerPartnerHostname $ }}'
+        gateway: istio-system/staging
+        destination: '{{ .Release.Name }}-cm-partner-api'
+        destinationPort: 80
+        prefix: /api/consent-manager-partner/
+        rewriteUri: /
+      gateway:
+        enabled: false
+  - enabled: false
+    nameOverride: cm-bene-api
+    apiAudience: beneficiary
+    authEnabled: 'true'
+    signingKeyMounted: false
+    hostname: '{{ tpl .Values.global.consentManagerBeneHostname $ }}'
+    openapiRootPath: /api/consent-manager-bene
+    istio:
+      enabled: true
+      virtualservice:
+        enabled: true
+        host: '{{ tpl .Values.global.consentManagerBeneHostname $ }}'
+        gateway: istio-system/staging
+        destination: '{{ .Release.Name }}-cm-bene-api'
+        destinationPort: 80
+        prefix: /api/consent-manager-bene/
+        rewriteUri: /
+      gateway:
+        enabled: false
   global:
     consentManagerHostname: consent-manager.oanstaging.com
     consentManagerPartnerHostname: consent-manager-partner.oanstaging.com
@@ -185,5 +231,9 @@ websubTopicProvisioning:
   enabled: true
 aggregationApi:
   enabled: true
+  virtualService:
+    gateway: istio-system/staging
 consentPartnerPortal:
   enabled: true
+  virtualService:
+    gateway: istio-system/staging
