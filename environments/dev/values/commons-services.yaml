@@ -171,3 +171,17 @@ openg2p-awe:
   istio:
     virtualservice:
       gateway: istio-system/development
+
+# IAM beneficiary portal API (image 1.1.0). Live on New Dev since 2026-10-30,
+# applied on its own from this chart's template; enabling it here lets the next
+# commons-services upgrade adopt the running resources instead of dropping them.
+# Login provider seeding stays off until a Fayda/eSignet client and signing key exist.
+iamBenePortalApi:
+  enabled: true
+  virtualService:
+    enabled: true
+    host: bene-iam.development.oanstaging.com
+    gateway: istio-system/development
+  loginProvider:
+    seed: false
+    defaultRedirectUri: https://bene-portal.development.oanstaging.com

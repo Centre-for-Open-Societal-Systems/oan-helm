@@ -38,6 +38,10 @@ publicHosts:
   farmerConnector: connector-farmer-registry.development.oanstaging.com
   cropsownConnector: connector-cropsown-registry.development.oanstaging.com
   livestockConnector: connector-livestock-registry.development.oanstaging.com
+  # IAM beneficiary portal API (commons-services iamBenePortalApi), /ping verified 2026-10-30.
+  benePortalApi: bene-iam.development.oanstaging.com
+  # Beneficiary portal UI the API redirects to and allows by CORS; planned, not yet deployed.
+  benePortal: bene-portal.development.oanstaging.com
   # Planned, not yet deployed: OAN Sandbox (charts/oan-sandbox), web and /oan API on one host.
   sandbox: sandbox.development.oanstaging.com
   # On the grievance RKE2 node 13.233.56.204, not `server` above.
@@ -55,6 +59,12 @@ unconfirmed:
 - standalone registry dashboards
 - OAN Sandbox
 verifiedRoutes:
+- namespace: commons
+  name: commons-services-iam-bene-portal-api
+  hosts:
+  - bene-iam.development.oanstaging.com
+  gateways:
+  - istio-system/development
 - namespace: commons
   name: commons-minio
   hosts:
