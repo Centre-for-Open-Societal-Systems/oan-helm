@@ -78,6 +78,9 @@ registry:
       REGISTRY_STAFF_PORTAL_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CORE_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
+      # The platform default ends in {RAND:1}: ten numbers per second, and the
+      # column is unique, so two submissions in the same second can collide.
+      REGISTRY_CORE_APPLICATION_REFERENCE_FORMAT: '{DATE:%Y%b%d|upper}-{SECONDS:5}{RAND:4}'
     envVarsFrom:
       AUTH_CLIENT_SECRET:
         secretKeyRef:
@@ -112,6 +115,9 @@ registry:
       KEYCLOAK_BASE_URL: https://keycloak.development.oanstaging.com
       REGISTRY_PARTNER_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
+      # The platform default ends in {RAND:1}: ten numbers per second, and the
+      # column is unique, so two submissions in the same second can collide.
+      REGISTRY_CORE_APPLICATION_REFERENCE_FORMAT: '{DATE:%Y%b%d|upper}-{SECONDS:5}{RAND:4}'
     hostname: partner-livestock.development.oanstaging.com
     istio:
       virtualservice:
@@ -150,6 +156,9 @@ registry:
       NOTIFICATION_PROVIDER_URL: ''
       REGISTRY_CELERY_WORKERS_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
+      # The platform default ends in {RAND:1}: ten numbers per second, and the
+      # column is unique, so two submissions in the same second can collide.
+      REGISTRY_CORE_APPLICATION_REFERENCE_FORMAT: '{DATE:%Y%b%d|upper}-{SECONDS:5}{RAND:4}'
     envVarsFrom:
       REGISTRY_CELERY_WORKERS_AWE_CLIENT_SECRET:
         secretKeyRef:
@@ -169,6 +178,9 @@ registry:
       REGISTRY_CELERY_BEAT_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CELERY_BEAT_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
+      # The platform default ends in {RAND:1}: ten numbers per second, and the
+      # column is unique, so two submissions in the same second can collide.
+      REGISTRY_CORE_APPLICATION_REFERENCE_FORMAT: '{DATE:%Y%b%d|upper}-{SECONDS:5}{RAND:4}'
   dbSeed:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/db-seed
