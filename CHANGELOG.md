@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-02
 
+### openg2p-commons-services 1.0.0-dev.33
+
+Previous version: 1.0.0-dev.32.
+
+- Master Data seed image with Mixed / Not Applicable in the livestock sex list (#72) (c07a692)
+
+## 2026-11-02
+
 ### openg2p-livestock-registry 1.0.0-dev.20
 
 Previous version: 1.0.0-dev.19.
