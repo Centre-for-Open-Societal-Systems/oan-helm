@@ -55,6 +55,11 @@ extraEnvVars:
 # client cannot spoof its address to escape a limit.
 service:
   type: ClusterIP
+  # Only used when an install overrides type to NodePort or LoadBalancer (e.g. behind an
+  # AWS NLB on a node whose 80/443 are taken by another ingress). Local keeps the client
+  # address; Cluster would SNAT every request to the node IP and all clients would share
+  # one rate-limit bucket. The chart ignores this field for ClusterIP.
+  externalTrafficPolicy: Local
   http:
     enabled: true
     servicePort: 80
