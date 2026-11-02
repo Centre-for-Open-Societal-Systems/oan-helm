@@ -269,6 +269,16 @@ reporting:
     user: master_data_user
     secret: master-data
     passwordKey: master-data-db-user
+  # Master Data catalogue API for reporting-label-sync.py (species and breed
+  # names), read with the registry's own service account, as the farmer
+  # chart's reporting does. An empty apiUrl skips the label copy.
+  masterDataApi:
+    apiUrl: '{{ .Values.global.masterDataApiUrl }}'
+    tokenUrl: '{{ .Values.global.masterDataTokenUrl }}'
+    clientId: '{{ .Values.global.authClientId }}'
+    clientSecret:
+      name: '{{ .Values.global.authClientSecret }}'
+      key: '{{ .Values.global.authClientSecretKey }}'
   image:
     repository: ''
     tag: ''
