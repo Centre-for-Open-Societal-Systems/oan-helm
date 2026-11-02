@@ -903,6 +903,12 @@ keycloak-init:
         - 'https://connector-farmer-registry.{{ .Values.global.baseDomain }}'
         - 'https://connector-cropsown-registry.{{ .Values.global.baseDomain }}'
         - 'https://connector-livestock-registry.{{ .Values.global.baseDomain }}'
+      # DA Services (Frappe) calls the DA registry staff API server to server with
+      # client credentials. Confidential, so keycloak-init turns its service account
+      # on. Created once: keycloak-init skips a client that exists.
+      - clientId: da-services-backend
+        name: DA Services backend
+        redirectUris: []
       users:
       - username: admin
         email: admin@your.domain.com
@@ -918,6 +924,17 @@ keycloak-init:
         clientRoleMappings:
           registry-connector:
           - REGISTRY_CONNECTOR_ADMIN
+      # The da-services-backend service account: reads DAs and opens change
+      # requests (Data Editor), imports DA files (Intake Officer) and reads the
+      # import exceptions (Integration Manager). It cannot approve. The roles are
+      # skipped with a warning when the DA registry is installed after Commons;
+      # rerun the keycloak-init job once it is.
+      - username: service-account-da-services-backend
+        clientRoleMappings:
+          da-registry-staff-portal:
+          - Data Editor
+          - Intake Officer
+          - Integration Manager
 aggregationApi:
   enabled: true
   nameOverride: ''
