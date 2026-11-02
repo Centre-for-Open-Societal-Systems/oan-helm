@@ -8,6 +8,14 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-02
+
+### openg2p-commons-services 1.0.0-dev.31
+
+Previous version: 1.0.0-dev.30.
+
+- Create the DA Services backend Keycloak client with its DA registry roles (b91170d)
+
 ## 2026-10-30
 
 ### openg2p-commons-services 1.0.0-dev.30
