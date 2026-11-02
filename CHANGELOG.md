@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-02
 
+### openg2p-livestock-registry 1.0.0-dev.20
+
+Previous version: 1.0.0-dev.19.
+
+- Livestock: application reference format and reporting labels from Master Data (#71) (76f764c)
+
+## 2026-11-02
+
 ### openg2p-commons-services 1.0.0-dev.32
 
 Previous version: 1.0.0-dev.31.
