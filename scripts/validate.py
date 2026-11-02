@@ -509,10 +509,11 @@ def main():
                 for component in ("masterDataAPI", "masterDataUi"):
                     assert values["master-data"][component]["image"]["tag"] == "0.0.0-develop.118"
                     assert re.fullmatch(r"sha256:[0-9a-f]{64}", values["master-data"][component]["image"]["digest"])
-                # The seed image is upstream's develop.118 with the ETH-OAN pack, by digest.
+                # The seed image is upstream's develop.118 with the ETH-OAN pack, by digest: a hand-tagged
+                # -oan.<n> build from the fork, or the scheduled build of one COSS develop commit.
                 seed = values["master-data"]["geoSeed"]["image"]
                 assert seed["repository"] == "ghcr.io/asmitonweb/master-data-db-seed"
-                assert re.fullmatch(r"0\.0\.0-develop\.118-oan\.\d+@sha256:[0-9a-f]{64}", seed["tag"])
+                assert re.fullmatch(r"(0\.0\.0-develop\.118-oan\.\d+|coss-develop-[0-9a-f]{12})@sha256:[0-9a-f]{64}", seed["tag"])
                 assert values["master-data"]["geoSeed"]["countryPack"] == "ETH-OAN"
                 assert values["master-data"]["geoSeed"]["enabled"] is False
                 assert info["annotations"]["oan.org/promotion-ready"] == "true"
