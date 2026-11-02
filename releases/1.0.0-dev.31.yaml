@@ -1,0 +1,18 @@
+chartVersion: 1.0.0-dev.31
+status: commons-services release record
+versionPolicy: Immutable after publication; component images retain independent versions.
+note: Only the Master Data seed image changed since 1.0.0-dev.30; the other entries of earlier manifests still apply.
+charts:
+- name: openg2p-commons-services
+  release: commons-services
+  namespace: commons
+  masterDataImageVersion: 0.0.0-develop.118
+  masterDataSeedImage:
+    repository: ghcr.io/asmitonweb/master-data-db-seed
+    tag: coss-develop-74459ca1182a
+    digest: sha256:7f3f7fb2dd672f2e9b5f7c91fbf51fd90a301cd79e441d3ba7dd434c446a5f3a
+    base: openg2p/master-data-db-seed:0.0.0-develop.118@sha256:cfa91c1bcc1798a8a82454073ac5454c8099041511bf6d0c7380b492232d809f
+    dataRepository: https://github.com/Centre-for-Open-Societal-Systems/openg2p-data
+    dataCommit: 74459ca1182a9f61ae4c25f73f6395a12dfb1cab
+    countryPack: ETH-OAN
+    note: COSS develop with openg2p-data PR 45 (nine livestock event and status lists); every list of the oan.3 image is still present
