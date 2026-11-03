@@ -16,7 +16,8 @@ global:
   cookieDomain: .development.oanstaging.com
   iamUrl: https://staff-iam.development.oanstaging.com
   iamServiceUrl: http://commons-services-iam-staff-portal-api.commons.svc.cluster.local
-  masterDataHostname: master-data.development.oanstaging.com
+  # Tile URL (see the chart's values.yaml); the API keeps master-data.*.
+  masterDataHostname: master-data-ui.development.oanstaging.com
   masterDataUiHostname: master-data-ui.development.oanstaging.com
   masterDataApiUrl: http://commons-services-master-data-api.commons.svc.cluster.local
   aweHostname: awe.development.oanstaging.com
@@ -37,7 +38,7 @@ openg2p-inji-certify:
       gateway: istio-system/development
 master-data:
   global:
-    masterDataHostname: master-data.development.oanstaging.com
+    masterDataHostname: master-data-ui.development.oanstaging.com
     masterDataUiHostname: master-data-ui.development.oanstaging.com
   # Load the ETH-OAN pack on every upgrade (an unchanged pack creates nothing;
   # a new or changed list is published at once: development only).
@@ -63,6 +64,7 @@ master-data:
       virtualservice:
         gateway: istio-system/development
   masterDataAPI:
+    hostname: master-data.development.oanstaging.com
     istio:
       virtualservice:
         gateway: istio-system/development
