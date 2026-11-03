@@ -1,0 +1,56 @@
+{{- /*
+Master Data API VirtualService, owned here instead of by the openg2p-master-data
+subchart (master-data.masterDataAPI.istio.virtualservice.enabled: false).
+
+The subchart's iam-register Job sets the staff-portal tile URL to
+https://<masterDataHostname> (the API host) on every upgrade, and the API answers
+"/" with 404. An exact "/" match therefore redirects to the Master Data UI; every
+other path still goes to the API. Both rules sit in one VirtualService so their
+order is fixed (Istio does not order rules across VirtualServices).
+*/}}
+{{- $md := index .Values "master-data" }}
+{{- if and $md.enabled .Values.masterDataApiVirtualService.enabled }}
+{{- $hostname := tpl .Values.global.masterDataHostname $ }}
+{{- $uiHostname := tpl .Values.global.masterDataUiHostname $ }}
+{{- $vs := .Values.masterDataApiVirtualService }}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  # Same name as the subchart's VirtualService, so an upgrade updates it in place.
+  name: {{ .Release.Name }}-master-data-api
+  labels:
+    app.kubernetes.io/name: master-data
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  hosts:
+  - {{ $hostname | quote }}
+  gateways:
+  - {{ $vs.gateway }}
+  http:
+  {{- if $vs.redirectRootToUi }}
+  - match:
+    - uri:
+        exact: /
+    redirect:
+      scheme: https
+      authority: {{ $uiHostname | quote }}
+      uri: /
+      redirectCode: 302
+  {{- end }}
+  - headers:
+      request:
+        set:
+          x-forwarded-host: {{ $hostname | quote }}
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: {{ .Release.Name }}-master-data-api
+        port:
+          number: {{ $vs.destinationPort }}
+{{- end }}

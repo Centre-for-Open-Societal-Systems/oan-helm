@@ -141,6 +141,8 @@ master-data:
   masterDataAPI:
     istio:
       virtualservice:
+        # Rendered by this chart instead: see masterDataApiVirtualService.
+        enabled: false
         gateway: istio-system/development
     # Registries and the UI call the API server-side; keep the MDM behaviour.
     envVars:
@@ -152,6 +154,13 @@ master-data:
     image:
       tag: 0.0.0-develop.118
       digest: sha256:3bc3f9d8db1e731d5b868edcda95bb080579831b08a8a6cea5a377e04959b5cf
+# Master Data API VirtualService (templates/master-data-api-virtualservice.yaml).
+# The staff-portal tile opens the API host, so "/" there redirects to the UI.
+masterDataApiVirtualService:
+  enabled: true
+  redirectRootToUi: true
+  gateway: istio-system/development
+  destinationPort: 80
 odk-central:
   enabled: true
   hostname: '{{ tpl .Values.global.odkHostname $ }}'
