@@ -364,6 +364,9 @@ farmerReference:
     source_query_field: functional_record_id
     uid_query_field: foundational_id
     fin_query_field: foundational_id
+    # The farmer's photo as bytes with its SHA-256; stored in this registry's
+    # own document store.
+    photo: farmer_reference.photo
     profile_paths:
       first_name: farmer_reference.first_name
       middle_name: farmer_reference.middle_name
@@ -388,3 +391,30 @@ farmerReference:
       zone_name: farmer_reference.zone_name
       woreda_name: farmer_reference.woreda_name
       kebele_name: farmer_reference.kebele_name
+      # The rest of the Farmer tab (not the Fayda verification, documents or staff names).
+      first_name_other: farmer_reference.first_name_other
+      middle_name_other: farmer_reference.middle_name_other
+      last_name_other: farmer_reference.last_name_other
+      language_spoken: farmer_reference.language_spoken
+      has_national_id: farmer_reference.has_national_id
+      rid: farmer_reference.rid
+      odk_farmer_id: farmer_reference.odk_farmer_id
+      pula_id: farmer_reference.pula_id
+      birth_date_ec: farmer_reference.birth_date_ec
+      estimated_age: farmer_reference.estimated_age
+      marital_status: farmer_reference.marital_status
+      education_level: farmer_reference.education_level
+      disabled: farmer_reference.disabled
+      disability_type: farmer_reference.disability_type
+      disability_severity: farmer_reference.disability_severity
+      source_of_income: farmer_reference.source_of_income
+      source_of_income_other: farmer_reference.source_of_income_other
+      is_psnp_user: farmer_reference.is_psnp_user
+      is_farmer: farmer_reference.is_farmer
+      farming_type: farmer_reference.farming_type
+      phones: farmer_reference.phones
+      email: farmer_reference.email
+      plus_code: farmer_reference.plus_code
+      latitude: farmer_reference.latitude
+      longitude: farmer_reference.longitude
+      altitude: farmer_reference.altitude
