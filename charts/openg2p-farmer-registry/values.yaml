@@ -50,7 +50,7 @@ registry:
   staffUi:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/staff-ui
-      tag: 90811b61a59f@sha256:e7e5c7d8d0935f8e2957019afe68cad168de8d08f34b52cffc8c91fe92d7cbc4
+      tag: 022dd8a42082@sha256:0d909127df239d7ce1cbc6c950a4beb6011fde186f0437035375edf4de03257e
     iamPublicUrl: 'https://staff-iam.{{ .Values.global.baseDomain }}'
     envVars:
       COOKIE_DOMAIN: '.{{ .Values.global.baseDomain }}'
@@ -76,7 +76,7 @@ registry:
   staffApi:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/staff-api
-      tag: 90811b61a59f@sha256:b8116e52f51c85d228d26ab97113b75cf293a9dfba120a062c16d97727039ed5
+      tag: 022dd8a42082@sha256:710e32f6dc7f87dd7d9743878725ec9f460370ae82eb93cf940b8c023983b611
     envVars:
       REGISTRY_STAFF_PORTAL_API_AUTH_REDIS_URL: redis://commons-redis-master.commons.svc.cluster.local:6379/0
       REGISTRY_CORE_REGISTRANT_AUTH_REDIS_URL: redis://commons-redis-master.commons.svc.cluster.local:6379/0
@@ -108,7 +108,7 @@ registry:
   partnerApi:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/partner-api
-      tag: 90811b61a59f@sha256:800b7b097a4fd8bf7a09ef0e24969ed374e0126933d9aa79c47e186644f4315c
+      tag: 022dd8a42082@sha256:bda1af9069b1b2650ce54f0f66f9c6bb5dc7184f7e4f5b55d0f6aa2cab600488
     envVars:
       REGISTRY_PARTNER_API_KEYMANAGER_API_BASE_URL: http://commons-services-keymanager.commons.svc.cluster.local/v1/keymanager
       REGISTRY_PARTNER_API_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
@@ -134,7 +134,7 @@ registry:
   celeryWorker:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/celery
-      tag: 90811b61a59f@sha256:15273f1e29b54f02df09b0bb69c5cf21d68432c1c34f0dd6521a1fbfe64b49c2
+      tag: 022dd8a42082@sha256:cb74fccfec636da433e9be6930e7bcd2b00d01e8a8487a47803b56c8456d0d77
     envVars:
       REGISTRY_CELERY_WORKERS_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CELERY_WORKERS_MASTER_DATA_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
@@ -155,7 +155,7 @@ registry:
   celeryBeat:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/celery
-      tag: 90811b61a59f@sha256:15273f1e29b54f02df09b0bb69c5cf21d68432c1c34f0dd6521a1fbfe64b49c2
+      tag: 022dd8a42082@sha256:cb74fccfec636da433e9be6930e7bcd2b00d01e8a8487a47803b56c8456d0d77
     envVars:
       COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       NOTIFICATION_ENABLED: 'false'
@@ -166,7 +166,7 @@ registry:
   dbSeed:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/db-seed
-      tag: 90811b61a59f@sha256:0b48d9f90be2734a131bcea08219c79cb9251307f13b422ead94f56fb7a00cd9
+      tag: 022dd8a42082@sha256:d669ef900eb7f69f9d518a08e4fdcee1f389477177e56fbc78cff70d37d0bbcd
     loadSampleData: false
     loadImages: false
     loadTemplates: true
@@ -201,7 +201,7 @@ registry:
     enabled: true
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/sanity-tests
-      tag: 90811b61a59f@sha256:baceebd88b20c4eefc9ed85473f1f9fe21a2ed86c9ee776da05e6ae47ed4e95d
+      tag: 022dd8a42082@sha256:9bb3ea28a90230941859c81a1c9ab8eb17e878b018b1e5471f75a874729416d7
     regType: Farmer
     regRecordType: spdci-extensions-dci:Farmer
     searchText: SANITY-FARMER-0001
