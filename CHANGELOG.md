@@ -10,6 +10,20 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-03
 
+### openg2p-cropsown-registry 1.0.0-dev.20
+
+Previous version: 1.0.0-dev.19.
+
+- Map every source of income for Crop Sown and Livestock (#80) (180c9b8)
+
+### openg2p-livestock-registry 1.0.0-dev.22
+
+Previous version: 1.0.0-dev.21.
+
+- Map every source of income for Crop Sown and Livestock (#80) (180c9b8)
+
+## 2026-11-03
+
 ### openg2p-cropsown-registry 1.0.0-dev.19
 
 Previous version: 1.0.0-dev.18.
