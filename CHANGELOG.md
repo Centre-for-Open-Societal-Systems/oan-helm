@@ -8,6 +8,20 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-03
+
+### openg2p-cropsown-registry 1.0.0-dev.19
+
+Previous version: 1.0.0-dev.18.
+
+- Map every Farmer-tab field and the photo for Crop Sown and Livestock (#76) (2d0d359)
+
+### openg2p-livestock-registry 1.0.0-dev.21
+
+Previous version: 1.0.0-dev.20.
+
+- Map every Farmer-tab field and the photo for Crop Sown and Livestock (#76) (2d0d359)
+
 ## 2026-11-02
 
 ### openg2p-commons-services 1.0.0-dev.33
