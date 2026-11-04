@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-04
 
+### openg2p-commons-services 1.0.0-dev.35
+
+Previous version: 1.0.0-dev.34.
+
+- Point the Master Data staff-portal tile at the UI (#92) (0071008)
+
+## 2026-11-04
+
 ### openg2p-commons-services 1.0.0-dev.34
 
 Previous version: 1.0.0-dev.33.
