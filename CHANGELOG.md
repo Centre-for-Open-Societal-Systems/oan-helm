@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-04
 
+### openg2p-farmer-registry 1.0.0-dev.22
+
+Previous version: 1.0.0-dev.21.
+
+- Farmer registry images 262e0d949a99 on platform 1.2.2-rc.625 (#94) (274ee86)
+
+## 2026-11-04
+
 ### openg2p-commons-services 1.0.0-dev.35
 
 Previous version: 1.0.0-dev.34.
