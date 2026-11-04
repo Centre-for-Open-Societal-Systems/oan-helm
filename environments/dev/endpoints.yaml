@@ -46,6 +46,8 @@ publicHosts:
   sandbox: sandbox.development.oanstaging.com
   # On the grievance RKE2 node 13.233.56.204, not `server` above.
   grievanceBackend: grievance-backend-dev.oanstaging.com
+  # Grievance UI (Next.js), same node; replaces grievance-dev.oanstaging.com.
+  grievanceUi: grievance.development.oanstaging.com
 sharedNamespace: commons
 method: Read-only post-cutover HTTPS checks and Helm/workload/Istio inventory. Private
   values/Secret payloads excluded.
