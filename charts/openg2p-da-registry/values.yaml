@@ -64,8 +64,8 @@ registry:
       REGISTRY_STAFF_PORTAL_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CORE_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
     image:
-      repository: ''
-      tag: ''
+      repository: '379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/da-registry'
+      tag: 'staff-api-4b3e39f60644@sha256:0d67b3258027f84a36137a9c9303ff9b31148e8f6091d2f67d0fc17a5d8e53ab'
     enabled: false
     istio:
       virtualservice:
@@ -88,8 +88,8 @@ registry:
       KEYCLOAK_BASE_URL: https://keycloak.development.oanstaging.com
       REGISTRY_PARTNER_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
     image:
-      repository: ''
-      tag: ''
+      repository: '379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/da-registry'
+      tag: 'partner-api-4b3e39f60644@sha256:82527bb1fe813d1055b1cec04a1228cebeed8523b330a9dfff754e575b682a60'
     enabled: false
     istio:
       virtualservice:
@@ -121,13 +121,13 @@ registry:
           name: '{{ tpl .Values.global.masterDataDBSecret $ }}'
           key: '{{ tpl .Values.global.masterDataDBUserPasswordKey $ }}'
     image:
-      repository: ''
-      tag: ''
+      repository: '379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/da-registry'
+      tag: 'celery-4b3e39f60644@sha256:a1fb9d4ccbc8d86bf7265ea7fbdc58d05b234f4e236154bf0d1bea8eab09241a'
     enabled: false
   celeryBeat:
     image:
-      repository: ''
-      tag: ''
+      repository: '379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/da-registry'
+      tag: 'celery-4b3e39f60644@sha256:a1fb9d4ccbc8d86bf7265ea7fbdc58d05b234f4e236154bf0d1bea8eab09241a'
     enabled: false
     envVars:
       COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
@@ -137,8 +137,8 @@ registry:
       REGISTRY_CELERY_BEAT_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
   dbSeed:
     image:
-      repository: ''
-      tag: ''
+      repository: '379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/da-registry'
+      tag: 'db-seed-4b3e39f60644@sha256:0bf44c81d90d5012ecdfcb6c7837c1b79c9af0fc8191183a52a19d0a2c56853c'
     loadSampleData: false
     loadImages: false
     loadTemplates: true
@@ -167,8 +167,8 @@ registry:
     enabled: false
   staffUi:
     image:
-      repository: ''
-      tag: ''
+      repository: '379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/da-registry'
+      tag: 'staff-ui-4b3e39f60644@sha256:2e7beae5f18882d342203f5b49bd2248ae13a5239bfd8ed0fa0a5780e1c40281'
     enabled: false
     iamPublicUrl: https://staff-iam.development.oanstaging.com
     envVars:
