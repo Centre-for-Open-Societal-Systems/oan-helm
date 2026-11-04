@@ -1,0 +1,18 @@
+chartVersion: 1.0.0-dev.34
+status: commons-services release record
+versionPolicy: Immutable after publication; component images retain independent versions.
+note: Only the Master Data seed image changed since 1.0.0-dev.33; the other entries of earlier manifests still apply.
+charts:
+- name: openg2p-commons-services
+  release: commons-services
+  namespace: commons
+  masterDataImageVersion: 0.0.0-develop.118
+  masterDataSeedImage:
+    repository: ghcr.io/asmitonweb/master-data-db-seed
+    tag: coss-develop-056df0189026
+    digest: sha256:f199f83c363f724cd82761ad4abebaebc70157172cc178edf939598b9b1efa67
+    base: openg2p/master-data-db-seed:0.0.0-develop.118@sha256:cfa91c1bcc1798a8a82454073ac5454c8099041511bf6d0c7380b492232d809f
+    dataRepository: https://github.com/Centre-for-Open-Societal-Systems/openg2p-data
+    dataCommit: 056df018902637bef5fda0c20110994e3ddf6d23
+    countryPack: ETH-OAN
+    note: COSS develop with openg2p-data PR 47 (livestock species and per-species breeds, horse and donkey vaccines on their own species); every list of the previous image is still present
