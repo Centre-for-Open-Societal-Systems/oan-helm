@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-04
 
+### openg2p-commons-services 1.0.0-dev.34
+
+Previous version: 1.0.0-dev.33.
+
+- Master Data seed image with the livestock species and breeds (#89) (e2360eb)
+
+## 2026-11-04
+
 ### openg2p-farmer-registry 1.0.0-dev.21
 
 Previous version: 1.0.0-dev.20.
