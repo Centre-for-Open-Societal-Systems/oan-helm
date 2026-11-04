@@ -8,6 +8,14 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-04
+
+### openg2p-farmer-registry 1.0.0-dev.21
+
+Previous version: 1.0.0-dev.20.
+
+- Move the Farmer registry to the OpenG2P registry chart 1.2.2-rc.625 (#79) (10eff85)
+
 ## 2026-11-03
 
 ### openg2p-cropsown-registry 1.0.0-dev.20
