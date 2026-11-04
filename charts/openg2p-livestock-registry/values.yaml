@@ -38,7 +38,7 @@ registry:
   staffApi:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/staff-api
-      tag: bf78e69a5fd6@sha256:189809772e28eafdeea66070dddfbe92d7ea840b2633dbc068a6f4fb85ae5ed2
+      tag: 762cc3979c53@sha256:3f142e1d4874bbb663af16ac6e794e9747b807b461f7066b707beb349843fde8
     envVars:
       REGISTRY_STAFF_PORTAL_API_VALIDATE_ATTRIBUTE_VALUES: 'true'
       REGISTRY_STAFF_PORTAL_API_APPLICATION_REFERENCE_FORMAT: '{DATE:%Y%b%d|upper}-{SECONDS:5}{RAND:5}'
@@ -96,7 +96,7 @@ registry:
   partnerApi:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/partner-api
-      tag: bf78e69a5fd6@sha256:99c37673cb62b52476a408531ffb73fa92d8d06d5ba0e61ea8790d116297f785
+      tag: 762cc3979c53@sha256:18b6ef91181d6f1e953b4d75eb3145854e14830b4460b4af29baa843f778ff76
     envVars:
       REGISTRY_PARTNER_API_VALIDATE_ATTRIBUTE_VALUES: 'true'
       REGISTRY_PARTNER_API_APPLICATION_REFERENCE_FORMAT: '{DATE:%Y%b%d|upper}-{SECONDS:5}{RAND:5}'
@@ -126,7 +126,7 @@ registry:
   celeryWorker:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/celery
-      tag: bf78e69a5fd6@sha256:982e8272993305d90d34ea5a449f915c5ad21689ba0788c48806fd003b1c143a
+      tag: 762cc3979c53@sha256:f4f7b18803d61a0abd4a52a72fb898254345a88a96385e3ef0d0a2bf3212e955
     envVars:
       CELERY_OPTS: worker -Q registry_worker_queue --loglevel=info --concurrency=4
       REGISTRY_CELERY_WORKERS_VALIDATE_ATTRIBUTE_VALUES: 'true'
@@ -163,7 +163,7 @@ registry:
   celeryBeat:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/celery
-      tag: bf78e69a5fd6@sha256:982e8272993305d90d34ea5a449f915c5ad21689ba0788c48806fd003b1c143a
+      tag: 762cc3979c53@sha256:f4f7b18803d61a0abd4a52a72fb898254345a88a96385e3ef0d0a2bf3212e955
     envVars:
       CELERY_OPTS: worker --beat --loglevel=info --schedule=/tmp/celery-beat-schedule.db
         --concurrency=4
@@ -178,7 +178,7 @@ registry:
   dbSeed:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/db-seed
-      tag: bf78e69a5fd6@sha256:6ba640c81fc5a6eb19b4a81ae2b6b86ce78cd76dc64dc67723de26cffc5efae3
+      tag: 762cc3979c53@sha256:365a2653bb2b78c6ce12d9c35bc78f77952a4980be40152dd7b35d82b79475e9
     loadGeoData: false
     loadSampleData: false
     loadImages: false
@@ -214,7 +214,7 @@ registry:
   staffUi:
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/staff-ui
-      tag: bf78e69a5fd6@sha256:07905855fdbc7dd452e92a36d7076eaddc86c17cc7b339332bf6fe2b2ddf4166
+      tag: 762cc3979c53@sha256:8ca2c1cd37403410bf03f85073c7ba08ba245a40655101d22a7c61c809545c6c
     iamPublicUrl: https://staff-iam.development.oanstaging.com
     envVars:
       COOKIE_DOMAIN: .development.oanstaging.com
@@ -241,7 +241,7 @@ registry:
     enabled: true
     image:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/sanity-tests
-      tag: bf78e69a5fd6@sha256:4bf827ba97d8af32315021bec0fad2d4910e53c3c0a1fa449aa37058d66ddcdc
+      tag: 762cc3979c53@sha256:fd15290755fdc4096865987a01116011b679d4ec4d055531a40a85b073bc299a
     regType: Livestock
     regRecordType: spdci-extensions-dci:Livestock
     searchText: SANITY-LIVESTOCK-0001
@@ -344,9 +344,9 @@ odkGeoSync:
 dashboardApi:
   enabled: false
   image:
-    digest: sha256:f105a023e2cf38149ae194eefae91d9d9a9d8ab8c6839a5b8d8c3a2d40958ce9
+    digest: sha256:bab32ba5e943f1dc10aeae9747bf1e1c4460efb91f3e6b890c531b6c483990e0
     repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/dashboard-api
-    tag: bf78e69a5fd6
+    tag: '762cc3979c53'
   replicas: 1
   workers: 2
   dbPool:
