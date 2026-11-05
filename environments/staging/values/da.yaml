@@ -33,6 +33,8 @@ global:
   idGeneratorHostname: idgenerator-da.oanstaging.com
   staffPortalBaseUrl: https://da-registry.oanstaging.com
 registry:
+  dbSeed:
+    enabled: true
   keycloak-init:
     keycloak:
       url: http://commons-keycloak.commons.svc.cluster.local:80
@@ -55,6 +57,7 @@ registry:
           host: '{{ tpl .Values.global.idGeneratorHostname $ }}'
     enabled: true
   staffUi:
+    enabled: true
     iamPublicUrl: https://staff-iam.oanstaging.com
     envVars:
       COOKIE_DOMAIN: .oanstaging.com
@@ -73,6 +76,7 @@ registry:
     hostname: da-registry.oanstaging.com
     partnerIngestUrl: https://partner-da-registry.oanstaging.com/partner/ingest_data?data_model=dcivc
   staffApi:
+    enabled: true
     envVars:
       REGISTRY_STAFF_PORTAL_API_AUTH_REDIS_URL: redis://commons-redis-master.commons.svc.cluster.local:6379/0
       REGISTRY_CORE_REGISTRANT_AUTH_REDIS_URL: redis://commons-redis-master.commons.svc.cluster.local:6379/0
@@ -106,6 +110,7 @@ registry:
           name: '{{ .Release.Name }}-staff-portal'
           key: client_secret
   partnerApi:
+    enabled: true
     envVars:
       REGISTRY_PARTNER_API_KEYMANAGER_API_BASE_URL: http://commons-services-keymanager.commons.svc.cluster.local/v1/keymanager
       REGISTRY_PARTNER_API_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
@@ -137,6 +142,7 @@ registry:
           name: '{{ .Release.Name }}-staff-portal'
           key: client_secret
   celeryWorker:
+    enabled: true
     envVars:
       REGISTRY_CELERY_WORKERS_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       REGISTRY_CELERY_WORKERS_MASTER_DATA_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
@@ -181,6 +187,7 @@ registry:
           name: '{{ tpl .Values.global.aweCallbackHmacSecretName $ }}'
           key: '{{ .Values.global.aweCallbackHmacSecretKey }}'
   celeryBeat:
+    enabled: true
     envVars:
       COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
       NOTIFICATION_ENABLED: 'false'
