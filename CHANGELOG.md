@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-05
 
+### openg2p-cropsown-registry 0.0.0-develop.488 (develop)
+
+- Merge pull request #239 from asmitonweb/use-pack-codes-for-growth-stage-and-severity (Centre-for-Open-Societal-Systems/cropsown-regsitry@fbe5a37e41f2)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-05
+
 ### openg2p-farmer-registry 1.0.0-rc.813 (staging)
 
 - Merge pull request #228 from asmitonweb/promote-staging-automatically (Centre-for-Open-Societal-Systems/farmer-registry@90b2649a7b10)
