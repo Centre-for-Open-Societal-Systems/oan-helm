@@ -1,5 +1,6 @@
 import importlib.util
 from pathlib import Path
+import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -74,6 +75,18 @@ class AnnotateTests(unittest.TestCase):
     def test_a_chart_without_annotations_is_refused(self):
         with self.assertRaises(ValueError):
             package_chart.annotate("name: x\n", {"a": "b"})
+
+
+class LeftoverTests(unittest.TestCase):
+    def test_an_old_lock_and_subcharts_are_removed_from_the_copy(self):
+        with tempfile.TemporaryDirectory() as folder:
+            chart = Path(folder)
+            (chart / "Chart.yaml").write_text("name: x")
+            (chart / "Chart.lock").write_text("old")
+            (chart / "charts").mkdir()
+            (chart / "charts/old.tgz").write_text("old")
+            package_chart.remove_leftovers(chart)
+            self.assertEqual([path.name for path in chart.iterdir()], ["Chart.yaml"])
 
 
 if __name__ == "__main__":
