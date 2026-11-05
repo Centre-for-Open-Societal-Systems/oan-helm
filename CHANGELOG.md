@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-05
 
+### oan-sandbox 1.0.0-dev.17
+
+Previous version: 1.0.0-dev.16.
+
+- feat(oan-sandbox): Keycloak, OAuth app tokens and partner gateway val… (#102) (5dcaa12)
+
+## 2026-11-05
+
 ### openg2p-livestock-registry 0.0.0-develop.424 (develop)
 
 - Move the Livestock chart into this repository and deploy the chart each build packages (Centre-for-Open-Societal-Systems/livestock-registry@e5082c54e7ab)

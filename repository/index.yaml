@@ -134,6 +134,37 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
     apiVersion: v2
     appVersion: develop
+    created: "2026-11-05T12:01:07.824019918Z"
+    description: OAN Sandbox for OpenAgriNet (OAN), developed in the COSS sandbox-platform
+      repository; developer portal with the API catalogue, participant portal, try-it
+      console and admin console. Component images have independent versions.
+    digest: 2bf8351418b01438640417d395b5f11ff698093548371affac338a0105b406a4
+    home: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - sandbox
+    - developer-portal
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-sandbox
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-sandbox-1.0.0-dev.17.tgz
+    version: 1.0.0-dev.17
+  - annotations:
+      catalog.cattle.io/display-name: OAN Sandbox
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-sandbox
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    apiVersion: v2
+    appVersion: develop
     created: "2026-10-27T13:43:44.761768+05:30"
     description: OAN Sandbox for OpenAgriNet (OAN), developed in the COSS sandbox-platform
       repository; developer portal with the API catalogue, participant portal, try-it
@@ -7828,4 +7859,4 @@ entries:
     urls:
     - openg2p-livestock-registry-1.0.0-dev.1.tgz
     version: 1.0.0-dev.1
-generated: "2026-11-04T11:07:47.943717937Z"
+generated: "2026-11-05T12:01:07.823355457Z"
