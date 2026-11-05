@@ -30,7 +30,8 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from package_chart import annotate, derive_version  # noqa: E402
 
-CHANNEL = "https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/"
+REPOSITORY = "https://github.com/Centre-for-Open-Societal-Systems/oan-helm.git"
+CHANNEL = "https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/%s/repository/develop/"
 MOVING_TAG = "staging"
 ECR = re.compile(r"^(?P<host>\d{12}\.dkr\.ecr\.(?P<region>[a-z0-9-]+)\.amazonaws\.com)/(?P<name>.+)$")
 PINNED_TAG = re.compile(r"""^(?P<lead>\s*tag:\s*)["']?(?P<tag>[^"'@\s]+)@(?P<digest>sha256:[0-9a-f]{64})["']?\s*$""")
@@ -55,6 +56,11 @@ def index_entries(text, chart):
             entry["commit" if found.group(1) else found.group(2)] = found.group(3)
     entries = [item for item in entries if {"version", "commit", "digest"} <= set(item)]
     return sorted(entries, key=lambda item: int(item["version"].rsplit(".", 1)[1]), reverse=True)
+
+
+def channel():
+    """repository/develop/ at the newest commit of main. A branch URL is served from a cache for minutes after a publish."""
+    return CHANNEL % run(["git", "ls-remote", REPOSITORY, "refs/heads/main"]).split()[0]
 
 
 def built_from_tree(entries, tree, tree_of):
@@ -123,7 +129,8 @@ def download(url, target, digest):
 def promote(args):
     version = derive_version("staging")
     tree = run(["git", "rev-parse", "HEAD^{tree}"]).strip()
-    index = urllib.request.urlopen(CHANNEL + "index.yaml", timeout=60).read().decode("utf-8")
+    source = channel()
+    index = urllib.request.urlopen(source + "index.yaml", timeout=60).read().decode("utf-8")
 
     def tree_of(commit):
         try:
@@ -136,7 +143,7 @@ def promote(args):
     output = Path(args.output)
     try:
         archive = work / "develop.tgz"
-        download("%s%s-%s.tgz" % (CHANNEL, args.chart, entry["version"]), archive, entry["digest"])
+        download("%s%s-%s.tgz" % (source, args.chart, entry["version"]), archive, entry["digest"])
         with tarfile.open(str(archive)) as bundle:
             bundle.extractall(str(work))
         chart = work / args.chart

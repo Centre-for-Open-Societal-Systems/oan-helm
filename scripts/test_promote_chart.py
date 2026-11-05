@@ -58,6 +58,14 @@ class IndexTests(unittest.TestCase):
     def test_a_chart_that_is_not_listed_has_no_entries(self):
         self.assertEqual(promote_chart.index_entries(INDEX, "openg2p-da"), [])
 
+    def test_channel_is_read_at_a_commit_and_not_through_the_branch_cache(self):
+        real = promote_chart.run
+        promote_chart.run = lambda command: "abc123\trefs/heads/main\n"
+        try:
+            self.assertIn("/oan-helm/abc123/repository/develop/", promote_chart.channel())
+        finally:
+            promote_chart.run = real
+
 
 class TreeTests(unittest.TestCase):
     ENTRIES = [{"version": "2", "commit": "b"}, {"version": "1", "commit": "a"}]
