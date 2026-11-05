@@ -43,10 +43,14 @@ Pipelines describe a version in chart annotations:
 
 ## Promotion
 
-Staging is promoted from develop, never rebuilt. `staging` moves by fast-forward to a commit develop already
-built, the pipeline adds the rc tag and the `staging` alias to the same ECR digests, and publishes the chart
-to `repository/staging/`. A release tag does the same from the rc. The `release` branch does not exist yet;
-it arrives with production.
+Staging is promoted from develop, never rebuilt. A pull request brings develop into `staging`, so the source tree of
+`staging` equals a commit develop already built. `scripts/ci/promote_chart.py` then finds the chart of that tree in
+`repository/develop/`, adds the rc tag and the `staging` alias to the same ECR digests, and packages the chart again with
+the rc version. The annotation `oan.org/promoted-from` names the develop chart. The promotion fails if develop never built
+that tree, so anything that must reach staging goes through develop and New Dev first. Environment settings are not part
+of the tree: they are in `environments/staging/values/`.
+
+A release tag does the same from the rc. The `release` branch does not exist yet; it arrives with production.
 
 ## Publishing credential
 
