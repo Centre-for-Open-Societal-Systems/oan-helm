@@ -36,7 +36,7 @@ except ValueError:
     deployed = []
 print(deployed[-1] if deployed else "")' || true)
 
-if ! helm upgrade --install "$release" "$archive" -n "$namespace" --create-namespace --reset-values -f "$values" "$@" \
+if ! helm upgrade --install "$release" "$archive" -n "$namespace" --reset-values -f "$values" "$@" \
     --wait --timeout "${HELM_TIMEOUT:-30m}"; then
   echo "the upgrade of $release failed" >&2
   kubectl get pods -n "$namespace" || true
