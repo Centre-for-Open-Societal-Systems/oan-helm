@@ -14,7 +14,7 @@ import sys
 import uuid
 
 ROOT=Path(__file__).resolve().parents[1]
-COLLECTION=ROOT/'postman/COSS-Automated-Staff.postman_collection.json'
+COLLECTION=ROOT/'postman/OAN-Automated-Staff.postman_collection.json'
 
 
 def collection():
@@ -85,7 +85,7 @@ else {pm.test('Every offered tab executed and every root fixture returned',()=>{
     add('18 Tampered ticket rejected','POST',tab,404,'{{negative_tab}}',pre=first+"b.searchId += 'tampered';pm.variables.set('negative_tab',JSON.stringify(b));")
     add('19 Different record rejected','POST',tab,400,'{{negative_tab}}',pre=first+"b.recordId='00000000-0000-0000-0000-000000000000';pm.variables.set('negative_tab',JSON.stringify(b));")
     add('20 Unknown tab rejected','POST',tab,400,'{{negative_tab}}',pre=first+"b.tabId='OAN_E2E_UNKNOWN';pm.variables.set('negative_tab',JSON.stringify(b));")
-    return {'info':{'name':'COSS automated new-dev staff regression','schema':'https://schema.getpostman.com/json/collection/v2.1.0/collection.json','description':'Run through the authorized local launcher: fixture setup and fresh test service tokens are automatic. Tests live staff access and registry data, Consent routing and access denial. Full partner OTP flow remains blocked pending SMS and partner setup.'},'item':items,'variable':[{'key':'expected_records','value':json.dumps(expected)},{'key':'foundational_id','value':fixture['foundationalId']},{'key':'agg_url','value':fixture['aggregationUrl']},{'key':'invalid_access_token','value':'invalid-regression-token'}]}
+    return {'info':{'name':'OAN automated new-dev staff regression','schema':'https://schema.getpostman.com/json/collection/v2.1.0/collection.json','description':'Run through the authorized local launcher: fixture setup and fresh test service tokens are automatic. Tests live staff access and registry data, Consent routing and access denial. Full partner OTP flow remains blocked pending SMS and partner setup.'},'item':items,'variable':[{'key':'expected_records','value':json.dumps(expected)},{'key':'foundational_id','value':fixture['foundationalId']},{'key':'agg_url','value':fixture['aggregationUrl']},{'key':'invalid_access_token','value':'invalid-regression-token'}]}
 
 
 def main():

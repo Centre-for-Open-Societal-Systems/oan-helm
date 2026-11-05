@@ -6,11 +6,11 @@ Portal rollout verified 21 October 2026 on `13.201.58.55`.
 | --- | --- |
 | Apps > Repositories > `oan-coss-preview` | Downloaded; raw GitHub fork preview includes dev.6. Stable `oan-coss` gets dev.6 after the upstream PR is merged. No Pages required. |
 | Apps > Installed Apps > namespace `commons` > `commons-services` | Chart `openg2p-commons-services` **1.0.0-dev.6**, Helm revision **18**, deployed |
-| Workloads > Deployments > `commons-services-cm-api` | New COSS Consent API, ready |
+| Workloads > Deployments > `commons-services-cm-api` | New OAN Consent API, ready |
 | Workloads > Deployments > `commons-services-cm-partner-api` | Same new API image, partner audience, ready |
-| Workloads > Deployments > `commons-services-cm-ui` | New COSS Consent UI, ready |
+| Workloads > Deployments > `commons-services-cm-ui` | New OAN Consent UI, ready |
 | Workloads > Deployments > `commons-services-cm-partner-portal` | OAN Consent Partner Portal, ready; partner-realm PKCE login verified |
-| Workloads > Deployments > `commons-services-aggregation-api` | New stateless COSS Aggregation API, enabled and ready |
+| Workloads > Deployments > `commons-services-aggregation-api` | New stateless OAN Aggregation API, enabled and ready |
 | VirtualServices > `commons-services-aggregation-api` | `aggregation.development.oanstaging.com` through `istio-system/development` |
 
 URLs:

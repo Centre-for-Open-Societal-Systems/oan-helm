@@ -18,7 +18,7 @@ def render(enabled):
         fixture=Path(tmp)
         (fixture/'templates').mkdir()
         (fixture/'charts').mkdir()
-        for name in ('_helpers.tpl','_coss.tpl','websub-topics.yaml'):
+        for name in ('_helpers.tpl','_oan.tpl','websub-topics.yaml'):
             shutil.copyfile(CHART/'templates'/name,fixture/'templates'/name)
         shutil.copyfile(CHART/'charts/websub-1.3.2.tgz',fixture/'charts/websub-1.3.2.tgz')
         (fixture/'Chart.yaml').write_text('apiVersion: v2\nname: websub-contract\nversion: 1.0.0\ndependencies:\n- name: websub\n  version: 1.3.2\n  condition: websub.enabled\n')

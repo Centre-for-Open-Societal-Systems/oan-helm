@@ -7,7 +7,7 @@ import re
 import subprocess
 
 ROOT=Path(__file__).resolve().parents[1]
-COLLECTION=ROOT/'postman/COSS-Registry-Public-URLs.postman_collection.json'
+COLLECTION=ROOT/'postman/OAN-Registry-Public-URLs.postman_collection.json'
 
 
 def collection():
@@ -30,7 +30,7 @@ def collection():
                 host=role+'-'+registry+('-development' if old else '.development')+'.oanstaging.com'
                 add(registry+' '+role+(' legacy' if old else ' canonical')+' API','https://'+host+'/ping','application/json',200,
                     "pm.test('Registry API answered',()=>pm.expect(pm.response.json()).to.equal('pong'));",False)
-    return {'info':{'name':'COSS registry public URL regression','schema':'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
+    return {'info':{'name':'OAN registry public URL regression','schema':'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
         'description':'Read-only live routing checks, with no login or fixtures. Detects canonical routes missing despite healthy internal registry APIs. Legacy HTML GET redirects, JSON/API calls keep proxy compatibility.'},'item':items}
 
 

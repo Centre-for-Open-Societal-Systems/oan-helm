@@ -57,7 +57,7 @@ class RefactorContracts(unittest.TestCase):
                 (fixture/'templates').mkdir()
                 # Render only the reporting API template, without registry workloads.
                 # The real chart gate is neither edited nor bypassed for deployment.
-                for name in ('_coss.tpl','_reporting.tpl','dashboard-api.yaml'):
+                for name in ('_oan.tpl','_reporting.tpl','dashboard-api.yaml'):
                     shutil.copyfile(source/'templates'/name,fixture/'templates'/name)
                 (fixture/'Chart.yaml').write_text('apiVersion: v2\nname: auth-contract\nversion: 1.0.0+test\n')
                 values = yaml.safe_load((source/'values.yaml').read_text(encoding='utf-8'))

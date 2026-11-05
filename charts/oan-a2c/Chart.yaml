@@ -8,7 +8,6 @@ appVersion: version-16
 keywords:
 - oan
 - openagrinet
-- coss
 - frappe
 - a2c
 home: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c
@@ -18,7 +17,7 @@ sources:
 - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
 - https://github.com/frappe/helm
 maintainers:
-- name: OpenAgriNet (OAN) / COSS
+- name: OpenAgriNet (OAN)
   url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
 dependencies:
 - name: erpnext
@@ -26,6 +25,6 @@ dependencies:
   version: 8.0.89
   repository: https://helm.erpnext.com
 annotations:
-  oan.org/owner: OpenAgriNet (OAN) / COSS
+  oan.org/owner: OpenAgriNet (OAN)
   oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c
   oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-a2c
