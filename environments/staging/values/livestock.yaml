@@ -241,6 +241,9 @@ reporting:
     enabled: true
 dashboardApi:
   enabled: true
+  image:
+    # The image the chart's tag names. The chart's digest field still pins an older build without API authentication.
+    digest: sha256:0e6a34e3413b317261a74f5dc878fec4573b173f435890ab957d170fc2a6120e
   auth:
     enabled: true
     issuer: https://keycloak.oanstaging.com/realms/staff
