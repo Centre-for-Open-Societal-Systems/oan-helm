@@ -60,9 +60,12 @@ class IndexTests(unittest.TestCase):
 
     def test_channel_is_read_at_a_commit_and_not_through_the_branch_cache(self):
         real = promote_chart.run
-        promote_chart.run = lambda command: "abc123\trefs/heads/main\n"
+        commands = []
+        promote_chart.run = lambda command: commands.append(command) or "abc123\trefs/heads/main\n"
         try:
             self.assertIn("/oan-helm/abc123/repository/develop/", promote_chart.channel())
+            self.assertEqual(commands, [["git", "ls-remote", promote_chart.CHART_SOURCE, "refs/heads/main"]])
+            self.assertIsInstance(promote_chart.CHART_SOURCE, str)
         finally:
             promote_chart.run = real
 
