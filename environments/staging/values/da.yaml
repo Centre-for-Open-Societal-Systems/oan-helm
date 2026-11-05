@@ -202,3 +202,12 @@ registry:
     enabled: true
   redis:
     enabled: true
+
+# ECR pull secret created and refreshed by this release. The pods run as the
+# namespace default ServiceAccount, which the release patches to use the secret
+# (global.imagePullSecrets renders invalid YAML in the pinned registry subchart).
+ecrPullSecret:
+  enabled: true
+  registry: 379220350808.dkr.ecr.ap-south-1.amazonaws.com
+  serviceAccounts:
+    - default

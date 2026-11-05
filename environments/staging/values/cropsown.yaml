@@ -266,3 +266,12 @@ farmerReference:
     779phPl8sUZENsF/2EdVLzlzlPjiUmVuThm3byWMCLdo4hUTrEerqfOOd1hJWSB5
     1wIDAQAB
     -----END PUBLIC KEY-----
+
+# ECR pull secret created and refreshed by this release. The pods run as the
+# namespace default ServiceAccount, which the release patches to use the secret
+# (global.imagePullSecrets renders invalid YAML in the pinned registry subchart).
+ecrPullSecret:
+  enabled: true
+  registry: 379220350808.dkr.ecr.ap-south-1.amazonaws.com
+  serviceAccounts:
+    - default
