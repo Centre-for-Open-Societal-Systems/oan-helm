@@ -114,6 +114,14 @@ def derive_version(branch):
     return re.search(r"(?m)^version=(\S+)$", out).group(1)
 
 
+def remove_leftovers(chart):
+    """Jenkins workspaces outlive builds: an ignored Chart.lock or downloaded subchart may be from an older chart."""
+    lock = chart / "Chart.lock"
+    if lock.exists():
+        lock.unlink()
+    shutil.rmtree(str(chart / "charts"), ignore_errors=True)
+
+
 def package(args):
     source = Path(args.chart)
     version = args.version or derive_version(args.branch)
@@ -123,6 +131,7 @@ def package(args):
     try:
         chart = work / source.name
         shutil.copytree(str(source), str(chart))
+        remove_leftovers(chart)
         values = chart / "values.yaml"
         text = values.read_text(encoding="utf-8")
         for path, repository, tag in images:
