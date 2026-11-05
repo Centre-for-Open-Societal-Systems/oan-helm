@@ -8,6 +8,13 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-05
+
+### openg2p-farmer-registry 0.0.0-develop.800 (develop)
+
+- Publish the Farmer chart from this repository after each deploy (#226) (Centre-for-Open-Societal-Systems/farmer-registry@a9128872b86d)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
 ## 2026-11-04
 
 ### openg2p-farmer-registry 1.0.0-dev.22
