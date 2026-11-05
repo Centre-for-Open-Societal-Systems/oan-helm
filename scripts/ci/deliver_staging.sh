@@ -46,4 +46,10 @@ if ! helm upgrade --install "$release" "$archive" -n "$namespace" --create-names
   exit 1
 fi
 
-python3 "$here/publish_chart.py" "$archive"
+# A rerun of the same source promotes the same rc version, and a published version is never replaced (exit 4).
+status=0
+python3 "$here/publish_chart.py" "$archive" || status=$?
+case $status in
+  0|4) ;;
+  *) exit "$status" ;;
+esac
