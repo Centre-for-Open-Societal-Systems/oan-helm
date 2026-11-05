@@ -3,12 +3,15 @@
 repository/ is what Rancher and `helm repo add` read, so its archives and
 index change only through scripts/release.py on main. A pull request that
 touches a protected path fails; on main, any non-merge commit in the pushed
-range that touches one must come from the release bot.
+range that touches one must come from the release bot. The one exception is the
+registry pipelines' GitHub App, which may add a new archive to a channel folder
+(scripts/ci/publish_chart.py) and nothing else.
 
   check_protected_paths.py --base <ref>             # pull request: diff base...HEAD
   check_protected_paths.py --range <before>..<after>  # push to main: check authors
 """
 import argparse
+import re
 import subprocess
 import sys
 
@@ -19,6 +22,8 @@ PROTECTED = (
     "CHANGELOG.md",
 )
 RELEASE_BOT = "github-actions[bot]"
+CHANNEL_PUBLISHER = "oan-ci-app[bot]"
+CHANNEL_ARCHIVE = re.compile(r"repository/(develop|staging|release)/[^/]+\.tgz")
 
 
 def git(*args):
@@ -40,8 +45,13 @@ def check_push(revisions):
         sha, author = line.split("\t", 1)
         if author == RELEASE_BOT:
             continue
-        touched = protected(git("diff-tree", "--no-commit-id", "--name-only", "-r", sha).splitlines())
-        errors += [f"{sha[:12]} by {author} changed {path}" for path in touched]
+        for change in git("diff-tree", "--no-commit-id", "--name-status", "-r", sha).splitlines():
+            status, path = change.split("\t")[0], change.split("\t")[-1]
+            if not protected([path]):
+                continue
+            if author == CHANNEL_PUBLISHER and status == "A" and CHANNEL_ARCHIVE.fullmatch(path):
+                continue
+            errors.append(f"{sha[:12]} by {author} changed {path}")
     return errors
 
 
