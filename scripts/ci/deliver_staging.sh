@@ -2,7 +2,9 @@
 # Promote the develop chart of this source tree to staging, deploy it, and publish it. Run by a registry staging pipeline
 # in a full checkout of the staging branch. Nothing is built here.
 #
-#   deliver_staging.sh <chart> <release> <namespace> <overlay file in environments/staging/values/>
+#   deliver_staging.sh <chart> <release> <namespace> <overlay file in environments/staging/values/> [helm flags]
+#
+# Further arguments go to helm upgrade, after the overlay: a registry's own value layers or its post-renderer.
 #
 # 1. promote_chart.py adds the rc tag to the images New Dev ran and packages the rc chart. It fails if develop never
 #    built this source tree.
@@ -15,6 +17,7 @@
 # Needs KUBECONFIG, AWS credentials for ECR and GH_TOKEN. HELM_TIMEOUT defaults to 30m.
 set -euo pipefail
 chart=$1 release=$2 namespace=$3 overlay=$4
+shift 4
 here=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 values="$here/../../environments/staging/values/$overlay"
 test -f "$values" || { echo "no staging values $overlay in oan-helm" >&2; exit 1; }
@@ -32,7 +35,7 @@ except ValueError:
     deployed = []
 print(deployed[-1] if deployed else "")')
 
-if ! helm upgrade --install "$release" "$archive" -n "$namespace" --create-namespace --reset-values -f "$values" \
+if ! helm upgrade --install "$release" "$archive" -n "$namespace" --create-namespace --reset-values -f "$values" "$@" \
     --wait --timeout "${HELM_TIMEOUT:-30m}"; then
   echo "the upgrade of $release failed" >&2
   kubectl get pods -n "$namespace" || true
