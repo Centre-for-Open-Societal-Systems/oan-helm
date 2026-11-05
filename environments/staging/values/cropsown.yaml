@@ -272,6 +272,9 @@ farmerReference:
 # (global.imagePullSecrets renders invalid YAML in the pinned registry subchart).
 ecrPullSecret:
   enabled: true
+  # Staging Deployments made before this chart still name cropsown-ecr at pod level (set by hand,
+  # kept by Helm's three-way merge). Refreshing that same secret makes them pull again.
+  name: cropsown-ecr
   registry: 379220350808.dkr.ecr.ap-south-1.amazonaws.com
   serviceAccounts:
     - default
