@@ -1,6 +1,10 @@
 # Staging (oanstaging.com) values for openg2p-da-registry: the New Dev values with the domain and gateway
 # changed. Release da-registry, namespace da-registry. Images come from the chart.
 global:
+  # Registry pods pull from ECR with ecr-pull-secret, which the ecr-secret-refresh
+  # CronJob renews every 6 hours. Set here so no pull secret is patched by hand.
+  imagePullSecrets:
+    - ecr-pull-secret
   baseDomain: oanstaging.com
   keycloakBaseUrl: https://keycloak.oanstaging.com
   keycloakRealm: staff

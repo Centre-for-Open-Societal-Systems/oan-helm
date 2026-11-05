@@ -1,6 +1,10 @@
 # Staging (oanstaging.com) values for openg2p-cropsown-registry: the New Dev values with the domain and gateway
 # changed. Release cropsown-registry, namespace crop. Images come from the chart.
 global:
+  # Registry pods pull from ECR with ecr-pull-secret, which the ecr-secret-refresh
+  # CronJob renews every 6 hours. Set here so no pull secret is patched by hand.
+  imagePullSecrets:
+    - ecr-pull-secret
   websubBaseUrl: http://commons-services-websub.commons.svc.cluster.local
   baseDomain: oanstaging.com
   keycloakBaseUrl: https://keycloak.oanstaging.com
