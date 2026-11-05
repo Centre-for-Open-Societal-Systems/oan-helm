@@ -13,4 +13,4 @@ deliver() {
 deliver farmer-registry-dashboard farmer repository/farmer-registry-dashboard-0.1.2.tgz "$values/farmer-dashboard.yaml"
 deliver cropsown-registry-dashboard crop repository/cropsown-registry-dashboard-0.1.2.tgz "$values/cropsown-dashboard.yaml"
 deliver livestock-registry-dashboard live repository/livestock-registry-dashboard-0.1.2.tgz "$values/livestock-dashboard.yaml"
-deliver oan-dashboards commons addons/registry-dashboards/oan-dashboards "$values/oan-dashboards.yaml"
+deliver oan-dashboards commons addons/oan-dashboards "$values/oan-dashboards.yaml"
