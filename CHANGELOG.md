@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-05
 
+### openg2p-da-registry 0.0.0-develop.81 (develop)
+
+- Move the DA chart into this repository and deploy the chart each build packages (Centre-for-Open-Societal-Systems/da-registry@4ad52ab0f375)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-05
+
 ### openg2p-farmer-registry 0.0.0-develop.801 (develop)
 
 - Deploy the chart each develop build packages, and publish that same archive (Centre-for-Open-Societal-Systems/farmer-registry@3337c093d42e)

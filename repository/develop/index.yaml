@@ -1,5 +1,51 @@
 apiVersion: v1
 entries:
+  openg2p-da-registry:
+  - annotations:
+      catalog.cattle.io/display-name: OAN DA Registry
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/da-registry/tree/develop/helm/openg2p-da-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/release-name: da-registry
+      oan.org/release-namespace: da-registry
+      oan.org/source-commit: 4ad52ab0f37556383a0b51b32677e7237e710e1c
+      oan.org/source-repository: Centre-for-Open-Societal-Systems/da-registry
+      oan.org/source-subject: Move the DA chart into this repository and deploy the
+        chart each build packages
+      oan.org/values-overlay: environments/dev/values/da.yaml
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.614
+    created: "2026-11-05T09:34:10.134120521Z"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.614
+    description: OAN DA Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: 9b5e3c57d1256b571e15209c11232d32df0f27390f27750ed1a6e1c47aabdaa3
+    home: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - da-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-da-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - openg2p-da-registry-0.0.0-develop.81.tgz
+    version: 0.0.0-develop.81
   openg2p-farmer-registry:
   - annotations:
       catalog.cattle.io/certified: partner
@@ -20,7 +66,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.625
-    created: "2026-11-05T09:12:26.460580066Z"
+    created: "2026-11-05T09:34:10.169756922Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -73,7 +119,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.625
-    created: "2026-11-05T09:12:26.447312743Z"
+    created: "2026-11-05T09:34:10.151608899Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -107,4 +153,4 @@ entries:
     urls:
     - openg2p-farmer-registry-0.0.0-develop.800.tgz
     version: 0.0.0-develop.800
-generated: "2026-11-05T09:12:26.43326708Z"
+generated: "2026-11-05T09:34:10.117303228Z"
