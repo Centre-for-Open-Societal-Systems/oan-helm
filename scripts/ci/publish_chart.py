@@ -8,7 +8,9 @@ pipelines of different registries never conflict with each other.
 
   GH_TOKEN=<token> python3 publish_chart.py dist/openg2p-farmer-registry-0.0.0-develop.812.tgz
 
-Needs GH_TOKEN with Contents write on OAN_HELM_REPOSITORY (default the COSS oan-helm repository).
+Needs GH_TOKEN with push access to OAN_HELM_REPOSITORY (default the COSS oan-helm repository). For now that is
+the token of a maintainer account, Jenkins credential oan-helm-fork-token. A GitHub App will replace it once its
+configuration is done; only the credential changes, since commits always carry the PUBLISHER name below.
 DRY_RUN=1 prints the target and writes nothing.
 Exit codes: 0 published, 1 unexpected failure, 2 bad input, 3 no token, 4 version already published.
 
@@ -29,6 +31,7 @@ CHANNELS = (
     ("staging", re.compile(r"\d+\.\d+\.\d+-rc\.\d+")),
     ("release", re.compile(r"\d+\.\d+\.\d+")),
 )
+PUBLISHER = {"name": "oan-chart-publisher", "email": "oan-chart-publisher@users.noreply.github.com"}
 ARCHIVE = re.compile(r"(?P<chart>[a-z0-9-]+?)-(?P<version>\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)\.tgz")
 
 
@@ -68,6 +71,8 @@ def main(argv):
         "message": "publish %s %s" % (match.group("chart"), match.group("version")),
         "content": base64.b64encode(archive.read_bytes()).decode("ascii"),
         "branch": "main",
+        "author": PUBLISHER,
+        "committer": PUBLISHER,
     }
     request = urllib.request.Request(
         "https://api.github.com/repos/%s/contents/%s" % (REPOSITORY, path), method="PUT",

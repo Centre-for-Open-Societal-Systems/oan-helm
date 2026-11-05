@@ -9,6 +9,7 @@ and deployed, and [CONTRIBUTING.md](../CONTRIBUTING.md) for the pull-request rul
 | --- | --- |
 | [versioning.md](versioning.md) | Version rules and the automatic release workflow |
 | [chart-channels.md](chart-channels.md) | Registry charts published per branch to `repository/develop`, `staging` and `release` |
+| [rollback.md](rollback.md) | Finding a version and rolling a chart back |
 | [publication.md](publication.md) | How GitHub serves `repository/` to Rancher and Helm |
 | [rancher-dev.md](rancher-dev.md) | Installing and upgrading releases in Rancher, ownership and rollback rules |
 | [commons-upgrades.md](commons-upgrades.md) | One-click Commons Services upgrades: what re-runs, why it is safe, verify and roll back |

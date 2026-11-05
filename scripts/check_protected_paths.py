@@ -4,7 +4,7 @@ repository/ is what Rancher and `helm repo add` read, so its archives and
 index change only through scripts/release.py on main. A pull request that
 touches a protected path fails; on main, any non-merge commit in the pushed
 range that touches one must come from the release bot. The one exception is the
-registry pipelines' GitHub App, which may add a new archive to a channel folder
+registry pipelines' publisher, which may add a new archive to a channel folder
 (scripts/ci/publish_chart.py) and nothing else.
 
   check_protected_paths.py --base <ref>             # pull request: diff base...HEAD
@@ -19,10 +19,13 @@ PROTECTED = (
     "repository/",
     "releases/artifacts.json",
     "releases/current.yaml",
+    "releases/channels.json",
+    "releases/channels-current.yaml",
+    "releases/history/",
     "CHANGELOG.md",
 )
 RELEASE_BOT = "github-actions[bot]"
-CHANNEL_PUBLISHER = "oan-ci-app[bot]"
+CHANNEL_PUBLISHER = "oan-chart-publisher"
 CHANNEL_ARCHIVE = re.compile(r"repository/(develop|staging|release)/[^/]+\.tgz")
 
 

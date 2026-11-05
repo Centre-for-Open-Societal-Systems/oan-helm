@@ -23,13 +23,37 @@ URL of that folder.
 2. The pipeline runs `scripts/ci/publish_chart.py`, which adds that one archive to `repository/<channel>/`.
    A version that already exists is refused.
 3. `.github/workflows/publish-channels.yaml` runs `scripts/publish_channels.py`: it checks the archive,
-   seals it in `releases/channels.json`, rebuilds `index.yaml` and `SHA256SUMS`, adds a `CHANGELOG.md`
-   entry and tags `<chart>-<version>`.
+   seals it in `releases/channels.json`, rebuilds `index.yaml` and `SHA256SUMS`, records the version in
+   `releases/history/<channel>/<chart>.md`, adds a `CHANGELOG.md` entry and tags `<chart>-<version>`.
 
-Chart annotations `oan.org/source-repository`, `oan.org/source-commit` and `oan.org/source-subject`
-become the changelog line.
+Pipelines describe a version in chart annotations:
 
-The pipeline token belongs to the GitHub App named in `CHANNEL_PUBLISHER` in
-`scripts/check_protected_paths.py`. On `main` it may only add new archives to channel folders.
+| Annotation | Meaning |
+| --- | --- |
+| `oan.org/source-repository` | `owner/repository` of the source |
+| `oan.org/source-commit` | Full commit |
+| `oan.org/source-subject` | Commit subject, used as the changelog line |
+| `oan.org/release-name`, `oan.org/release-namespace` | Used in the rollback command |
+| `oan.org/values-overlay` | Overlay path, default `helm/environments/<env>/values.yaml` |
+| `oan.org/upgrade-notes` | Optional. Migrations or steps an operator must know about |
+
+[rollback.md](rollback.md) explains how to use this record.
+
+## Promotion
+
+Staging is promoted from develop, never rebuilt. `staging` moves by fast-forward to a commit develop already
+built, the pipeline adds the rc tag and the `staging` alias to the same ECR digests, and publishes the chart
+to `repository/staging/`. A release tag does the same from the rc. The `release` branch does not exist yet;
+it arrives with production.
+
+## Publishing credential
+
+Pipelines use the token of a maintainer account, Jenkins credential `oan-helm-fork-token`. Configuration of the
+GitHub App that will replace it is pending; only the Jenkins credential changes when it is ready. Commits always
+carry the name in `CHANNEL_PUBLISHER` in `scripts/check_protected_paths.py`, and on `main` that name may only add
+new archives to channel folders.
+
+`main` has no ruleset yet, so this is checked after the push, not blocked before it. Add a ruleset when the App
+is configured.
 
 The flat `repository/` folder stays as it is until no cluster or pin reads it.

@@ -22,11 +22,16 @@ def write_archive(path, name, version):
     path.parent.mkdir(parents=True, exist_ok=True)
     body = yaml.safe_dump({"apiVersion": "v2", "name": name, "version": version, "annotations": {
         "oan.org/source-repository": "example/repo", "oan.org/source-commit": "a" * 40,
-        "oan.org/source-subject": "Change the form"}}).encode()
+        "oan.org/source-subject": "Change the form", "oan.org/release-name": "farmer-registry",
+        "oan.org/release-namespace": "farmer"}}).encode()
+    values = yaml.safe_dump({"registry": {"staffApi": {"image": {
+        "repository": "ecr/openg2p/farmer-registry/staff-api", "tag": f"{version}@sha256:{'b' * 64}"}}},
+        "dashboards": {"repository": "https://github.com/x/y.git", "tag": "v1"}, "unset": {"repository": "", "tag": ""}}).encode()
     with tarfile.open(path, "w:gz") as tar:
-        info = tarfile.TarInfo(f"{name}/Chart.yaml")
-        info.size = len(body)
-        tar.addfile(info, io.BytesIO(body))
+        for file_name, content in (("Chart.yaml", body), ("values.yaml", values)):
+            info = tarfile.TarInfo(f"{name}/{file_name}")
+            info.size = len(content)
+            tar.addfile(info, io.BytesIO(content))
 
 
 class PublishChannelsTest(unittest.TestCase):
@@ -39,6 +44,8 @@ class PublishChannelsTest(unittest.TestCase):
             mock.patch.object(publish_channels, "ROOT", self.root),
             mock.patch.object(publish_channels, "PUBLIC", self.root / "repository"),
             mock.patch.object(publish_channels, "SEALS", self.root / "releases/channels.json"),
+            mock.patch.object(publish_channels, "HISTORY", self.root / "releases/history"),
+            mock.patch.object(publish_channels, "CURRENT", self.root / "releases/channels-current.yaml"),
             mock.patch.object(publish_channels, "write_changelog", self.changelog.append),
         ):
             patcher.start()
@@ -64,6 +71,33 @@ class PublishChannelsTest(unittest.TestCase):
         seals = json.loads((self.root / "releases/channels.json").read_text())
         self.assertIn("develop/farmer-0.0.0-develop.7.tgz", seals)
         self.assertIn("Change the form (example/repo@aaaaaaaaaaaa)", self.changelog[0])
+
+    def test_history_records_images_and_the_way_back(self):
+        self.archive("develop", "0.0.0-develop.7")
+        publish_channels.main()
+        text = (self.root / "releases/history/develop/farmer.md").read_text()
+        self.assertIn("`registry.staffApi.image` | `ecr/openg2p/farmer-registry/staff-api:0.0.0-develop.7@sha256:", text)
+        self.assertNotIn("github.com/x/y", text)
+        self.assertIn("helm upgrade farmer-registry https://raw.githubusercontent.com/", text)
+        self.assertIn("repository/develop/farmer-0.0.0-develop.7.tgz -n farmer --reset-values "
+                      "-f helm/environments/dev/values.yaml", text)
+
+    def test_history_is_newest_first_with_a_compare_link(self):
+        self.archive("develop", "0.0.0-develop.7")
+        publish_channels.main()
+        self.archive("develop", "0.0.0-develop.10")
+        publish_channels.main()
+        text = (self.root / "releases/history/develop/farmer.md").read_text()
+        self.assertLess(text.index("## 0.0.0-develop.10"), text.index("## 0.0.0-develop.7"))
+        self.assertEqual(text.count("# farmer: develop history"), 1)
+        self.assertIn("Changes since 0.0.0-develop.7: https://github.com/example/repo/compare/", text)
+
+    def test_current_lists_the_highest_version_per_channel(self):
+        self.archive("develop", "0.0.0-develop.9")
+        self.archive("develop", "0.0.0-develop.10")
+        publish_channels.main()
+        current = yaml.safe_load((self.root / "releases/channels-current.yaml").read_text())
+        self.assertEqual(current["develop"], {"farmer": "0.0.0-develop.10"})
 
     def test_second_run_changes_nothing(self):
         self.archive("staging", "1.0.0-rc.9")

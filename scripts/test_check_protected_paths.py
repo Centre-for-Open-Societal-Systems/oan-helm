@@ -67,18 +67,18 @@ class ProtectedPathsTest(unittest.TestCase):
 
     def test_channel_publisher_may_add_an_archive(self):
         before = self.git('rev-parse', 'HEAD')
-        after = self.commit('oan-ci-app[bot]', {'repository/develop/x-0.0.0-develop.5.tgz': 'archive'})
+        after = self.commit('oan-chart-publisher', {'repository/develop/x-0.0.0-develop.5.tgz': 'archive'})
         self.assertEqual(self.run_check('--range', f'{before}..{after}'), 0)
 
     def test_channel_publisher_may_not_replace_an_archive(self):
-        self.commit('oan-ci-app[bot]', {'repository/release/x-1.0.0.tgz': 'archive'})
+        self.commit('oan-chart-publisher', {'repository/release/x-1.0.0.tgz': 'archive'})
         before = self.git('rev-parse', 'HEAD')
-        after = self.commit('oan-ci-app[bot]', {'repository/release/x-1.0.0.tgz': 'other'})
+        after = self.commit('oan-chart-publisher', {'repository/release/x-1.0.0.tgz': 'other'})
         self.assertEqual(self.run_check('--range', f'{before}..{after}'), 1)
 
     def test_channel_publisher_may_not_write_the_index(self):
         before = self.git('rev-parse', 'HEAD')
-        after = self.commit('oan-ci-app[bot]', {'repository/develop/index.yaml': 'entries: {}\n'})
+        after = self.commit('oan-chart-publisher', {'repository/develop/index.yaml': 'entries: {}\n'})
         self.assertEqual(self.run_check('--range', f'{before}..{after}'), 1)
 
     def test_channel_archive_from_a_person_fails(self):
