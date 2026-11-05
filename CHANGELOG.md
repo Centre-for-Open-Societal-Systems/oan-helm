@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-05
 
+### openg2p-cropsown-registry 0.0.0-develop.485 (develop)
+
+- Merge pull request #235 from asmitonweb/record-staging-history (Centre-for-Open-Societal-Systems/cropsown-regsitry@51d9894158b1)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-05
+
 ### openg2p-livestock-registry 1.0.0-rc.432 (staging)
 
 - Merge pull request #199 from asmitonweb/promote-staging-without-rebuilding (Centre-for-Open-Societal-Systems/livestock-registry@cc5b130f5aea)
