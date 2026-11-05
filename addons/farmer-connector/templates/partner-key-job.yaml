@@ -1,0 +1,72 @@
+{{- /*
+After every install and upgrade: make sure the signing partner exists in Partner Manager and holds this
+connector's public key. Safe to run twice: it changes nothing when the key is already registered.
+*/ -}}
+{{- with .Values.partnerRegistration }}
+{{- if .enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "openg2p-connector.fullname" $ }}-partner-key
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+data:
+  register.py: |
+{{ $.Files.Get "files/register_partner_key.py" | indent 4 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "openg2p-connector.fullname" $ }}-partner-key
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 3
+  activeDeadlineSeconds: 300
+  template:
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      {{- with $.Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: partner-key
+          image: "{{ $.Values.api.image.repository }}:{{ $.Values.api.image.tag }}"
+          command: ["python", "/register/register.py"]
+          env:
+            - name: PARTNER_MANAGER_URL
+              value: {{ required "partnerRegistration.partnerManagerUrl is required" .partnerManagerUrl | quote }}
+            - name: TOKEN_URL
+              value: {{ required "partnerRegistration.tokenUrl is required" .tokenUrl | quote }}
+            - name: CLIENT_ID
+              value: {{ required "partnerRegistration.clientId is required" .clientId | quote }}
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ required "partnerRegistration.clientSecretName is required" .clientSecretName | quote }}
+                  key: {{ .clientSecretKey | default "client_secret" | quote }}
+            - name: PARTNER_ID
+              value: {{ $.Values.cossSigning.partnerId | quote }}
+            - name: PARTNER_NAME
+              value: {{ .partnerName | default "Farmer Registry Connector" | quote }}
+            - name: KEY_ID
+              value: {{ $.Values.cossSigning.keyId | quote }}
+            - name: PRIVATE_KEY_PEM
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.cossSigning.secret | quote }}
+                  key: private-key.pem
+          volumeMounts:
+            - name: register
+              mountPath: /register
+      volumes:
+        - name: register
+          configMap:
+            name: {{ include "openg2p-connector.fullname" $ }}-partner-key
+{{- end }}
+{{- end }}

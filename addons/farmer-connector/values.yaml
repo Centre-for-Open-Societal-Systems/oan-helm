@@ -138,3 +138,7 @@ postgres-init:
       user: "{{ .Values.global.connectorDBUser }}"
       secret: "{{ .Values.global.connectorDBSecret }}"
       secretUserPasswordKey: "{{ .Values.global.connectorDBUserPasswordKey }}"
+
+# Registers the signing key in Partner Manager after every install and upgrade.
+partnerRegistration:
+  enabled: false

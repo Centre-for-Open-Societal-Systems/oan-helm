@@ -64,3 +64,9 @@ istio:
   virtualservice:
     enabled: true
     gateway: istio-system/staging
+partnerRegistration:
+  enabled: true
+  partnerManagerUrl: http://commons-services-pm-staff-portal-api.commons.svc.cluster.local
+  tokenUrl: https://keycloak.oanstaging.com/realms/staff/protocol/openid-connect/token
+  clientId: commons-services-staff-portal
+  clientSecretName: commons-services-staff-portal
