@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-05
 
+### openg2p-da-registry 1.0.0-rc.84 (staging)
+
+- Merge pull request #43 from asmitonweb/promote-staging-without-rebuilding (Centre-for-Open-Societal-Systems/da-registry@9dc1ebfea870)
+- Images and rollback: [releases/history/staging/openg2p-da-registry.md](releases/history/staging/openg2p-da-registry.md)
+
+## 2026-11-05
+
 ### openg2p-cropsown-registry 0.0.0-develop.488 (develop)
 
 - Merge pull request #239 from asmitonweb/use-pack-codes-for-growth-stage-and-severity (Centre-for-Open-Societal-Systems/cropsown-regsitry@fbe5a37e41f2)
