@@ -1,0 +1,66 @@
+# Farmer connector on staging: the images New Dev runs, with staging hosts, queue, signing key and admin login.
+# Secrets come from the farmer-connector-credentials release. postgres-init creates the database on first install.
+fullnameOverride: farmer-registry-connector
+cossQueue: farmer-registry-connector-v2
+cossSigning:
+  enabled: true
+  partnerId: farmer-partner
+  keyId: farmer-connector-v2-staging
+  secret: farmer-connector-v2-staging-signing
+adminAuth:
+  issuer: https://keycloak.oanstaging.com/realms/staff
+  jwksUrl: http://commons-keycloak.commons.svc.cluster.local:80/realms/staff/protocol/openid-connect/certs
+  clientId: registry-connector
+  role: REGISTRY_CONNECTOR_ADMIN
+  uiClientId: registry-connector-ui
+global:
+  hostname: connector-farmer-registry.oanstaging.com
+  postgresqlHost: commons-postgresql.commons.svc.cluster.local
+  postgresqlPort: 5432
+  connectorDB: farmer_connector_v2
+  connectorDBUser: farmer_connector_v2_user
+  connectorDBSecret: farmer-connector-v2-staging-db
+  connectorDBUserPasswordKey: password
+  redisHost: commons-redis-master.commons.svc.cluster.local
+  partnerApiService: farmer-registry-partner-api
+imagePullSecrets:
+  - name: ecr-pull-secret
+commonEnv:
+  CONNECTOR_STORE_RUN_PAYLOADS: 'false'
+  CONNECTOR_STRICT_INCREMENTAL: 'true'
+  CONNECTOR_FULL_SCAN_ON_INCREMENTAL_UNSUPPORTED: 'false'
+  CONNECTOR_CORS_ORIGINS: https://connector-farmer-registry.oanstaging.com
+api:
+  replicaCount: 1
+  autoscaling:
+    enabled: false
+  image: &api
+    repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/registry-connector-api
+    tag: bc565efd47c1-158e11f710bd@sha256:3a042f7a2d04e4e9ff8fdd2614f36a678cb6294f36ffc40d7d687bd33cb1c0c2
+worker:
+  replicaCount: 1
+  image: *api
+beat:
+  enabled: true
+  replicaCount: 1
+  image: *api
+consumer:
+  enabled: false
+  image: *api
+ui:
+  replicaCount: 1
+  image:
+    repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/registry-connector-ui
+    tag: bc565efd47c1-158e11f710bd@sha256:05a7e2c2e7de3088a5cd7092899c760387840e4236ca67aaa6620a830aa8cb6e
+postgresCheckerInit:
+  enabled: false
+postgres-init:
+  enabled: true
+istio:
+  enabled: true
+  gateway:
+    create: false
+    name: internal
+  virtualservice:
+    enabled: true
+    gateway: internal
