@@ -8,6 +8,5 @@ values=environments/staging/values
 
 helm upgrade --install farmer-connector-credentials addons/farmer-connector-credentials --namespace farmer \
   --values "$values/farmer-connector-credentials.yaml" --reset-values --wait --timeout 3m
-helm dependency build addons/farmer-connector
 helm upgrade --install farmer-registry-connector addons/farmer-connector --namespace farmer \
   --values "$values/farmer-connector.yaml" --reset-values --wait --timeout 10m
