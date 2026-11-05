@@ -1,0 +1,258 @@
+# Staging (oanstaging.com) values for openg2p-cropsown-registry: the New Dev values with the domain and gateway
+# changed. Release cropsown-registry, namespace crop. Images come from the chart.
+global:
+  websubBaseUrl: http://commons-services-websub.commons.svc.cluster.local
+  baseDomain: oanstaging.com
+  keycloakBaseUrl: https://keycloak.oanstaging.com
+  keycloakRealm: staff
+  keycloakIssuerUrl: https://keycloak.oanstaging.com/realms/staff
+  keycloakInternalUrl: http://commons-keycloak.commons.svc.cluster.local:80
+  keycloakExternalIssuerUrl: https://keycloak.oanstaging.com/realms/staff
+  masterDataTokenUrl: https://keycloak.oanstaging.com/realms/staff/protocol/openid-connect/token
+  postgresqlHost: commons-postgresql.commons.svc.cluster.local
+  minioHost: minio-farmer.oanstaging.com
+  minioSecure: true
+  iamServiceUrl: http://commons-services-iam-staff-portal-api.commons.svc.cluster.local
+  masterDataApiUrl: http://commons-services-master-data-api.commons.svc.cluster.local
+  partnerManagementApiUrl: http://commons-services-pm-partner-api.commons.svc.cluster.local
+  partnerManagementAdminApiUrl: http://commons-services-pm-staff-portal-api.commons.svc.cluster.local
+  consentManagerUrl: http://commons-services-cm-partner-api.commons.svc.cluster.local
+  consentManagerStaffUrl: http://commons-services-cm-api.commons.svc.cluster.local
+  auditManagerUrl: http://commons-services-auditmanager.commons.svc.cluster.local:80
+  aweHostname: awe.oanstaging.com
+  aweBaseUrl: http://commons-services-awe.commons.svc.cluster.local
+  aweDefaultCallbackUrl: http://{{ .Release.Name }}-staff-portal-api.{{ .Release.Namespace
+    }}.svc.cluster.local/awe/webhooks/decision
+  idGeneratorInternalUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace
+    }}.svc.cluster.local/v1
+  idGeneratorApiUrl: http://{{ .Release.Name }}-id-generator.{{ .Release.Namespace
+    }}.svc.cluster.local/v1
+  notificationEnabled: false
+  notificationApiHostname: ''
+  notificationWsHostname: ''
+  notificationBackendUrl: ''
+  notificationWebsocketUrl: ''
+  notificationProviderUrl: ''
+  registryHostname: crop-registry.oanstaging.com
+  staffPortalBaseUrl: https://crop-registry.oanstaging.com
+  idGeneratorHostname: idgenerator-crop.oanstaging.com
+registry:
+  keycloak-init:
+    keycloak:
+      url: http://commons-keycloak.commons.svc.cluster.local:80
+  postgres-init:
+    postgresql:
+      host: commons-postgresql.commons.svc.cluster.local
+  idgenerator:
+    postgres-init:
+      postgresql:
+        host: commons-postgresql.commons.svc.cluster.local
+    idGenerator:
+      hostname: '{{ tpl .Values.global.idGeneratorHostname $ }}'
+      istio:
+        virtualservice:
+          host: '{{ tpl .Values.global.idGeneratorHostname $ }}'
+          gateway: istio-system/staging
+        gateway:
+          host: '{{ tpl .Values.global.idGeneratorHostname $ }}'
+  staffUi:
+    iamPublicUrl: https://staff-iam.oanstaging.com
+    envVars:
+      COOKIE_DOMAIN: .oanstaging.com
+      IAM_URL: https://staff-iam.oanstaging.com
+      KEYCLOAK_LOGOUT_URL: https://keycloak.oanstaging.com/realms/staff/protocol/openid-connect/logout
+      APP_URL: https://crop-registry.oanstaging.com
+      REDIRECT_URL: https://crop-registry.oanstaging.com
+      VERIFY_SERVICE_URL: https://crop-registry.oanstaging.com/v1/verify
+      # Location map: OpenStreetMap tiles (img) and the pin's elevation lookup
+      # (connect). A per-directive value replaces the whole list.
+      CSP_SRC_IMG: 'self blob: data: https://minio-farmer.oanstaging.com https://tile.openstreetmap.org'
+      CSP_SRC_CONNECT: 'self https://api.open-meteo.com'
+      MASTERDATA_BACKEND_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
+      PARTNER_INGEST_URL: https://partner-crop.oanstaging.com/partner/ingest_data?data_model=dcivc
+      NOTIFICATION_BACKEND_URL: ''
+      NOTIFICATION_WEBSOCKET_URL: ''
+    partnerIngestUrl: https://partner-crop.oanstaging.com/partner/ingest_data?data_model=dcivc
+    hostname: crop-registry.oanstaging.com
+    istio:
+      virtualservice:
+        host: crop-registry.oanstaging.com
+        gateway: istio-system/staging
+      gateway:
+        host: crop-registry.oanstaging.com
+  staffApi:
+    # Farmer reference (chart README "Farmer reference"): the public files from
+    # the chart's ConfigMap, the Crop lookup key (Secret provisioned in the
+    # namespace, registered in Partner Management as Crop_sown_partner_internal)
+    # and the AWE client secret, all read-only. The anchors repeat the same
+    # wiring on the partner API, celery worker and celery beat.
+    extraVolumes: &farmerReferenceVolumes
+      - name: farmer-reference
+        configMap:
+          name: cropsown-registry-farmer-reference
+      - name: farmer-reference-key
+        secret:
+          secretName: crop-farmer-lookup-signing-ed25519
+      - name: farmer-reference-awe
+        secret:
+          secretName: cropsown-registry-staff-portal
+    extraVolumeMounts: &farmerReferenceMounts
+      - name: farmer-reference
+        mountPath: /etc/coss-farmer
+        readOnly: true
+      - name: farmer-reference-key
+        mountPath: /etc/coss-farmer-key
+        readOnly: true
+      - name: farmer-reference-awe
+        mountPath: /etc/coss-farmer-awe
+        readOnly: true
+    envVars:
+      REGISTRY_STAFF_PORTAL_API_AUTH_REDIS_URL: redis://commons-redis-master.commons.svc.cluster.local:6379/0
+      REGISTRY_CORE_REGISTRANT_AUTH_REDIS_URL: redis://commons-redis-master.commons.svc.cluster.local:6379/0
+      REGISTRY_STAFF_PORTAL_API_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_STAFF_PORTAL_API_MASTER_DATA_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
+      REGISTRY_STAFF_PORTAL_API_MASTER_DATA_TOKEN_URL: https://keycloak.oanstaging.com/realms/staff/protocol/openid-connect/token
+      REGISTRY_STAFF_PORTAL_API_PARTNER_MGMT_API_URL: http://commons-services-pm-partner-api.commons.svc.cluster.local
+      REGISTRY_STAFF_PORTAL_API_PARTNER_MGMT_ADMIN_API_URL: http://commons-services-pm-staff-portal-api.commons.svc.cluster.local
+      REGISTRY_STAFF_PORTAL_API_PARTNER_MGMT_ADMIN_TOKEN_URL: https://keycloak.oanstaging.com/realms/staff/protocol/openid-connect/token
+      REGISTRY_STAFF_PORTAL_API_AWE_BASE_URL: http://commons-services-awe.commons.svc.cluster.local
+      REGISTRY_STAFF_PORTAL_API_AWE_DEFAULT_CALLBACK_URL: http://{{ .Release.Name
+        }}-staff-portal-api.{{ .Release.Namespace }}.svc.cluster.local/awe/webhooks/decision
+      REGISTRY_STAFF_PORTAL_API_AUDIT_MANAGER_URL: http://commons-services-auditmanager.commons.svc.cluster.local:80
+      COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      NOTIFICATION_ENABLED: 'false'
+      NOTIFICATION_PROVIDER_URL: ''
+      KEYCLOAK_BASE_URL: https://keycloak.oanstaging.com
+      REGISTRY_STAFF_PORTAL_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CORE_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
+      REGISTRY_STAFF_PORTAL_API_VALIDATE_ATTRIBUTE_VALUES: 'true'
+      # Older crop policies whose open approval tasks still belong to this portal.
+      AWE_TASK_SCOPE_EXTRA_POLICY_KEYS: registry.intake_form.planning_cropsown,registry.intake_form.devplanning_cropsown,registry.change_request.devcropsown
+      <<: &farmerReferenceEnv
+        COSS_FARMER_DCI_URL: http://farmer-registry-partner-api.farmer.svc.cluster.local/dci/sync/search
+        COSS_FARMER_SENDER_ID: Crop_sown_partner_internal
+        COSS_FARMER_SOURCE_ID: farmer-registry
+        COSS_FARMER_SIGNING_KEY_FILE: /etc/coss-farmer-key/private-key.pem
+        COSS_FARMER_SIGNING_KID: crop-lookup-ed25519-a26349ea5e745eb0
+        COSS_FARMER_SIGNING_ALGORITHM: EdDSA
+        COSS_FARMER_SOURCE_PUBLIC_KEY_FILE: /etc/coss-farmer/source-public-key.pem
+        COSS_FARMER_SOURCE_KID: farmer-registry-dci-rsa
+        COSS_FARMER_SOURCE_ALGORITHM: RS256
+        COSS_FARMER_CONSENT_AUDIENCE: crop-registry
+        COSS_FARMER_CONSENT_CONTROLLER: farmer-registry
+        COSS_FARMER_CONSENT_PURPOSE: registry_intake
+        COSS_FARMER_CONSENT_SCOPES: farmer_personal_details,farmer_reference
+        COSS_FARMER_RECORD_CONTRACT_FILE: /etc/coss-farmer/record-contract.json
+        # The sender mnemonic the connector stamps on each ingested row; the platform
+        # worker passes it as the change request's source partner, and the Farmer
+        # reference ingestion accepts only this value. Equal to COSS_FARMER_SENDER_ID.
+        COSS_FARMER_SOURCE_PARTNER_ID: Crop_sown_partner_internal
+        COSS_FARMER_AWE_TOKEN_URL: https://keycloak.oanstaging.com/realms/staff/protocol/openid-connect/token
+        COSS_FARMER_AWE_CLIENT_ID: cropsown-registry-staff-portal
+        COSS_FARMER_AWE_CLIENT_SECRET_FILE: /etc/coss-farmer-awe/client_secret
+    hostname: staff-crop.oanstaging.com
+    istio:
+      virtualservice:
+        host: staff-crop.oanstaging.com
+        gateway: istio-system/staging
+      gateway:
+        host: staff-crop.oanstaging.com
+  partnerApi:
+    extraVolumes: *farmerReferenceVolumes
+    extraVolumeMounts: *farmerReferenceMounts
+    envVars:
+      REGISTRY_PARTNER_API_KEYMANAGER_API_BASE_URL: http://commons-services-keymanager.commons.svc.cluster.local/v1/keymanager
+      REGISTRY_PARTNER_API_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_PARTNER_API_MASTER_DATA_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
+      REGISTRY_PARTNER_API_MASTER_DATA_TOKEN_URL: https://keycloak.oanstaging.com/realms/staff/protocol/openid-connect/token
+      REGISTRY_PARTNER_API_PARTNER_MGMT_API_URL: http://commons-services-pm-partner-api.commons.svc.cluster.local
+      REGISTRY_PARTNER_API_PARTNER_MGMT_ADMIN_API_URL: http://commons-services-pm-staff-portal-api.commons.svc.cluster.local
+      REGISTRY_PARTNER_API_PARTNER_MGMT_ADMIN_TOKEN_URL: https://keycloak.oanstaging.com/realms/staff/protocol/openid-connect/token
+      REGISTRY_PARTNER_API_AUDIT_MANAGER_URL: http://commons-services-auditmanager.commons.svc.cluster.local:80
+      COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      NOTIFICATION_ENABLED: 'false'
+      NOTIFICATION_PROVIDER_URL: ''
+      KEYCLOAK_BASE_URL: https://keycloak.oanstaging.com
+      REGISTRY_PARTNER_API_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      # The aggregation layer searches by id type UIN (the beneficiary's Fayda FAN). This
+      # register keeps it in fayda_fan_id; it has no foundational_id column.
+      REGISTRY_PARTNER_API_DCI_ID_TYPE_COLUMNS: '{"UIN": "fayda_fan_id", "FID": "functional_record_id"}'
+      REGISTRY_PARTNER_API_DCI_ALLOWED_SEARCH_FIELDS: '["functional_record_id", "first_name", "middle_name", "last_name", "given_name", "gender", "birth_date", "foundational_id", "record_name", "record_status", "search_text", "fayda_fan_id"]'
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
+      <<: *farmerReferenceEnv
+    hostname: partner-crop.oanstaging.com
+    istio:
+      virtualservice:
+        host: partner-crop.oanstaging.com
+        gateway: istio-system/staging
+      gateway:
+        host: partner-crop.oanstaging.com
+  celeryWorker:
+    extraVolumes: *farmerReferenceVolumes
+    extraVolumeMounts: *farmerReferenceMounts
+    envVars:
+      REGISTRY_CELERY_WORKERS_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CELERY_WORKERS_MASTER_DATA_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
+      REGISTRY_CELERY_WORKERS_MASTER_DATA_TOKEN_URL: https://keycloak.oanstaging.com/realms/staff/protocol/openid-connect/token
+      REGISTRY_CELERY_WORKERS_PARTNER_MGMT_API_URL: http://commons-services-pm-partner-api.commons.svc.cluster.local
+      REGISTRY_CELERY_WORKERS_PARTNER_MGMT_ADMIN_API_URL: http://commons-services-pm-staff-portal-api.commons.svc.cluster.local
+      REGISTRY_CELERY_WORKERS_PARTNER_MGMT_ADMIN_TOKEN_URL: https://keycloak.oanstaging.com/realms/staff/protocol/openid-connect/token
+      REGISTRY_CELERY_WORKERS_AWE_BASE_URL: http://commons-services-awe.commons.svc.cluster.local
+      REGISTRY_CELERY_WORKERS_AWE_DEFAULT_CALLBACK_URL: http://{{ .Release.Name }}-staff-portal-api.{{
+        .Release.Namespace }}.svc.cluster.local/awe/webhooks/decision
+      REGISTRY_CELERY_WORKERS_AWE_TOKEN_ISSUER_BASE_URL: https://keycloak.oanstaging.com
+      REGISTRY_CELERY_WORKERS_AWE_TOKEN_URL: https://keycloak.oanstaging.com/realms/staff/protocol/openid-connect/token
+      COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      NOTIFICATION_ENABLED: 'false'
+      NOTIFICATION_PROVIDER_URL: ''
+      REGISTRY_CELERY_WORKERS_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      KEYCLOAK_BASE_URL: https://keycloak.oanstaging.com
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
+      <<: *farmerReferenceEnv
+      # The extension's worker starts the Farmer change-request workflow in AWE
+      # itself (upstream workers never call AWE).
+      REGISTRY_CELERY_WORKERS_AWE_ENABLED: 'true'
+      REGISTRY_CELERY_WORKERS_AWE_CALLBACK_SECRET_ID: cropsown-registry
+  celeryBeat:
+    extraVolumes: *farmerReferenceVolumes
+    extraVolumeMounts: *farmerReferenceMounts
+    envVars:
+      COMMON_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      NOTIFICATION_ENABLED: 'false'
+      NOTIFICATION_PROVIDER_URL: ''
+      REGISTRY_CELERY_BEAT_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CELERY_BEAT_MASTER_DATA_DB_HOSTNAME: commons-postgresql.commons.svc.cluster.local
+      REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
+      <<: *farmerReferenceEnv
+  beneApi:
+    istio:
+      virtualservice:
+        gateway: istio-system/staging
+  dbSeed:
+    # Sample farmers and their records from the pinned openg2p-data checkout,
+    # entered through intake and approved at both stages (db-seed hook).
+    loadSampleData: false
+dashboardApi:
+  auth:
+    enabled: true
+    issuer: https://keycloak.oanstaging.com/realms/staff
+    iamUrl: https://staff-iam.oanstaging.com
+    audience: cropsown-registry-dashboard-api
+    role: charts:read
+# Farmer reference: the Farmer partner API's DCI response-signing public key
+# (openg2p-farmer-registry dciSigning, ConfigMap farmer-registry-dci-signing-public
+# in the farmer namespace, kid farmer-registry-dci-rsa) and the record contract
+# from the chart defaults.
+farmerReference:
+  enabled: true
+  sourcePublicKey: |
+    -----BEGIN PUBLIC KEY-----
+    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAproXZpIJzVQTZRzXglwI
+    XW7eLxrHGYSlmVMbKJaCabyr7TQI4AMbQcJLywJIbeWdLAqnBqAploEHMLdtZRZb
+    Yhe4ibglL98a9490rGSZqBVimFN+4iXPx5DguqZlOBuM5nvWNS7jsFWQ9Xc++T75
+    IoJJhEsrqSZl0e3UdzKhmyX/OKcv9UgeDJPE/93u1Wnt/DmQEfk7FIusjendsbqF
+    XAqCyTNJme4wynFvQKocMnYwncGVdDG41UJ0OuWowGDx1dE+25tQvvcC7kZdarbD
+    L0YZ615l/Q61hzRpTZelVFWV1oPkywUuEmWMglJwkPMy8dwORJ4P3bzWvhUEnX5u
+    zwIDAQAB
+    -----END PUBLIC KEY-----
