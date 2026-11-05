@@ -21,7 +21,8 @@ global:
   cookieDomain: .oanstaging.com
   iamUrl: https://staff-iam.oanstaging.com
   iamServiceUrl: http://commons-services-iam-staff-portal-api.commons.svc.cluster.local
-  masterDataHostname: master-data.oanstaging.com
+  # Tile URL (see the chart's values.yaml); the API keeps master-data.*.
+  masterDataHostname: master-data-ui.oanstaging.com
   masterDataUiHostname: master-data-ui.oanstaging.com
   masterDataApiUrl: http://commons-services-master-data-api.commons.svc.cluster.local
   aweHostname: awe.oanstaging.com
@@ -42,7 +43,7 @@ openg2p-inji-certify:
       gateway: istio-system/staging
 master-data:
   global:
-    masterDataHostname: master-data.oanstaging.com
+    masterDataHostname: master-data-ui.oanstaging.com
     masterDataUiHostname: master-data-ui.oanstaging.com
   # Staging Commons is upgraded in place, like New Dev: its master_data database holds the
   # legacy catalogue (4 levels, 21053 geography values), which Master Data migrates on
@@ -67,6 +68,7 @@ master-data:
       virtualservice:
         gateway: istio-system/staging
   masterDataAPI:
+    hostname: master-data.oanstaging.com
     istio:
       virtualservice:
         gateway: istio-system/staging
@@ -237,3 +239,15 @@ consentPartnerPortal:
   enabled: true
   virtualService:
     gateway: istio-system/staging
+
+# IAM beneficiary portal API, as on New Dev. Login provider seeding stays off until a
+# Fayda/eSignet client and signing key exist.
+iamBenePortalApi:
+  enabled: true
+  virtualService:
+    enabled: true
+    host: bene-iam.oanstaging.com
+    gateway: istio-system/staging
+  loginProvider:
+    seed: false
+    defaultRedirectUri: https://bene-portal.oanstaging.com
