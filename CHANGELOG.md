@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-05
 
+### openg2p-da-registry 0.0.0-develop.83 (develop)
+
+- Merge pull request #43 from asmitonweb/promote-staging-without-rebuilding (Centre-for-Open-Societal-Systems/da-registry@9dc1ebfea870)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-05
+
 ### oan-sandbox 1.0.0-dev.17
 
 Previous version: 1.0.0-dev.16.

@@ -20,7 +20,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
     apiVersion: v2
     appVersion: 1.2.2-rc.614
-    created: "2026-11-05T10:58:08.234964093Z"
+    created: "2026-11-05T12:23:29.836228351Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -61,6 +61,50 @@ entries:
       oan.org/owner: OpenAgriNet (OAN) / COSS
       oan.org/release-name: da-registry
       oan.org/release-namespace: da-registry
+      oan.org/source-commit: 9dc1ebfea8706c5d2d5332c1220210e15c407be8
+      oan.org/source-repository: Centre-for-Open-Societal-Systems/da-registry
+      oan.org/source-subject: 'Merge pull request #43 from asmitonweb/promote-staging-without-rebuilding'
+      oan.org/values-overlay: environments/dev/values/da.yaml
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.614
+    created: "2026-11-05T12:23:29.855146062Z"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.614
+    description: OAN DA Registry for OpenAgriNet (OAN), developed in COSS repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: a69fe54de600bd9883511de2bcf54dcc6edc4732508ae98bda3974e7fcf6da5e
+    home: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - coss
+    - openg2p
+    - registry
+    - da-registry
+    maintainers:
+    - name: OpenAgriNet (OAN) / COSS
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-da-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/da-registry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - openg2p-da-registry-0.0.0-develop.83.tgz
+    version: 0.0.0-develop.83
+  - annotations:
+      catalog.cattle.io/display-name: OAN DA Registry
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/da-registry/tree/develop/helm/openg2p-da-registry
+      oan.org/owner: OpenAgriNet (OAN) / COSS
+      oan.org/release-name: da-registry
+      oan.org/release-namespace: da-registry
       oan.org/source-commit: 4ad52ab0f37556383a0b51b32677e7237e710e1c
       oan.org/source-repository: Centre-for-Open-Societal-Systems/da-registry
       oan.org/source-subject: Move the DA chart into this repository and deploy the
@@ -69,7 +113,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.614
-    created: "2026-11-05T10:58:08.251581809Z"
+    created: "2026-11-05T12:23:29.845768021Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -119,7 +163,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.625
-    created: "2026-11-05T10:58:08.286075446Z"
+    created: "2026-11-05T12:23:29.875768308Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -172,7 +216,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.625
-    created: "2026-11-05T10:58:08.268436385Z"
+    created: "2026-11-05T12:23:29.865435706Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -226,7 +270,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.614
-    created: "2026-11-05T10:58:08.30332958Z"
+    created: "2026-11-05T12:23:29.8857877Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -259,4 +303,4 @@ entries:
     urls:
     - openg2p-livestock-registry-0.0.0-develop.424.tgz
     version: 0.0.0-develop.424
-generated: "2026-11-05T10:58:08.216583793Z"
+generated: "2026-11-05T12:23:29.825761065Z"
