@@ -37,6 +37,16 @@ class SetImageTests(unittest.TestCase):
         self.assertIn("repository: old/partner-api\n      tag: develop-1\n", result)
         self.assertIn("      image: other\n", result)
 
+    def test_a_digest_of_its_own_follows_the_new_tag(self):
+        values = "dashboardApi:\n  enabled: false\n  image:\n    digest: sha256:old\n    repository: old/api\n    tag: develop-1\n  replicas: 1\n"
+        result = package_chart.set_image(values, "dashboardApi.image", "new/api", "develop-2@sha256:new")
+        self.assertIn('    digest: "sha256:new"\n    repository: "new/api"\n    tag: "develop-2@sha256:new"\n', result)
+
+    def test_a_tag_without_a_digest_clears_an_old_digest(self):
+        values = "api:\n  image:\n    repository: old/api\n    tag: develop-1\n    digest: sha256:old\n"
+        result = package_chart.set_image(values, "api.image", "new/api", "develop-2")
+        self.assertIn('    digest: ""\n', result)
+
     def test_empty_values_are_filled(self):
         result = package_chart.set_image(VALUES, "dashboardUi.image", "new/ui", "abc")
         self.assertIn('  image:\n    repository: "new/ui"\n    tag: "abc"\n', result)
