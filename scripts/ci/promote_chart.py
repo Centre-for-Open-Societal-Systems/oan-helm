@@ -30,7 +30,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from package_chart import annotate, derive_version  # noqa: E402
 
-REPOSITORY = "https://github.com/Centre-for-Open-Societal-Systems/oan-helm.git"
+CHART_SOURCE = "https://github.com/Centre-for-Open-Societal-Systems/oan-helm.git"
 CHANNEL = "https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/%s/repository/develop/"
 MOVING_TAG = "staging"
 ECR = re.compile(r"^(?P<host>\d{12}\.dkr\.ecr\.(?P<region>[a-z0-9-]+)\.amazonaws\.com)/(?P<name>.+)$")
@@ -60,7 +60,7 @@ def index_entries(text, chart):
 
 def channel():
     """repository/develop/ at the newest commit of main. A branch URL is served from a cache for minutes after a publish."""
-    return CHANNEL % run(["git", "ls-remote", REPOSITORY, "refs/heads/main"]).split()[0]
+    return CHANNEL % run(["git", "ls-remote", CHART_SOURCE, "refs/heads/main"]).split()[0]
 
 
 def built_from_tree(entries, tree, tree_of):
