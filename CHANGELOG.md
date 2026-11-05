@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-05
 
+### openg2p-livestock-registry 0.0.0-develop.424 (develop)
+
+- Move the Livestock chart into this repository and deploy the chart each build packages (Centre-for-Open-Societal-Systems/livestock-registry@e5082c54e7ab)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-05
+
 ### openg2p-cropsown-registry 0.0.0-develop.467 (develop)
 
 - Move the Crop chart into this repository and deploy the chart each build packages (Centre-for-Open-Societal-Systems/cropsown-regsitry@791c66f9d008)
