@@ -81,13 +81,10 @@ class LeftoverTests(unittest.TestCase):
     def test_an_old_lock_and_subcharts_are_removed_from_the_copy(self):
         with tempfile.TemporaryDirectory() as folder:
             chart = Path(folder)
-            (chart / "Chart.yaml").write_text("name: x
-")
-            (chart / "Chart.lock").write_text("old
-")
+            (chart / "Chart.yaml").write_text("name: x")
+            (chart / "Chart.lock").write_text("old")
             (chart / "charts").mkdir()
-            (chart / "charts/old.tgz").write_text("old
-")
+            (chart / "charts/old.tgz").write_text("old")
             package_chart.remove_leftovers(chart)
             self.assertEqual([path.name for path in chart.iterdir()], ["Chart.yaml"])
 
