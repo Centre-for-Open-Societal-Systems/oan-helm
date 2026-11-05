@@ -46,6 +46,12 @@ publicHosts:
   sandbox: sandbox.development.oanstaging.com
   # On the grievance RKE2 node 13.233.56.204, not `server` above.
   grievanceBackend: grievance-backend-dev.oanstaging.com
+  # Dev APISIX Admin API (read by the OAN Sandbox, config.gateway.sync.adminUrl). Answers
+  # only the IPs in its ip-restriction whitelist (403 otherwise, checked 2026-11-05).
+  apisixAdmin: apisix-admin.oanstaging.com
+  # Planned, not yet confirmed: partner APIs on the dev APISIX (oan-partner-gateway chart,
+  # docs/apisix-gateway.md section 8b), the OAN Sandbox's config.gateway.uatUrl.
+  partnerGateway: partner-api-dev.oanstaging.com
 sharedNamespace: commons
 method: Read-only post-cutover HTTPS checks and Helm/workload/Istio inventory. Private
   values/Secret payloads excluded.

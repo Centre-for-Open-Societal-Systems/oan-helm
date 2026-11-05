@@ -1,0 +1,33 @@
+# Values for the oan-partner-gateway chart (sandbox-platform deploy/apisix-partner-gateway/k8s):
+# the partner APIs that sandbox apps call, with the app's OAuth token in X-Partner-Token.
+# Target: the dev APISIX (release `apisix`, namespace `apisix`), not the OpenG2P cluster.
+# Install in namespace `apisix`: the upstreams are external hosts (externalNodes).
+# See docs/apisix-gateway.md, section 8b.
+
+ingressClassName: apisix
+
+# Required. TO CONFIRM (DevOps): the public host partners call, with DNS to the gateway node.
+# The sandbox's config.gateway.uatUrl is https://<this host>.
+hosts:
+  - partner-api-dev.oanstaging.com
+
+# APISIX terminates TLS for `hosts` with this Secret (tls.crt, tls.key) in namespace apisix,
+# provided outside Git like oan-grievance-tls (section 11).
+tls:
+  secretName: oan-partner-gateway-tls
+
+# The sandbox's realm (KEYCLOAK_REALM=partner), as written into tokens.
+keycloak:
+  issuer: https://keycloak.development.oanstaging.com/realms/partner
+
+environmentRole: uat
+
+farmerRegistry:
+  upstreamHost: staff-farmer.development.oanstaging.com
+  keycloakHost: keycloak.development.oanstaging.com
+  keycloakRealm: staff
+
+# Counters shared by the APISIX pods. TO CONFIRM: the Redis/valkey of this gateway.
+redis:
+  host: apisix-valkey.apisix.svc.cluster.local
+  port: 6379

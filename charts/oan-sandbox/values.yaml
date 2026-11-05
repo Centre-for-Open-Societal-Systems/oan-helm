@@ -36,15 +36,85 @@ config:
   # Try-it calls for products "served through the API gateway" go to this proxy.
   gateway:
     enabled: true
+    # Fallback proxy for an environment without its own URL (GATEWAY_BASE_URL).
     sandboxUrl: ""
     uatUrl: ""
     prodUrl: ""
-    # "Pull from gateway" in the console: reads the gateway Admin API.
+    # The same gateway as partners reach it (Postman, their own code): shown in
+    # code samples, the try-it request URL and API history. Set when the URLs
+    # above are cluster-internal (e.g. http://apisix-gateway.apisix:9080).
+    # Empty = the URL above.
+    uatPublicUrl: ""
+    prodPublicUrl: ""
+    # Gateway Admin API (APISIX). Key in the Secret: GATEWAY_ADMIN_TOKEN.
     sync:
+      # "Pull from gateway" in the console (reads routes; a viewer key is enough).
       enabled: false
       # apisix | kong
       type: apisix
       adminUrl: ""
+    # Participant apps (API key + secret per app). appSync: apikey / keycloak mode write
+    # every app to the APISIX Admin API as a consumer (GATEWAY_ADMIN_TOKEN = admin key);
+    # oauth mode only reads the routes (viewer key) and writes nothing to the gateway.
+    appSync:
+      enabled: false
+    # What the gateway checks: apikey | keycloak | oauth. oauth (OAuth 2.0 client
+    # credentials): every app key is also a Keycloak client in keycloak.realm; the
+    # partner sends only the app's access token in tokenHeader. Needs keycloak.enabled
+    # and appSync.enabled, and the partner routes of chart oan-partner-gateway
+    # (sandbox-platform deploy/apisix-partner-gateway) on the gateway.
+    partnerAuth: apikey
+    tokenHeader: X-Partner-Token
+    appKeyHeader: apikey
+    # Calls made outside the sandbox (Postman, partner servers) in API history: APISIX
+    # http-logger posts them to <ingestUrl>. Token in the Secret: GATEWAY_LOG_INGEST_TOKEN.
+    logIngest:
+      enabled: false
+      # The API as APISIX reaches it, e.g. https://<global.hostname>/oan/internal/gateway/logs
+      url: ""
+    # Per-product rate limits on app consumers (limit-count).
+    rateLimit:
+      enabled: false
+      # local | redis
+      policy: local
+      redisHost: ""
+      redisPort: 6379
+  # Participants as Keycloak users; app keys as Keycloak clients (partnerAuth oauth).
+  # Clients and attribute are made once with backend/scripts/keycloak/setup_partner_realm.py;
+  # its two client secrets go in the Secret: KEYCLOAK_ADMIN_CLIENT_SECRET, KEYCLOAK_LOGIN_CLIENT_SECRET.
+  keycloak:
+    enabled: false
+    # Keycloak as the API reaches it.
+    url: ""
+    # Keycloak as partners reach it (token URL shown in the portal); empty = url.
+    publicUrl: ""
+    realm: partner
+    adminClientId: oan-sandbox-provisioner
+    partnerClientId: oan-partner-api
+    environments: UAT,PRODUCTION
+    # iss of the realm's tokens; empty = <publicUrl or url>/realms/<realm>.
+    issuer: ""
+    # Portal sign-in: local (sandbox password) | keycloak (Keycloak checks the password).
+    participantAuth: local
+    loginClientId: oan-sandbox-portal
+  # OpenG2P Consent Manager partner portal: an approved participant gets the portal
+  # client's role and a partner_id attribute in keycloak.realm. Empty clientId = off.
+  partnerPortal:
+    clientId: ""
+    role: PARTNER_OPERATOR
+    partnerIdAttribute: partner_id
+    # Never change once partners exist: it is their ID in the CM and PM.
+    partnerIdPrefix: oan-p-
+  # OpenG2P Partner Management: approved participants onboarded as partners.
+  # Secret key: PM_CLIENT_SECRET.
+  partnerManagement:
+    enabled: false
+    staffApiUrl: ""
+    tokenUrl: ""
+    clientId: oan-sandbox-pm
+    # This API as PM reaches it (partner JWKS), e.g. https://<global.hostname>/oan
+    jwksBaseUrl: ""
+    defaultPolicies: "[]"
   # Only used on an empty database: creates the master administrator, masters
   # and CMS content when the Secret holds SEED_ADMIN_PASSWORD (idempotent).
   seed:
@@ -52,7 +122,10 @@ config:
 
 # Existing Secret in the release namespace, loaded into the api container.
 # Required keys: DB_PASSWORD, JWT_ACCESS_TOKEN_KEY, JWT_REFRESH_TOKEN_KEY.
-# Optional keys: SMTP_PASSWORD, GATEWAY_ADMIN_TOKEN, SEED_ADMIN_PASSWORD.
+# Required with participant apps: APP_CREDENTIAL_ENCRYPTION_KEY (Fernet key; never change it).
+# Optional keys: SMTP_PASSWORD, GATEWAY_ADMIN_TOKEN, SEED_ADMIN_PASSWORD,
+# KEYCLOAK_ADMIN_CLIENT_SECRET, KEYCLOAK_LOGIN_CLIENT_SECRET, GATEWAY_LOG_INGEST_TOKEN,
+# GATEWAY_RATE_LIMIT_REDIS_PASSWORD, PM_CLIENT_SECRET.
 secret:
   name: ""
 

@@ -110,18 +110,101 @@ spec:
               value: {{ $config.devFixedOtp | quote }}
             - name: GATEWAY_ENABLED
               value: {{ $config.gateway.enabled | quote }}
-            - name: GATEWAY_SANDBOX_URL
+            - name: GATEWAY_BASE_URL
               value: {{ $config.gateway.sandboxUrl | quote }}
             - name: GATEWAY_UAT_URL
               value: {{ $config.gateway.uatUrl | quote }}
             - name: GATEWAY_PROD_URL
               value: {{ $config.gateway.prodUrl | quote }}
+            - name: GATEWAY_UAT_PUBLIC_URL
+              value: {{ $config.gateway.uatPublicUrl | default "" | quote }}
+            - name: GATEWAY_PROD_PUBLIC_URL
+              value: {{ $config.gateway.prodPublicUrl | default "" | quote }}
             - name: GATEWAY_SYNC_ENABLED
               value: {{ $config.gateway.sync.enabled | quote }}
             - name: GATEWAY_TYPE
               value: {{ $config.gateway.sync.type | quote }}
             - name: GATEWAY_ADMIN_URL
               value: {{ $config.gateway.sync.adminUrl | quote }}
+            {{- $gw := $config.gateway }}
+            {{- $kc := $config.keycloak | default dict }}
+            {{- if eq ($gw.partnerAuth | default "apikey") "oauth" }}
+            {{- if not (and $kc.enabled ($gw.appSync | default dict).enabled) }}
+            {{- fail "config.gateway.partnerAuth=oauth needs config.keycloak.enabled and config.gateway.appSync.enabled" }}
+            {{- end }}
+            {{- end }}
+            - name: GATEWAY_APP_SYNC_ENABLED
+              value: {{ ($gw.appSync | default dict).enabled | default false | quote }}
+            - name: GATEWAY_PARTNER_AUTH
+              value: {{ $gw.partnerAuth | default "apikey" | quote }}
+            - name: GATEWAY_PARTNER_TOKEN_HEADER
+              value: {{ $gw.tokenHeader | default "X-Partner-Token" | quote }}
+            - name: GATEWAY_APP_KEY_HEADER
+              value: {{ $gw.appKeyHeader | default "apikey" | quote }}
+            {{- with $gw.logIngest }}
+            - name: GATEWAY_LOG_INGEST_ENABLED
+              value: {{ .enabled | default false | quote }}
+            - name: GATEWAY_LOG_INGEST_URL
+              value: {{ .url | default "" | quote }}
+            {{- end }}
+            {{- with $gw.rateLimit }}
+            - name: GATEWAY_RATE_LIMIT_ENABLED
+              value: {{ .enabled | default false | quote }}
+            - name: GATEWAY_RATE_LIMIT_POLICY
+              value: {{ .policy | default "local" | quote }}
+            - name: GATEWAY_RATE_LIMIT_REDIS_HOST
+              value: {{ .redisHost | default "" | quote }}
+            - name: GATEWAY_RATE_LIMIT_REDIS_PORT
+              value: {{ .redisPort | default 6379 | quote }}
+            {{- end }}
+            {{- if $kc.enabled }}
+            - name: KEYCLOAK_PROVISIONING_ENABLED
+              value: "true"
+            - name: KEYCLOAK_URL
+              value: {{ required "config.keycloak.url is required" $kc.url | quote }}
+            - name: KEYCLOAK_PUBLIC_URL
+              value: {{ $kc.publicUrl | default "" | quote }}
+            - name: KEYCLOAK_REALM
+              value: {{ $kc.realm | quote }}
+            - name: KEYCLOAK_ADMIN_CLIENT_ID
+              value: {{ $kc.adminClientId | quote }}
+            - name: KEYCLOAK_PARTNER_CLIENT_ID
+              value: {{ $kc.partnerClientId | quote }}
+            - name: KEYCLOAK_ENVIRONMENTS
+              value: {{ $kc.environments | quote }}
+            - name: KEYCLOAK_ISSUER
+              value: {{ $kc.issuer | default "" | quote }}
+            - name: PARTICIPANT_AUTH_PROVIDER
+              value: {{ $kc.participantAuth | default "local" | quote }}
+            - name: KEYCLOAK_LOGIN_CLIENT_ID
+              value: {{ $kc.loginClientId | quote }}
+            {{- end }}
+            {{- with $config.partnerPortal }}
+            - name: KEYCLOAK_PORTAL_CLIENT_ID
+              value: {{ .clientId | default "" | quote }}
+            - name: KEYCLOAK_PORTAL_ROLE
+              value: {{ .role | default "PARTNER_OPERATOR" | quote }}
+            - name: KEYCLOAK_PARTNER_ID_ATTRIBUTE
+              value: {{ .partnerIdAttribute | default "partner_id" | quote }}
+            - name: PARTNER_ID_PREFIX
+              value: {{ .partnerIdPrefix | default "oan-p-" | quote }}
+            {{- end }}
+            {{- with $config.partnerManagement }}
+            {{- if .enabled }}
+            - name: PM_PROVISIONING_ENABLED
+              value: "true"
+            - name: PM_STAFF_API_URL
+              value: {{ required "config.partnerManagement.staffApiUrl is required" .staffApiUrl | quote }}
+            - name: PM_TOKEN_URL
+              value: {{ required "config.partnerManagement.tokenUrl is required" .tokenUrl | quote }}
+            - name: PM_CLIENT_ID
+              value: {{ .clientId | quote }}
+            - name: PM_PARTNER_JWKS_BASE_URL
+              value: {{ .jwksBaseUrl | default "" | quote }}
+            - name: PM_DEFAULT_POLICIES
+              value: {{ .defaultPolicies | default "[]" | quote }}
+            {{- end }}
+            {{- end }}
             - name: SEED_ADMIN_EMAIL
               value: {{ $config.seed.adminEmail | quote }}
             {{- with $component.env }}

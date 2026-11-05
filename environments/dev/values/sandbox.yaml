@@ -1,10 +1,12 @@
 # OAN Sandbox (charts/oan-sandbox) in the dev environment.
 # Release `sandbox` in namespace `sandbox` (planned; not yet installed).
-# Merge with private values holding the images and the Secret name.
+# Merge with private values holding the images and the Secret name
+# (examples/dev/sandbox.yaml lists the steps and the Secret keys).
 global:
   hostname: sandbox.development.oanstaging.com
 config:
   appEnv: sandbox
+  debug: false
   db:
     host: commons-postgresql.commons.svc.cluster.local
     port: 5432
@@ -12,13 +14,39 @@ config:
     user: sandbox
   gateway:
     enabled: true
-    # Dev APISIX (grievance cluster). A2C routes are not on it yet.
-    sandboxUrl: https://grievance-backend-dev.oanstaging.com
+    # Dev APISIX (apisix.dashboard.oanstaging.com, ingress controller), partner routes of
+    # chart oan-partner-gateway on the public host below.
+    # TO CONFIRM (DevOps): the host name, its DNS record and TLS certificate.
+    uatUrl: https://partner-api-dev.oanstaging.com
     sync:
-      # The Admin API is internal to the grievance cluster; enable once it is
-      # reachable from this cluster with a viewer key in GATEWAY_ADMIN_TOKEN.
-      enabled: false
+      # oauth: only reads the routes (viewer key), writes nothing. TO CONFIRM (docs/apisix-gateway.md 8b): how
+      # this cluster reaches the Admin API; this host admits only the IPs in its
+      # ip-restriction whitelist, so add this cluster's egress IP.
+      enabled: true
       type: apisix
-      adminUrl: ""
+      adminUrl: https://apisix-admin.oanstaging.com
+    appSync:
+      enabled: true
+    # Partners call with an app access token (client credentials), not the API key.
+    partnerAuth: oauth
+    tokenHeader: X-Partner-Token
+    logIngest:
+      enabled: false
+    rateLimit:
+      enabled: false
+  keycloak:
+    enabled: true
+    url: https://keycloak.development.oanstaging.com
+    publicUrl: https://keycloak.development.oanstaging.com
+    # Set up on 2026-11-05 with setup_partner_realm.py: oan-partner-api,
+    # oan-sandbox-provisioner, oan-sandbox-portal, attribute participant_uid.
+    realm: partner
+    participantAuth: keycloak
+  # Consent Manager partner portal: off until the CM portal client is confirmed in the realm
+  # (then: consent-partner-portal, and rerun setup_partner_realm.py with --portal-client-id).
+  partnerPortal:
+    clientId: ""
+  partnerManagement:
+    enabled: false
 virtualService:
   gateway: istio-system/development
