@@ -172,6 +172,8 @@ registry:
         gateway: istio-system/staging
 analytics:
   dashboards:
+    # No Superset on staging or New Dev: the bundle Job would wait for its config Secret for ever.
+    enabled: false
     superset:
       url: http://commons-services-superset.commons.svc.cluster.local:8088
 # staging: confirm that staging keeps the eSignet mock for Fayda verification.
