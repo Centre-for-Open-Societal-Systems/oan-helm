@@ -1,0 +1,23 @@
+# Staging dashboard UI: the image New Dev runs, on the shared staff IAM and the staging Gateway.
+# Install with scripts/ci/deliver_staging_dashboards.sh. Secret contents stay outside Git.
+image:
+  repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/farmer-registry/dashboard-ui
+  tag: 8aa8dd8ab773@sha256:948811f5b98aa54b753003fd6a1911f57750ec3de30a62e7b11abb6e7fe75a99
+environment: ''
+iam:
+  url: https://staff-iam.oanstaging.com
+  cookieDomain: .oanstaging.com
+links:
+  staffPortalUrl: https://staff-portal.oanstaging.com
+  registryPortalUrl: https://farmer-registry.oanstaging.com
+dashboardApi:
+  service: farmer-registry-dashboard-api
+  auth:
+    enabled: true
+iamSetup:
+  grantUsers: [admin]
+  description: Farmer Dashboard
+host: farmer-registry-dashboard.oanstaging.com
+ingress:
+  public:
+    existingGateway: istio-system/staging
