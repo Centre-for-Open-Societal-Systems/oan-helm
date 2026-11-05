@@ -18,8 +18,10 @@ URL of that folder.
 
 ## How a chart is published
 
-1. A registry pipeline runs `scripts/ci/derive-version.sh`, packages `helm/<chart>` with that version
-   and writes the image digests of the build into the packaged values.
+1. A registry pipeline runs `scripts/ci/package_chart.py`, which takes the version from
+   `scripts/ci/derive-version.sh`, packages `helm/<chart>` and writes the images of the build into the
+   packaged values. The pipeline deploys this archive, and step 2 publishes the same file. Farmer has
+   its own `ci/deploy/package_chart.py` with the same result.
 2. The pipeline runs `scripts/ci/publish_chart.py`, which adds that one archive to `repository/<channel>/`.
    A version that already exists is refused.
 3. `.github/workflows/publish-channels.yaml` runs `scripts/publish_channels.py`: it checks the archive,
