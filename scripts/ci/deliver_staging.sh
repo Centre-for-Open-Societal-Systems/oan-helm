@@ -27,13 +27,14 @@ python3 "$here/promote_chart.py" --chart "$chart" --release "$release" --namespa
 archive=$(ls built-chart/*.tgz)
 echo "promoted $(basename "$archive")"
 
+# A first install has no history, and helm history fails.
 previous=$(helm history "$release" -n "$namespace" -o json 2>/dev/null | python3 -c '
 import json, sys
 try:
     deployed = [r["revision"] for r in json.load(sys.stdin) if r["status"] in ("deployed", "superseded")]
 except ValueError:
     deployed = []
-print(deployed[-1] if deployed else "")')
+print(deployed[-1] if deployed else "")' || true)
 
 if ! helm upgrade --install "$release" "$archive" -n "$namespace" --create-namespace --reset-values -f "$values" "$@" \
     --wait --timeout "${HELM_TIMEOUT:-30m}"; then
