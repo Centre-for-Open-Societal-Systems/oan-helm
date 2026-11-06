@@ -141,6 +141,8 @@ dev value in the team's secret manager.
 | `oan-grievance-admin` | grievance | `develop` | `password` | Frappe `Administrator` password |
 | `oan-grievance-jwt` | grievance | `develop` | `jwt_v1.pem` | RS256 signing key for `oan_auth_service` |
 | `oan-grievance-sentry` | grievance | `develop` | `dsn` | Optional: Sentry DSN |
+| `oan-ivr-vendor` | gateway | `apisix` | `key` | IVR vendor API key, shared with A2C. Read by the `oan-ivr-vendor` ApisixConsumer in `apisix.yaml` `extraDeploy` |
+| `oan-grievance-ivr-frappe-credential` | gateway | `apisix` | `authorization` | `token <api_key>:<api_secret>` of the Grievance IVR Integration user. The IVR webhook route puts it in `Authorization` |
 
 Frappe also generates an `encryption_key` when it creates the site. It is stored in
 `sites/develop.grievance.test/site_config.json` on the sites volume. Back it up with the
