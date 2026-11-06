@@ -1,0 +1,18 @@
+# Staging shared dashboard: the develop image of oan_dashboards, reading each registry's dashboard API in the cluster.
+# A2C has no staging gateway, so it reads the develop one.
+image:
+  repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/oan-dashboards
+  tag: 3aecc3171303
+dashboardServices:
+  FARMER_REGISTRY_DASHBOARD_API_URL: http://farmer-registry-dashboard-api.farmer
+  CROPSOWN_REGISTRY_DASHBOARD_API_URL: http://cropsown-registry-dashboard-api.crop
+  LIVESTOCK_REGISTRY_DASHBOARD_API_URL: http://livestock-registry-dashboard-api.live
+  A2C_DASHBOARD_API_URL: https://a2c-develop-gateway.oanstaging.com
+  A2C_DASHBOARD_API_CHARTS_PATH: /v1/charts
+ingress:
+  private:
+    enabled: true
+    gateway: istio-system/staging
+    host: oan-dashboard.oanstaging.com
+  public:
+    enabled: false

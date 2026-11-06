@@ -89,14 +89,17 @@ global:
   authCookieDomain: '.{{ .Values.global.baseDomain }}'
   cookieDomain: '.{{ .Values.global.baseDomain }}'
   iamUrl: 'https://staff-iam.{{ .Values.global.baseDomain }}'
-  masterDataHostname: 'master-data.{{ .Values.global.baseDomain }}'
+  # The openg2p-master-data iam-register Job sets the staff-portal tile to
+  # https://<masterDataHostname>, so this is the UI host; masterDataAPI.hostname
+  # keeps the API on master-data.*.
+  masterDataHostname: 'master-data-ui.{{ .Values.global.baseDomain }}'
   masterDataUiHostname: 'master-data-ui.{{ .Values.global.baseDomain }}'
   masterDataApiUrl: http://commons-services-master-data-api.commons.svc.cluster.local
   aweBaseUrl: http://commons-services-awe.commons.svc.cluster.local
 master-data:
   enabled: true
   global:
-    masterDataHostname: 'master-data.{{ .Values.global.baseDomain }}'
+    masterDataHostname: 'master-data-ui.{{ .Values.global.baseDomain }}'
     masterDataDB: master_data
     masterDataDBUser: master_data_user
     masterDataDBSecret: master-data-db-user
@@ -112,7 +115,7 @@ master-data:
     - agriculture
     image:
       repository: ghcr.io/asmitonweb/master-data-db-seed
-      tag: coss-develop-2fd6f2a8d05d@sha256:a68fcd9231cdac9bbd835c8caabc63f71d0830d78b6554d49b4142d796d19831
+      tag: coss-develop-056df0189026@sha256:f199f83c363f724cd82761ad4abebaebc70157172cc178edf939598b9b1efa67
     enabled: false
     autoPublish: false
     publishInitial: false
@@ -139,6 +142,7 @@ master-data:
       tag: 0.0.0-develop.118
       digest: sha256:98a0f4fac7a72dcb4d0a24e11953495c5e04c39db77f54eb85ef00643c0abf9d
   masterDataAPI:
+    hostname: 'master-data.{{ .Values.global.baseDomain }}'
     istio:
       virtualservice:
         gateway: istio-system/development

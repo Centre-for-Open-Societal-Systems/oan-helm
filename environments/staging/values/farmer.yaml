@@ -172,6 +172,8 @@ registry:
         gateway: istio-system/staging
 analytics:
   dashboards:
+    # No Superset on staging or New Dev: the bundle Job would wait for its config Secret for ever.
+    enabled: false
     superset:
       url: http://commons-services-superset.commons.svc.cluster.local:8088
 # staging: confirm that staging keeps the eSignet mock for Fayda verification.
@@ -182,3 +184,15 @@ registrantAuth:
   enabled: true
   esignetBaseUrl: https://esignet.oanstaging.com
   callbackUrl: https://staff-farmer.oanstaging.com/registrant-auth/callback
+# Farmer dashboard API, the develop image. The dashboard UI and oan-dashboards read it inside the cluster.
+dashboardApi:
+  enabled: true
+  image:
+    repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/dashboard-api
+    tag: f584b8e53bc0
+    digest: sha256:7148aa3011907d9830e007f9adea1677174ada071582ecb2defb17877484870b
+  env:
+    AUTH_ENABLED: 'true'
+    AUTH_AUDIENCE: farmer-registry-dashboard-api
+    AUTH_IAM_URL: http://commons-services-iam-staff-portal-api.commons.svc.cluster.local
+    AUTH_ROLE: charts:read

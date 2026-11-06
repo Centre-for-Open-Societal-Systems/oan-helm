@@ -1,0 +1,23 @@
+# Staging dashboard UI: the image New Dev runs, on the shared staff IAM and the staging Gateway.
+# Install with scripts/ci/deliver_staging_dashboards.sh. Secret contents stay outside Git.
+image:
+  repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/cropsown-registry/dashboard-ui
+  tag: 1027e7775505
+environment: ''
+iam:
+  url: https://staff-iam.oanstaging.com
+  cookieDomain: .oanstaging.com
+links:
+  staffPortalUrl: https://staff-portal.oanstaging.com
+  registryPortalUrl: https://crop-registry.oanstaging.com
+dashboardApi:
+  service: cropsown-registry-dashboard-api
+  auth:
+    enabled: true
+iamSetup:
+  grantUsers: [admin]
+  description: Crop Sown Dashboard
+host: cropsown-registry-dashboard.oanstaging.com
+ingress:
+  public:
+    existingGateway: istio-system/staging

@@ -1,0 +1,23 @@
+# Staging dashboard UI: the image New Dev runs, on the shared staff IAM and the staging Gateway.
+# Install with scripts/ci/deliver_staging_dashboards.sh. Secret contents stay outside Git.
+image:
+  repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/livestock-registry/dashboard-ui
+  tag: 829c1d3abd03
+environment: ''
+iam:
+  url: https://staff-iam.oanstaging.com
+  cookieDomain: .oanstaging.com
+links:
+  staffPortalUrl: https://staff-portal.oanstaging.com
+  registryPortalUrl: https://livestock-registry.oanstaging.com
+dashboardApi:
+  service: livestock-registry-dashboard-api
+  auth:
+    enabled: true
+iamSetup:
+  grantUsers: [admin]
+  description: Livestock Dashboard
+host: livestock-registry-dashboard.oanstaging.com
+ingress:
+  public:
+    existingGateway: istio-system/staging

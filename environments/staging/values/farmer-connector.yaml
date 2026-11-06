@@ -1,0 +1,73 @@
+# Farmer connector on staging: the images the Farmer pipeline builds from docker/registry-connector, which limit the API and
+# UI to the connector admin role, with staging hosts, queue, signing key and admin login.
+# Secrets come from the farmer-connector-credentials release. postgres-init creates the database on first install.
+fullnameOverride: farmer-registry-connector
+cossQueue: farmer-registry-connector-v2
+cossSigning:
+  enabled: true
+  partnerId: farmer-partner
+  keyId: farmer-connector-v2-staging
+  secret: farmer-connector-v2-staging-signing
+adminAuth:
+  issuer: https://keycloak.oanstaging.com/realms/staff
+  jwksUrl: http://commons-keycloak.commons.svc.cluster.local:80/realms/staff/protocol/openid-connect/certs
+  clientId: registry-connector
+  role: REGISTRY_CONNECTOR_ADMIN
+  uiClientId: registry-connector-ui
+global:
+  hostname: connector-farmer-registry.oanstaging.com
+  postgresqlHost: commons-postgresql.commons.svc.cluster.local
+  postgresqlPort: 5432
+  connectorDB: farmer_connector_v2
+  connectorDBUser: farmer_connector_v2_user
+  connectorDBSecret: farmer-connector-v2-staging-db
+  connectorDBUserPasswordKey: password
+  redisHost: commons-redis-master.commons.svc.cluster.local
+  partnerApiService: farmer-registry-partner-api
+imagePullSecrets:
+  - name: ecr-pull-secret
+commonEnv:
+  CONNECTOR_STORE_RUN_PAYLOADS: 'false'
+  CONNECTOR_STRICT_INCREMENTAL: 'true'
+  CONNECTOR_FULL_SCAN_ON_INCREMENTAL_UNSUPPORTED: 'false'
+  CONNECTOR_CORS_ORIGINS: https://connector-farmer-registry.oanstaging.com
+api:
+  replicaCount: 1
+  autoscaling:
+    enabled: false
+  image: &api
+    repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/registry-connector
+    tag: 90b2649a7b10@sha256:347e5f45bb078d06afc37ea7510ddc1d6eda5355764dc6fff9bfe446f7ab5ca6
+worker:
+  replicaCount: 1
+  image: *api
+beat:
+  enabled: true
+  replicaCount: 1
+  image: *api
+consumer:
+  enabled: false
+  image: *api
+ui:
+  replicaCount: 1
+  image:
+    repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/registry-connector-ui
+    tag: 90b2649a7b10@sha256:773fc2f67b438536a6f909f7aaf1de6180440323f42cfc9b7f8b23cc0fe6e061
+postgresCheckerInit:
+  enabled: false
+postgres-init:
+  enabled: true
+istio:
+  enabled: true
+  gateway:
+    create: false
+    name: internal
+  virtualservice:
+    enabled: true
+    gateway: istio-system/staging
+partnerRegistration:
+  enabled: true
+  partnerManagerUrl: http://commons-services-pm-staff-portal-api.commons.svc.cluster.local
+  tokenUrl: https://keycloak.oanstaging.com/realms/staff/protocol/openid-connect/token
+  clientId: commons-services-staff-portal
+  clientSecretName: commons-services-staff-portal

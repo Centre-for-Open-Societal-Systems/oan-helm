@@ -8,6 +8,172 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-05
+
+### openg2p-da-registry 1.0.0-rc.84 (staging)
+
+- Merge pull request #43 from asmitonweb/promote-staging-without-rebuilding (Centre-for-Open-Societal-Systems/da-registry@9dc1ebfea870)
+- Images and rollback: [releases/history/staging/openg2p-da-registry.md](releases/history/staging/openg2p-da-registry.md)
+
+## 2026-11-05
+
+### openg2p-cropsown-registry 0.0.0-develop.488 (develop)
+
+- Merge pull request #239 from asmitonweb/use-pack-codes-for-growth-stage-and-severity (Centre-for-Open-Societal-Systems/cropsown-regsitry@fbe5a37e41f2)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-05
+
+### openg2p-farmer-registry 1.0.0-rc.813 (staging)
+
+- Merge pull request #228 from asmitonweb/promote-staging-automatically (Centre-for-Open-Societal-Systems/farmer-registry@90b2649a7b10)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-05
+
+### openg2p-cropsown-registry 0.0.0-develop.485 (develop)
+
+- Merge pull request #235 from asmitonweb/record-staging-history (Centre-for-Open-Societal-Systems/cropsown-regsitry@51d9894158b1)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-05
+
+### openg2p-livestock-registry 1.0.0-rc.432 (staging)
+
+- Merge pull request #199 from asmitonweb/promote-staging-without-rebuilding (Centre-for-Open-Societal-Systems/livestock-registry@cc5b130f5aea)
+- Images and rollback: [releases/history/staging/openg2p-livestock-registry.md](releases/history/staging/openg2p-livestock-registry.md)
+
+## 2026-11-05
+
+### openg2p-cropsown-registry 0.0.0-develop.469 (develop)
+
+- Merge pull request #234 from asmitonweb/promote-staging-without-rebuilding (Centre-for-Open-Societal-Systems/cropsown-regsitry@e591be837fad)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-05
+
+### openg2p-farmer-registry 0.0.0-develop.803 (develop)
+
+- Merge pull request #228 from asmitonweb/promote-staging-automatically (Centre-for-Open-Societal-Systems/farmer-registry@90b2649a7b10)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-05
+
+### openg2p-livestock-registry 0.0.0-develop.426 (develop)
+
+- Merge pull request #199 from asmitonweb/promote-staging-without-rebuilding (Centre-for-Open-Societal-Systems/livestock-registry@cc5b130f5aea)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-05
+
+### openg2p-da-registry 0.0.0-develop.83 (develop)
+
+- Merge pull request #43 from asmitonweb/promote-staging-without-rebuilding (Centre-for-Open-Societal-Systems/da-registry@9dc1ebfea870)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-05
+
+### oan-sandbox 1.0.0-dev.17
+
+Previous version: 1.0.0-dev.16.
+
+- feat(oan-sandbox): Keycloak, OAuth app tokens and partner gateway val… (#102) (5dcaa12)
+
+## 2026-11-05
+
+### openg2p-livestock-registry 0.0.0-develop.424 (develop)
+
+- Move the Livestock chart into this repository and deploy the chart each build packages (Centre-for-Open-Societal-Systems/livestock-registry@e5082c54e7ab)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-05
+
+### openg2p-cropsown-registry 0.0.0-develop.467 (develop)
+
+- Move the Crop chart into this repository and deploy the chart each build packages (Centre-for-Open-Societal-Systems/cropsown-regsitry@791c66f9d008)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-05
+
+### openg2p-da-registry 0.0.0-develop.81 (develop)
+
+- Move the DA chart into this repository and deploy the chart each build packages (Centre-for-Open-Societal-Systems/da-registry@4ad52ab0f375)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-05
+
+### openg2p-farmer-registry 0.0.0-develop.801 (develop)
+
+- Deploy the chart each develop build packages, and publish that same archive (Centre-for-Open-Societal-Systems/farmer-registry@3337c093d42e)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-05
+
+### openg2p-farmer-registry 0.0.0-develop.800 (develop)
+
+- Publish the Farmer chart from this repository after each deploy (#226) (Centre-for-Open-Societal-Systems/farmer-registry@a9128872b86d)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-04
+
+### openg2p-farmer-registry 1.0.0-dev.22
+
+Previous version: 1.0.0-dev.21.
+
+- Farmer registry images 262e0d949a99 on platform 1.2.2-rc.625 (#94) (274ee86)
+
+## 2026-11-04
+
+### openg2p-commons-services 1.0.0-dev.35
+
+Previous version: 1.0.0-dev.34.
+
+- Point the Master Data staff-portal tile at the UI (#92) (0071008)
+
+## 2026-11-04
+
+### openg2p-commons-services 1.0.0-dev.34
+
+Previous version: 1.0.0-dev.33.
+
+- Master Data seed image with the livestock species and breeds (#89) (e2360eb)
+
+## 2026-11-04
+
+### openg2p-farmer-registry 1.0.0-dev.21
+
+Previous version: 1.0.0-dev.20.
+
+- Move the Farmer registry to the OpenG2P registry chart 1.2.2-rc.625 (#79) (10eff85)
+
+## 2026-11-03
+
+### openg2p-cropsown-registry 1.0.0-dev.20
+
+Previous version: 1.0.0-dev.19.
+
+- Map every source of income for Crop Sown and Livestock (#80) (180c9b8)
+
+### openg2p-livestock-registry 1.0.0-dev.22
+
+Previous version: 1.0.0-dev.21.
+
+- Map every source of income for Crop Sown and Livestock (#80) (180c9b8)
+
+## 2026-11-03
+
+### openg2p-cropsown-registry 1.0.0-dev.19
+
+Previous version: 1.0.0-dev.18.
+
+- Map every Farmer-tab field and the photo for Crop Sown and Livestock (#76) (2d0d359)
+
+### openg2p-livestock-registry 1.0.0-dev.21
+
+Previous version: 1.0.0-dev.20.
+
+- Map every Farmer-tab field and the photo for Crop Sown and Livestock (#76) (2d0d359)
+
 ## 2026-11-02
 
 ### openg2p-commons-services 1.0.0-dev.33

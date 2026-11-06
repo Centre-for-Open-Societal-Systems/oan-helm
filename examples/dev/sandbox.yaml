@@ -3,10 +3,31 @@
 #   1. Push the API and web images built from sandbox-platform; the web image with
 #      NEXT_PUBLIC_API_BASE_URL=https://sandbox.development.oanstaging.com/oan.
 #   2. Create database sandbox_db_oan and user sandbox on commons-postgresql.
-#   3. kubectl -n sandbox create secret generic sandbox-secrets \
-#        --from-literal=DB_PASSWORD=... --from-literal=JWT_ACCESS_TOKEN_KEY=... \
-#        --from-literal=JWT_REFRESH_TOKEN_KEY=... [--from-literal=SEED_ADMIN_PASSWORD=...]
-#   4. Set the image digests below, enabled: true on api, web and virtualService,
+#   3. Keycloak (done for dev on 2026-11-05): realm `partner` holds the sandbox clients.
+#      Elsewhere, once per realm (writes the two client secrets into the env file):
+#        KC_ADMIN_USER=... KC_ADMIN_PASSWORD=... python backend/scripts/keycloak/setup_partner_realm.py \
+#          --url https://keycloak.<domain> --realm partner --env-file keycloak.env
+#      Read the secrets for step 4 in the Keycloak console (Clients > oan-sandbox-provisioner /
+#      oan-sandbox-portal > Credentials) or from keycloak.env.
+#   4. kubectl -n sandbox create secret generic sandbox-secrets \
+#        --from-literal=DB_PASSWORD=... \
+#        --from-literal=JWT_ACCESS_TOKEN_KEY=... --from-literal=JWT_REFRESH_TOKEN_KEY=... \
+#        --from-literal=APP_CREDENTIAL_ENCRYPTION_KEY=... \
+#        --from-literal=KEYCLOAK_ADMIN_CLIENT_SECRET=... \
+#        --from-literal=KEYCLOAK_LOGIN_CLIENT_SECRET=... \
+#        --from-literal=GATEWAY_ADMIN_TOKEN=... \
+#        [--from-literal=SEED_ADMIN_PASSWORD=...] [--from-literal=SMTP_PASSWORD=...]
+#      JWT keys: python -c "import secrets; print(secrets.token_urlsafe(48))" (two different values).
+#      APP_CREDENTIAL_ENCRYPTION_KEY: python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+#        (never change it once apps have keys). GATEWAY_ADMIN_TOKEN: the APISIX `viewer` key
+#        (Secret apisix-admin-credentials in namespace apisix): with partnerAuth oauth the sandbox
+#        only reads routes. The `admin` key is needed only in apikey / keycloak mode (consumers).
+#   5. APISIX (docs/apisix-gateway.md, section 8b): partner host DNS + TLS Secret
+#      oan-partner-gateway-tls, the partner routes
+#        helm upgrade --install oan-partner-gateway <sandbox-platform>/deploy/apisix-partner-gateway/k8s \
+#          -n apisix -f environments/dev/values/oan-partner-gateway.yaml
+#      and a way for this cluster to reach the Admin API (config.gateway.sync.adminUrl).
+#   6. Set the image digests below, enabled: true on api, web and virtualService,
 #      and install with environments/dev/values/sandbox.yaml.
 secret:
   name: sandbox-secrets

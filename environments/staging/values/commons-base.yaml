@@ -1,0 +1,15 @@
+# Staging overlay for the openg2p-commons-base release `commons`. Staging keeps its saved values, so apply it with
+# --reuse-values. Only what must match New Dev is here.
+postgresql:
+  primary:
+    resources:
+      limits:
+        # New Dev runs Postgres without a memory limit. Staging's saved limit of 1Gi killed Postgres during dumps, and
+        # Helm cannot clear a saved value with null on this chart, so the limit is set well above what Postgres uses.
+        memory: 8Gi
+minio:
+  istio:
+    virtualservice:
+      host: minio-console.oanstaging.com
+      apiHost: minio-farmer.oanstaging.com
+      gateway: istio-system/staging

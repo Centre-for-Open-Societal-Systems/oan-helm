@@ -232,6 +232,7 @@ before committing: `git checkout -- repository releases`.
 | `releases/resource-baselines-current.json` | Resource names, selectors and Secret references installed releases depend on | Pull requests, deliberately |
 | `releases/<version>.yaml`, other `releases/*.json` | Historical release-train manifests and environment evidence | Pull requests (historical) |
 | `repository/` | **Published Helm repository read by Rancher:** archives, `index.yaml`, `SHA256SUMS` | Release workflow only |
+| `repository/{develop,staging,release}/` | Registry charts published per branch, see [docs/chart-channels.md](docs/chart-channels.md) | Registry pipelines add archives; the index workflow writes the rest |
 | `releases/artifacts.json`, `releases/current.yaml`, `CHANGELOG.md` | Archive seals, latest versions, release notes | Release workflow only |
 
 The `protected-paths` check enforces the last two rows: a pull request touching them

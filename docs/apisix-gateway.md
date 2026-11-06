@@ -23,6 +23,7 @@ header. **Never install them into the OpenG2P cluster.**
 | Rate-limit counters               | Upstream chart `valkey/valkey` 0.11.0 from `https://valkey.io/valkey-helm/`, release `apisix-valkey` next to APISIX                                                                                                                     | [dev/values/valkey-gateway.yaml](../environments/dev/values/valkey-gateway.yaml)               |
 | Grievance routes                  | Chart `oan-grievance-gateway` in [oan_grievance_service/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/tree/develop/apisix/k8s), generated from the service's OpenAPI spec. It is not copied here | [dev/values/oan-grievance-gateway.yaml](../environments/dev/values/oan-grievance-gateway.yaml) |
 | A2C routes                        | Chart `oan-a2c-gateway` in [oan_a2c/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/tree/develop/apisix/k8s), generated from the A2C OpenAPI spec                                                                | [dev/values/oan-a2c-gateway.yaml](../environments/dev/values/oan-a2c-gateway.yaml)             |
+| Partner APIs (OAN sandbox apps)   | Chart `oan-partner-gateway` in [sandbox-platform deploy/apisix-partner-gateway/k8s](https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform/tree/develop/deploy/apisix-partner-gateway), generated from the routes the sandbox is tested against | [dev/values/oan-partner-gateway.yaml](../environments/dev/values/oan-partner-gateway.yaml) |
 
 This repository holds only the values. Each app's route chart lives with the app, because
 the routes come from the app's OpenAPI spec and must change in the same PR as the code.
@@ -310,6 +311,65 @@ back to back. Between the two upgrades both consumers hold the key, APISIX match
 and the old A2C chart accepts only the old one, so some IVR calls to A2C get 403 for that
 moment. Delete the old Secret once the A2C chart no longer creates its consumer.
 
+## 8b. Partner APIs (OAN sandbox)
+
+Partners call OAN APIs (first: the Farmer Registry staff API) with apps they create in the
+OAN sandbox. The sandbox runs with `GATEWAY_PARTNER_AUTH=oauth`:
+
+```
+partner -> POST https://keycloak.development.oanstaging.com/realms/partner/protocol/openid-connect/token
+           grant_type=client_credentials, client_id=<API key>, client_secret=<API secret>
+        <- access token (claims participant_uid, oan_app, oan_environments, oan_routes)
+partner -> https://<partner host>/farmer-registry/... with header X-Partner-Token: <token>
+        -> APISIX: openid-connect (realm JWKS, iss, exp), role `uat` in oan_environments,
+           this route's id in oan_routes, limit-count per app -> Farmer Registry
+```
+
+The routes are the chart `oan-partner-gateway` (sandbox-platform
+`deploy/apisix-partner-gateway/k8s`), the same shape as the grievance chart: one
+`ApisixRoute` per upstream, `ApisixUpstream`s with `externalNodes` (the Farmer Registry and
+its Keycloak are public hosts), and an `ApisixTls` for the partner host. `hosts` is
+required. Values: [dev/values/oan-partner-gateway.yaml](../environments/dev/values/oan-partner-gateway.yaml).
+
+What the sandbox does on the gateway: it **only reads** the routes through the Admin API
+(`GATEWAY_ADMIN_URL`, key `GATEWAY_ADMIN_TOKEN`; the **viewer** key is enough). Their ids go
+into the tokens' `oan_routes`. In oauth mode it writes nothing to the gateway (no consumers
+or credentials): each app key is a Keycloak client instead, and the routes check the
+token. So the Ingress Controller stays the only writer, as section 10 requires.
+
+Install, in order:
+
+1. **Partner host.** **Confirm** the name (values use `partner-api-dev.oanstaging.com`).
+   DNS to the gateway node, and a certificate in Secret `oan-partner-gateway-tls`
+   (`tls.crt`, `tls.key`) in namespace `apisix`, as for grievance (section 11).
+2. **Routes.** From a sandbox-platform checkout at the deployed commit:
+
+```bash
+helm upgrade --install oan-partner-gateway deploy/apisix-partner-gateway/k8s   -n apisix -f <oan-helm>/environments/dev/values/oan-partner-gateway.yaml
+kubectl -n apisix get apisixroutes,apisixupstreams,apisixtls -l app=oan-partner-gateway
+```
+
+3. **Admin API for the sandbox.** The sandbox runs in the OpenG2P dev cluster. The Admin
+   API in `apisix.yaml` is a ClusterIP Service (`apisix-admin:9180`) that admits
+   `10.0.0.0/8`, so the sandbox cannot reach it from another cluster. **Confirm** one way
+   in: an Admin API route on a host with `ip-restriction` to the sandbox cluster's egress
+   IP (the live dev gateway has `apisix-admin.oanstaging.com` this way), or a private
+   network path. Then the sandbox's `config.gateway.sync.adminUrl` and the viewer key.
+4. **Check, before telling partners:**
+
+```bash
+H=https://partner-api-dev.oanstaging.com
+# No token: 401 {"message":"Missing app token (X-Partner-Token)"} from the gateway
+curl -s -X POST $H/farmer-registry/register-data/get_register_summary_data
+# A user's or a foreign realm's token: 401. An app token without this route: 403.
+# An app token from the sandbox (try-it page "Get token"): passes the gateway (the registry answers).
+```
+
+The sandbox's own check: sign up and approve a participant, create and approve an app,
+**Get token** on the try-it page, then **Run**: the call passes the gateway.
+
+Rate limits count per app (`X-OAN-App`, set from the token) in the valkey at `redis.host`.
+
 ## 9. Known open items
 
 - **Values to fill:** the UI origins for CORS and socket.io cookies (still the
@@ -346,6 +406,8 @@ moment. Delete the old Secret once the A2C chart no longer creates its consumer.
   APISIX has no certificate to answer HTTPS with yet.
 - **ADC and APISIX 3.19.** The Ingress Controller uses ADC internally, and ADC's documented
   support stops at APISIX 3.17. Watch the controller logs on the first sync.
+- **Partner APIs:** the partner host name, DNS and certificate; how the sandbox reaches
+  the Admin API (read only) from the OpenG2P cluster (section 8b).
 - **etcd.** `apisix.yaml` uses `externalEtcd`; see section 10. Not yet installed against
   a real etcd.
 - **Global plugins.** Confirm `request-id` and `prometheus` take effect: `X-Request-Id` in
