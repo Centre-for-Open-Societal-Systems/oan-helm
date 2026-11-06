@@ -8,6 +8,33 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-06
+
+### openg2p-cropsown-registry 1.0.0-dev.21
+
+Previous version: 1.0.0-dev.20.
+
+- Crop seed stops loading profile images it does not ship (18f4da6)
+- Registry charts create and refresh their own ECR pull secret (590000c)
+
+### openg2p-da-registry 1.0.0-dev.21
+
+Previous version: 1.0.0-dev.20.
+
+- Registry charts create and refresh their own ECR pull secret (590000c)
+
+### openg2p-farmer-registry 1.0.0-dev.23
+
+Previous version: 1.0.0-dev.22.
+
+- Registry charts create and refresh their own ECR pull secret (590000c)
+
+### openg2p-livestock-registry 1.0.0-dev.23
+
+Previous version: 1.0.0-dev.22.
+
+- Registry charts create and refresh their own ECR pull secret (590000c)
+
 ## 2026-11-05
 
 ### openg2p-da-registry 1.0.0-rc.84 (staging)
