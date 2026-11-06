@@ -10,6 +10,56 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-06
 
+### oan-a2c 0.1.0-dev.2
+
+Previous version: 0.1.0-dev.1.
+
+- Rename COSS to OAN in chart names, annotations, helpers, scripts and docs (#127) (5982df6)
+
+### oan-grievance-service 0.1.0-dev.2
+
+Previous version: 0.1.0-dev.1.
+
+- Rename COSS to OAN in chart names, annotations, helpers, scripts and docs (#127) (5982df6)
+
+### oan-sandbox 1.0.0-dev.18
+
+Previous version: 1.0.0-dev.17.
+
+- Rename COSS to OAN in chart names, annotations, helpers, scripts and docs (#127) (5982df6)
+
+### openg2p-commons-services 1.0.0-dev.36
+
+Previous version: 1.0.0-dev.35.
+
+- Rename COSS to OAN in chart names, annotations, helpers, scripts and docs (#127) (5982df6)
+
+### openg2p-cropsown-registry 1.0.0-dev.22
+
+Previous version: 1.0.0-dev.21.
+
+- Rename COSS to OAN in chart names, annotations, helpers, scripts and docs (#127) (5982df6)
+
+### openg2p-da-registry 1.0.0-dev.23
+
+Previous version: 1.0.0-dev.22.
+
+- Rename COSS to OAN in chart names, annotations, helpers, scripts and docs (#127) (5982df6)
+
+### openg2p-farmer-registry 1.0.0-dev.24
+
+Previous version: 1.0.0-dev.23.
+
+- Rename COSS to OAN in chart names, annotations, helpers, scripts and docs (#127) (5982df6)
+
+### openg2p-livestock-registry 1.0.0-dev.24
+
+Previous version: 1.0.0-dev.23.
+
+- Rename COSS to OAN in chart names, annotations, helpers, scripts and docs (#127) (5982df6)
+
+## 2026-11-06
+
 ### openg2p-da-registry 1.0.0-dev.22
 
 Previous version: 1.0.0-dev.21.
