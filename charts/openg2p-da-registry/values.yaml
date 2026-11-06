@@ -249,3 +249,10 @@ ecrPullSecret:
   schedule: "0 */6 * * *"
   awsCliImage: amazon/aws-cli:2.36.43
   kubectlImage: alpine/k8s:1.31.1
+
+# ExternalName Services for Commons Services the registry subchart calls by short
+# name (see templates/commons-service-aliases.yaml). Example:
+#   commonsServiceAliases:
+#     - name: commons-services-awe
+#       namespace: commons
+commonsServiceAliases: []

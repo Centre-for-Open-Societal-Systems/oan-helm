@@ -211,3 +211,9 @@ ecrPullSecret:
   registry: 379220350808.dkr.ecr.ap-south-1.amazonaws.com
   serviceAccounts:
     - default
+
+# The db-seed hook waits for http://commons-services-awe:80, a name that exists in this
+# namespace only through this alias (the other registry namespaces have hand-made ones).
+commonsServiceAliases:
+  - name: commons-services-awe
+    namespace: commons
