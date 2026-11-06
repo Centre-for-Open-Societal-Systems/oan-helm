@@ -90,7 +90,7 @@ described in `docs/service-onboarding.md` and `docs/consent-aggregation-prerequi
 
 The farmer db-seed Job comes from the upstream platform chart (`openg2p-registry` 1.2.2-rc.614), which
 this repository does not modify. Its template renders a fixed list of env vars from `dbSeed.*` and
-`global.*` and never renders `dbSeed.envVars`, so a value such as `COSS_FARMER_SOURCE_ID` or
+`global.*` and never renders `dbSeed.envVars`, so a value such as `REGISTRY_FARMER_REFERENCE_SOURCE_ID` or
 `APPROVER_RESOLVER_SECRET` set under `registry.dbSeed.envVars` is silently ignored. There is no other
 values key that reaches the Job's container env (`dbSeed.resources` is the only free-form field and it
 only renders under `resources:`).
