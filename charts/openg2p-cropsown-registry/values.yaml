@@ -147,7 +147,9 @@ registry:
       APPROVER_RESOLVER_SECRET: cropsown-approver-resolver-secret
     loadGeoData: false
     loadSampleData: false
-    loadImages: true
+    # The Crop db-seed image ships no /seed/upload_images.py (profile images belong to
+    # Farmer sample data), so image loading stays off.
+    loadImages: false
     loadTemplates: true
   iamRegister:
     applicationDescription: Crop Sown Registry
