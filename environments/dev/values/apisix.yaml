@@ -39,9 +39,12 @@ updateStrategy:
   type: Recreate
   rollingUpdate: null
 
-# A2C partner routes replace the caller's Authorization with the Frappe service user's
-# credential, which APISIX reads from its environment ($env://A2C_FRAPPE_SERVICE_AUTHORIZATION).
-# Secret a2c-frappe-service-credential (key `authorization`) in namespace apisix.
+# Key-auth routes replace the caller's Authorization with a Frappe credential, which
+# APISIX reads from its environment ($env://NAME), so it is never written into a route:
+# - A2C partner routes: the A2C service user. Secret a2c-frappe-service-credential.
+# - Grievance IVR webhook: the Grievance IVR Integration user. Secret
+#   oan-grievance-ivr-frappe-credential.
+# Both in namespace apisix, key `authorization`, value `token <api_key>:<api_secret>`.
 extraEnvVars:
   - name: A2C_FRAPPE_SERVICE_AUTHORIZATION
     valueFrom:
@@ -49,6 +52,31 @@ extraEnvVars:
         name: a2c-frappe-service-credential
         key: authorization
         optional: true
+  - name: OAN_GRIEVANCE_IVR_FRAPPE_AUTHORIZATION
+    valueFrom:
+      secretKeyRef:
+        name: oan-grievance-ivr-frappe-credential
+        key: authorization
+        optional: true
+
+# Consumers whose routes live in more than one app gateway, so no app chart owns them
+# (gateway_apisix.SHARED_CONSUMERS in oan_auth_service). App charts whitelist them as
+# `<sharedConsumerNamespace>_<name>`, with sharedConsumerNamespace set to this namespace.
+# Each key is read from the Secret named after the consumer (key `key`) in namespace
+# apisix, provisioned outside Git.
+# - oan-ivr-vendor: the telco IVR vendor, calling A2C lead creation and the grievance
+#   IVR webhook with one key.
+extraDeploy:
+  - apiVersion: apisix.apache.org/v2
+    kind: ApisixConsumer
+    metadata:
+      name: oan-ivr-vendor
+    spec:
+      ingressClassName: apisix
+      authParameter:
+        keyAuth:
+          secretRef:
+            name: oan-ivr-vendor
 
 # Nothing proxies in front of APISIX, so clients connect to it directly and rate limits
 # see their own address. No X-Real-IP is trusted (chart default `realIpFrom`), so a
