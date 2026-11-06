@@ -33,7 +33,7 @@ spec:
         runAsGroup: 1001
       containers:
         - name: web
-          image: {{ include "coss.image" $component.image | quote }}
+          image: {{ include "oan.image" $component.image | quote }}
           imagePullPolicy: {{ $component.image.pullPolicy }}
           securityContext:
             allowPrivilegeEscalation: false

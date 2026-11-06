@@ -13,6 +13,8 @@ global:
   masterDataDsnKey: master_data_dsn
   registryDsnKey: registry_db_dsn
 
+# Signing key and queue are set by environment values: oanSigning (enabled, partnerId, keyId, secret) and oanQueue.
+# The old keys cossSigning and cossQueue are still read, only until every environment's values use the new ones.
 imagePullSecrets: []
 
 commonEnv:

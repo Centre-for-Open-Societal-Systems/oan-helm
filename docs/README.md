@@ -16,7 +16,7 @@ and deployed, and [CONTRIBUTING.md](../CONTRIBUTING.md) for the pull-request rul
 | [commons-upgrades.md](commons-upgrades.md) | One-click Commons Services upgrades: what re-runs, why it is safe, verify and roll back |
 | [rancher-consent-aggregation-status.md](rancher-consent-aggregation-status.md) | Installed Commons Services release in dev and its upgrade controls |
 | [readiness.md](readiness.md) | Per-component readiness and image provenance |
-| [service-catalog.md](service-catalog.md) | Every COSS service, its chart, values key and source |
+| [service-catalog.md](service-catalog.md) | Every OAN service, its chart, values key and source |
 | [service-onboarding.md](service-onboarding.md) | Adding or enabling a service in dev without new DNS, Nginx or certificates |
 | [dev-urls.md](dev-urls.md) | Development wildcard URLs and the legacy-URL migration |
 | [request-flow.md](request-flow.md) | Request path, load balancing, logging and Rancher in one picture |
@@ -42,7 +42,7 @@ and deployed, and [CONTRIBUTING.md](../CONTRIBUTING.md) for the pull-request rul
 | --- | --- |
 | [consent-aggregation-prerequisites.md](consent-aggregation-prerequisites.md) | What must exist before enabling Aggregation |
 | [consent-partner-portal.md](consent-partner-portal.md) | The optional Consent Partner Portal workload |
-| [consent-candidate-build.md](consent-candidate-build.md) | Published COSS Consent candidate images |
+| [consent-candidate-build.md](consent-candidate-build.md) | Published OAN Consent candidate images |
 | [consent-aggregation-local-check.md](consent-aggregation-local-check.md) | Local check of a Consent and Aggregation image pair |
 | [ecr-pull-access.md](ecr-pull-access.md) | Letting New Dev pull the Aggregation image |
 | [partner-session-cookie-guard.md](partner-session-cookie-guard.md) | Partner Management session cookie guard in dev |

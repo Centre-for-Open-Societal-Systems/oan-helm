@@ -1,9 +1,9 @@
-# COSS refactor candidate ownership and location support
+# OAN refactor candidate ownership and location support
 
 Crop and Livestock core charts and all three registry dashboard release charts
 are maintained here. Registries consume a commit, chart version and archive
 SHA-256; they do not resolve dependencies or mutate chart versions in Jenkins.
-Dashboard applications retain independent COSS source repositories and
+Dashboard applications retain independent OAN source repositories and
 registry-owned CI, ECR, releases, authentication and reporting views.
 
 Candidate 1.0.0-dev.11 keeps the registry platform at rc.557 and incorporates

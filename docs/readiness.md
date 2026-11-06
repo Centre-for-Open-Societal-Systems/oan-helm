@@ -18,7 +18,7 @@ distinguish installed components from partner/staff workflows still awaiting set
 | Farmer/Crop/Livestock dashboard API | Three published digests verified in ECR; Farmer/Crop currently deployed | Disabled by default; Farmer needs `analytics.reportingViews`, Crop/Livestock need `reporting.views`, DB Secrets and authentication settings |
 | Registry dashboard UI | Configurable Deployment/ClusterIP Service in every registry | Disabled; current standalone dashboard images unavailable. Confirm IAM URL/domain/provider/client roles/Secrets and routing |
 | DA dashboard API/UI | Optional configurable workloads included | Disabled pending images and confirmed runtime/database contracts |
-| COSS Consent API/UI/sanity | Current `48e64c249056` images published and digest-pinned; 195 tests pass with disposable PostgreSQL | Fresh live DB copy passed migration twice with row counts/IDs preserved. Retain current owner, private values and key; OTP unavailable pending SMS. See current evidence. |
+| OAN Consent API/UI/sanity | Current `48e64c249056` images published and digest-pinned; 195 tests pass with disposable PostgreSQL | Fresh live DB copy passed migration twice with row counts/IDs preserved. Retain current owner, private values and key; OTP unavailable pending SMS. See current evidence. |
 | Aggregation API | Current `a5fa17fd7e7f` image published; 171 unit tests pass; cluster ECR pull access now works | Stateless: no own DB/queue/migration. Default disabled; persistent signing, catalog, staff auth/roles and partner bindings required. Stored-consent calls await partner realm/usable consent. |
 | OAN Sandbox | Chart added for `sandbox-platform`; renders verified by `validate.py` | API, web and route disabled by default. Publish both images (web built for `https://sandbox.development.oanstaging.com/oan`), create DB/user on `commons-postgresql` and the namespace Secret, then enable. Packaged as `oan-sandbox-1.0.0-dev.6.tgz` |
 | Connectors / shared OAN dashboard | Existing independent releases confirmed in dev | Remain outside these six charts; keep current owners |
@@ -84,7 +84,7 @@ owners unless a separate migration is agreed. **Helm rollback does not reverse
 database migrations, seed data or external IAM changes.** Historical packaging alone performed no rollout; current setup and migration
 rehearsal evidence are recorded in `releases/consent-aggregation-20261019.json`.
 
-Version `1.0.0-dev.3` adds OAN display names and COSS source links; runtime values
+Version `1.0.0-dev.3` adds OAN display names and OAN source links; runtime values
 are unchanged from `1.0.0-dev.2`. Local pair results and their limits are in
 [the isolated check guide](consent-aggregation-local-check.md).
 

@@ -33,14 +33,14 @@ ADDON_RENDER_ARGS = ("--set","image.repository=example.invalid/verification-dash
     "--set","ecrPullSecret.enabled=false","--set","iam.url=https://iam.verification.invalid",
     "--set","iam.cookieDomain=.verification.invalid","--set","domain=verification.invalid")
 SYNTHETIC_IMAGE = {"repository": "example.invalid/render-only", "digest": "sha256:" + "a" * 64}
-COSS = "https://github.com/Centre-for-Open-Societal-Systems/"
+OAN = "https://github.com/Centre-for-Open-Societal-Systems/"
 APPLICATION_SOURCES = {
-    "openg2p-farmer-registry": [COSS + "farmer-registry"],
-    "openg2p-cropsown-registry": [COSS + "cropsown-regsitry"],
-    "openg2p-livestock-registry": [COSS + "livestock-registry"],
-    "openg2p-da-registry": [COSS + "da-registry"],
-    "openg2p-commons-services": [COSS + "consent-management", COSS + "oan-aggregation-api"],
-    "oan-sandbox": [COSS + "sandbox-platform"],
+    "openg2p-farmer-registry": [OAN + "farmer-registry"],
+    "openg2p-cropsown-registry": [OAN + "cropsown-regsitry"],
+    "openg2p-livestock-registry": [OAN + "livestock-registry"],
+    "openg2p-da-registry": [OAN + "da-registry"],
+    "openg2p-commons-services": [OAN + "consent-management", OAN + "oan-aggregation-api"],
+    "oan-sandbox": [OAN + "sandbox-platform"],
 }
 EXPECTED = set(APPLICATION_SOURCES)
 CHARTS = [m for m in sorted((ROOT / "charts").glob("*/Chart.yaml")) if m.parent.name in EXPECTED]
@@ -49,9 +49,9 @@ CHARTS = [m for m in sorted((ROOT / "charts").glob("*/Chart.yaml")) if m.parent.
 def check_oan_metadata(info, chart):
     annotations = info["annotations"]
     assert annotations["catalog.cattle.io/display-name"].startswith("OAN ")
-    assert annotations["oan.org/owner"] == "OpenAgriNet (OAN) / COSS"
-    assert annotations["oan.org/chart-source"] == COSS + "oan-helm/tree/main/charts/" + chart.name
-    assert info["home"].startswith(COSS)
+    assert annotations["oan.org/owner"] == "OpenAgriNet (OAN)"
+    assert annotations["oan.org/chart-source"] == OAN + "oan-helm/tree/main/charts/" + chart.name
+    assert info["home"].startswith(OAN)
     assert "OAN" in info["description"]
     for url in APPLICATION_SOURCES[chart.name]:
         assert url in info["sources"], "Application GitHub source missing"
@@ -439,23 +439,23 @@ def package(report):
         helm_cache = ROOT / ".build/http-repository-cache"
         helm_cache.mkdir(exist_ok=True)
         env = dict(os.environ, HELM_REPOSITORY_CACHE=str(helm_cache), HELM_REPOSITORY_CONFIG=str(ROOT / ".build/http-repositories.yaml"))
-        run("repo", "add", "coss", base, "--force-update", env=env)
+        run("repo", "add", "oan", base, "--force-update", env=env)
         for entries in index["entries"].values():
             for entry in entries:
                 for url in entry["urls"]:
                     assert url == Path(url).name and url.endswith(".tgz"), url
                     data = urlopen(f"{base}/{url}").read()
                     assert hashlib.sha256(data).hexdigest() == entry["digest"]
-                    selected = yaml.safe_load(run("show", "chart", "coss/" + entry["name"], "--version", entry["version"], env=env))
+                    selected = yaml.safe_load(run("show", "chart", "oan/" + entry["name"], "--version", entry["version"], env=env))
                     assert selected["name"] == entry["name"] and selected["version"] == entry["version"]
                     if entry["name"] not in EXPECTED:
                         continue
                     if selected.get("annotations", {}).get("oan.org/promotion-ready") == "false":
                         verify_refactor_gate(public / Path(url).name, "http-check")
                     elif (ROOT / "addons/registry-dashboards" / entry["name"] / "Chart.yaml").exists():
-                        documents(run("template", "http-check", "coss/" + entry["name"], "--version", entry["version"], "--namespace", "http-check", *ADDON_RENDER_ARGS, env=env), "http-check")
+                        documents(run("template", "http-check", "oan/" + entry["name"], "--version", entry["version"], "--namespace", "http-check", *ADDON_RENDER_ARGS, env=env), "http-check")
                     else:
-                        documents(run("template", "http-check", "coss/" + entry["name"], "--version", entry["version"], "--namespace", "http-check", env=env), "http-check")
+                        documents(run("template", "http-check", "oan/" + entry["name"], "--version", entry["version"], "--namespace", "http-check", env=env), "http-check")
     recorded.write_text(json.dumps(prior, indent=2) + "\n")
     (public / "SHA256SUMS").write_text("".join(f"{digest(p)}  {p.name}\n" for p in sorted(public.glob("*.tgz"))), encoding="utf-8")
     report["packages"] = len(list(public.glob("*.tgz")))
@@ -510,7 +510,7 @@ def main():
                     assert values["master-data"][component]["image"]["tag"] == "0.0.0-develop.118"
                     assert re.fullmatch(r"sha256:[0-9a-f]{64}", values["master-data"][component]["image"]["digest"])
                 # The seed image is upstream's develop.118 with the ETH-OAN pack, by digest: a hand-tagged
-                # -oan.<n> build from the fork, or the scheduled build of one COSS develop commit.
+                # -oan.<n> build from the fork, or the scheduled build of one OAN develop commit.
                 seed = values["master-data"]["geoSeed"]["image"]
                 assert seed["repository"] == "ghcr.io/asmitonweb/master-data-db-seed"
                 assert re.fullmatch(r"(0\.0\.0-develop\.118-oan\.\d+|coss-develop-[0-9a-f]{12})@sha256:[0-9a-f]{64}", seed["tag"])

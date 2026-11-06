@@ -1,8 +1,8 @@
 # OpenAgriNet (OAN) Helm charts
 
-Helm charts for the OpenAgriNet services that COSS deploys: the Farmer, Crop Sown,
+Helm charts for the OpenAgriNet services that OAN deploys: the Farmer, Crop Sown,
 Livestock and DA registries, Commons Services (the shared OpenG2P services plus the
-COSS Consent Manager and Aggregation API), the OAN Sandbox, the Grievance service,
+OAN Consent Manager and Aggregation API), the OAN Sandbox, the Grievance service,
 A2C and the per-registry dashboards.
 
 This repository is also the Helm repository Rancher installs from. Chart sources live
@@ -48,7 +48,7 @@ describes the gate, kept for the next candidate.
 Commons Services passed that gate with Master Data (MDS) `0.0.0-develop.118`: its
 catalogue migration was rehearsed against a copy of the new-dev `master_data` database.
 
-[docs/service-catalog.md](docs/service-catalog.md) maps every COSS service to its
+[docs/service-catalog.md](docs/service-catalog.md) maps every OAN service to its
 chart, values key and source repository.
 
 ## How a change reaches a cluster

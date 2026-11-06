@@ -1,12 +1,12 @@
 # OAN Commons Services: Consent Manager and Aggregation
 
-This is the OpenAgriNet (OAN) shared-services chart maintained in COSS.
+This is the OpenAgriNet (OAN) shared-services chart maintained in the OAN repositories.
 
 | OAN component | Application source | Helm implementation |
 | --- | --- | --- |
-| OAN Consent Manager | [COSS/consent-management](https://github.com/Centre-for-Open-Societal-Systems/consent-management) | Reuses the `openg2p-consent-manager:1.0.2` template dependency; OAN image overrides under `openg2p-consent-manager` in values.yaml |
-| OAN Aggregation API | [COSS/oan-aggregation-api](https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api) | Local `templates/aggregation-api.yaml`; configured by `aggregationApi`, disabled pending runtime preparation |
-| OAN Helm chart | [COSS/oan-helm](https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-commons-services) | Editable sources and immutable packages |
+| OAN Consent Manager | [Centre-for-Open-Societal-Systems/consent-management](https://github.com/Centre-for-Open-Societal-Systems/consent-management) | Reuses the `openg2p-consent-manager:1.0.2` template dependency; OAN image overrides under `openg2p-consent-manager` in values.yaml |
+| OAN Aggregation API | [Centre-for-Open-Societal-Systems/oan-aggregation-api](https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api) | Local `templates/aggregation-api.yaml`; configured by `aggregationApi`, disabled pending runtime preparation |
+| OAN Helm chart | [Centre-for-Open-Societal-Systems/oan-helm](https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-commons-services) | Editable sources and immutable packages |
 
 ## Why is the dependency still named openg2p-consent-manager?
 
@@ -20,7 +20,7 @@ original provenance; this chart does not claim they were all authored by OAN.
 ## Select the images deliberately
 
 Chart version **1.0.0-dev.5** uses the wildcard development domain and shared Istio Gateway.
-Consent images are pinned to COSS commit `48e64c249056`, and Aggregation to
+Consent images are pinned to OAN commit `48e64c249056`, and Aggregation to
 `a5fa17fd7e7f`, using verified ECR digests. Aggregation is now stateless: it needs
 no database, queue or migration. Its own signing key, registry catalog, protected
 staff authentication and partner/policy bindings still need preparation.
@@ -42,8 +42,8 @@ See the service onboarding and enablement guide in `docs/service-onboarding.md`.
 
 ## OAN Consent Partner Portal
 
-The COSS browser portal is included through `consentPartnerPortal`, alongside the
+The OAN browser portal is included through `consentPartnerPortal`, alongside the
 existing Consent staff UI and partner API. Enable it with the reviewed
 `examples/dev/consent-partner-portal.yaml` overlay after preparing partner login.
-Its image is built from the recorded COSS Consent source and pinned by ECR digest.
+Its image is built from the recorded OAN Consent source and pinned by ECR digest.
 OTP stays unavailable pending SMS; enabling the UI does not enable OTP delivery.

@@ -64,7 +64,10 @@ app.kubernetes.io/instance: {{ .Release.Name }}
   value: {{ .Values.commonEnv.CONNECTOR_METRICS_ENABLED | quote }}
 - name: CONNECTOR_CORS_ORIGINS
   value: {{ .Values.commonEnv.CONNECTOR_CORS_ORIGINS | quote }}
-{{- if .Values.cossSigning.enabled }}
+{{- /* oanSigning and oanQueue replace cossSigning and cossQueue. The old keys are read only until every environment's values use the new ones. */ -}}
+{{- $signing := .Values.oanSigning | default .Values.cossSigning | default dict }}
+{{- $queue := .Values.oanQueue | default .Values.cossQueue }}
+{{- if $signing.enabled }}
 - name: CONNECTOR_REQUIRE_SIGNING
   value: "true"
 - name: CONNECTOR_SIGNING_ENABLED
@@ -72,18 +75,18 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 - name: CONNECTOR_SIGNING_ALGORITHM
   value: "RS256"
 - name: CONNECTOR_SIGNING_ISSUER
-  value: {{ required "Signing partnerId is required" .Values.cossSigning.partnerId | quote }}
+  value: {{ required "Signing partnerId is required" $signing.partnerId | quote }}
 - name: CONNECTOR_SIGNING_KEY_ID
-  value: {{ required "Signing keyId is required" .Values.cossSigning.keyId | quote }}
+  value: {{ required "Signing keyId is required" $signing.keyId | quote }}
 - name: CONNECTOR_SIGNING_PRIVATE_KEY_PEM
   valueFrom:
     secretKeyRef:
-      name: {{ required "Signing Secret is required" .Values.cossSigning.secret | quote }}
+      name: {{ required "Signing Secret is required" $signing.secret | quote }}
       key: private-key.pem
 {{- end }}
-{{- if .Values.cossQueue }}
+{{- if $queue }}
 - name: CONNECTOR_CELERY_QUEUE
-  value: {{ .Values.cossQueue | quote }}
+  value: {{ $queue | quote }}
 {{- end }}
 {{- with .Values.adminAuth }}
 - name: CONNECTOR_ADMIN_AUTH_ISSUER

@@ -29,7 +29,7 @@ spec:
       {{- end }}
       containers:
         - name: aggregation-api
-          image: {{ include "coss.image" $component.image | quote }}
+          image: {{ include "oan.image" $component.image | quote }}
           imagePullPolicy: {{ $component.image.pullPolicy }}
           {{- with $component.volumeMounts }}
           volumeMounts:

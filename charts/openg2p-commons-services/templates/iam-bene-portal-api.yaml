@@ -51,7 +51,7 @@ spec:
       {{- end }}
       containers:
         - name: iam-bene-portal-api
-          image: {{ include "coss.image" $c.image | quote }}
+          image: {{ include "oan.image" $c.image | quote }}
           imagePullPolicy: {{ $c.image.pullPolicy }}
           ports:
             - name: http

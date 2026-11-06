@@ -1,6 +1,6 @@
 # Consent Manager and Aggregation: current dev setup
 
-Current chart: **1.0.0-dev.6**. Consent comes from COSS commit
+Current chart: **1.0.0-dev.6**. Consent comes from OAN commit
 `48e64c249056a1aed3ce728c61c1bc059a288a50`; Aggregation comes from
 `a5fa17fd7e7f50eb9a8649c267a9cc59223c934c`. Four images are published to the
 existing ECR repositories and selected by digest. See [current evidence](../releases/consent-aggregation-20261019.json).

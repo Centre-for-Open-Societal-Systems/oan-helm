@@ -1,7 +1,7 @@
 # Automated new-dev staff regression
 
 The saved collection is
-[`COSS-Automated-Staff.postman_collection.json`](../postman/COSS-Automated-Staff.postman_collection.json).
+[`OAN-Automated-Staff.postman_collection.json`](../postman/OAN-Automated-Staff.postman_collection.json).
 It tests the real development Aggregation service and all three real registry
 staff APIs, plus Consent routing and access rejection. No application deployment
 or chart upgrade is performed. It does not establish the partner OTP workflow.

@@ -4,13 +4,13 @@ annotations:
   catalog.cattle.io/release-name: commons-services
   openg2p.org/add-to-rancher: openg2p.org/add-to-rancher
   org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
-  coss.org/upstream-version: 2.3.4-rc.247
-  oan.org/owner: OpenAgriNet (OAN) / COSS
+  oan.org/upstream-version: 2.3.4-rc.247
+  oan.org/owner: OpenAgriNet (OAN)
   oan.org/consent-manager-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
   oan.org/aggregation-source: https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api
   oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/openg2p-commons-services
-  coss.org/upstream-source: https://github.com/OpenG2P/commons
-  coss.org/upstream-source-revision: 32638189178ca451d354316a099918574c6730a5
+  oan.org/upstream-source: https://github.com/OpenG2P/commons
+  oan.org/upstream-source-revision: 32638189178ca451d354316a099918574c6730a5
   oan.org/consent-partner-portal-source: https://github.com/Centre-for-Open-Societal-Systems/consent-management
   oan.org/promotion-ready: 'true'
   oan.org/master-data-source: e569a59b8e9f61f809e07791e9263e50b2a7e0da
@@ -83,7 +83,7 @@ dependencies:
   repository: https://openg2p.github.io/openg2p-helm
   version: 1.2.0
 description: OAN Commons Services including OAN Consent Manager and Aggregation API
-  from COSS repositories, with pinned OpenG2P shared-service dependencies.
+  from OAN repositories, with pinned OpenG2P shared-service dependencies.
 icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
 name: openg2p-commons-services
 type: application
@@ -97,9 +97,8 @@ sources:
 keywords:
 - oan
 - openagrinet
-- coss
 - consent-manager
 - aggregation
 maintainers:
-- name: OpenAgriNet (OAN) / COSS
+- name: OpenAgriNet (OAN)
   url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm

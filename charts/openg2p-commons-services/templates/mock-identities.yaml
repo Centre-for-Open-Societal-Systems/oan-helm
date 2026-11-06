@@ -64,7 +64,7 @@ spec:
       {{- end }}
       containers:
         - name: seed
-          image: {{ include "coss.image" $v.image | quote }}
+          image: {{ include "oan.image" $v.image | quote }}
           env:
             - name: API
               value: {{ tpl $v.apiBaseUrl $ | quote }}

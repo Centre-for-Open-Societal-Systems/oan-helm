@@ -86,14 +86,14 @@ all shared service settings and coordinate the shared-platform change separately
 An equivalent CLI upgrade, once those checks are complete, is:
 
 ```sh
-helm upgrade farmer-registry coss/openg2p-farmer-registry \
+helm upgrade farmer-registry oan/openg2p-farmer-registry \
   --namespace farmer --version <version> \
   --reuse-values -f /private/reviewed-changes.yaml \
   -f environments/dev/values/farmer.yaml --wait --timeout 15m
 ```
 
 Substitute the **actual current** release/namespace from the installed app. This
-command assumes `coss` points to the published Helm repository and that reviewed
+command assumes `oan` points to the published Helm repository and that reviewed
 private values have been reconciled with the new schema. Do not add `--install`
 to this existing-release procedure.
 
@@ -144,7 +144,7 @@ prepared recovery procedure.
 Select a chart version to see its OAN metadata and embedded README. Versions from
 `1.0.0-dev.3` on carry the OAN display names.
 Rancher may show either a display name or the Helm identifier depending on its
-view; the chart Home, Sources and README link directly to the COSS repositories.
+view; the chart Home, Sources and README link directly to the OAN repositories.
 
 | OAN display name | Retained Helm chart identifier |
 | --- | --- |
@@ -156,9 +156,9 @@ view; the chart Home, Sources and README link directly to the COSS repositories.
 
 Consent Manager's dependency URL continues to point to OpenG2P because those
 are the reused Helm templates. Its OAN application source is
-[COSS/consent-management](https://github.com/Centre-for-Open-Societal-Systems/consent-management).
+[Centre-for-Open-Societal-Systems/consent-management](https://github.com/Centre-for-Open-Societal-Systems/consent-management).
 Aggregation is a template in the Commons chart, with source
-[COSS/oan-aggregation-api](https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api).
+[Centre-for-Open-Societal-Systems/oan-aggregation-api](https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api).
 Changing these labels does not enable Aggregation or select newer candidate
 images. Use the explicit candidate overlays only after the prerequisites.
 

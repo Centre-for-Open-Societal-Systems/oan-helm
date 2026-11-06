@@ -1,9 +1,9 @@
-# Published COSS Consent candidate images
+# Published OAN Consent candidate images
 
 > Historical image-pair evidence. For current dev.5 images and prerequisites, see
 > [the current setup guide](consent-aggregation-prerequisites.md).
 
-The three images tagged `dev-d6ce86b9e3f9` were manually built from COSS
+The three images tagged `dev-d6ce86b9e3f9` were manually built from OAN
 `consent-management` commit `d6ce86b9e3f904ee668d913fd06835e8f70e7f64` and
 published through the existing Jenkins AWS credential. Actual image digests,
 source/build settings and checks are in [consent-candidate.json](../releases/consent-candidate.json).
@@ -13,7 +13,7 @@ subject-consent policy changes, beneficiary routing or the prepared signing key.
 
 ## Build adjustments
 
-The COSS API Dockerfile defaults to framework ref `1.2.0`. Building it as-is
+The OAN API Dockerfile defaults to framework ref `1.2.0`. Building it as-is
 failed image import checks: Consent imports
 `openg2p_fastapi_common.utils.crypto`, absent in that framework release. The API
 candidate instead pins framework commit
@@ -22,7 +22,7 @@ layer explicitly installs `SQLAlchemy[asyncio]==2.0.54` and `greenlet==3.5.6`.
 Without greenlet, the source Dockerfile image failed the runtime import check.
 Application source and application CI files were not edited.
 
-Example build recipe (run from a clean checkout of the exact COSS commit):
+Example build recipe (run from a clean checkout of the exact OAN commit):
 
 ```sh
 docker build --platform linux/amd64 \
@@ -30,20 +30,20 @@ docker build --platform linux/amd64 \
   --label org.opencontainers.image.source=https://github.com/Centre-for-Open-Societal-Systems/consent-management \
   --label org.opencontainers.image.revision=d6ce86b9e3f904ee668d913fd06835e8f70e7f64 \
   -f docker/consent-manager-api/Dockerfile \
-  -t coss-consent-api-source-build:d6ce86b9e3f9-framework-164f07f .
+  -t oan-consent-api-source-build:d6ce86b9e3f9-framework-164f07f .
 ```
 
 The runtime Dockerfile used after that source build:
 
 ```dockerfile
-FROM coss-consent-api-source-build:d6ce86b9e3f9-framework-164f07f
+FROM oan-consent-api-source-build:d6ce86b9e3f9-framework-164f07f
 RUN pip install --no-cache-dir "SQLAlchemy[asyncio]==2.0.54" "greenlet==3.5.6"
 ```
 
 Build this runtime layer under the API target tag. UI uses `ui/Dockerfile` with
 context `ui/`; sanity uses `docker/consent-manager-sanity/Dockerfile` with the
 repository root context. All images override OCI source/revision labels to the
-COSS repository and exact source commit. The UI also receives `GIT_COMMIT` and
+OAN repository and exact source commit. The UI also receives `GIT_COMMIT` and
 `BUILD_TIME` build arguments. Keep the recorded digests as deployment references:
 base tags and other unpinned package inputs mean a future rebuild need not
 produce identical bytes. Existing ECR repositories are mutable; the publication
