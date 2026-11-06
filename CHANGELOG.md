@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-06
 
+### openg2p-da-registry 1.0.0-dev.22
+
+Previous version: 1.0.0-dev.21.
+
+- DA staging reaches the Commons approval engine by its short name (e8a8018)
+
+## 2026-11-06
+
 ### openg2p-cropsown-registry 1.0.0-dev.21
 
 Previous version: 1.0.0-dev.20.
