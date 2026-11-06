@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-06
 
+### openg2p-cropsown-registry 0.0.0-develop.489 (develop)
+
+- Run the browser tests on Ubuntu 24.04 (#244) (Centre-for-Open-Societal-Systems/cropsown-regsitry@deabbfe47dca)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-06
+
 ### oan-a2c 0.1.0-dev.2
 
 Previous version: 0.1.0-dev.1.

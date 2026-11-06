@@ -2,6 +2,33 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.0-develop.489
+
+<!-- source-commit: deabbfe47dca3509099d9e2b2af94a017c50fa44 version: 0.0.0-develop.489 -->
+Published 2026-11-06. Archive SHA-256 `9831c87dae764bc62de0db2b63f155ecdcb20b6c22d215ef9e1c2bb892fba7aa`.
+
+- Change: Run the browser tests on Ubuntu 24.04 (#244)
+- Source: [Centre-for-Open-Societal-Systems/cropsown-regsitry@deabbfe47dca](https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry/commit/deabbfe47dca3509099d9e2b2af94a017c50fa44)
+- Changes since 0.0.0-develop.488: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry/compare/fbe5a37e41f2e7a98ed9283b4825a0a5b4be6f4c...deabbfe47dca3509099d9e2b2af94a017c50fa44
+
+| Values path | Image |
+| --- | --- |
+| `registry.staffApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/cropsown-registry/staff-api:develop-256@sha256:0f5f1e74fad726d4709945c5719b10078b02b6c5e41b2081f23c3467fa94a992` |
+| `registry.partnerApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/cropsown-registry/partner-api:develop-256@sha256:8bb5e557cb651ff41e282b5d3e370becb26b2c76377a419b55aff0c21bcafb9d` |
+| `registry.celeryWorker.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/cropsown-registry/celery:develop-256@sha256:42a29700419ea5ca751cfffcfa572785941f4b95bbc87ed458663f04fb5871d7` |
+| `registry.celeryBeat.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/cropsown-registry/celery:develop-256@sha256:42a29700419ea5ca751cfffcfa572785941f4b95bbc87ed458663f04fb5871d7` |
+| `registry.dbSeed.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/cropsown-registry/db-seed:develop-256@sha256:c1a0d4387c6b054f5989084acef5fc193cd328cd51b4ca49dd3fbde4e5d21f53` |
+| `registry.staffUi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/cropsown-registry/staff-ui:develop-256@sha256:fbedb507075c91ef201dc623e297fd7586d7c44875c8187d15cbbcd965823de6` |
+| `registry.sanity.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/cropsown-registry/sanity-tests:develop-256@sha256:380f6e9421dca37e7ace9fc3b60590199eb3ddc7b092abaffd6c3dbe4a877114` |
+| `dashboardApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/cropsown-registry/dashboard-api:develop-256@sha256:53681f7fa1f6267ec63daf4e4f367590a034bb14dc544cf8d59c1f27508e192f` |
+| `dashboardUi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/cropsown-registry/dashboard-ui:1027e7775505@sha256:480562cd9d1fd5ffdd87142554d4e33cfd249e581a4119ff2be416e4e8fb31de` |
+
+Return to this version:
+
+```sh
+helm upgrade cropsown-registry https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/openg2p-cropsown-registry-0.0.0-develop.489.tgz -n crop --reset-values -f environments/dev/values/cropsown.yaml --wait --timeout 15m
+```
+
 ## 0.0.0-develop.488
 
 <!-- source-commit: fbe5a37e41f2e7a98ed9283b4825a0a5b4be6f4c version: 0.0.0-develop.488 -->
