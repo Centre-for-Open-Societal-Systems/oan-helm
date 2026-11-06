@@ -37,6 +37,11 @@ global:
   staffPortalBaseUrl: https://crop-registry.oanstaging.com
   idGeneratorHostname: idgenerator-crop.oanstaging.com
 registry:
+  # The Crop db-seed image carries configuration only; it ships no /seed/upload_images.py,
+  # so loading profile images would fail the post-upgrade seed hook.
+  dbSeed:
+    loadSampleData: false
+    loadImages: false
   keycloak-init:
     keycloak:
       url: http://commons-keycloak.commons.svc.cluster.local:80
