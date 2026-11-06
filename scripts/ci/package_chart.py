@@ -75,6 +75,12 @@ def set_image(text, path, repository, tag):
         if at is None:
             raise ValueError("values have no %s.%s" % (path, key))
         lines[at] = "%s%s: %s" % (" " * indent_of(lines[at]), key, json.dumps(value))
+    # A block with its own digest renders repository@digest and ignores the tag, so an old digest
+    # left there would keep the previous image. It takes the digest the tag carries, or none.
+    at = find_key(lines, "digest", start, end)
+    if at is not None:
+        digest = tag.partition("@")[2]
+        lines[at] = "%sdigest: %s" % (" " * indent_of(lines[at]), json.dumps(digest))
     return "\n".join(lines)
 
 
