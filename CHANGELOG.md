@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-06
 
+### openg2p-cropsown-registry 0.0.0-develop.493 (develop)
+
+- Declare crop connector definitions in git and apply them with a Helm hook (#245) (Centre-for-Open-Societal-Systems/cropsown-regsitry@4a4c2fa3a91e)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-06
+
 ### openg2p-cropsown-registry 0.0.0-develop.489 (develop)
 
 - Run the browser tests on Ubuntu 24.04 (#244) (Centre-for-Open-Societal-Systems/cropsown-regsitry@deabbfe47dca)
