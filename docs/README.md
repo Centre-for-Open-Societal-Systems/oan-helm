@@ -7,6 +7,7 @@ and deployed, and [CONTRIBUTING.md](../CONTRIBUTING.md) for the pull-request rul
 
 | Guide | Use it for |
 | --- | --- |
+| [release/README.md](release/README.md) | Production release documentation: versions, environments, pipeline, runbook, integration contracts, naming |
 | [versioning.md](versioning.md) | Version rules and the automatic release workflow |
 | [chart-channels.md](chart-channels.md) | Registry charts published per branch to `repository/develop`, `staging` and `release` |
 | [rollback.md](rollback.md) | Finding a version and rolling a chart back |
