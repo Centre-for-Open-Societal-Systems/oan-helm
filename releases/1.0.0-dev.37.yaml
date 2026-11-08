@@ -1,0 +1,18 @@
+chartVersion: 1.0.0-dev.37
+status: commons-services release record
+versionPolicy: Immutable after publication; component images retain independent versions.
+note: Only the Master Data seed image changed since 1.0.0-dev.36; the other entries of earlier manifests still apply.
+charts:
+- name: openg2p-commons-services
+  release: commons-services
+  namespace: commons
+  masterDataImageVersion: 0.0.0-develop.118
+  masterDataSeedImage:
+    repository: ghcr.io/asmitonweb/master-data-db-seed
+    tag: coss-develop-eccd9e103cf8
+    digest: sha256:c22cf7b9a87a6976d9096496ef74e9eea2a78e347577a9063dc8cfdf371b1cb2
+    base: openg2p/master-data-db-seed:0.0.0-develop.118@sha256:cfa91c1bcc1798a8a82454073ac5454c8099041511bf6d0c7380b492232d809f
+    dataRepository: https://github.com/Centre-for-Open-Societal-Systems/openg2p-data
+    dataCommit: eccd9e103cf8d17edde0d060965eed50f32b34e0
+    countryPack: ETH-OAN
+    note: COSS develop with openg2p-data PR 51 (OAN theme crop primary colour #EABB13 and 1200x600 background) and the new CLUSTER_STATUS list (Clustered, Independent); every list of the previous image is still present
