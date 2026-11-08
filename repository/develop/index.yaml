@@ -11,6 +11,57 @@ entries:
       oan.org/promotion-ready: "true"
       oan.org/release-name: cropsown-registry
       oan.org/release-namespace: crop
+      oan.org/source-commit: e1fa219edac4535eaf399e132fdba11b3bf27c7e
+      oan.org/source-repository: Centre-for-Open-Societal-Systems/cropsown-regsitry
+      oan.org/source-subject: Seed renames the Farmer-reference tables before it writes
+        the archive (#251)
+      oan.org/values-overlay: environments/dev/values/cropsown.yaml
+      openg2p.org/add-to-rancher: ""
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    apiVersion: v2
+    appVersion: 1.2.2-rc.614
+    created: "2026-11-08T19:34:24.644996843Z"
+    dependencies:
+    - alias: registry
+      name: openg2p-registry
+      repository: https://openg2p.github.io/openg2p-helm
+      version: 1.2.2-rc.614
+    description: OAN Crop Sown Registry for OpenAgriNet (OAN), developed in OAN repositories;
+      reuses pinned OpenG2P platform templates. Component images have independent
+      versions.
+    digest: f9c0410e2a7b8f7f79e30cafc1f7df9ddc5662b36e334e99f3fb9571c3c3b990
+    home: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+    keywords:
+    - oan
+    - openagrinet
+    - openg2p
+    - registry
+    - cropsown-registry
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: openg2p-cropsown-registry
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/cropsown-registry-dashboard-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_cropsown_dashboard
+    - https://github.com/OpenG2P/cropsown-registry
+    type: application
+    urls:
+    - openg2p-cropsown-registry-0.0.0-develop.498.tgz
+    version: 0.0.0-develop.498
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: OAN Crop Sown Registry
+      catalog.cattle.io/kube-version: '>=1.23.0-0'
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry/tree/develop/helm/openg2p-cropsown-registry
+      oan.org/owner: OpenAgriNet (OAN)
+      oan.org/promotion-ready: "true"
+      oan.org/release-name: cropsown-registry
+      oan.org/release-namespace: crop
       oan.org/source-commit: bad56edad2ed14027813f8a553db2cace1c57fe3
       oan.org/source-repository: Centre-for-Open-Societal-Systems/cropsown-regsitry
       oan.org/source-subject: Upgrade the staging crop connector to the registry-connector
@@ -20,7 +71,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
     apiVersion: v2
     appVersion: 1.2.2-rc.614
-    created: "2026-11-08T19:14:13.645629772Z"
+    created: "2026-11-08T19:34:24.63206053Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -71,7 +122,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
     apiVersion: v2
     appVersion: 1.2.2-rc.614
-    created: "2026-11-08T19:14:13.628478071Z"
+    created: "2026-11-08T19:34:24.619482608Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -122,7 +173,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
     apiVersion: v2
     appVersion: 1.2.2-rc.614
-    created: "2026-11-08T19:14:13.610569294Z"
+    created: "2026-11-08T19:34:24.606190668Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -172,7 +223,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
     apiVersion: v2
     appVersion: 1.2.2-rc.614
-    created: "2026-11-08T19:14:13.594342632Z"
+    created: "2026-11-08T19:34:24.593499455Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -223,7 +274,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
     apiVersion: v2
     appVersion: 1.2.2-rc.614
-    created: "2026-11-08T19:14:13.578483884Z"
+    created: "2026-11-08T19:34:24.580224471Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -274,7 +325,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
     apiVersion: v2
     appVersion: 1.2.2-rc.614
-    created: "2026-11-08T19:14:13.561709176Z"
+    created: "2026-11-08T19:34:24.566567169Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -325,7 +376,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
     apiVersion: v2
     appVersion: 1.2.2-rc.614
-    created: "2026-11-08T19:14:13.544608086Z"
+    created: "2026-11-08T19:34:24.554052908Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -377,7 +428,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry
     apiVersion: v2
     appVersion: 1.2.2-rc.614
-    created: "2026-11-08T19:14:13.527870366Z"
+    created: "2026-11-08T19:34:24.540784809Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -426,7 +477,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.614
-    created: "2026-11-08T19:14:13.691612164Z"
+    created: "2026-11-08T19:34:24.68180854Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -470,7 +521,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.614
-    created: "2026-11-08T19:14:13.675639362Z"
+    created: "2026-11-08T19:34:24.668839378Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -515,7 +566,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/da-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.614
-    created: "2026-11-08T19:14:13.660913392Z"
+    created: "2026-11-08T19:34:24.657109499Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -565,7 +616,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.625
-    created: "2026-11-08T19:14:13.781122831Z"
+    created: "2026-11-08T19:34:24.752783419Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -617,7 +668,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.625
-    created: "2026-11-08T19:14:13.762066164Z"
+    created: "2026-11-08T19:34:24.738755879Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -669,7 +720,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.625
-    created: "2026-11-08T19:14:13.744818703Z"
+    created: "2026-11-08T19:34:24.724521027Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -722,7 +773,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.625
-    created: "2026-11-08T19:14:13.726223968Z"
+    created: "2026-11-08T19:34:24.710052493Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -775,7 +826,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.625
-    created: "2026-11-08T19:14:13.708388189Z"
+    created: "2026-11-08T19:34:24.696421732Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -829,7 +880,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.614
-    created: "2026-11-08T19:14:13.833827342Z"
+    created: "2026-11-08T19:34:24.792041901Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -879,7 +930,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.614
-    created: "2026-11-08T19:14:13.816666512Z"
+    created: "2026-11-08T19:34:24.778070962Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -931,7 +982,7 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry
     apiVersion: v2
     appVersion: 1.2.2-rc.614
-    created: "2026-11-08T19:14:13.800966036Z"
+    created: "2026-11-08T19:34:24.765576045Z"
     dependencies:
     - alias: registry
       name: openg2p-registry
@@ -964,4 +1015,4 @@ entries:
     urls:
     - openg2p-livestock-registry-0.0.0-develop.424.tgz
     version: 0.0.0-develop.424
-generated: "2026-11-08T19:14:13.510828182Z"
+generated: "2026-11-08T19:34:24.526909134Z"

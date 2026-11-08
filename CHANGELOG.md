@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-08
 
+### openg2p-cropsown-registry 0.0.0-develop.498 (develop)
+
+- Seed renames the Farmer-reference tables before it writes the archive (#251) (Centre-for-Open-Societal-Systems/cropsown-regsitry@e1fa219edac4)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-08
+
 ### openg2p-farmer-registry 0.0.0-develop.819 (develop)
 
 - Add required chart check and failure mail on staging builds (#237) (Centre-for-Open-Societal-Systems/farmer-registry@c15d5c18f2cc)
