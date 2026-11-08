@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-08
 
+### openg2p-farmer-registry 0.0.0-develop.827 (develop)
+
+- Carry the connector UI overlay into the services deploy stage (#244) (Centre-for-Open-Societal-Systems/farmer-registry@d4d3042bb151)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-08
+
 ### openg2p-farmer-registry 0.0.0-develop.826 (develop)
 
 - Run the connector schema rehearsal on the API image only (#243) (Centre-for-Open-Societal-Systems/farmer-registry@969866646703)
