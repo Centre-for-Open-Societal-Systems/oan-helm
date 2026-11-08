@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-08
 
+### openg2p-farmer-registry 0.0.0-develop.826 (develop)
+
+- Run the connector schema rehearsal on the API image only (#243) (Centre-for-Open-Societal-Systems/farmer-registry@969866646703)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-08
+
 ### openg2p-cropsown-registry 1.0.0-rc.503 (staging)
 
 - Operator job: a parameter to accept a deliberate connector chart change (#253) (Centre-for-Open-Societal-Systems/cropsown-regsitry@97e9a92e1fb8)
