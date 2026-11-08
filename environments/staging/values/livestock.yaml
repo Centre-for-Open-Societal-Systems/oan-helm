@@ -98,13 +98,13 @@ registry:
           secretName: livestock-registry-staff-portal
     extraVolumeMounts: &farmerReferenceMounts
       - name: farmer-reference
-        mountPath: /etc/coss-farmer
+        mountPath: /etc/farmer-reference/source
         readOnly: true
       - name: farmer-reference-key
-        mountPath: /etc/coss-farmer-key
+        mountPath: /etc/farmer-reference/lookup-signing-key
         readOnly: true
       - name: farmer-reference-awe
-        mountPath: /etc/coss-farmer-awe
+        mountPath: /etc/farmer-reference/awe-client
         readOnly: true
     envVars:
       REGISTRY_STAFF_PORTAL_API_AUTH_REDIS_URL: redis://commons-redis-master.commons.svc.cluster.local:6379/0
@@ -128,27 +128,27 @@ registry:
       REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
       REGISTRY_STAFF_PORTAL_API_VALIDATE_ATTRIBUTE_VALUES: 'true'
       <<: &farmerReferenceEnv
-        COSS_FARMER_DCI_URL: http://farmer-registry-partner-api.farmer.svc.cluster.local/dci/sync/search
-        COSS_FARMER_SENDER_ID: Live_stock_partner_internal
-        COSS_FARMER_SOURCE_ID: farmer-registry
-        COSS_FARMER_SIGNING_KEY_FILE: /etc/coss-farmer-key/private-key.pem
-        COSS_FARMER_SIGNING_KID: livestock-lookup-ed25519-9aff06b813c8ce29
-        COSS_FARMER_SIGNING_ALGORITHM: EdDSA
-        COSS_FARMER_SOURCE_PUBLIC_KEY_FILE: /etc/coss-farmer/source-public-key.pem
-        COSS_FARMER_SOURCE_KID: farmer-registry-dci-rsa
-        COSS_FARMER_SOURCE_ALGORITHM: RS256
-        COSS_FARMER_CONSENT_AUDIENCE: farmer-registry
-        COSS_FARMER_CONSENT_CONTROLLER: farmer-registry
-        COSS_FARMER_CONSENT_PURPOSE: registry_intake
-        COSS_FARMER_CONSENT_SCOPES: farmer_personal_details,farmer_reference
-        COSS_FARMER_RECORD_CONTRACT_FILE: /etc/coss-farmer/record-contract.json
+        REGISTRY_FARMER_REFERENCE_DCI_URL: http://farmer-registry-partner-api.farmer.svc.cluster.local/dci/sync/search
+        REGISTRY_FARMER_REFERENCE_SENDER_ID: Live_stock_partner_internal
+        REGISTRY_FARMER_REFERENCE_SOURCE_ID: farmer-registry
+        REGISTRY_FARMER_REFERENCE_SIGNING_KEY_FILE: /etc/farmer-reference/lookup-signing-key/private-key.pem
+        REGISTRY_FARMER_REFERENCE_SIGNING_KID: livestock-lookup-ed25519-9aff06b813c8ce29
+        REGISTRY_FARMER_REFERENCE_SIGNING_ALGORITHM: EdDSA
+        REGISTRY_FARMER_REFERENCE_SOURCE_PUBLIC_KEY_FILE: /etc/farmer-reference/source/source-public-key.pem
+        REGISTRY_FARMER_REFERENCE_SOURCE_KID: farmer-registry-dci-rsa
+        REGISTRY_FARMER_REFERENCE_SOURCE_ALGORITHM: RS256
+        REGISTRY_FARMER_REFERENCE_CONSENT_AUDIENCE: farmer-registry
+        REGISTRY_FARMER_REFERENCE_CONSENT_CONTROLLER: farmer-registry
+        REGISTRY_FARMER_REFERENCE_CONSENT_PURPOSE: registry_intake
+        REGISTRY_FARMER_REFERENCE_CONSENT_SCOPES: farmer_personal_details,farmer_reference
+        REGISTRY_FARMER_REFERENCE_RECORD_CONTRACT_FILE: /etc/farmer-reference/source/record-contract.json
         # The sender mnemonic the connector stamps on each ingested row; the platform
         # worker passes it as the change request's source partner, and the Farmer
-        # reference ingestion accepts only this value. Equal to COSS_FARMER_SENDER_ID.
-        COSS_FARMER_SOURCE_PARTNER_ID: Live_stock_partner_internal
-        COSS_FARMER_AWE_TOKEN_URL: https://keycloak.oanstaging.com/realms/staff/protocol/openid-connect/token
-        COSS_FARMER_AWE_CLIENT_ID: livestock-registry-staff-portal
-        COSS_FARMER_AWE_CLIENT_SECRET_FILE: /etc/coss-farmer-awe/client_secret
+        # reference ingestion accepts only this value. Equal to REGISTRY_FARMER_REFERENCE_SENDER_ID.
+        REGISTRY_FARMER_REFERENCE_SOURCE_PARTNER_ID: Live_stock_partner_internal
+        REGISTRY_FARMER_REFERENCE_AWE_TOKEN_URL: https://keycloak.oanstaging.com/realms/staff/protocol/openid-connect/token
+        REGISTRY_FARMER_REFERENCE_AWE_CLIENT_ID: livestock-registry-staff-portal
+        REGISTRY_FARMER_REFERENCE_AWE_CLIENT_SECRET_FILE: /etc/farmer-reference/awe-client/client_secret
     hostname: staff-livestock.oanstaging.com
     istio:
       virtualservice:
