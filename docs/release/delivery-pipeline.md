@@ -58,7 +58,8 @@ Farmer 1.0.0-rc.813, Livestock 1.0.0-rc.432; release is empty (`releases/channel
 Commons services is not in this flow. Its chart source is in `charts/` and is released by
 `.github/workflows/release.yaml` on every push to `main` that touches `charts/` (see `docs/versioning.md`).
 
-The pipelines publish with the Jenkins credential `oan-helm-fork-token`, the token of a maintainer account.
+The pipelines publish as the `oan-ci-integration` GitHub App (Jenkins credential `oan-ci-app`); a pipeline that has not
+moved yet still uses `oan-helm-fork-token`, the token of a maintainer account.
 `main` has no ruleset, so the rule that this account may only add new archives is checked after the push
 (`docs/chart-channels.md`, Publishing credential).
 

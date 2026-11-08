@@ -8,9 +8,10 @@ pipelines of different registries never conflict with each other.
 
   GH_TOKEN=<token> python3 publish_chart.py dist/openg2p-farmer-registry-0.0.0-develop.812.tgz
 
-Needs GH_TOKEN with push access to OAN_HELM_REPOSITORY (default the OAN oan-helm repository). For now that is
-the token of a maintainer account, Jenkins credential oan-helm-fork-token. A GitHub App will replace it once its
-configuration is done; only the credential changes, since commits always carry the PUBLISHER name below.
+Needs GH_TOKEN with push access to OAN_HELM_REPOSITORY (default the OAN oan-helm repository): the installation
+token of the oan-ci-integration GitHub App (Contents: write), Jenkins credential oan-ci-app, or for a pipeline that
+has not moved yet the token of a maintainer account, Jenkins credential oan-helm-fork-token. Only the credential
+differs, since commits always carry the PUBLISHER name below.
 DRY_RUN=1 prints the target and writes nothing.
 Exit codes: 0 published, 1 unexpected failure, 2 bad input, 3 no token, 4 version already published.
 

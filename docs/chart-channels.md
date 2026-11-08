@@ -54,12 +54,13 @@ A release tag does the same from the rc. The `release` branch does not exist yet
 
 ## Publishing credential
 
-Pipelines use the token of a maintainer account, Jenkins credential `oan-helm-fork-token`. Configuration of the
-GitHub App that will replace it is pending; only the Jenkins credential changes when it is ready. Commits always
-carry the name in `CHANNEL_PUBLISHER` in `scripts/check_protected_paths.py`, and on `main` that name may only add
-new archives to channel folders.
+Pipelines publish as the `oan-ci-integration` GitHub App, Jenkins credential `oan-ci-app`, bound as `GH_TOKEN` (an
+installation token that expires after an hour). The App needs Contents: Read and write on this repository. A pipeline
+that has not moved yet still uses the token of a maintainer account, Jenkins credential `oan-helm-fork-token`; only the
+credential differs. Commits always carry the name in `CHANNEL_PUBLISHER` in `scripts/check_protected_paths.py`, and on
+`main` that name may only add new archives to channel folders.
 
-`main` has no ruleset yet, so this is checked after the push, not blocked before it. Add a ruleset when the App
-is configured.
+`main` has no ruleset yet, so this is checked after the push, not blocked before it. When a ruleset is added, the App
+must be on its bypass list or pipelines cannot publish.
 
 The flat `repository/` folder stays as it is until no cluster or pin reads it.
