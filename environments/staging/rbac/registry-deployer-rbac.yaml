@@ -1,0 +1,90 @@
+# Staging: let the registry deployer manage the RBAC objects of its own release.
+#
+# Crop, Livestock and DA staging deploy as ServiceAccount live/livestock-ci, bound in crop, live and
+# da-registry to the Role livestock-ci (core, apps, batch, Istio, networking and policy objects only).
+# Since the registry charts refresh their own ECR pull secret (ecrPullSecret in
+# environments/staging/values/*.yaml), each release also owns a ServiceAccount, a Role and a
+# RoleBinding named <release>-ecr-refresh[-init]. Without rights on rbac.authorization.k8s.io the
+# upgrade stops before anything changes:
+#   roles.rbac.authorization.k8s.io "cropsown-registry-ecr-refresh" is forbidden:
+#   User "system:serviceaccount:live:livestock-ci" cannot get resource "roles" ... in the namespace "crop"
+#
+# These Roles add exactly that, per namespace. Kubernetes still refuses any Role or RoleBinding that
+# grants more than the deployer already holds in that namespace (RBAC escalation check), so this
+# cannot widen the deployer's own access.
+#
+# Apply once as the cluster admin on the staging box (safe to re-apply):
+#   sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml apply -f registry-deployer-rbac.yaml
+# Check:
+#   sudo ... kubectl auth can-i create roles.rbac.authorization.k8s.io -n crop --as=system:serviceaccount:live:livestock-ci   # yes
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: registry-deployer-release-rbac
+  namespace: crop
+rules:
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["roles", "rolebindings"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: registry-deployer-release-rbac
+  namespace: crop
+subjects:
+  - kind: ServiceAccount
+    name: livestock-ci
+    namespace: live
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: registry-deployer-release-rbac
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: registry-deployer-release-rbac
+  namespace: da-registry
+rules:
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["roles", "rolebindings"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: registry-deployer-release-rbac
+  namespace: da-registry
+subjects:
+  - kind: ServiceAccount
+    name: livestock-ci
+    namespace: live
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: registry-deployer-release-rbac
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: registry-deployer-release-rbac
+  namespace: live
+rules:
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["roles", "rolebindings"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: registry-deployer-release-rbac
+  namespace: live
+subjects:
+  - kind: ServiceAccount
+    name: livestock-ci
+    namespace: live
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: registry-deployer-release-rbac
