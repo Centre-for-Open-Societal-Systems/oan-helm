@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-08
 
+### openg2p-da-registry 0.0.0-develop.85 (develop)
+
+- DA staging deploys on merge with no Build with Parameters (#47) (Centre-for-Open-Societal-Systems/da-registry@acf5e374a852)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-08
+
 ### openg2p-cropsown-registry 0.0.0-develop.496 (develop)
 
 - Upgrade the staging crop connector to the registry-connector image from the pipeline (#246) (Centre-for-Open-Societal-Systems/cropsown-regsitry@bad56edad2ed)
