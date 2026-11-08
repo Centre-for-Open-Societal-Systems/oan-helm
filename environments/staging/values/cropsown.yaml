@@ -243,6 +243,12 @@ analytics:
   dashboards:
     enabled: false
 reporting:
+  # Staging's registry database and user carry the namespace (the staff and partner APIs
+  # read COMMON_DB_DBNAME cropsown_registry_crop as crop_cropsown_registry_user), not the
+  # chart default derived from the release name. The password key is the chart default.
+  db:
+    name: cropsown_registry_crop
+    user: crop_cropsown_registry_user
   views:
     enabled: true
 dashboardApi:
