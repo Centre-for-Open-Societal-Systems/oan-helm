@@ -2,6 +2,37 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.0-develop.818
+
+<!-- source-commit: 7daff6e3d2a5bb9150661e71345d6465f8114f09 version: 0.0.0-develop.818 -->
+Published 2026-11-08. Archive SHA-256 `b262161388167f9414b44148232948b99143828613127d2ac7e966538bc3ab66`.
+
+- Change: Deploy on merge without Build with Parameters (#235)
+- Source: [Centre-for-Open-Societal-Systems/farmer-registry@7daff6e3d2a5](https://github.com/Centre-for-Open-Societal-Systems/farmer-registry/commit/7daff6e3d2a5bb9150661e71345d6465f8114f09)
+- Changes since 0.0.0-develop.803: https://github.com/Centre-for-Open-Societal-Systems/farmer-registry/compare/90b2649a7b10d8ba6db48164fdb478f49fcc878b...7daff6e3d2a5bb9150661e71345d6465f8114f09
+
+| Values path | Image |
+| --- | --- |
+| `registry.staffUi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/staff-ui:7daff6e3d2a5@sha256:77f45d46f17049eceb7b1495e05f47efe7cb91750902766aedd813edc4085e5e` |
+| `registry.staffApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/staff-api:7daff6e3d2a5@sha256:f32eb02dcf70d6bbd0078ebf51272dbeb89417ab113b94afe0cc849d53806b56` |
+| `registry.partnerApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/partner-api:7daff6e3d2a5@sha256:74d92e85aa0971f394e491bb4a577226830ebe687a4ba6de9f461fbde6657a83` |
+| `registry.celeryWorker.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/celery:7daff6e3d2a5@sha256:501ba0bc06e90f785006b518dcdbb42283c7f372fa3aef730ea2fb4cadbf7ee7` |
+| `registry.celeryBeat.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/celery:7daff6e3d2a5@sha256:501ba0bc06e90f785006b518dcdbb42283c7f372fa3aef730ea2fb4cadbf7ee7` |
+| `registry.dbSeed.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/db-seed:7daff6e3d2a5@sha256:7ea50d29b05ddc68c2be868dd74d8033160239b9e81a9fc757b34e62f44751a1` |
+| `registry.sanity.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/sanity-tests:7daff6e3d2a5@sha256:5224daf5d41a1c87933448b9f2459ba0e22e089277eee9dca53d532ed96220b9` |
+| `analytics.dashboards.image` | `apachesuperset.docker.scarf.sh/apache/superset:4.0.1` |
+| `dashboardApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/dashboard-api:85fd0a3c2518@sha256:66934adc8a6f5effb3334c8bd80d5afa7eed76486ad8b0ceaf1638a24bc6e6c2` |
+| `dciSigning.images.kubectl` | `docker.io/alpine/k8s@sha256:b0523f0a244ddc4c8e055aa335c040d3d78b3ead5528f4544395f7f9f69c7b68` |
+| `dciSigning.images.postgres` | `docker.io/openg2p/postgresql@sha256:65b6faa9f30de7dc89f63f055a3dd3e4ba0334172ee95c8badf49da0d08ef1c0` |
+| `registrantAuth.images.kubectl` | `docker.io/alpine/k8s@sha256:b0523f0a244ddc4c8e055aa335c040d3d78b3ead5528f4544395f7f9f69c7b68` |
+| `registrantAuth.images.postgres` | `docker.io/openg2p/postgresql@sha256:65b6faa9f30de7dc89f63f055a3dd3e4ba0334172ee95c8badf49da0d08ef1c0` |
+
+Return to this version:
+
+```sh
+helm upgrade farmer-registry https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/openg2p-farmer-registry-0.0.0-develop.818.tgz -n farmer --reset-values -f environments/dev/values/farmer.yaml --wait --timeout 15m
+```
+
 ## 0.0.0-develop.803
 
 <!-- source-commit: 90b2649a7b10d8ba6db48164fdb478f49fcc878b version: 0.0.0-develop.803 -->
