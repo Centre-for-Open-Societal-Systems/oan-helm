@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-08
 
+### openg2p-livestock-registry 0.0.0-develop.435 (develop)
+
+- Seed renames the Farmer-reference tables before it writes the archive (#210) (Centre-for-Open-Societal-Systems/livestock-registry@cd63c4c20c63)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-08
+
 ### openg2p-cropsown-registry 0.0.0-develop.498 (develop)
 
 - Seed renames the Farmer-reference tables before it writes the archive (#251) (Centre-for-Open-Societal-Systems/cropsown-regsitry@e1fa219edac4)
