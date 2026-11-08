@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-08
 
+### openg2p-farmer-registry 0.0.0-develop.819 (develop)
+
+- Add required chart check and failure mail on staging builds (#237) (Centre-for-Open-Societal-Systems/farmer-registry@c15d5c18f2cc)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-08
+
 ### openg2p-commons-services 1.0.0-dev.37
 
 Previous version: 1.0.0-dev.36.
