@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-08
 
+### openg2p-farmer-registry 0.0.0-develop.825 (develop)
+
+- Create a missing role image repository like the component's own, then push again (#242) (Centre-for-Open-Societal-Systems/farmer-registry@eeafa8593de1)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-08
+
 ### openg2p-cropsown-registry 0.0.0-develop.499 (develop)
 
 - Wait for every table the crop reporting views read before applying them (#252) (Centre-for-Open-Societal-Systems/cropsown-regsitry@5287a40657f0)
