@@ -8,6 +8,13 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-08
+
+### openg2p-cropsown-registry 0.0.0-develop.496 (develop)
+
+- Upgrade the staging crop connector to the registry-connector image from the pipeline (#246) (Centre-for-Open-Societal-Systems/cropsown-regsitry@bad56edad2ed)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
 ## 2026-11-06
 
 ### openg2p-cropsown-registry 0.0.0-develop.494 (develop)
