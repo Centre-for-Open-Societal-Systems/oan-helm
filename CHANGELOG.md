@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-08
 
+### openg2p-farmer-registry 0.0.0-develop.822 (develop)
+
+- Publish the farmer change notice as farmer-registry.farmer-profile.changed.v1 (#236) (Centre-for-Open-Societal-Systems/farmer-registry@14982326968d)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-08
+
 ### openg2p-livestock-registry 0.0.0-develop.435 (develop)
 
 - Seed renames the Farmer-reference tables before it writes the archive (#210) (Centre-for-Open-Societal-Systems/livestock-registry@cd63c4c20c63)
