@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-08
 
+### openg2p-farmer-registry 0.0.0-develop.824 (develop)
+
+- Name the docker step that failed and catch a missing ECR repository on push (#241) (Centre-for-Open-Societal-Systems/farmer-registry@a7a37ef1d37a)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-08
+
 ### openg2p-farmer-registry 0.0.0-develop.823 (develop)
 
 - Keep publishing the earlier farmer change topic until the receivers move (#240) (Centre-for-Open-Societal-Systems/farmer-registry@60169129495d)
