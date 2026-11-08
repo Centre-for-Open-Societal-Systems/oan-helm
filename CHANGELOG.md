@@ -10,6 +10,29 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-08
 
+### oan-a2c 0.1.0-dev.3
+
+Previous version: 0.1.0-dev.2.
+
+- feat(a2c,grievance): vendor the frappe chart archive without a repository (28d0641)
+- feat(a2c,grievance): depend on the OAN frappe chart with PostgreSQL and Redis (20453a9)
+
+### oan-clamav 0.1.0-dev.1
+
+First published version.
+
+- feat(a2c,grievance): depend on the OAN frappe chart with PostgreSQL and Redis (20453a9)
+
+### oan-grievance-service 0.1.0-dev.3
+
+Previous version: 0.1.0-dev.2.
+
+- chore(grievance): drop site config keys the auth and grievance apps no longer read (2e12ec4)
+- feat(a2c,grievance): vendor the frappe chart archive without a repository (28d0641)
+- feat(a2c,grievance): depend on the OAN frappe chart with PostgreSQL and Redis (20453a9)
+
+## 2026-11-08
+
 ### openg2p-farmer-registry 0.0.0-develop.818 (develop)
 
 - Deploy on merge without Build with Parameters (#235) (Centre-for-Open-Societal-Systems/farmer-registry@7daff6e3d2a5)

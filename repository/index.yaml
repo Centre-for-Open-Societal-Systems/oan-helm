@@ -58,6 +58,38 @@ entries:
       oan.org/owner: OpenAgriNet (OAN)
     apiVersion: v2
     appVersion: version-16
+    created: "2026-11-08T18:39:17.032600099Z"
+    dependencies:
+    - name: frappe
+      repository: ""
+      version: 8.0.91
+    description: OAN Access to Credit (A2C) Frappe app with oan_auth_service for OpenAgriNet
+      (OAN); deploys the OAN frappe chart with the A2C defaults.
+    digest: fe862c4d9f3eb56679b504bebad9134373adcbf828e6a6805f70e96f611fdf32
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c
+    keywords:
+    - oan
+    - openagrinet
+    - frappe
+    - a2c
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-a2c
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_a2c
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_auth_service
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-a2c-0.1.0-dev.3.tgz
+    version: 0.1.0-dev.3
+  - annotations:
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-a2c
+      oan.org/owner: OpenAgriNet (OAN)
+    apiVersion: v2
+    appVersion: version-16
     created: "2026-11-06T12:00:24.087384874Z"
     dependencies:
     - alias: frappe
@@ -123,7 +155,65 @@ entries:
     urls:
     - oan-a2c-0.1.0-dev.1.tgz
     version: 0.1.0-dev.1
+  oan-clamav:
+  - annotations:
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-clamav
+      oan.org/owner: OpenAgriNet (OAN)
+    apiVersion: v2
+    appVersion: "1.4"
+    created: "2026-11-08T18:39:17.032797772Z"
+    description: ClamAV daemon that scans OAN Grievance Service attachments for OpenAgriNet
+      (OAN).
+    digest: f8aeecce8a8d6653dd80b61226e9d23a54df31b75e9043f6edf208add4043b30
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    keywords:
+    - oan
+    - openagrinet
+    - clamav
+    - grievance
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-clamav
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-clamav-0.1.0-dev.1.tgz
+    version: 0.1.0-dev.1
   oan-grievance-service:
+  - annotations:
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-grievance-service
+      oan.org/owner: OpenAgriNet (OAN)
+    apiVersion: v2
+    appVersion: version-16
+    created: "2026-11-08T18:39:17.044100089Z"
+    dependencies:
+    - name: frappe
+      repository: ""
+      version: 8.0.91
+    description: OAN Grievance Service (Frappe app with oan_auth_service) for OpenAgriNet
+      (OAN); deploys the OAN frappe chart with the grievance defaults and queue workers.
+    digest: 706e10b3e70b43feef06c2402abfc5caa537a1420ef38e99f2c784e63c96bc02
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service
+    keywords:
+    - oan
+    - openagrinet
+    - frappe
+    - grievance
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-grievance-service
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_auth_service
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-grievance-service-0.1.0-dev.3.tgz
+    version: 0.1.0-dev.3
   - annotations:
       oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service
       oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-grievance-service
@@ -8458,4 +8548,4 @@ entries:
     urls:
     - openg2p-livestock-registry-1.0.0-dev.1.tgz
     version: 1.0.0-dev.1
-generated: "2026-11-06T12:00:24.065530443Z"
+generated: "2026-11-08T18:39:17.021214709Z"
