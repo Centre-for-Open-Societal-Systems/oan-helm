@@ -1,0 +1,41 @@
+# Staging: let the registry deployer read the one Commons secret the connector upgrade needs.
+#
+# The "Upgrade connector" stage of the Crop and Livestock staging builds reads the registry-connector
+# client secret in commons to apply the connector definitions. The staging deployer
+# (ServiceAccount live/livestock-ci) has no rights in commons, so Crop staging 34 deployed the
+# registry and then stopped:
+#   secrets "registry-connector" is forbidden: User "system:serviceaccount:live:livestock-ci"
+#   cannot get resource "secrets" in API group "" in the namespace "commons"
+#
+# This grants get on that single named secret only, the same rule New Dev has
+# (Role connector-definitions-read-client-secret in commons).
+#
+# Apply once as the cluster admin on the staging box (safe to re-apply):
+#   sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml apply -f connector-definitions-rbac.yaml
+# Check:
+#   sudo ... kubectl auth can-i get secret/registry-connector -n commons --as=system:serviceaccount:live:livestock-ci   # yes
+#   sudo ... kubectl auth can-i list secrets -n commons --as=system:serviceaccount:live:livestock-ci                  # no
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: connector-definitions-read-client-secret
+  namespace: commons
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: ["registry-connector"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: registry-deployer-connector-definitions-client-secret
+  namespace: commons
+subjects:
+  - kind: ServiceAccount
+    name: livestock-ci
+    namespace: live
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: connector-definitions-read-client-secret
