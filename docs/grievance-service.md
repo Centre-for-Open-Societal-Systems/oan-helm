@@ -242,7 +242,6 @@ hop between them crosses the internet in plain HTTP: add a VPN or TLS before goi
 8. **Install the grievance service.** The image tag is the one Jenkins pushed.
 
    ```sh
-   helm dependency build charts/oan-grievance-service
    helm upgrade --install grievance charts/oan-grievance-service -n develop \
      -f environments/dev/values/oan-grievance-service.yaml \
      --set-string frappe.image.tag=<develop-build-sha> \
