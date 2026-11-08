@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-08
 
+### openg2p-livestock-registry 0.0.0-develop.433 (develop)
+
+- Replace the stale parameter test with a check that the pipeline takes no parameters (#211) (Centre-for-Open-Societal-Systems/livestock-registry@455e6ec2eac4)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-08
+
 ### oan-a2c 0.1.0-dev.3
 
 Previous version: 0.1.0-dev.2.
