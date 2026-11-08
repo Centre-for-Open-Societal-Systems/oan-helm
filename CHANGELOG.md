@@ -8,6 +8,121 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-08
+
+### oan-a2c 0.1.0-dev.3
+
+Previous version: 0.1.0-dev.2.
+
+- feat(a2c,grievance): vendor the frappe chart archive without a repository (28d0641)
+- feat(a2c,grievance): depend on the OAN frappe chart with PostgreSQL and Redis (20453a9)
+
+### oan-clamav 0.1.0-dev.1
+
+First published version.
+
+- feat(a2c,grievance): depend on the OAN frappe chart with PostgreSQL and Redis (20453a9)
+
+### oan-grievance-service 0.1.0-dev.3
+
+Previous version: 0.1.0-dev.2.
+
+- chore(grievance): drop site config keys the auth and grievance apps no longer read (2e12ec4)
+- feat(a2c,grievance): vendor the frappe chart archive without a repository (28d0641)
+- feat(a2c,grievance): depend on the OAN frappe chart with PostgreSQL and Redis (20453a9)
+
+## 2026-11-08
+
+### openg2p-farmer-registry 0.0.0-develop.818 (develop)
+
+- Deploy on merge without Build with Parameters (#235) (Centre-for-Open-Societal-Systems/farmer-registry@7daff6e3d2a5)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-08
+
+### openg2p-da-registry 0.0.0-develop.85 (develop)
+
+- DA staging deploys on merge with no Build with Parameters (#47) (Centre-for-Open-Societal-Systems/da-registry@acf5e374a852)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-08
+
+### openg2p-cropsown-registry 0.0.0-develop.496 (develop)
+
+- Upgrade the staging crop connector to the registry-connector image from the pipeline (#246) (Centre-for-Open-Societal-Systems/cropsown-regsitry@bad56edad2ed)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-06
+
+### openg2p-cropsown-registry 0.0.0-develop.494 (develop)
+
+- Crop chart refreshes its own ECR pull secret and stops loading seed images (#247) (Centre-for-Open-Societal-Systems/cropsown-regsitry@3ee052a6b0de)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-06
+
+### openg2p-cropsown-registry 0.0.0-develop.493 (develop)
+
+- Declare crop connector definitions in git and apply them with a Helm hook (#245) (Centre-for-Open-Societal-Systems/cropsown-regsitry@4a4c2fa3a91e)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-06
+
+### openg2p-cropsown-registry 0.0.0-develop.489 (develop)
+
+- Run the browser tests on Ubuntu 24.04 (#244) (Centre-for-Open-Societal-Systems/cropsown-regsitry@deabbfe47dca)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-06
+
+### oan-a2c 0.1.0-dev.2
+
+Previous version: 0.1.0-dev.1.
+
+- Rename COSS to OAN in chart names, annotations, helpers, scripts and docs (#127) (5982df6)
+
+### oan-grievance-service 0.1.0-dev.2
+
+Previous version: 0.1.0-dev.1.
+
+- Rename COSS to OAN in chart names, annotations, helpers, scripts and docs (#127) (5982df6)
+
+### oan-sandbox 1.0.0-dev.18
+
+Previous version: 1.0.0-dev.17.
+
+- Rename COSS to OAN in chart names, annotations, helpers, scripts and docs (#127) (5982df6)
+
+### openg2p-commons-services 1.0.0-dev.36
+
+Previous version: 1.0.0-dev.35.
+
+- Rename COSS to OAN in chart names, annotations, helpers, scripts and docs (#127) (5982df6)
+
+### openg2p-cropsown-registry 1.0.0-dev.22
+
+Previous version: 1.0.0-dev.21.
+
+- Rename COSS to OAN in chart names, annotations, helpers, scripts and docs (#127) (5982df6)
+
+### openg2p-da-registry 1.0.0-dev.23
+
+Previous version: 1.0.0-dev.22.
+
+- Rename COSS to OAN in chart names, annotations, helpers, scripts and docs (#127) (5982df6)
+
+### openg2p-farmer-registry 1.0.0-dev.24
+
+Previous version: 1.0.0-dev.23.
+
+- Rename COSS to OAN in chart names, annotations, helpers, scripts and docs (#127) (5982df6)
+
+### openg2p-livestock-registry 1.0.0-dev.24
+
+Previous version: 1.0.0-dev.23.
+
+- Rename COSS to OAN in chart names, annotations, helpers, scripts and docs (#127) (5982df6)
+
 ## 2026-11-06
 
 ### openg2p-da-registry 1.0.0-dev.22

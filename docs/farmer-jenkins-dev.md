@@ -2,7 +2,7 @@
 
 [The public profile](../environments/dev/farmer-jenkins.json) approves only
 `farmer-registry` in namespace `farmer`, chart `1.0.0-dev.5`, platform
-`1.2.2-rc.544`. Download the archive directly from the COSS `main/repository/`
+`1.2.2-rc.544`. Download the archive directly from the OAN `main/repository/`
 URL in that profile. Verify SHA256 before parsing it; verify the parent
 dependency and the packaged child version too. Use that same archive for lint,
 server render and upgrade. Do not rebuild dependencies, resolve a moving index,

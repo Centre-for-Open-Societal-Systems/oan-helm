@@ -56,7 +56,7 @@ spec:
       {{- end }}
       containers:
         - name: consent-partner-portal
-          image: {{ include "coss.image" $portal.image | quote }}
+          image: {{ include "oan.image" $portal.image | quote }}
           imagePullPolicy: {{ $portal.image.pullPolicy }}
           securityContext:
             allowPrivilegeEscalation: false

@@ -11,8 +11,8 @@ records image digests, source revision, suite checksum and limits.
 
 | Application | Source / published candidate |
 | --- | --- |
-| OAN Consent Manager | COSS `consent-management` at `d6ce86b9e3f904ee668d913fd06835e8f70e7f64`; [exact image records](../releases/consent-candidate.json) |
-| OAN Aggregation API | COSS `oan-aggregation-api` at `8fe3bf97030bb0b3f6283c2123ad58026af6cc50`; [exact image record](../releases/aggregation-candidate.json) |
+| OAN Consent Manager | OAN `consent-management` at `d6ce86b9e3f904ee668d913fd06835e8f70e7f64`; [exact image records](../releases/consent-candidate.json) |
+| OAN Aggregation API | OAN `oan-aggregation-api` at `8fe3bf97030bb0b3f6283c2123ad58026af6cc50`; [exact image record](../releases/aggregation-candidate.json) |
 
 The checks cover discovery, invalid query/subject/section rejection, OTP consent,
 registry search, bene360 response schema, field/scope filtering, approval polling,

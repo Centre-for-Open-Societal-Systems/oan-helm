@@ -34,7 +34,7 @@ They remain independent releases; moving source does not adopt their resources
 into the core registry release. Each existing registry pipeline can consume its
 exact archive from the same central repository.
 
-Dashboard application/API source remains in the six existing COSS repositories.
+Dashboard application/API source remains in the six existing OAN repositories.
 Humans retain `Dashboard Viewer`; service accounts use `charts:read`. The addon
 checks use synthetic values, compare source and packaged resource identities,
 selectors/images/Secret references and exercise two namespaces without Kubernetes.

@@ -208,6 +208,10 @@ registry:
 # (global.imagePullSecrets renders invalid YAML in the pinned registry subchart).
 ecrPullSecret:
   enabled: true
+  # The live DA pods list ecr-pull-secret in their pod spec (set by hand before Helm
+  # managed pull secrets; Helm keeps fields it never owned), which hides ServiceAccount
+  # pull secrets. Refreshing that same Secret keeps them pulling.
+  name: ecr-pull-secret
   registry: 379220350808.dkr.ecr.ap-south-1.amazonaws.com
   serviceAccounts:
     - default

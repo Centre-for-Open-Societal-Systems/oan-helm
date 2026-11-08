@@ -1,7 +1,7 @@
 # OAN Sandbox
 
-OpenAgriNet (OAN) developer sandbox, developed in the Centre for Open Societal
-Systems (COSS) repositories: a public site with the API catalogue, a participant
+OpenAgriNet (OAN) developer sandbox, developed in the OAN
+repositories: a public site with the API catalogue, a participant
 portal (sign-up, environment access, try-it console, API history, support) and an
 admin console (participants, products and end-points, CMS, masters, queries).
 

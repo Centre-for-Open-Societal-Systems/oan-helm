@@ -141,6 +141,8 @@ dev value in the team's secret manager.
 | `oan-grievance-admin` | grievance | `develop` | `password` | Frappe `Administrator` password |
 | `oan-grievance-jwt` | grievance | `develop` | `jwt_v1.pem` | RS256 signing key for `oan_auth_service` |
 | `oan-grievance-sentry` | grievance | `develop` | `dsn` | Optional: Sentry DSN |
+| `oan-ivr-vendor` | gateway | `apisix` | `key` | IVR vendor API key, shared with A2C. Read by the `oan-ivr-vendor` ApisixConsumer in `apisix.yaml` `extraDeploy` |
+| `oan-grievance-ivr-frappe-credential` | gateway | `apisix` | `authorization` | `token <api_key>:<api_secret>` of the Grievance IVR Integration user. The IVR webhook route puts it in `Authorization` |
 
 Frappe also generates an `encryption_key` when it creates the site. It is stored in
 `sites/develop.grievance.test/site_config.json` on the sites volume. Back it up with the
@@ -242,7 +244,6 @@ hop between them crosses the internet in plain HTTP: add a VPN or TLS before goi
 8. **Install the grievance service.** The image tag is the one Jenkins pushed.
 
    ```sh
-   helm dependency build charts/oan-grievance-service
    helm upgrade --install grievance charts/oan-grievance-service -n develop \
      -f environments/dev/values/oan-grievance-service.yaml \
      --set-string frappe.image.tag=<develop-build-sha> \

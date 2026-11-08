@@ -1,8 +1,8 @@
 # OpenAgriNet (OAN) Helm charts
 
-Helm charts for the OpenAgriNet services that COSS deploys: the Farmer, Crop Sown,
+Helm charts for the OpenAgriNet services that OAN deploys: the Farmer, Crop Sown,
 Livestock and DA registries, Commons Services (the shared OpenG2P services plus the
-COSS Consent Manager and Aggregation API), the OAN Sandbox, the Grievance service,
+OAN Consent Manager and Aggregation API), the OAN Sandbox, the Grievance service,
 A2C and the per-registry dashboards.
 
 This repository is also the Helm repository Rancher installs from. Chart sources live
@@ -38,6 +38,7 @@ Rancher sees is a reviewed pull request.
 | `openg2p-commons-services` | [charts/openg2p-commons-services](charts/openg2p-commons-services) | Shared services: IAM, Master Data, AWE, ODK, Partner Management, Consent Manager, Aggregation | `commons-services` / `commons` |
 | `oan-sandbox` | [charts/oan-sandbox](charts/oan-sandbox) | OAN Sandbox developer portal (disabled until its images exist) | not installed |
 | `oan-grievance-service` | [charts/oan-grievance-service](charts/oan-grievance-service) | Grievance service (Frappe) | `grievance` / `develop`, see [the guide](docs/grievance-service.md) |
+| `oan-clamav` | [charts/oan-clamav](charts/oan-clamav) | ClamAV for grievance attachments | `grievance-clamav` / `develop`, see [the guide](docs/grievance-service.md) |
 | `oan-a2c` | [charts/oan-a2c](charts/oan-a2c) | Access to Credit (Frappe) | `a2c` / `a2c-develop`, see [the guide](docs/a2c.md) |
 | `farmer-registry-dashboard`, `cropsown-registry-dashboard`, `livestock-registry-dashboard` | [addons/registry-dashboards](addons/registry-dashboards) | Per-registry dashboard UI and API | per registry |
 
@@ -48,7 +49,7 @@ describes the gate, kept for the next candidate.
 Commons Services passed that gate with Master Data (MDS) `0.0.0-develop.118`: its
 catalogue migration was rehearsed against a copy of the new-dev `master_data` database.
 
-[docs/service-catalog.md](docs/service-catalog.md) maps every COSS service to its
+[docs/service-catalog.md](docs/service-catalog.md) maps every OAN service to its
 chart, values key and source repository.
 
 ## How a change reaches a cluster

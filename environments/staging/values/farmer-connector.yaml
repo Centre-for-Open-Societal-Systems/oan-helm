@@ -2,8 +2,8 @@
 # UI to the connector admin role, with staging hosts, queue, signing key and admin login.
 # Secrets come from the farmer-connector-credentials release. postgres-init creates the database on first install.
 fullnameOverride: farmer-registry-connector
-cossQueue: farmer-registry-connector-v2
-cossSigning:
+oanQueue: farmer-registry-connector-v2
+oanSigning:
   enabled: true
   partnerId: farmer-partner
   keyId: farmer-connector-v2-staging

@@ -2,6 +2,7 @@
 After every install and upgrade: make sure the signing partner exists in Partner Manager and holds this
 connector's public key. Safe to run twice: it changes nothing when the key is already registered.
 */ -}}
+{{- $signing := .Values.oanSigning | default .Values.cossSigning | default dict }}
 {{- with .Values.partnerRegistration }}
 {{- if .enabled }}
 apiVersion: v1
@@ -51,15 +52,15 @@ spec:
                   name: {{ required "partnerRegistration.clientSecretName is required" .clientSecretName | quote }}
                   key: {{ .clientSecretKey | default "client_secret" | quote }}
             - name: PARTNER_ID
-              value: {{ $.Values.cossSigning.partnerId | quote }}
+              value: {{ $signing.partnerId | quote }}
             - name: PARTNER_NAME
               value: {{ .partnerName | default "Farmer Registry Connector" | quote }}
             - name: KEY_ID
-              value: {{ $.Values.cossSigning.keyId | quote }}
+              value: {{ $signing.keyId | quote }}
             - name: PRIVATE_KEY_PEM
               valueFrom:
                 secretKeyRef:
-                  name: {{ $.Values.cossSigning.secret | quote }}
+                  name: {{ $signing.secret | quote }}
                   key: private-key.pem
           volumeMounts:
             - name: register

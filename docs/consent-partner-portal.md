@@ -1,6 +1,6 @@
 # OAN Consent Partner Portal
 
-Chart **1.0.0-dev.6** adds the COSS partner browser portal to the existing
+Chart **1.0.0-dev.6** adds the OAN partner browser portal to the existing
 Commons Services chart. The pinned `openg2p-consent-manager:1.0.2` child remains
 unchanged; a local parent template owns the additional workload. Defaults keep
 the portal disabled for environments without partner authentication.
@@ -22,7 +22,7 @@ the partner API for validation, receipts and JWKS. It is not the browser portal.
 - Values: `consentPartnerPortal` in Commons Services.
 - Resources: `commons-services-cm-partner-portal` Deployment, Service and
   VirtualService, plus `commons-services-cm-partner-portal-config` ConfigMap.
-- Source: COSS `consent-management` commit
+- Source: OAN `consent-management` commit
   `d911269106b0d09b6308124c451642ab05087efc`, directory `partner-portal`.
 - Image: `379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/consent-partner-portal`,
   pinned by digest in the chart and [build evidence](../releases/consent-partner-portal-20261019.json).
@@ -94,4 +94,4 @@ tokens, signs in through the real browser PKCE flow, runs both Postman collectio
 and saves a private combined report. It does not create consents or enable OTP.
 Reusable test sources are
 [`test-partner-portal-browser.py`](../scripts/test-partner-portal-browser.py) and
-[`COSS-Partner-Portal.postman_collection.json`](../postman/COSS-Partner-Portal.postman_collection.json).
+[`OAN-Partner-Portal.postman_collection.json`](../postman/OAN-Partner-Portal.postman_collection.json).

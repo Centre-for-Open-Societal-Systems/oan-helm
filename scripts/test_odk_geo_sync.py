@@ -22,7 +22,7 @@ class OdkGeoSyncContract(unittest.TestCase):
                 self.assertFalse(values['odkGeoSync']['runOnInstall'])
                 fixture = Path(directory)
                 (fixture / 'templates').mkdir()
-                for name in ('odk-geo-sync.yaml', '_coss.tpl'):
+                for name in ('odk-geo-sync.yaml', '_oan.tpl'):
                     shutil.copyfile(source / 'templates' / name, fixture / 'templates' / name)
                 (fixture / 'Chart.yaml').write_text('apiVersion: v2\nname: job-contract\nversion: 0.1.0\n')
                 values['odkGeoSync'].update(enabled=True, runOnInstall=True,

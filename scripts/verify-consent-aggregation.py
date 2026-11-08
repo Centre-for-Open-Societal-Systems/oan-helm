@@ -58,7 +58,7 @@ def main():
               'consentImage': cm, 'aggregationImage': agg, 'postgresImage': pg_image,
               'sourceFixturesCommit': AGG_COMMIT, 'environment': 'disposable local Docker network/databases',
               'authenticationEnabled': False, 'aweEnabled': False, 'kafkaEnabled': False,
-              'fixtureSource': 'COSS oan-aggregation-api test/e2e/fakes.py; owner-provided local fixture reused',
+              'fixtureSource': 'OAN oan-aggregation-api test/e2e/fakes.py; owner-provided local fixture reused',
               'postmanSimulation': 'postman/simulations/consent-aggregation.sim.yaml',
               'clusterChanges': False, 'productionServicesContacted': False,
               'status': 'running', 'logDirectory': str(work.relative_to(ROOT))}
@@ -111,7 +111,7 @@ def main():
         raise RuntimeError('Local service did not become ready: ' + url)
 
     try:
-        command(['docker', 'network', 'create', '--label', 'org.coss.local-check=' + run_id, run_id])
+        command(['docker', 'network', 'create', '--label', 'org.oan.local-check=' + run_id, run_id])
         db = start('db', pg_image, env={'POSTGRES_PASSWORD': 'local-test-only'})
         for _ in range(60):
             ready = subprocess.run(['docker', 'exec', db, 'pg_isready', '-U', 'postgres'], capture_output=True)

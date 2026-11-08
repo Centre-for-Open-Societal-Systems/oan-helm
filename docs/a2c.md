@@ -46,7 +46,8 @@ Created by hand, never in values files.
 | `oan-a2c-openg2p` | A2C | `a2c-develop` | `username`, `password` | Optional: OpenG2P portal agent login |
 | `oan-a2c-sentry` | A2C | `a2c-develop` | `dsn` | Optional: Sentry DSN |
 | `oan-a2c-tls` | gateway | `a2c` | `tls.crt`, `tls.key` | Certificate APISIX serves for the host |
-| `a2c-openg2p-consent-webhook`, `a2c-telco-ivr-lead-gateway`, `a2c-oan-dashboards` | gateway | `a2c` | `key` | Partner and dashboard API keys, one Secret per consumer |
+| `a2c-openg2p-consent-webhook`, `a2c-oan-dashboards` | gateway | `a2c` | `key` | Partner and dashboard API keys, one Secret per consumer |
+| `oan-ivr-vendor` | gateway | `apisix` | `key` | Telco IVR vendor API key, shared with grievance. Read by the `oan-ivr-vendor` ApisixConsumer in `apisix.yaml` `extraDeploy` |
 | `a2c-frappe-service-credential` | gateway | `apisix` | `authorization` | `token <api_key>:<api_secret>` of the login-disabled Frappe service user. The partner routes put it in `Authorization`. |
 
 The service user is a Frappe user on the A2C site with an API key and secret. Create it
@@ -64,7 +65,6 @@ openssl genrsa -out jwt_v1.pem 2048
 kubectl -n a2c-develop create secret generic oan-a2c-jwt --from-file=jwt_v1.pem=jwt_v1.pem
 rm jwt_v1.pem
 
-helm dependency build charts/oan-a2c
 helm upgrade --install a2c charts/oan-a2c -n a2c-develop \
   -f environments/dev/values/oan-a2c.yaml \
   --set-string frappe.image.tag=<develop-build> \
