@@ -1,0 +1,12 @@
+# Malware scanning for grievance attachments (services/scanning.py). The signature
+# database is downloaded by freshclam on every start into an emptyDir.
+image:
+  repository: clamav/clamav-debian
+  tag: "1.4"
+  pullPolicy: IfNotPresent
+port: 3310
+resources:
+  requests:
+    memory: 1536Mi
+  limits:
+    memory: 3Gi
