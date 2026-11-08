@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-08
 
+### openg2p-cropsown-registry 0.0.0-develop.500 (develop)
+
+- Operator job: a parameter to accept a deliberate connector chart change (#253) (Centre-for-Open-Societal-Systems/cropsown-regsitry@97e9a92e1fb8)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-08
+
 ### openg2p-farmer-registry 0.0.0-develop.825 (develop)
 
 - Create a missing role image repository like the component's own, then push again (#242) (Centre-for-Open-Societal-Systems/farmer-registry@eeafa8593de1)
