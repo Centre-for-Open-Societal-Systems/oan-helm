@@ -10,6 +10,20 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-08
 
+### openg2p-cropsown-registry 1.0.0-dev.23
+
+Previous version: 1.0.0-dev.22.
+
+- Name the Farmer reference settings after the registry, not the delivery team (#129) (af00768)
+
+### openg2p-livestock-registry 1.0.0-dev.25
+
+Previous version: 1.0.0-dev.24.
+
+- Name the Farmer reference settings after the registry, not the delivery team (#129) (af00768)
+
+## 2026-11-08
+
 ### openg2p-livestock-registry 0.0.0-develop.433 (develop)
 
 - Replace the stale parameter test with a check that the pipeline takes no parameters (#211) (Centre-for-Open-Societal-Systems/livestock-registry@455e6ec2eac4)
