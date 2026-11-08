@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-08
 
+### openg2p-commons-services 1.0.0-dev.37
+
+Previous version: 1.0.0-dev.36.
+
+- Master Data seed image with the crop theme and the cluster status list (#139) (c012fdf)
+
+## 2026-11-08
+
 ### openg2p-cropsown-registry 1.0.0-dev.23
 
 Previous version: 1.0.0-dev.22.
