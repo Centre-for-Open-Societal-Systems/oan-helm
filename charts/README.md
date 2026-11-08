@@ -13,8 +13,9 @@ See [the inclusion details](../docs/service-catalog.md#where-are-oan-consent-man
 | DA | [Chart.yaml](openg2p-da-registry/Chart.yaml) | [values.yaml](openg2p-da-registry/values.yaml) | [templates/](openg2p-da-registry/templates/) |
 | Commons Services, including OAN Consent/Aggregation | [Chart.yaml](openg2p-commons-services/Chart.yaml) | [values.yaml](openg2p-commons-services/values.yaml) | [Aggregation](openg2p-commons-services/templates/aggregation-api.yaml) and [other templates](openg2p-commons-services/templates/) |
 | OAN Sandbox (developer portal; no OpenG2P dependency) | [Chart.yaml](oan-sandbox/Chart.yaml) | [values.yaml](oan-sandbox/values.yaml) | [API](oan-sandbox/templates/api.yaml), [web](oan-sandbox/templates/web.yaml), [route](oan-sandbox/templates/virtualservice.yaml) |
-| Grievance Service (Frappe; upstream `frappe/helm` dependency) | [Chart.yaml](oan-grievance-service/Chart.yaml) | [values.yaml](oan-grievance-service/values.yaml) | [templates/](oan-grievance-service/templates/), see [the grievance guide](../docs/grievance-service.md) |
-| A2C (Frappe; upstream `frappe/helm` dependency) | [Chart.yaml](oan-a2c/Chart.yaml) | [values.yaml](oan-a2c/values.yaml) | [templates/](oan-a2c/templates/), see [the A2C guide](../docs/a2c.md) |
+| ClamAV for the Grievance Service | [Chart.yaml](oan-clamav/Chart.yaml) | [values.yaml](oan-clamav/values.yaml) | [templates/](oan-clamav/templates/), see [the grievance guide](../docs/grievance-service.md) |
+| OAN A2C | [Chart.yaml](oan-a2c/Chart.yaml) | [values.yaml](oan-a2c/values.yaml) | None; all from the `frappe` dependency (`oan-service-helm`) |
+| OAN Grievance Service | [Chart.yaml](oan-grievance-service/Chart.yaml) | [values.yaml](oan-grievance-service/values.yaml) | None; all from the `frappe` dependency (`oan-service-helm`) |
 
 [The service catalog](../docs/service-catalog.md) maps every included OAN
 repository and shared service to its chart, values key, source and enablement.

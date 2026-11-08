@@ -65,7 +65,6 @@ openssl genrsa -out jwt_v1.pem 2048
 kubectl -n a2c-develop create secret generic oan-a2c-jwt --from-file=jwt_v1.pem=jwt_v1.pem
 rm jwt_v1.pem
 
-helm dependency build charts/oan-a2c
 helm upgrade --install a2c charts/oan-a2c -n a2c-develop \
   -f environments/dev/values/oan-a2c.yaml \
   --set-string frappe.image.tag=<develop-build> \

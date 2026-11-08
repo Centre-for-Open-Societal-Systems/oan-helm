@@ -1,0 +1,20 @@
+apiVersion: v2
+name: oan-clamav
+description: ClamAV daemon that scans OAN Grievance Service attachments for OpenAgriNet (OAN).
+type: application
+version: 0.1.0-dev.1
+appVersion: "1.4"
+keywords:
+- oan
+- openagrinet
+- clamav
+- grievance
+home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+sources:
+- https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+maintainers:
+- name: OpenAgriNet (OAN)
+  url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+annotations:
+  oan.org/owner: OpenAgriNet (OAN)
+  oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-clamav
