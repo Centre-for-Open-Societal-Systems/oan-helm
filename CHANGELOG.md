@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-08
 
+### openg2p-da-registry 1.0.0-rc.87 (staging)
+
+- DA staging deploys on merge with no Build with Parameters (#47) (Centre-for-Open-Societal-Systems/da-registry@acf5e374a852)
+- Images and rollback: [releases/history/staging/openg2p-da-registry.md](releases/history/staging/openg2p-da-registry.md)
+
+## 2026-11-08
+
 ### openg2p-farmer-registry 0.0.0-develop.822 (develop)
 
 - Publish the farmer change notice as farmer-registry.farmer-profile.changed.v1 (#236) (Centre-for-Open-Societal-Systems/farmer-registry@14982326968d)
