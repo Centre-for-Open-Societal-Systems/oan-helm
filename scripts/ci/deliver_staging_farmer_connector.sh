@@ -7,6 +7,6 @@ cd "$(dirname "$0")/../.."
 values=environments/staging/values
 
 helm upgrade --install farmer-connector-credentials addons/farmer-connector-credentials --namespace farmer \
-  --values "$values/farmer-connector-credentials.yaml" --reset-values --wait --timeout 3m
+  --values "$values/farmer-connector-credentials.yaml" --reset-values --atomic --wait --timeout 3m
 helm upgrade --install farmer-registry-connector addons/farmer-connector --namespace farmer \
-  --values "$values/farmer-connector.yaml" --reset-values --wait --timeout 10m
+  --values "$values/farmer-connector.yaml" --reset-values --atomic --wait --timeout 10m
