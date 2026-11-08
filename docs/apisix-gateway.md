@@ -284,12 +284,32 @@ host's DNS at the gateway node.
 A2C needs secrets that grievance does not, all provisioned outside Git:
 
 - One Secret per partner and dashboard consumer in namespace `a2c`, named after the
-  consumer, with key `key`: `a2c-openg2p-consent-webhook`, `a2c-telco-ivr-lead-gateway`,
-  `a2c-oan-dashboards`.
+  consumer, with key `key`: `a2c-openg2p-consent-webhook`, `a2c-oan-dashboards`.
 - `A2C_FRAPPE_SERVICE_AUTHORIZATION` (`token <api_key>:<api_secret>` of the Frappe service
   user) in the APISIX pods' environment, in the gateway cluster. Partner routes reference it as
   `$env://A2C_FRAPPE_SERVICE_AUTHORIZATION`. `apisix.yaml` reads it from the optional Secret
   `a2c-frappe-service-credential` (key `authorization`) in namespace `apisix`.
+
+### Consumers shared by several apps
+
+The telco IVR vendor calls A2C lead creation and the grievance IVR webhook with one key.
+Its consumer, `oan-ivr-vendor`, belongs to neither app chart: the APISIX release creates it
+(`extraDeploy` in `apisix.yaml`), so the controller names it `apisix_oan-ivr-vendor`. Both
+app charts whitelist that name through `sharedConsumerNamespace: apisix` in their values.
+Each app's route still calls Frappe with its own credential, from the APISIX environment:
+`A2C_FRAPPE_SERVICE_AUTHORIZATION` and `OAN_GRIEVANCE_IVR_FRAPPE_AUTHORIZATION`.
+
+```sh
+kubectl -n apisix create secret generic oan-ivr-vendor --from-literal=key='<vendor key>'
+kubectl -n apisix create secret generic oan-grievance-ivr-frappe-credential \
+  --from-literal=authorization='token <api_key>:<api_secret>'
+```
+
+To keep the vendor's current key, create `oan-ivr-vendor` with the value of the old
+`a2c-telco-ivr-lead-gateway` Secret. Then upgrade the APISIX release and `oan-a2c-gateway`
+back to back. Between the two upgrades both consumers hold the key, APISIX matches either,
+and the old A2C chart accepts only the old one, so some IVR calls to A2C get 403 for that
+moment. Delete the old Secret once the A2C chart no longer creates its consumer.
 
 ## 8b. Partner APIs (OAN sandbox)
 
