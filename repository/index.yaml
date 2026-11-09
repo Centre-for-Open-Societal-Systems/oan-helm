@@ -155,6 +155,41 @@ entries:
     urls:
     - oan-a2c-0.1.0-dev.1.tgz
     version: 0.1.0-dev.1
+  oan-apisix-gateway:
+  - annotations:
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-apisix-gateway
+      oan.org/owner: OpenAgriNet (OAN)
+    apiVersion: v2
+    appVersion: 3.19.0
+    created: "2026-11-09T10:35:49.461889067Z"
+    dependencies:
+    - name: apisix
+      repository: ""
+      version: 2.18.2
+    - name: redis
+      repository: ""
+      version: 17.15.2
+    description: APISIX gateway and Ingress Controller for OpenAgriNet (OAN); deploys
+      the upstream apisix chart with the OAN gateway defaults. App routes install
+      separately.
+    digest: b69b038eb9ab4eb7a4fd765a0d13cbdb5a32cd90179975854e171597b3235f42
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    keywords:
+    - oan
+    - openagrinet
+    - apisix
+    - gateway
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-apisix-gateway
+    sources:
+    - https://github.com/apache/apisix-helm-chart
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-apisix-gateway-0.1.0-dev.1.tgz
+    version: 0.1.0-dev.1
   oan-clamav:
   - annotations:
       oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-clamav
@@ -284,6 +319,56 @@ entries:
     type: application
     urls:
     - oan-grievance-service-0.1.0-dev.1.tgz
+    version: 0.1.0-dev.1
+  oan-logging:
+  - annotations:
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-logging
+      oan.org/owner: OpenAgriNet (OAN)
+    apiVersion: v2
+    appVersion: 3.6.16
+    created: "2026-11-09T10:35:49.480207488Z"
+    dependencies:
+    - condition: loki.enabled
+      name: loki
+      repository: ""
+      version: 7.5.0
+    - alias: otel-gateway
+      condition: otel-gateway.enabled
+      name: opentelemetry-collector
+      repository: ""
+      version: 0.177.0
+    - alias: otel-agent
+      condition: otel-agent.enabled
+      name: opentelemetry-collector
+      repository: ""
+      version: 0.177.0
+    - condition: grafana.enabled
+      name: grafana
+      repository: ""
+      version: 10.5.15
+    description: Log pipeline for OpenAgriNet (OAN); deploys the node log agent, the
+      OTel gateway, Loki and Grafana from their upstream charts with the OAN defaults.
+    digest: d11335f11adc50bff903e81d34852ec78a3a708e5c856373cd3312b140ec287c
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    keywords:
+    - oan
+    - openagrinet
+    - logging
+    - loki
+    - grafana
+    - opentelemetry
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-logging
+    sources:
+    - https://github.com/grafana/loki
+    - https://github.com/grafana/helm-charts
+    - https://github.com/open-telemetry/opentelemetry-helm-charts
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-logging-0.1.0-dev.1.tgz
     version: 0.1.0-dev.1
   oan-sandbox:
   - annotations:
@@ -8854,4 +8939,4 @@ entries:
     urls:
     - openg2p-livestock-registry-1.0.0-dev.1.tgz
     version: 1.0.0-dev.1
-generated: "2026-11-09T05:21:51.570140585Z"
+generated: "2026-11-09T10:35:49.444563667Z"

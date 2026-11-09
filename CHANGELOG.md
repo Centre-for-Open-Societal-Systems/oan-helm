@@ -10,6 +10,21 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-09
 
+### oan-apisix-gateway 0.1.0-dev.1
+
+First published version.
+
+- feat(apisix,a2c,grievance): bundle Redis with the gateway and use the Bitnami images (ff81b94)
+- feat(apisix): package the gateway as a chart with a shared Redis (ac37459)
+
+### oan-logging 0.1.0-dev.1
+
+First published version.
+
+- feat(logging): package the log pipeline as one chart (61a99e4)
+
+## 2026-11-09
+
 ### openg2p-livestock-registry 0.0.0-develop.441 (develop)
 
 - Merge pull request #218 from simretyibeltal-commits/revert-app-publish-v2 (Centre-for-Open-Societal-Systems/livestock-registry@418c8fab326c)
