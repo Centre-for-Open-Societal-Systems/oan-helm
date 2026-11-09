@@ -16,3 +16,8 @@ minio:
       host: minio-console.oanstaging.com
       apiHost: minio-farmer.oanstaging.com
       gateway: istio-system/staging
+kafkaUi:
+  istio:
+    virtualservice:
+      # The public host only works through the staging gateway; the chart default is the internal one.
+      gateway: istio-system/staging
