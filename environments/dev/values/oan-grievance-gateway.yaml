@@ -18,7 +18,7 @@ ingressClassName: apisix
 sharedConsumerNamespace: apisix
 
 hosts:
-  - grievance-backend-dev.oanstaging.com
+  - grievance-backend.development.oanstaging.com
 
 # APISIX terminates TLS for `hosts` with this Secret (tls.crt, tls.key) in namespace
 # `grievance`. Dev: written by cert-manager. Local: a locally generated certificate.
@@ -27,7 +27,7 @@ tls:
 
 # Frappe site name (Jenkinsfile `targets.develop.site`), sent as Host because Frappe
 # selects the site from it. Must equal siteName in oan-grievance-service.yaml.
-siteName: develop.grievance.test
+siteName: grievance-backend.development.oanstaging.com
 
 # With externalHosts set, serviceName only names the ApisixUpstream, and port is the node
 # port of oan-grievance-service.yaml gatewayAccess. Without it, serviceName and port are a
@@ -42,7 +42,7 @@ web:
     active:
       type: http
       httpPath: /api/method/ping
-      host: develop.grievance.test
+      host: grievance-backend.development.oanstaging.com
       timeout: 3
       healthy:
         interval: 5s

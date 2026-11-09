@@ -312,7 +312,7 @@ and have not tested it here.
 
 ## Walk through one request
 
-1. The client resolves `grievance-backend-dev.oanstaging.com` and reaches one gateway
+1. The client resolves `grievance-backend.development.oanstaging.com` and reaches one gateway
    node through DNS or the load balancer.
 2. APISIX on that node terminates TLS and matches the route by `Host` and path. It checks
    the rate limit in Redis (the same counters for every APISIX Pod), then CORS, API
