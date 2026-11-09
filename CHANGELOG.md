@@ -8,6 +8,13 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-09
+
+### openg2p-farmer-registry 0.0.0-develop.828 (develop)
+
+- Roll an active connector's images automatically with a smoke check and rollback (#245) (Centre-for-Open-Societal-Systems/farmer-registry@b7b0f527f04c)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
 ## 2026-11-08
 
 ### openg2p-farmer-registry 0.0.0-develop.827 (develop)
