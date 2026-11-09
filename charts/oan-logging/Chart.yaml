@@ -1,0 +1,41 @@
+apiVersion: v2
+name: oan-logging
+description: Log pipeline for OpenAgriNet (OAN); deploys the node log agent, the OTel
+  gateway, Loki and Grafana from their upstream charts with the OAN defaults.
+type: application
+version: 0.1.0-dev.1
+appVersion: 3.6.16
+keywords:
+- oan
+- openagrinet
+- logging
+- loki
+- grafana
+- opentelemetry
+home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+sources:
+- https://github.com/grafana/loki
+- https://github.com/grafana/helm-charts
+- https://github.com/open-telemetry/opentelemetry-helm-charts
+- https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+maintainers:
+- name: OpenAgriNet (OAN)
+  url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+dependencies:
+- name: loki
+  version: 7.5.0
+  condition: loki.enabled
+- name: opentelemetry-collector
+  alias: otel-gateway
+  version: 0.177.0
+  condition: otel-gateway.enabled
+- name: opentelemetry-collector
+  alias: otel-agent
+  version: 0.177.0
+  condition: otel-agent.enabled
+- name: grafana
+  version: 10.5.15
+  condition: grafana.enabled
+annotations:
+  oan.org/owner: OpenAgriNet (OAN)
+  oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-logging

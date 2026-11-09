@@ -17,27 +17,25 @@ Grafana (Loki data source) -> Explore
 
 ## 1. Files
 
-| File | Chart | Release | Namespace |
-|---|---|---|---|
-| [loki.yaml](../environments/dev/values/loki.yaml) | `grafana/loki` 7.5.0 | `loki` | `observability` |
-| [otel-gateway.yaml](../environments/dev/values/otel-gateway.yaml) | `open-telemetry/opentelemetry-collector` 0.177.0 | `otel-gateway` | `observability` |
-| [otel-agent.yaml](../environments/dev/values/otel-agent.yaml) | same chart | `otel-agent` | `observability` (one per cluster) |
-| [grafana.yaml](../environments/dev/values/grafana.yaml) | `grafana/grafana` 10.5.15 | `grafana` | `observability` |
+One chart, [charts/oan-logging](../charts/oan-logging), installs as release `oan-logging`
+in namespace `observability`. Its [values.yaml](../charts/oan-logging/values.yaml) holds the
+settings of four vendored upstream charts, each under its own key:
 
-Repositories:
+| Key | Upstream chart | Service or workload |
+|---|---|---|
+| `loki` | `grafana/loki` 7.5.0 | `loki` |
+| `otel-gateway` | `open-telemetry/opentelemetry-collector` 0.177.0 | `otel-gateway` |
+| `otel-agent` | same chart | DaemonSet `otel-agent-agent` (one per cluster) |
+| `grafana` | `grafana/grafana` 10.5.15 | `grafana` |
 
-```sh
-helm repo add grafana https://grafana.github.io/helm-charts
-helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
-helm repo update
-```
+Each key has an `enabled` flag. No `helm repo add` is needed: the charts are vendored.
 
 ## 2. Storage
 
 Loki keeps chunks in an S3-compatible bucket in every environment, so the values do not
-change between a lab and production. `loki.yaml` turns on the MinIO sub-chart of the Loki
+change between a lab and production. The `loki` values turn on the MinIO sub-chart of the Loki
 chart. Only the endpoint and credentials differ if production uses another object store:
-set `minio.enabled=false` and `loki.storage.s3.endpoint`, `accessKeyId`,
+set `loki.minio.enabled=false` and `loki.loki.storage.s3.endpoint`, `accessKeyId`,
 `secretAccessKey`.
 
 - The sub-chart's own notes call it a test setup. Its image is a community fork
@@ -55,28 +53,22 @@ kubectl create namespace observability
 kubectl -n observability create secret generic grafana-admin \
   --from-literal=admin-user=admin --from-literal=admin-password='<password>'
 
-helm upgrade --install loki grafana/loki --version 7.5.0 -n observability \
-  -f environments/dev/values/loki.yaml \
-  --set-string minio.rootPassword='<root password>' \
-  --set-string 'minio.users[0].accessKey=logs-user' \
-  --set-string 'minio.users[0].secretKey=<logs password>' --wait
-
-helm upgrade --install otel-gateway open-telemetry/opentelemetry-collector --version 0.177.0 \
-  -n observability -f environments/dev/values/otel-gateway.yaml --wait
-helm upgrade --install otel-agent open-telemetry/opentelemetry-collector --version 0.177.0 \
-  -n observability -f environments/dev/values/otel-agent.yaml --wait
-helm upgrade --install grafana grafana/grafana --version 10.5.15 -n observability \
-  -f environments/dev/values/grafana.yaml --wait
+helm upgrade --install oan-logging charts/oan-logging -n observability \
+  --set-string loki.minio.rootPassword='<root password>' \
+  --set-string 'loki.minio.users[0].accessKey=logs-user' \
+  --set-string 'loki.minio.users[0].secretKey=<logs password>' --wait --timeout 10m
 ```
 
 The chart uses `rootUser`/`rootPassword` for Loki's own S3 access, so the root password
 matters most. Both passwords must be set.
 
-Another cluster (an app cluster) installs only `otel-agent`. Point it at the gateway
-address of the log cluster:
+Another cluster (an app cluster) installs only the agent. Turn off the rest and point the
+agent at the gateway address of the log cluster:
 
 ```sh
---set 'config.exporters.otlp_grpc.endpoint=<gateway address>:4317'
+helm upgrade --install oan-logging charts/oan-logging -n observability --create-namespace \
+  --set loki.enabled=false --set otel-gateway.enabled=false --set grafana.enabled=false \
+  --set 'otel-agent.alternateConfig.exporters.otlp_grpc.endpoint=<gateway address>:4317'
 ```
 
 Use a network the clusters share, and note that the agent talks to the gateway without
@@ -101,7 +93,7 @@ A shared setup needs an APISIX route and a login for Grafana. Not done.
 
 ## 5. Redaction
 
-The `transform/redact` rules in `otel-agent.yaml` replace email addresses, phone-number
+The `transform/redact` rules under `otel-agent` in `charts/oan-logging/values.yaml` replace email addresses, phone-number
 shapes and `password`/`token`/`bearer`/`authorization` values in the log line before it
 leaves the node. OpenG2P does not publish its rules. Test these on realistic lines
 (grievance text can contain names and IDs the rules do not catch). Names and national
