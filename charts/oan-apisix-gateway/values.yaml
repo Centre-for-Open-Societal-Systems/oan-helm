@@ -146,3 +146,25 @@ apisix:
         namespace: apisix
         name: apisix-admin
         port: 9180
+
+# Redis for the limit-count plugin's counters (bitnami/redis 17.15.2, vendored in charts/),
+# with the image the frappe subchart uses. Counters are short-lived, so there is no
+# persistence and no password: the Service apisix-redis-master is ClusterIP and only APISIX
+# connects. Route charts reach it through `redis.host` in
+# environments/<env>/values/gateway-common.yaml.
+redis:
+  image:
+    repository: bitnamilegacy/redis
+    tag: "7.0"
+  architecture: standalone
+  auth:
+    enabled: false
+  master:
+    persistence:
+      enabled: false
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        memory: 256Mi

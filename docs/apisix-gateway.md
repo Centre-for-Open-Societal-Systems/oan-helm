@@ -20,7 +20,7 @@ header. **Never install them into the OpenG2P cluster.**
 | Part                              | Source                                                                                                                                                                                                                                   | Values                                                                                         |
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
 | APISIX and the Ingress Controller | Chart `oan-apisix-gateway`, which vendors upstream `apisix/apisix` 2.18.2 (bundles `apisix-ingress-controller`) and releases like the other charts                                                    | [charts/oan-apisix-gateway/values.yaml](../charts/oan-apisix-gateway/values.yaml)                               |
-| Rate-limit counters               | Upstream chart `bitnami/redis` 19.6.4 from `https://charts.bitnami.com/bitnami`, release `apisix-redis` next to APISIX                                                                                                                     | [dev/values/redis-gateway.yaml](../environments/dev/values/redis-gateway.yaml)               |
+| Rate-limit counters               | Dependency `bitnami/redis` 17.15.2 of `oan-apisix-gateway`, installed with APISIX in the same release                                                                                                                                      | [charts/oan-apisix-gateway/values.yaml](../charts/oan-apisix-gateway/values.yaml)            |
 | Grievance routes                  | Chart `oan-grievance-gateway` in [oan_grievance_service/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/tree/develop/apisix/k8s), generated from the service's OpenAPI spec. It is not copied here | [dev/values/oan-grievance-gateway.yaml](../environments/dev/values/oan-grievance-gateway.yaml) |
 | A2C routes                        | Chart `oan-a2c-gateway` in [oan_a2c/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/tree/develop/apisix/k8s), generated from the A2C OpenAPI spec                                                                | [dev/values/oan-a2c-gateway.yaml](../environments/dev/values/oan-a2c-gateway.yaml)             |
 | Partner APIs (OAN sandbox apps)   | Chart `oan-partner-gateway` in [sandbox-platform deploy/apisix-partner-gateway/k8s](https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform/tree/develop/deploy/apisix-partner-gateway), generated from the routes the sandbox is tested against | [dev/values/oan-partner-gateway.yaml](../environments/dev/values/oan-partner-gateway.yaml) |
@@ -43,7 +43,7 @@ overwrite the other's routes.
 ### Traffic path
 
 ```
-browser -> DNS grievance-backend-dev.oanstaging.com -> gateway node
+browser -> DNS grievance-backend.development.oanstaging.com -> gateway node
         -> APISIX, hostPorts 80 and 443 on the node      TLS, routes, rate limits, CORS, metrics
         -> grievance node, private address               node ports 30800 (gunicorn), 30900 (socket.io)
 ```
@@ -146,11 +146,10 @@ helm template apisix charts/oan-apisix-gateway -n apisix \
 helm upgrade --install apisix charts/oan-apisix-gateway -n apisix \
   --set 'apisix.externalEtcd.host={http://<m1>:2379,http://<m2>:2379,http://<m3>:2379}' \
   --wait --timeout 10m
-
-helm repo add bitnami https://charts.bitnami.com/bitnami && helm repo update bitnami
-helm upgrade --install apisix-redis bitnami/redis --version 19.6.4 -n apisix \
-  -f environments/dev/values/redis-gateway.yaml --wait
 ```
+
+The same release installs the Redis for rate-limit counters (the `redis` key of the
+chart's `values.yaml`); its Service is `apisix-redis-master`.
 
 The release name must be `apisix`: the Ingress Controller values point at the Service
 `apisix-admin` that this name produces.
@@ -208,7 +207,7 @@ DNS or the certificate. The `Host` header must be the public host.
 
 ```sh
 kubectl -n apisix port-forward svc/apisix-gateway 9080:80 &
-H='Host: grievance-backend-dev.oanstaging.com'
+H='Host: grievance-backend.development.oanstaging.com'
 
 # 1. Health: 200, with an X-Request-Id header.
 curl -si -H "$H" http://localhost:9080/v1/grievances/health | head -20
@@ -240,7 +239,7 @@ If any test fails, stop here and fix it before using the public host.
 
 Dev is built fresh, so there is no traffic to move: once APISIX holds ports 80 and 443,
 the grievance host is served by it. Run the checks from section 5 against
-`https://grievance-backend-dev.oanstaging.com`, using `/v1/grievances/health` for health,
+`https://grievance-backend.development.oanstaging.com`, using `/v1/grievances/health` for health,
 not `/api/method/ping` (see Known open items). Watch for a few minutes:
 `kubectl -n apisix logs deploy/apisix -f`, and the `apisix_http_status` metrics (look
 for 5xx and 429).
@@ -381,8 +380,8 @@ Rate limits count per app (`X-OAN-App`, set from the token) in the Redis at `red
   of the node ports (`gatewayAccess.type: LoadBalancer`) and list its address once.
 - **socket.io `Origin`.** The socket routes set `Origin: http://<siteName>:8000`. The socket.io
   server calls Frappe back at that address, and Frappe also requires `Origin` and `Host` to
-  name the same host. `develop.grievance.test` probably does not resolve inside the cluster,
-  so socket authentication may fail. Test a socket connection in section 5. If it fails, the
+  name the same host. `grievance-backend.development.oanstaging.com` is the public name, and
+  may not resolve from the socket.io Pod, so socket authentication may fail. Test a socket connection in section 5. If it fails, the
   fix is to make the origin a chart value (`frappeWebOrigin`) and make that host resolvable
   from the socket.io Pod (for example `hostAliases` or a CoreDNS entry). Not done yet.
 - **`/api/...` paths.** Clients use `/v1/...`, which the gateway rewrites to `/api/v1/...`.
@@ -390,7 +389,7 @@ Rate limits count per app (`X-OAN-App`, set from the token) in the Redis at `red
   return 404 through the gateway. Use `/v1/grievances/health`, or keep a separate path to Frappe
   for ops checks.
 - **Frappe `Host` handling.** The gateway rewrites `Host` to the site name
-  (`develop.grievance.test`). Confirm Frappe answers for that site through the gateway
+  (`grievance-backend.development.oanstaging.com`). Confirm Frappe answers for that site through the gateway
   (section 5, check 1).
 - **Real client IP.** Rate limits are per client address, taken from the connection
   (no proxy in front, no `X-Real-IP` trusted). This holds only if the gateway node keeps

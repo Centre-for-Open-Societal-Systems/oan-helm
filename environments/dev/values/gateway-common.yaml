@@ -3,8 +3,8 @@
 #   -f environments/dev/values/gateway-common.yaml -f environments/dev/values/oan-<app>-gateway.yaml
 # Target: the gateway cluster, namespace `apisix`. See docs/apisix-gateway.md.
 
-# Limit-count counters, in the gateway cluster (redis-gateway.yaml). Service
-# apisix-redis-master.apisix.svc.cluster.local of the release `apisix-redis`; no password.
+# Limit-count counters, in the gateway cluster (the `redis` dependency of oan-apisix-gateway). Service
+# apisix-redis-master.apisix.svc.cluster.local of the release `apisix`; no password.
 redis:
   host: apisix-redis-master.apisix.svc.cluster.local
   port: 6379

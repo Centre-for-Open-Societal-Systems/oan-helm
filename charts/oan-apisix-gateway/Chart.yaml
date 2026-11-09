@@ -20,6 +20,9 @@ maintainers:
 dependencies:
 - name: apisix
   version: 2.18.2
+# Counters of the limit-count plugin; the Service is apisix-redis-master.
+- name: redis
+  version: 17.15.2
 annotations:
   oan.org/owner: OpenAgriNet (OAN)
   oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-apisix-gateway
