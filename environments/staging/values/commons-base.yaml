@@ -1,5 +1,8 @@
 # Staging overlay for the openg2p-commons-base release `commons`. Staging keeps its saved values, so apply it with
 # --reuse-values. Only what must match New Dev is here.
+global:
+  # Kafka UI signs in through the staff realm, so it needs a public host with a certificate (nginx on the box).
+  kafkaUiHostname: kafka.oanstaging.com
 postgresql:
   primary:
     resources:
