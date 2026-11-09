@@ -61,7 +61,7 @@ ingress:
   # Public hostname on this release's own Istio Gateway.
   public:
     enabled: false
-    host: ""             # e.g. oan-dashboard-development.oanstaging.com
+    host: ""             # e.g. oan-dashboard.development.oanstaging.com
     gatewayName: public-oanstaging
   # Private hostname on an existing gateway in this namespace (e.g. "internal"
   # for *.<namespace>.openg2p.test), if one exists.
