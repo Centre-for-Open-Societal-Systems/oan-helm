@@ -29,6 +29,14 @@ frappe:
   postgresql-sts:
     enabled: false
 
+  # Same Redis image as the OpenG2P commons and registry charts (docker.io/openg2p/redis).
+  redis-cache:
+    image: &redisImage
+      repository: openg2p/redis
+      tag: 7.2.5-debian-12-r4
+  redis-queue:
+    image: *redisImage
+
   siteConfig:
     enabled: true
     values:
