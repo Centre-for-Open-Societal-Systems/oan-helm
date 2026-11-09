@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-09
 
+### openg2p-da-registry 0.0.0-develop.86 (develop)
+
+- Right-align and group every number widget in the DA register (#49) (Centre-for-Open-Societal-Systems/da-registry@ea2fa29f43af)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-09
+
 ### openg2p-farmer-registry 0.0.0-develop.828 (develop)
 
 - Roll an active connector's images automatically with a smoke check and rollback (#245) (Centre-for-Open-Societal-Systems/farmer-registry@b7b0f527f04c)
