@@ -16,7 +16,7 @@ because a majority is needed. Lines are coloured by what they carry:
 |---|---|
 | Blue, numbered 1 to 4 | The request path: client, DNS, APISIX, node port, Service, Pod |
 | Purple | Gateway configuration: the `Apisix*` resources, the controller, the Admin API, etcd |
-| Grey | Data: database, Valkey, the job queue, NFS |
+| Grey | Data: database, Redis, the job queue, NFS |
 | Yellow, dotted | Logs and errors |
 | Red, dotted | Management: Rancher and operators |
 
@@ -37,7 +37,7 @@ flowchart LR
     apA["APISIX Pod A<br/>gateway node 1<br/>hostPort 80/443"]
     apB["APISIX Pod B<br/>gateway node 2<br/>hostPort 80/443"]
     pick(("routes by Host,<br/>picks a node"))
-    valkey[("Valkey<br/>rate-limit counters")]
+    redis[("Redis<br/>rate-limit counters")]
     cfg>"config objects: ApisixRoute,<br/>ApisixUpstream, ApisixTls"]
     ic["apisix-ingress-controller"]
     agGW["agents: OTel, Rancher"]
@@ -60,8 +60,8 @@ flowchart LR
       pgB["gunicorn Pod B<br/>workers 1..n"]
     end
     sioG["socket.io Pod"]
-    vcG[("Valkey cache Pod")]
-    vqG[("Valkey queue Pod")]
+    vcG[("Redis cache Pod")]
+    vqG[("Redis queue Pod")]
     schedG["scheduler Pod"]
     wkG["Frappe workers<br/>default, short, long"]
     wcG["OAN workers<br/>routing, sla, scan, notifications"]
@@ -80,8 +80,8 @@ flowchart LR
     subgraph a2["node 2"]
       paB["gunicorn Pod B<br/>workers 1..n"]
     end
-    vcA[("Valkey cache Pod")]
-    vqA[("Valkey queue Pod")]
+    vcA[("Redis cache Pod")]
+    vqA[("Redis queue Pod")]
     wkA["scheduler, socket.io,<br/>Frappe workers"]
     pvcA[/"PVC sites<br/>nfs-csi, ReadWriteMany"/]
     csiA["csi-driver-nfs"]
@@ -117,7 +117,7 @@ flowchart LR
   e1 <-->|"vote"| e2
   e2 <--> e3
   e3 <--> e1
-  apA -.->|"count"| valkey
+  apA -.->|"count"| redis
   pgA --> db
   pgB --> db
   pgA --> vcG
@@ -190,7 +190,7 @@ and fails on its own. Rendered with `helm template` from the dev values.
 | `worker-d`, `worker-s`, `worker-l` | Frappe background workers (default, short, long queues) | both |
 | `worker-routing`, `worker-sla`, `worker-scan`, `worker-notifications` | OAN queue workers | grievance only |
 | `clamav` | virus scanner for uploads | grievance only |
-| `valkey-cache`, `valkey-queue` | Frappe cache and job queue (Deployments, not StatefulSets) | both |
+| `redis-cache-master`, `redis-queue-master` | Frappe cache and job queue (StatefulSets) | both |
 | `mariadb-sts` | database; off, the server is external (`frappe.dbHost`) | both |
 | `nginx` | present with 0 replicas; APISIX replaces it | both |
 | jobs | `conf-bench`, `new-site`, `site-config` run on install and upgrade | both |
@@ -207,7 +207,7 @@ flowchart LR
 
   subgraph GW["Gateway cluster, 1 node"]
     apisix["APISIX<br/>hostPort 80/443<br/>routes by Host"]
-    valkey[("Valkey<br/>rate limits")]
+    redis[("Redis<br/>rate limits")]
     etcd[("etcd<br/>routes")]
   end
 
@@ -216,7 +216,7 @@ flowchart LR
     gun_g["gunicorn Pod<br/>workers 1..n"]
     sio_g["socket.io"]
     work_g["workers, scheduler,<br/>OAN workers, ClamAV"]
-    vk_g[("Valkey<br/>cache + queue")]
+    vk_g[("Redis<br/>cache + queue")]
     pvc_g[/"PVC sites<br/>StorageClass nfs-csi"/]
     csi_g["csi-driver-nfs<br/>kube-system<br/>controller + node plugin"]
   end
@@ -225,7 +225,7 @@ flowchart LR
     np_a["node port<br/>30810"]
     gun_a["gunicorn Pod<br/>workers 1..n"]
     work_a["workers, scheduler,<br/>socket.io"]
-    vk_a[("Valkey<br/>cache + queue")]
+    vk_a[("Redis<br/>cache + queue")]
     pvc_a[/"PVC sites<br/>StorageClass nfs-csi"/]
     csi_a["csi-driver-nfs<br/>kube-system<br/>controller + node plugin"]
   end
@@ -234,7 +234,7 @@ flowchart LR
   nfs[("NFS server<br/>sites volumes (nfs-csi)")]
 
   client -->|"1"| apisix
-  apisix -.-> valkey
+  apisix -.-> redis
   apisix -.-> etcd
   apisix -->|"2 Host = grievance"| np_g
   apisix -->|"2 Host = A2C"| np_a
@@ -312,10 +312,10 @@ and have not tested it here.
 
 ## Walk through one request
 
-1. The client resolves `grievance-backend-dev.oanstaging.com` and reaches one gateway
+1. The client resolves `grievance-backend.development.oanstaging.com` and reaches one gateway
    node through DNS or the load balancer.
 2. APISIX on that node terminates TLS and matches the route by `Host` and path. It checks
-   the rate limit in Valkey (the same counters for every APISIX Pod), then CORS, API
+   the rate limit in Redis (the same counters for every APISIX Pod), then CORS, API
    keys and IP rules.
 3. APISIX picks a healthy node from the upstream's `externalNodes` and sends plain HTTP
    to that node's port 30800. It rewrites `Host` to the Frappe site name.
@@ -392,7 +392,7 @@ Rancher is a management console. It is not in the request path.
 
 | Part | Status |
 |---|---|
-| Gateway cluster with APISIX and Valkey, one node | built and tested on OrbStack |
+| Gateway cluster with APISIX and Redis, one node | built and tested on OrbStack |
 | Grievance and A2C app clusters, one node, one Pod each | built and tested on OrbStack |
 | Several gateway nodes, several app nodes | the gateway chart takes `externalHosts` (a list) and `healthCheck` per app, generated by `oan_auth_service/gateway_apisix.py`. Rendered, and accepted by a server-side dry run against the controller's CRD; not tried with real traffic. APISIX still needs one replica per node (`hostPort`) and a load balancer in front. |
 | External MariaDB and NFS | the base app values use them ([external-db-and-nfs.md](external-db-and-nfs.md)); rendered with `helm template`, not installed against a real server. NFS on k3d is untested. |
@@ -401,5 +401,5 @@ Rancher is a management console. It is not in the request path.
 | OpenTelemetry, Loki, Grafana | not installed. Memory is the limit on a laptop. Placement is open: in the management cluster, or a cluster of its own. |
 | Sentry | not installed. The Secret hook exists in both charts. |
 | Rancher | tested locally on its own k3d cluster with the OrbStack cluster imported. Dev's Rancher version and install method are unconfirmed. |
-| etcd | `apisix.yaml` sets `etcd.enabled: false` and `externalEtcd`; the three member URLs are passed at install. Rendered with `helm template`; no etcd cluster has been run against it. |
-| Valkey | single instance. If it is down, the rate-limit plugin follows its `allow_degradation` setting. |
+| etcd | the chart's `values.yaml` sets `etcd.enabled: false` and `externalEtcd`; the three member URLs are passed at install. Rendered with `helm template`; no etcd cluster has been run against it. |
+| Redis | single instance. If it is down, the rate-limit plugin follows its `allow_degradation` setting. |

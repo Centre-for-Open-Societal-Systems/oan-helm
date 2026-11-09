@@ -25,7 +25,7 @@
 #   5. APISIX (docs/apisix-gateway.md, section 8b): partner host DNS + TLS Secret
 #      oan-partner-gateway-tls, the partner routes
 #        helm upgrade --install oan-partner-gateway <sandbox-platform>/deploy/apisix-partner-gateway/k8s \
-#          -n apisix -f environments/dev/values/oan-partner-gateway.yaml
+#          -n apisix -f environments/dev/values/gateway-common.yaml -f environments/dev/values/oan-partner-gateway.yaml
 #      and a way for this cluster to reach the Admin API (config.gateway.sync.adminUrl).
 #   6. Set the image digests below, enabled: true on api, web and virtualService,
 #      and install with environments/dev/values/sandbox.yaml.

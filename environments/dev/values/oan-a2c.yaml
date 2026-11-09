@@ -22,7 +22,7 @@ frappe:
 
   siteConfig:
     values:
-      host_name: https://a2c-backend-dev.oanstaging.com
+      host_name: https://a2c-backend.development.oanstaging.com
     # Demo data. Build and push from oan-service-helm: seed/Dockerfile with SERVICE=a2c.
     seed:
       enabled: true
@@ -45,4 +45,4 @@ frappe:
       # that write into sites/ while the jobs run, and its failure fails the job.
       fixVolume: false
     createSite:
-      siteName: develop.a2c.test
+      siteName: a2c-backend.development.oanstaging.com

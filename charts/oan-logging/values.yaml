@@ -1,0 +1,210 @@
+# Defaults for the OAN log pipeline. Four upstream charts, vendored in charts/:
+#   otel-agent   one Pod per node reads container stdout, redacts personal data, and
+#                sends the logs to the gateway
+#   otel-gateway receives OTLP from the agents, batches, and writes to Loki
+#   loki         single-binary log store, chunks in an S3-compatible bucket (MinIO)
+#   grafana      Loki is the only data source
+# Install as release `oan-logging` in namespace `observability`. Each fullnameOverride
+# keeps the Service names below stable. See docs/logging.md.
+#
+# Set at install, not here:
+# - loki.minio.rootPassword, loki.minio.users[0].secretKey: object store credentials
+#   (use --set-string; the chart takes no existing Secret for them)
+# - Secret `grafana-admin` (keys admin-user, admin-password) in the namespace
+# Another cluster (an app cluster) installs only the agent:
+#   --set loki.enabled=false --set otel-gateway.enabled=false --set grafana.enabled=false \
+#   --set 'otel-agent.alternateConfig.exporters.otlp_grpc.endpoint=<gateway address>:4317'
+
+loki:
+  enabled: true
+  fullnameOverride: loki
+  # For an object store outside this release, set minio.enabled=false and
+  # loki.storage.s3.* (endpoint, accessKeyId, secretAccessKey) instead.
+  deploymentMode: SingleBinary
+  loki:
+    auth_enabled: false
+    commonConfig:
+      replication_factor: 1
+    storage:
+      type: s3
+      bucketNames:
+        chunks: chunks
+        ruler: ruler
+        admin: admin
+    schemaConfig:
+      configs:
+        - from: "2024-04-01"
+          store: tsdb
+          object_store: s3
+          schema: v13
+          index:
+            prefix: loki_index_
+            period: 24h
+    limits_config:
+      retention_period: 336h
+    compactor:
+      retention_enabled: true
+      delete_request_store: s3
+  singleBinary:
+    replicas: 1
+    persistence:
+      size: 5Gi
+  minio:
+    enabled: true
+    replicas: 1
+    rootUser: root-user
+    rootPassword: ""
+    users:
+      - accessKey: logs-user
+        secretKey: ""
+        policy: readwrite
+    persistence:
+      size: 10Gi
+  backend:
+    replicas: 0
+  read:
+    replicas: 0
+  write:
+    replicas: 0
+  chunksCache:
+    enabled: false
+  resultsCache:
+    enabled: false
+  lokiCanary:
+    enabled: false
+  test:
+    enabled: false
+
+otel-gateway:
+  enabled: true
+  fullnameOverride: otel-gateway
+  mode: deployment
+  replicaCount: 1
+  image:
+    repository: otel/opentelemetry-collector-k8s
+  # `alternateConfig` replaces the chart's default config. As a subchart, `config` could not
+  # drop the default jaeger, zipkin, prometheus receivers and metrics, traces pipelines
+  # (a null in this file is ignored).
+  alternateConfig:
+    extensions:
+      health_check:
+        endpoint: ${env:MY_POD_IP}:13133
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+    processors:
+      batch: {}
+      memory_limiter:
+        check_interval: 5s
+        limit_percentage: 80
+        spike_limit_percentage: 25
+    exporters:
+      otlphttp/loki:
+        endpoint: http://loki.observability.svc:3100/otlp
+    service:
+      extensions: [health_check]
+      pipelines:
+        logs:
+          receivers: [otlp]
+          processors: [memory_limiter, batch]
+          exporters: [otlphttp/loki]
+  ports:
+    otlp: {enabled: true}
+    otlp-http: {enabled: false}
+    jaeger-compact: {enabled: false}
+    jaeger-thrift: {enabled: false}
+    jaeger-grpc: {enabled: false}
+    zipkin: {enabled: false}
+    metrics: {enabled: false}
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+
+# One agent per cluster. The redaction rules are ours and untested: check them on
+# realistic log lines.
+otel-agent:
+  enabled: true
+  fullnameOverride: otel-agent
+  mode: daemonset
+  image:
+    repository: otel/opentelemetry-collector-k8s
+  presets:
+    logsCollection:
+      enabled: true
+      includeCollectorLogs: false
+    kubernetesAttributes:
+      enabled: true
+  # `alternateConfig` replaces the chart's default config, for the reason given at
+  # otel-gateway. The presets above still add the file_log receiver and k8s_attributes.
+  alternateConfig:
+    extensions:
+      health_check:
+        endpoint: ${env:MY_POD_IP}:13133
+    processors:
+      batch: {}
+      memory_limiter:
+        check_interval: 5s
+        limit_percentage: 80
+        spike_limit_percentage: 25
+      transform/redact:
+        error_mode: ignore
+        log_statements:
+          - context: log
+            statements:
+              - replace_pattern(body, "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}", "[email]")
+              - replace_pattern(body, "\\+?[0-9][0-9 -]{8,14}[0-9]", "[phone]")
+              - 'replace_pattern(body, "(?i)(authorization|bearer|token|password|secret)([\"''=: ]+)[A-Za-z0-9._~+/=-]{8,}", "$1$2[redacted]")'
+    exporters:
+      otlp_grpc:
+        endpoint: otel-gateway.observability.svc:4317
+        tls:
+          insecure: true
+    service:
+      extensions: [health_check]
+      pipelines:
+        logs:
+          receivers: [file_log]
+          processors: [memory_limiter, k8s_attributes, transform/redact, batch]
+          exporters: [otlp_grpc]
+  ports:
+    jaeger-compact: {enabled: false}
+    jaeger-thrift: {enabled: false}
+    jaeger-grpc: {enabled: false}
+    zipkin: {enabled: false}
+    metrics: {enabled: false}
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+
+grafana:
+  enabled: true
+  fullnameOverride: grafana
+  admin:
+    existingSecret: grafana-admin
+    userKey: admin-user
+    passwordKey: admin-password
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          url: http://loki.observability.svc:3100
+          isDefault: true
+  persistence:
+    enabled: false
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 256Mi

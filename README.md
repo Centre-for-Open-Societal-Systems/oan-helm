@@ -40,6 +40,8 @@ Rancher sees is a reviewed pull request.
 | `oan-grievance-service` | [charts/oan-grievance-service](charts/oan-grievance-service) | Grievance service (Frappe) | `grievance` / `develop`, see [the guide](docs/grievance-service.md) |
 | `oan-clamav` | [charts/oan-clamav](charts/oan-clamav) | ClamAV for grievance attachments | `grievance-clamav` / `develop`, see [the guide](docs/grievance-service.md) |
 | `oan-a2c` | [charts/oan-a2c](charts/oan-a2c) | Access to Credit (Frappe) | `a2c` / `a2c-develop`, see [the guide](docs/a2c.md) |
+| `oan-apisix-gateway` | [charts/oan-apisix-gateway](charts/oan-apisix-gateway) | APISIX gateway, Ingress Controller and Redis | `apisix`, see [the guide](docs/apisix-gateway.md) |
+| `oan-logging` | [charts/oan-logging](charts/oan-logging) | Node log agent, OTel gateway, Loki and Grafana | `oan-logging` / `observability`, see [the guide](docs/logging.md) |
 | `farmer-registry-dashboard`, `cropsown-registry-dashboard`, `livestock-registry-dashboard` | [addons/registry-dashboards](addons/registry-dashboards) | Per-registry dashboard UI and API | per registry |
 
 Farmer, Crop Sown and Livestock were **refactor candidates** whose charts failed

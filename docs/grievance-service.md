@@ -14,11 +14,11 @@ One central APISIX gateway serves every OAN app. It runs in its own cluster, and
 app runs in a cluster of its own (grievance today, A2C later):
 
 ```
-client -> DNS (dev) or /etc/hosts (local): grievance-backend-dev.oanstaging.com -> gateway node
+client -> DNS (dev) or /etc/hosts (local): grievance-backend.development.oanstaging.com -> gateway node
        -> gateway cluster: APISIX, ports 80/443 (hostPort)   TLS, routes, CORS, rate limits
-            picks the app by Host; rate-limit counters in Valkey next to it
+            picks the app by Host; rate-limit counters in Redis next to it
        -> grievance cluster: node ports 30800 (gunicorn) and 30900 (socket.io), private network
-       -> Frappe Pods, MariaDB, Valkey, ClamAV
+       -> Frappe Pods, MariaDB, Redis, ClamAV
 ```
 
 There is no nginx anywhere on this path. APISIX terminates TLS and proxies straight to
@@ -31,8 +31,8 @@ node ports must accept only the gateway cluster's addresses.
 | Cluster | Release | Chart | Namespace | Values |
 | --- | --- | --- | --- | --- |
 | grievance, A2C | `csi-driver-nfs` | `csi-driver-nfs/csi-driver-nfs` 4.13.6 | `kube-system` | [nfs-csi.yaml](../environments/dev/values/nfs-csi.yaml) |
-| gateway | `apisix` | `apisix/apisix` 2.18.2 | `apisix` | [apisix.yaml](../environments/dev/values/apisix.yaml) |
-| gateway | `apisix-valkey` | `valkey/valkey` 0.11.0 | `apisix` | [valkey-gateway.yaml](../environments/dev/values/valkey-gateway.yaml) |
+| gateway | `apisix` | `oan-apisix-gateway` 0.1.0-dev.1 (apisix 2.18.2) | `apisix` | [values.yaml](../charts/oan-apisix-gateway/values.yaml) |
+| gateway | `apisix` (Redis included) | `bitnami/redis` 17.15.2, a dependency of `oan-apisix-gateway` | `apisix` | [values.yaml](../charts/oan-apisix-gateway/values.yaml) |
 | grievance | `grievance` | [charts/oan-grievance-service](../charts/oan-grievance-service) | `develop` | [oan-grievance-service.yaml](../environments/dev/values/oan-grievance-service.yaml) |
 | gateway | `oan-grievance-gateway` | `apisix/k8s` in the oan_grievance_service repository | `grievance` | [oan-grievance-gateway.yaml](../environments/dev/values/oan-grievance-gateway.yaml) |
 
@@ -58,7 +58,7 @@ PersistentVolumes and the directories on the NFS server yourself to remove it.
 
 The chart depends on the upstream `frappe/helm` chart `erpnext` 8.0.89, aliased
 `frappe`. Upstream provides gunicorn, socket.io, the scheduler, the default, short and
-long workers, Valkey cache and queue, and the create-site job.
+long workers, Redis cache and queue, and the create-site job.
 Its values sit under the `frappe:` key. The chart adds what upstream cannot do:
 
 - **Grievance queue workers.** Upstream workers listen only on `default`, `short` and
@@ -111,7 +111,7 @@ the gateway node to keep the source address of hostPort traffic. On OrbStack it 
 not: every request shows the Pod gateway address, so all local clients share one
 rate-limit bucket. Confirm on dev in section 2, step 10.
 
-The counters live in the gateway cluster's own Valkey (`apisix-valkey`), so a limit
+The counters live in the gateway cluster's own Redis (`apisix-redis`), so a limit
 check never crosses clusters. Frappe sees the gateway node as the client; APISIX passes
 the client in `X-Forwarded-For`.
 
@@ -145,7 +145,7 @@ dev value in the team's secret manager.
 | `oan-grievance-ivr-frappe-credential` | gateway | `apisix` | `authorization` | `token <api_key>:<api_secret>` of the Grievance IVR Integration user. The IVR webhook route puts it in `Authorization` |
 
 Frappe also generates an `encryption_key` when it creates the site. It is stored in
-`sites/develop.grievance.test/site_config.json` on the sites volume. Back it up with the
+`sites/grievance-backend.development.oanstaging.com/site_config.json` on the sites volume. Back it up with the
 database: without it, encrypted fields cannot be read.
 
 ## 2. Dev
@@ -205,15 +205,10 @@ hop between them crosses the internet in plain HTTP: add a VPN or TLS before goi
      --from-literal=admin="$(openssl rand -hex 16)" --from-literal=viewer="$(openssl rand -hex 16)"
    ```
 
-5. **Install APISIX and its Valkey.**
+5. **Install APISIX and its Redis.**
 
    ```sh
-   helm repo add apisix https://apache.github.io/apisix-helm-chart && helm repo update apisix
-   helm repo add valkey https://valkey.io/valkey-helm/ && helm repo update valkey
-   helm upgrade --install apisix apisix/apisix --version 2.18.2 -n apisix \
-     -f environments/dev/values/apisix.yaml --wait --timeout 10m
-   helm upgrade --install apisix-valkey valkey/valkey --version 0.11.0 -n apisix \
-     -f environments/dev/values/valkey-gateway.yaml --wait
+   helm upgrade --install apisix charts/oan-apisix-gateway -n apisix --wait --timeout 10m
    curl -s -o /dev/null -w '%{http_code}\n' http://<gateway node public IP>/   # 404 from APISIX: no routes yet
    ```
 
@@ -262,7 +257,7 @@ hop between them crosses the internet in plain HTTP: add a VPN or TLS before goi
    and CORS. Check from the gateway node:
 
    ```sh
-   curl -s -H 'Host: develop.grievance.test' http://<grievance private IP>:30800/api/v1/grievances/health
+   curl -s -H 'Host: grievance-backend.development.oanstaging.com' http://<grievance private IP>:30800/api/v1/grievances/health
    ```
 
 **Gateway cluster**
@@ -274,7 +269,7 @@ hop between them crosses the internet in plain HTTP: add a VPN or TLS before goi
    kubectl create namespace grievance
    ```
 
-   Get a certificate for `grievance-backend-dev.oanstaging.com` into Secret
+   Get a certificate for `grievance-backend.development.oanstaging.com` into Secret
    `oan-grievance-tls` in `grievance`. With cert-manager (check:
    `kubectl get crd certificates.cert-manager.io`), an HTTP-01 `Certificate` whose solver
    uses ingress class `apisix` works, because APISIX answers on port 80. Without
@@ -284,23 +279,23 @@ hop between them crosses the internet in plain HTTP: add a VPN or TLS before goi
 
    ```sh
    helm upgrade --install oan-grievance-gateway <oan_grievance_service>/apisix/k8s -n grievance \
-     -f environments/dev/values/oan-grievance-gateway.yaml \
+     -f environments/dev/values/gateway-common.yaml -f environments/dev/values/oan-grievance-gateway.yaml \
      --set "web.externalHosts={<grievance private IP>}" \
      --set "socket.externalHosts={<grievance private IP>}" --wait
    kubectl -n grievance get apisixtls,apisixroute,apisixupstream
    ```
 
-   Point DNS for `grievance-backend-dev.oanstaging.com` at the gateway node's public IP.
+   Point DNS for `grievance-backend.development.oanstaging.com` at the gateway node's public IP.
 
 10. **Check.**
 
     ```sh
-    H=https://grievance-backend-dev.oanstaging.com
+    H=https://grievance-backend.development.oanstaging.com
     curl -si $H/v1/grievances/health | head -12        # 200, X-Request-Id header
     curl -si $H/v1/does-not-exist | head -3            # 404 from APISIX
     curl -s $H/v1/auth/keys | head -c 200              # kid v1: the JWT key loaded
     kubectl -n apisix logs deploy/apisix -c apisix --tail=3   # first field: your public IP, not 10.42.x
-    kubectl -n apisix exec deploy/apisix-valkey -- valkey-cli --scan | head -3   # plugin-limit-count:... keys
+    kubectl -n apisix exec statefulset/apisix-redis-master -- redis-cli --scan | head -3   # plugin-limit-count:... keys
     ```
 
     If the access log shows a `10.42.x` address, the node rewrites the source address
@@ -358,10 +353,10 @@ It needs about 8 GB of memory for the cluster, of which ClamAV takes 1.5 GB.
    the node IP from step 1, and remove it when you need the real dev host again:
 
    ```
-   192.168.139.2 grievance-backend-dev.oanstaging.com
+   192.168.139.2 grievance-backend.development.oanstaging.com
    ```
 
-   Check with `dscacheutil -q host -a name grievance-backend-dev.oanstaging.com` (macOS).
+   Check with `dscacheutil -q host -a name grievance-backend.development.oanstaging.com` (macOS).
    If it shows a public address, requests go to the real dev host instead.
 
 4. **Do dev steps 3 to 8 in the one cluster**, without the context switches, with tag
@@ -373,7 +368,7 @@ It needs about 8 GB of memory for the cluster, of which ClamAV takes 1.5 GB.
    machine.
 
    ```sh
-   H=grievance-backend-dev.oanstaging.com
+   H=grievance-backend.development.oanstaging.com
    kubectl create namespace grievance
    openssl req -x509 -newkey rsa:2048 -nodes -days 365 -subj "/CN=OAN local dev CA" -keyout ca.key -out ca.crt
    openssl req -newkey rsa:2048 -nodes -subj "/CN=$H" -keyout tls.key -out tls.csr
@@ -390,19 +385,19 @@ It needs about 8 GB of memory for the cluster, of which ClamAV takes 1.5 GB.
 
    ```sh
    helm upgrade --install oan-grievance-gateway <oan_grievance_service>/apisix/k8s -n grievance \
-     -f environments/dev/values/oan-grievance-gateway.yaml \
+     -f environments/dev/values/gateway-common.yaml -f environments/dev/values/oan-grievance-gateway.yaml \
      --set "web.externalHosts={192.168.139.2}" --set "socket.externalHosts={192.168.139.2}" --wait
    ```
 
 7. **Check**, as in dev step 10:
 
    ```sh
-   curl -s --cacert ca.crt https://grievance-backend-dev.oanstaging.com/v1/grievances/health
+   curl -s --cacert ca.crt https://grievance-backend.development.oanstaging.com/v1/grievances/health
    PW=$(kubectl -n develop get secret oan-grievance-admin -o jsonpath='{.data.password}' | base64 -d)
    curl -s --cacert ca.crt -H 'Content-Type: application/json' \
      -d "{\"usr\":\"Administrator\",\"pwd\":\"$PW\"}" \
-     https://grievance-backend-dev.oanstaging.com/v1/auth/login | head -c 120
-   kubectl -n apisix exec deploy/apisix-valkey -- valkey-cli --scan | head -3
+     https://grievance-backend.development.oanstaging.com/v1/auth/login | head -c 120
+   kubectl -n apisix exec statefulset/apisix-redis-master -- redis-cli --scan | head -3
    kubectl -n develop logs deploy/grievance-worker-scan --tail=5
    ```
 

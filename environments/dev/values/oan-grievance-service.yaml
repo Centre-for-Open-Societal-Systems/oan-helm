@@ -23,7 +23,7 @@ frappe:
 
   siteConfig:
     values:
-      host_name: https://grievance-backend-dev.oanstaging.com
+      host_name: https://grievance-backend.development.oanstaging.com
     # Demo data. Build and push from oan-service-helm: seed/Dockerfile with SERVICE=grievance.
     seed:
       enabled: true
@@ -49,4 +49,4 @@ frappe:
       # that write into sites/ while the jobs run, and its failure fails the job.
       fixVolume: false
     createSite:
-      siteName: develop.grievance.test
+      siteName: grievance-backend.development.oanstaging.com
