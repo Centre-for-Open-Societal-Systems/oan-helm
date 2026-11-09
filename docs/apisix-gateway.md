@@ -19,8 +19,8 @@ header. **Never install them into the OpenG2P cluster.**
 
 | Part                              | Source                                                                                                                                                                                                                                   | Values                                                                                         |
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| APISIX and the Ingress Controller | Upstream chart `apisix/apisix` 2.18.2 (bundles `apisix-ingress-controller`) from `https://apache.github.io/apisix-helm-chart`. It is not vendored, repackaged or added to `releases/`                                                    | [dev/values/apisix.yaml](../environments/dev/values/apisix.yaml)                               |
-| Rate-limit counters               | Upstream chart `valkey/valkey` 0.11.0 from `https://valkey.io/valkey-helm/`, release `apisix-valkey` next to APISIX                                                                                                                     | [dev/values/valkey-gateway.yaml](../environments/dev/values/valkey-gateway.yaml)               |
+| APISIX and the Ingress Controller | Chart `oan-apisix-gateway`, which vendors upstream `apisix/apisix` 2.18.2 (bundles `apisix-ingress-controller`) and releases like the other charts                                                    | [charts/oan-apisix-gateway/values.yaml](../charts/oan-apisix-gateway/values.yaml)                               |
+| Rate-limit counters               | Upstream chart `bitnami/redis` 19.6.4 from `https://charts.bitnami.com/bitnami`, release `apisix-redis` next to APISIX                                                                                                                     | [dev/values/redis-gateway.yaml](../environments/dev/values/redis-gateway.yaml)               |
 | Grievance routes                  | Chart `oan-grievance-gateway` in [oan_grievance_service/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/tree/develop/apisix/k8s), generated from the service's OpenAPI spec. It is not copied here | [dev/values/oan-grievance-gateway.yaml](../environments/dev/values/oan-grievance-gateway.yaml) |
 | A2C routes                        | Chart `oan-a2c-gateway` in [oan_a2c/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/tree/develop/apisix/k8s), generated from the A2C OpenAPI spec                                                                | [dev/values/oan-a2c-gateway.yaml](../environments/dev/values/oan-a2c-gateway.yaml)             |
 | Partner APIs (OAN sandbox apps)   | Chart `oan-partner-gateway` in [sandbox-platform deploy/apisix-partner-gateway/k8s](https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform/tree/develop/deploy/apisix-partner-gateway), generated from the routes the sandbox is tested against | [dev/values/oan-partner-gateway.yaml](../environments/dev/values/oan-partner-gateway.yaml) |
@@ -30,7 +30,7 @@ the routes come from the app's OpenAPI spec and must change in the same PR as th
 The grievance service will get its own chart repository and releases later; until then,
 install its chart from a checkout of the service repository at the deployed commit.
 
-All of these install into the gateway cluster: APISIX and Valkey in namespace `apisix`,
+All of these install into the gateway cluster: APISIX and Redis in namespace `apisix`,
 each app's routes in a namespace named after the app (`grievance`, `a2c`).
 
 oan_auth_service is a library installed into each app's bench, not a service of its own,
@@ -73,7 +73,7 @@ steps.
 ### Gateway-wide plugins
 
 `request-id` (`X-Request-Id`, echoed in the response) and `prometheus` are global rules,
-set as `gatewayProxy.plugins` in `apisix.yaml`, so they apply to every app's routes. Metrics
+set as `gatewayProxy.plugins` in the chart's `values.yaml`, so they apply to every app's routes. Metrics
 are served on port 9091 at `/apisix/prometheus/metrics`; enable
 `metrics.serviceMonitor` once a Prometheus Operator scrapes the cluster. Per-app plugins
 (CORS, body size, rate limits, authentication) stay in each app's chart.
@@ -96,7 +96,7 @@ Collect these facts first. They are the values the install needs.
 | Private address of each app node, reachable from the gateway cluster | the cloud console | `--set "web.externalHosts={...}"` (section 5) |
 | Browser origins of the grievance UI | ask the UI team | `corsOriginRegexes`, `realtimeAllowedOrigins` |
 
-The upstream names, node ports and the Valkey for rate-limit counters are already in
+The upstream names, node ports and the Redis for rate-limit counters are already in
 `oan-grievance-gateway.yaml`. The node ports belong to `gatewayAccess` of the
 `grievance` release of `charts/oan-grievance-service`.
 
@@ -131,7 +131,7 @@ kubectl -n apisix create secret generic apisix-etcd-credentials \
 Then edit the values, in a branch of this repo, and get the change reviewed:
 
 - `environments/dev/values/oan-grievance-gateway.yaml`: the origin lists. `siteName`,
-  `hosts`, the upstream names and ports, `redis.host` and `tls.secretName` are already
+  `hosts`, the upstream names and ports, and `tls.secretName` are already
   set. A missing required value stops `helm install` with "`<name>` is required".
 - The certificate: Secret `oan-grievance-tls` in `grievance` (see
   [grievance-service.md](grievance-service.md), section 2, step 9).
@@ -139,34 +139,30 @@ Then edit the values, in a branch of this repo, and get the change reviewed:
 ## 4. Install the gateway
 
 ```sh
-helm repo add apisix https://apache.github.io/apisix-helm-chart && helm repo update
-
 # Read the plan first.
-helm template apisix apisix/apisix --version 2.18.2 -n apisix \
-  -f environments/dev/values/apisix.yaml \
-  --set 'externalEtcd.host={http://<m1>:2379,http://<m2>:2379,http://<m3>:2379}' | less
+helm template apisix charts/oan-apisix-gateway -n apisix \
+  --set 'apisix.externalEtcd.host={http://<m1>:2379,http://<m2>:2379,http://<m3>:2379}' | less
 
-helm upgrade --install apisix apisix/apisix --version 2.18.2 -n apisix \
-  -f environments/dev/values/apisix.yaml \
-  --set 'externalEtcd.host={http://<m1>:2379,http://<m2>:2379,http://<m3>:2379}' \
+helm upgrade --install apisix charts/oan-apisix-gateway -n apisix \
+  --set 'apisix.externalEtcd.host={http://<m1>:2379,http://<m2>:2379,http://<m3>:2379}' \
   --wait --timeout 10m
 
-helm repo add valkey https://valkey.io/valkey-helm/ && helm repo update valkey
-helm upgrade --install apisix-valkey valkey/valkey --version 0.11.0 -n apisix \
-  -f environments/dev/values/valkey-gateway.yaml --wait
+helm repo add bitnami https://charts.bitnami.com/bitnami && helm repo update bitnami
+helm upgrade --install apisix-redis bitnami/redis --version 19.6.4 -n apisix \
+  -f environments/dev/values/redis-gateway.yaml --wait
 ```
 
 The release name must be `apisix`: the Ingress Controller values point at the Service
 `apisix-admin` that this name produces.
 
-`apisix.yaml` binds the node's ports 80 and 443 (hostPort). While another Pod holds
+the chart's `values.yaml` binds the node's ports 80 and 443 (hostPort). While another Pod holds
 them, the APISIX Pod stays `Pending`: turn off `rke2-ingress-nginx` first
 ([grievance-service.md](grievance-service.md), section 2, step 2).
 
 Check:
 
 ```sh
-kubectl -n apisix get pods                       # apisix, etcd, apisix-ingress-controller, apisix-valkey: Running
+kubectl -n apisix get pods                       # apisix, etcd, apisix-ingress-controller, apisix-redis: Running
 kubectl -n apisix get svc                        # apisix-gateway, apisix-admin, apisix-prometheus-metrics
 kubectl get ingressclass apisix
 kubectl -n apisix get gatewayproxy               # apisix-config
@@ -191,10 +187,10 @@ VALUES=environments/dev/values/oan-grievance-gateway.yaml
 APP_HOST=<grievance node private IP>
 SET="--set web.externalHosts={$APP_HOST} --set socket.externalHosts={$APP_HOST}"
 
-helm lint "$CHART" -f "$VALUES" $SET
-helm template oan-grievance-gateway "$CHART" -n grievance -f "$VALUES" $SET | less   # read it
+helm lint "$CHART" -f environments/dev/values/gateway-common.yaml -f "$VALUES" $SET
+helm template oan-grievance-gateway "$CHART" -n grievance -f environments/dev/values/gateway-common.yaml -f "$VALUES" $SET | less   # read it
 
-helm upgrade --install oan-grievance-gateway "$CHART" -n grievance -f "$VALUES" $SET --atomic --wait
+helm upgrade --install oan-grievance-gateway "$CHART" -n grievance -f environments/dev/values/gateway-common.yaml -f "$VALUES" $SET --atomic --wait
 ```
 
 Check that the controller synced the routes:
@@ -262,7 +258,7 @@ endpoint or tier changes. The order matters.
 5. On failure: `helm -n grievance rollback oan-grievance-gateway`.
 
 Changes to the values in this repo (hosts, Service names, origins) need only step 3 and
-the checks. Changes to `apisix.yaml` need `helm upgrade apisix ...` first.
+the checks. Changes to the chart's `values.yaml` need `helm upgrade apisix ...` first.
 
 ## 8. A2C
 
@@ -272,7 +268,7 @@ namespace `a2c`, from the `oan_a2c` checkout at the deployed commit:
 
 ```sh
 helm upgrade --install oan-a2c-gateway <oan_a2c>/apisix/k8s -n a2c --create-namespace \
-  -f environments/dev/values/oan-a2c-gateway.yaml \
+  -f environments/dev/values/gateway-common.yaml -f environments/dev/values/oan-a2c-gateway.yaml \
   --set "web.externalHosts={<A2C node private IP>}" --atomic --wait
 ```
 
@@ -287,14 +283,14 @@ A2C needs secrets that grievance does not, all provisioned outside Git:
   consumer, with key `key`: `a2c-openg2p-consent-webhook`, `a2c-oan-dashboards`.
 - `A2C_FRAPPE_SERVICE_AUTHORIZATION` (`token <api_key>:<api_secret>` of the Frappe service
   user) in the APISIX pods' environment, in the gateway cluster. Partner routes reference it as
-  `$env://A2C_FRAPPE_SERVICE_AUTHORIZATION`. `apisix.yaml` reads it from the optional Secret
+  `$env://A2C_FRAPPE_SERVICE_AUTHORIZATION`. the chart's `values.yaml` reads it from the optional Secret
   `a2c-frappe-service-credential` (key `authorization`) in namespace `apisix`.
 
 ### Consumers shared by several apps
 
 The telco IVR vendor calls A2C lead creation and the grievance IVR webhook with one key.
 Its consumer, `oan-ivr-vendor`, belongs to neither app chart: the APISIX release creates it
-(`extraDeploy` in `apisix.yaml`), so the controller names it `apisix_oan-ivr-vendor`. Both
+(`extraDeploy` in the chart's `values.yaml`), so the controller names it `apisix_oan-ivr-vendor`. Both
 app charts whitelist that name through `sharedConsumerNamespace: apisix` in their values.
 Each app's route still calls Frappe with its own credential, from the APISIX environment:
 `A2C_FRAPPE_SERVICE_AUTHORIZATION` and `OAN_GRIEVANCE_IVR_FRAPPE_AUTHORIZATION`.
@@ -345,12 +341,12 @@ Install, in order:
 2. **Routes.** From a sandbox-platform checkout at the deployed commit:
 
 ```bash
-helm upgrade --install oan-partner-gateway deploy/apisix-partner-gateway/k8s   -n apisix -f <oan-helm>/environments/dev/values/oan-partner-gateway.yaml
+helm upgrade --install oan-partner-gateway deploy/apisix-partner-gateway/k8s   -n apisix -f <oan-helm>/environments/dev/values/gateway-common.yaml -f <oan-helm>/environments/dev/values/oan-partner-gateway.yaml
 kubectl -n apisix get apisixroutes,apisixupstreams,apisixtls -l app=oan-partner-gateway
 ```
 
 3. **Admin API for the sandbox.** The sandbox runs in the OpenG2P dev cluster. The Admin
-   API in `apisix.yaml` is a ClusterIP Service (`apisix-admin:9180`) that admits
+   API in the chart's `values.yaml` is a ClusterIP Service (`apisix-admin:9180`) that admits
    `10.0.0.0/8`, so the sandbox cannot reach it from another cluster. **Confirm** one way
    in: an Admin API route on a host with `ip-restriction` to the sandbox cluster's egress
    IP (the live dev gateway has `apisix-admin.oanstaging.com` this way), or a private
@@ -368,7 +364,7 @@ curl -s -X POST $H/farmer-registry/register-data/get_register_summary_data
 The sandbox's own check: sign up and approve a participant, create and approve an app,
 **Get token** on the try-it page, then **Run**: the call passes the gateway.
 
-Rate limits count per app (`X-OAN-App`, set from the token) in the valkey at `redis.host`.
+Rate limits count per app (`X-OAN-App`, set from the token) in the Redis at `redis.host`.
 
 ## 9. Known open items
 
@@ -402,13 +398,13 @@ Rate limits count per app (`X-OAN-App`, set from the token) in the valkey at `re
   local OrbStack cluster it does not hold: every request shows the Pod gateway.
 - **HTTP to HTTPS redirect.** Port 80 still serves the routes over plain HTTP. Once the
   first certificate is issued, add a `redirect` global rule (`http_to_https: true`) in
-  `apisix.yaml`. Before the first issuance it would break the HTTP-01 challenge, since
+  the chart's `values.yaml`. Before the first issuance it would break the HTTP-01 challenge, since
   APISIX has no certificate to answer HTTPS with yet.
 - **ADC and APISIX 3.19.** The Ingress Controller uses ADC internally, and ADC's documented
   support stops at APISIX 3.17. Watch the controller logs on the first sync.
 - **Partner APIs:** the partner host name, DNS and certificate; how the sandbox reaches
   the Admin API (read only) from the OpenG2P cluster (section 8b).
-- **etcd.** `apisix.yaml` uses `externalEtcd`; see section 10. Not yet installed against
+- **etcd.** the chart's `values.yaml` uses `externalEtcd`; see section 10. Not yet installed against
   a real etcd.
 - **Global plugins.** Confirm `request-id` and `prometheus` take effect: `X-Request-Id` in
   responses and the `apisix_http_status` metric.
@@ -422,13 +418,13 @@ and APISIX stores them. The controller is the source of truth, so a lost etcd is
 from the resources at the next sync (not tried here). Never edit the gateway by hand with
 the Admin API or `adc sync`.
 
-`apisix.yaml` sets `etcd.enabled: false` and `externalEtcd`, the same shape in every
+the chart's `values.yaml` sets `etcd.enabled: false` and `externalEtcd`, the same shape in every
 environment:
 
 | | Value |
 |---|---|
 | Members | three, each on its own machine, in different availability zones. The members vote, and a change counts only when a majority agrees, so one can fail. Three services on one machine would fail together. |
-| URLs | `--set 'externalEtcd.host={...}'` at install. Use `https` when TLS is on. |
+| URLs | `--set 'apisix.externalEtcd.host={...}'` at install. Use `https` when TLS is on. |
 | Authentication | `externalEtcd.user: root`, password in Secret `apisix-etcd-credentials`, key `etcd-root-password`. |
 | Storage | fast local SSD, never NFS or EFS. |
 | Ports | 2379 (clients) from the APISIX nodes only, 2380 (peers) between the members only. |

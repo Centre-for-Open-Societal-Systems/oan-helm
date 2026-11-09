@@ -16,9 +16,9 @@ app runs in a cluster of its own (grievance today, A2C later):
 ```
 client -> DNS (dev) or /etc/hosts (local): grievance-backend-dev.oanstaging.com -> gateway node
        -> gateway cluster: APISIX, ports 80/443 (hostPort)   TLS, routes, CORS, rate limits
-            picks the app by Host; rate-limit counters in Valkey next to it
+            picks the app by Host; rate-limit counters in Redis next to it
        -> grievance cluster: node ports 30800 (gunicorn) and 30900 (socket.io), private network
-       -> Frappe Pods, MariaDB, Valkey, ClamAV
+       -> Frappe Pods, MariaDB, Redis, ClamAV
 ```
 
 There is no nginx anywhere on this path. APISIX terminates TLS and proxies straight to
@@ -31,8 +31,8 @@ node ports must accept only the gateway cluster's addresses.
 | Cluster | Release | Chart | Namespace | Values |
 | --- | --- | --- | --- | --- |
 | grievance, A2C | `csi-driver-nfs` | `csi-driver-nfs/csi-driver-nfs` 4.13.6 | `kube-system` | [nfs-csi.yaml](../environments/dev/values/nfs-csi.yaml) |
-| gateway | `apisix` | `apisix/apisix` 2.18.2 | `apisix` | [apisix.yaml](../environments/dev/values/apisix.yaml) |
-| gateway | `apisix-valkey` | `valkey/valkey` 0.11.0 | `apisix` | [valkey-gateway.yaml](../environments/dev/values/valkey-gateway.yaml) |
+| gateway | `apisix` | `oan-apisix-gateway` 0.1.0-dev.1 (apisix 2.18.2) | `apisix` | [values.yaml](../charts/oan-apisix-gateway/values.yaml) |
+| gateway | `apisix-redis` | `bitnami/redis` 19.6.4 | `apisix` | [redis-gateway.yaml](../environments/dev/values/redis-gateway.yaml) |
 | grievance | `grievance` | [charts/oan-grievance-service](../charts/oan-grievance-service) | `develop` | [oan-grievance-service.yaml](../environments/dev/values/oan-grievance-service.yaml) |
 | gateway | `oan-grievance-gateway` | `apisix/k8s` in the oan_grievance_service repository | `grievance` | [oan-grievance-gateway.yaml](../environments/dev/values/oan-grievance-gateway.yaml) |
 
@@ -58,7 +58,7 @@ PersistentVolumes and the directories on the NFS server yourself to remove it.
 
 The chart depends on the upstream `frappe/helm` chart `erpnext` 8.0.89, aliased
 `frappe`. Upstream provides gunicorn, socket.io, the scheduler, the default, short and
-long workers, Valkey cache and queue, and the create-site job.
+long workers, Redis cache and queue, and the create-site job.
 Its values sit under the `frappe:` key. The chart adds what upstream cannot do:
 
 - **Grievance queue workers.** Upstream workers listen only on `default`, `short` and
@@ -111,7 +111,7 @@ the gateway node to keep the source address of hostPort traffic. On OrbStack it 
 not: every request shows the Pod gateway address, so all local clients share one
 rate-limit bucket. Confirm on dev in section 2, step 10.
 
-The counters live in the gateway cluster's own Valkey (`apisix-valkey`), so a limit
+The counters live in the gateway cluster's own Redis (`apisix-redis`), so a limit
 check never crosses clusters. Frappe sees the gateway node as the client; APISIX passes
 the client in `X-Forwarded-For`.
 
@@ -205,15 +205,13 @@ hop between them crosses the internet in plain HTTP: add a VPN or TLS before goi
      --from-literal=admin="$(openssl rand -hex 16)" --from-literal=viewer="$(openssl rand -hex 16)"
    ```
 
-5. **Install APISIX and its Valkey.**
+5. **Install APISIX and its Redis.**
 
    ```sh
-   helm repo add apisix https://apache.github.io/apisix-helm-chart && helm repo update apisix
-   helm repo add valkey https://valkey.io/valkey-helm/ && helm repo update valkey
-   helm upgrade --install apisix apisix/apisix --version 2.18.2 -n apisix \
-     -f environments/dev/values/apisix.yaml --wait --timeout 10m
-   helm upgrade --install apisix-valkey valkey/valkey --version 0.11.0 -n apisix \
-     -f environments/dev/values/valkey-gateway.yaml --wait
+   helm repo add bitnami https://charts.bitnami.com/bitnami && helm repo update bitnami
+   helm upgrade --install apisix charts/oan-apisix-gateway -n apisix --wait --timeout 10m
+   helm upgrade --install apisix-redis bitnami/redis --version 19.6.4 -n apisix \
+     -f environments/dev/values/redis-gateway.yaml --wait
    curl -s -o /dev/null -w '%{http_code}\n' http://<gateway node public IP>/   # 404 from APISIX: no routes yet
    ```
 
@@ -284,7 +282,7 @@ hop between them crosses the internet in plain HTTP: add a VPN or TLS before goi
 
    ```sh
    helm upgrade --install oan-grievance-gateway <oan_grievance_service>/apisix/k8s -n grievance \
-     -f environments/dev/values/oan-grievance-gateway.yaml \
+     -f environments/dev/values/gateway-common.yaml -f environments/dev/values/oan-grievance-gateway.yaml \
      --set "web.externalHosts={<grievance private IP>}" \
      --set "socket.externalHosts={<grievance private IP>}" --wait
    kubectl -n grievance get apisixtls,apisixroute,apisixupstream
@@ -300,7 +298,7 @@ hop between them crosses the internet in plain HTTP: add a VPN or TLS before goi
     curl -si $H/v1/does-not-exist | head -3            # 404 from APISIX
     curl -s $H/v1/auth/keys | head -c 200              # kid v1: the JWT key loaded
     kubectl -n apisix logs deploy/apisix -c apisix --tail=3   # first field: your public IP, not 10.42.x
-    kubectl -n apisix exec deploy/apisix-valkey -- valkey-cli --scan | head -3   # plugin-limit-count:... keys
+    kubectl -n apisix exec statefulset/apisix-redis-master -- redis-cli --scan | head -3   # plugin-limit-count:... keys
     ```
 
     If the access log shows a `10.42.x` address, the node rewrites the source address
@@ -390,7 +388,7 @@ It needs about 8 GB of memory for the cluster, of which ClamAV takes 1.5 GB.
 
    ```sh
    helm upgrade --install oan-grievance-gateway <oan_grievance_service>/apisix/k8s -n grievance \
-     -f environments/dev/values/oan-grievance-gateway.yaml \
+     -f environments/dev/values/gateway-common.yaml -f environments/dev/values/oan-grievance-gateway.yaml \
      --set "web.externalHosts={192.168.139.2}" --set "socket.externalHosts={192.168.139.2}" --wait
    ```
 
@@ -402,7 +400,7 @@ It needs about 8 GB of memory for the cluster, of which ClamAV takes 1.5 GB.
    curl -s --cacert ca.crt -H 'Content-Type: application/json' \
      -d "{\"usr\":\"Administrator\",\"pwd\":\"$PW\"}" \
      https://grievance-backend-dev.oanstaging.com/v1/auth/login | head -c 120
-   kubectl -n apisix exec deploy/apisix-valkey -- valkey-cli --scan | head -3
+   kubectl -n apisix exec statefulset/apisix-redis-master -- redis-cli --scan | head -3
    kubectl -n develop logs deploy/grievance-worker-scan --tail=5
    ```
 

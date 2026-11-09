@@ -1,0 +1,25 @@
+apiVersion: v2
+name: oan-apisix-gateway
+description: APISIX gateway and Ingress Controller for OpenAgriNet (OAN); deploys the
+  upstream apisix chart with the OAN gateway defaults. App routes install separately.
+type: application
+version: 0.1.0-dev.1
+appVersion: 3.19.0
+keywords:
+- oan
+- openagrinet
+- apisix
+- gateway
+home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+sources:
+- https://github.com/apache/apisix-helm-chart
+- https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+maintainers:
+- name: OpenAgriNet (OAN)
+  url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+dependencies:
+- name: apisix
+  version: 2.18.2
+annotations:
+  oan.org/owner: OpenAgriNet (OAN)
+  oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-apisix-gateway

@@ -24,7 +24,7 @@ flowchart TB
                 WG["WireGuard Server<br/>(UDP 51820)"]
                 APISIX["Apache APISIX<br/>(hostPort 80/443 | TLS Termination)"]
                 AIC["apisix-ingress-controller"]
-                GWValkey[("APISIX Valkey<br/>(Rate Limits)")]
+                GWRedis[("APISIX Redis<br/>(Rate Limits)")]
             end
             NAT["NAT Instance (t3a.nano | 10.20.0.30 | EIP: 13.200.74.221)<br/>Outbound egress for private subnets"]
         end
@@ -35,7 +35,7 @@ flowchart TB
                 GRV_Web["Grievance Web<br/>(NodePort 30800)"]
                 GRV_Sock["Grievance Socket.IO<br/>(NodePort 30900)"]
                 GRV_Workers["Workers & Scheduler<br/>(Routing, SLA, Scan, Celery)"]
-                GRV_Valkey[("Valkey Cache & Queue")]
+                GRV_Redis[("Redis Cache & Queue")]
                 GRV_Clam["ClamAV Antivirus"]
                 GRV_OTel["OTel Agent (DaemonSet)"]
             end
@@ -43,7 +43,7 @@ flowchart TB
             subgraph A2C["A2C Cluster (t3a.medium | 10.20.10.30)"]
                 A2C_Web["A2C Web<br/>(NodePort 30810)"]
                 A2C_Workers["Workers & Scheduler"]
-                A2C_Valkey[("Valkey Cache & Queue")]
+                A2C_Redis[("Redis Cache & Queue")]
                 A2C_OTel["OTel Agent (DaemonSet)"]
             end
 
@@ -89,7 +89,7 @@ flowchart TB
     APISIX <-->|"Read/Write Route Config (2379)"| ETCD1
     APISIX <-->|"Read/Write Route Config (2379)"| ETCD2
     APISIX <-->|"Read/Write Route Config (2379)"| ETCD3
-    APISIX <-->|"Rate-limit Counters"| GWValkey
+    APISIX <-->|"Rate-limit Counters"| GWRedis
 
     %% Raft Consensus Sync
     ETCD1 <-->|"Raft Peering (2380)"| ETCD2
@@ -116,10 +116,10 @@ flowchart TB
 
 | Host / Instance | Role | Type | Private IP | Public IP | Key Services |
 |---|---|---|---|---|---|
-| **`gateway`** | Edge Gateway & Admin Entrypoint | `t3a.medium` | `10.20.0.10` | `3.108.29.44` (Elastic IP) | Apache APISIX (80/443), Ingress Controller, APISIX Valkey, WireGuard (UDP 51820) |
+| **`gateway`** | Edge Gateway & Admin Entrypoint | `t3a.medium` | `10.20.0.10` | `3.108.29.44` (Elastic IP) | Apache APISIX (80/443), Ingress Controller, APISIX Redis, WireGuard (UDP 51820) |
 | **`nat`** | Outbound Internet Egress | `t3a.nano` | `10.20.0.30` | `13.200.74.221` (Elastic IP) | `iptables` NAT router for private instances |
-| **`grievance`** | Grievance Service Backend | `t3a.large` | `10.20.10.20` | None (Private) | Frappe Gunicorn (30800), Socket.IO (30900), Workers, ClamAV, Valkey |
-| **`a2c`** | Access to Credit Backend | `t3a.medium` | `10.20.10.30` | None (Private) | Frappe Gunicorn (30810), Workers, Valkey |
+| **`grievance`** | Grievance Service Backend | `t3a.large` | `10.20.10.20` | None (Private) | Frappe Gunicorn (30800), Socket.IO (30900), Workers, ClamAV, Redis |
+| **`a2c`** | Access to Credit Backend | `t3a.medium` | `10.20.10.30` | None (Private) | Frappe Gunicorn (30810), Workers, Redis |
 | **`storage`** | Shared Database & File Storage | `t3a.small` | `10.20.10.10` | None (Private) | MariaDB 10.11 (3306, TLS required), NFSv4 Server (2049, 20 GB dedicated disk) |
 | **`logging`** | Observability & Telemetry | `t3a.medium` | `10.20.10.40` | None (Private) | OpenTelemetry Gateway (30317), Loki (Log store), MinIO (S3 on NFS), Grafana (3000) |
 | **`etcd-1`** | APISIX Data Store (Member 1) | `t3a.nano` | `10.20.10.51` | None (Private) | etcd (AZ `ap-south-1a`, ports 2379/2380) |

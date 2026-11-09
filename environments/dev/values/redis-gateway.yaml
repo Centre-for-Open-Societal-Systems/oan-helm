@@ -1,0 +1,27 @@
+# Upstream chart bitnami/redis 19.6.4 from https://charts.bitnami.com/bitnami with the
+# image the OpenG2P registry charts use (openg2p/redis 7.2.5-debian-12-r4, the Bitnami
+# chart's own appVersion 7.2.5). Not vendored or repackaged here.
+# Target: the gateway cluster. Release: name `apisix-redis`, namespace `apisix`, so the
+# Service is apisix-redis-master.apisix.svc.cluster.local.
+#
+# Holds the counters of the limit-count plugin for every app's routes (`redis.host` in
+# gateway-common.yaml). It sits next to APISIX so a rate limit check never crosses
+# clusters. Counters are short-lived, so there is no persistence and no password: the
+# Service is ClusterIP and only APISIX connects.
+
+image:
+  registry: docker.io
+  repository: openg2p/redis
+  tag: 7.2.5-debian-12-r4
+architecture: standalone
+auth:
+  enabled: false
+master:
+  persistence:
+    enabled: false
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      memory: 256Mi

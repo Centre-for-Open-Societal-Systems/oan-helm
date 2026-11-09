@@ -71,9 +71,6 @@ socket:
         tcpFailures: 3
         timeout: 3
 
-# Limit-count counters, in the gateway cluster (valkey-gateway.yaml).
-redis:
-  host: apisix-valkey.apisix.svc.cluster.local
 
 # Browser origins allowed to open a socket.io connection with a session cookie, and
 # regexes of origins the cors plugin allows. Localhost only until the grievance UI host

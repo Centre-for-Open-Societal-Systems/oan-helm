@@ -84,7 +84,7 @@ checkout at the deployed commit:
 
 ```sh
 helm upgrade --install oan-a2c-gateway <oan_a2c>/apisix/k8s -n a2c \
-  -f environments/dev/values/oan-a2c-gateway.yaml \
+  -f environments/dev/values/gateway-common.yaml -f environments/dev/values/oan-a2c-gateway.yaml \
   --set "web.externalHosts={<A2C node private IP>}" --wait
 ```
 
@@ -133,7 +133,7 @@ Same releases and values on the one local cluster, as in
 4. **`/etc/hosts`:** a line for the A2C host next to the grievance one.
 5. **Memory:** grievance and A2C together, with Rancher, overload an 8 GB Docker VM
    (load average above 30). Probes then time out, and a first install fails with
-   "Connection refused" to `a2c-valkey-cache:6379`. Stop the k3d Rancher cluster
+   "Connection refused" to `a2c-redis-cache-master:6379`. Stop the k3d Rancher cluster
    (`k3d cluster stop rancher`) and scale `grievance-clamav` to 0 while installing, or
    give OrbStack more memory (`orb config set memory_mib 12288`).
 6. **A failed first install cannot be resumed:** the create-site job treats an existing

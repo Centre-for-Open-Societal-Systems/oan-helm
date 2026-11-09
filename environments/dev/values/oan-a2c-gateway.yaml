@@ -54,9 +54,6 @@ web:
         timeout: 3
         httpCodes: [500, 502, 503, 504]
 
-# Limit-count counters, in the gateway cluster (valkey-gateway.yaml).
-redis:
-  host: apisix-valkey.apisix.svc.cluster.local
 
 # Source addresses allowed on the partner webhook routes. Development defaults; narrow to
 # the partners' egress CIDRs (OpenG2P, telco IVR) before go-live.
