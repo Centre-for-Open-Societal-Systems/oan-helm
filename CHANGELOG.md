@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-09
 
+### openg2p-livestock-registry 0.0.0-develop.441 (develop)
+
+- Merge pull request #218 from simretyibeltal-commits/revert-app-publish-v2 (Centre-for-Open-Societal-Systems/livestock-registry@418c8fab326c)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-09
+
 ### openg2p-cropsown-registry 0.0.0-develop.502 (develop)
 
 - Right-align and group every number widget in the crop register (#256) (Centre-for-Open-Societal-Systems/cropsown-regsitry@4875c5686ee2)
