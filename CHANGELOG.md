@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-09
 
+### openg2p-cropsown-registry 0.0.0-develop.503 (develop)
+
+- Accept the farmer.profile.updates.v1 event name next to the three older names (#259) (Centre-for-Open-Societal-Systems/cropsown-regsitry@98014b3200cd)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-09
+
 ### oan-apisix-gateway 0.1.0-dev.1
 
 First published version.
