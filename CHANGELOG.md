@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-09
 
+### openg2p-commons-services 1.0.0-dev.38
+
+Previous version: 1.0.0-dev.37.
+
+- Pin the Master Data db-seed image to ECR instead of GHCR (#146) (39bc91f)
+
+## 2026-11-09
+
 ### openg2p-da-registry 0.0.0-develop.86 (develop)
 
 - Right-align and group every number widget in the DA register (#49) (Centre-for-Open-Societal-Systems/da-registry@ea2fa29f43af)
