@@ -1,0 +1,18 @@
+chartVersion: 1.0.0-dev.38
+status: commons-services release record
+versionPolicy: Immutable after publication; component images retain independent versions.
+note: Only the Master Data seed image changed since 1.0.0-dev.37; it now comes from ECR instead of GHCR. The other entries of earlier manifests still apply.
+charts:
+- name: openg2p-commons-services
+  release: commons-services
+  namespace: commons
+  masterDataImageVersion: 0.0.0-develop.118
+  masterDataSeedImage:
+    repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/master-data-db-seed
+    tag: bff0921698f2-mds-e569a59b
+    digest: sha256:fe6d6cffa12eeffe65fb566b1dd6ed4ba8753e413e3f9b3a4c1e7026af64211d
+    base: openg2p/master-data-db-seed:0.0.0-develop.118@sha256:cfa91c1bcc1798a8a82454073ac5454c8099041511bf6d0c7380b492232d809f
+    dataRepository: https://github.com/Centre-for-Open-Societal-Systems/openg2p-data
+    dataCommit: bff0921698f2
+    countryPack: ETH-OAN
+    note: Built and pushed to ECR by the openg2p-data Jenkins pipeline (build 46), replacing the GHCR copy
