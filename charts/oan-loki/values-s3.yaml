@@ -1,0 +1,40 @@
+# Overlay: S3 object storage and 3 replicas (HA). Use with:
+#   helm upgrade --install loki charts/oan-loki -n observability -f charts/oan-loki/values-s3.yaml
+# The docs warn against bucket names "chunks", "ruler" or "admin" on S3 (they must be globally unique anyway).
+# Credentials: prefer IRSA / instance profile. Otherwise create a Secret "loki-s3" with
+# AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and uncomment extraEnvFrom below.
+loki:
+  loki:
+    commonConfig:
+      replication_factor: 3
+    storage:
+      type: s3
+      bucketNames:
+        chunks: oan-loki-chunks   # FIXME: your bucket
+        ruler: oan-loki-ruler     # FIXME: your bucket
+      s3:
+        region: ap-south-1
+    schemaConfig:
+      configs:
+        - from: "2024-04-01"
+          store: tsdb
+          object_store: s3
+          schema: v13
+          index:
+            prefix: loki_index_
+            period: 24h
+    compactor:
+      delete_request_store: s3
+    rulerConfig:
+      storage:
+        type: s3   # bucket and region come from loki.storage above
+
+  singleBinary:
+    replicas: 3
+    persistence:
+      size: 20Gi   # WAL and index cache only; chunks live in S3
+    # extraArgs: [-config.expand-env=true]
+    # extraEnvFrom:
+    #   - secretRef:
+    #       name: loki-s3
+    # serviceAccount annotations for IRSA go under loki.serviceAccount.annotations

@@ -1,0 +1,30 @@
+apiVersion: v2
+name: oan-loki
+description: OAN Loki log store for OpenAgriNet (OAN) central application logs; deploys
+  the grafana-community/loki chart in monolithic mode with a Grafana datasource.
+type: application
+version: 0.1.0-dev.1
+appVersion: 3.7.9
+kubeVersion: ">=1.25.0-0"
+keywords:
+- oan
+- openagrinet
+- loki
+- logging
+home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+sources:
+- https://github.com/grafana/loki
+- https://github.com/grafana-community/helm-charts
+- https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+maintainers:
+- name: OpenAgriNet (OAN)
+  url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+dependencies:
+- name: loki
+  version: 21.0.0
+  repository: https://grafana-community.github.io/helm-charts
+annotations:
+  catalog.cattle.io/display-name: OAN Loki
+  oan.org/owner: OpenAgriNet (OAN)
+  oan.org/application-source: https://github.com/grafana/loki
+  oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-loki

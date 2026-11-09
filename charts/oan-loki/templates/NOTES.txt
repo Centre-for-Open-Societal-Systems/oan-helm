@@ -1,0 +1,14 @@
+Loki ({{ .Values.loki.deploymentMode }}, {{ .Values.loki.singleBinary.replicas }} replica(s), storage: {{ .Values.loki.loki.storage.type }}) is installing in {{ .Release.Namespace }}.
+
+Push / query endpoint (in cluster): {{ include "oan-loki.url" . }}
+  OTLP logs:  {{ include "oan-loki.url" . }}/otlp/v1/logs
+  Push API:   {{ include "oan-loki.url" . }}/loki/api/v1/push
+
+Check:
+  kubectl -n {{ .Release.Namespace }} get pods -l app.kubernetes.io/instance={{ .Release.Name }}
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ .Values.loki.fullnameOverride | default "loki" }}-gateway 3100:80
+  curl -s localhost:3100/loki/api/v1/labels
+{{- if .Values.grafanaDatasource.enabled }}
+
+Grafana datasource ConfigMap: {{ .Release.Name }}-grafana-datasource (needs sidecar.datasources.enabled=true in the Grafana chart).
+{{- end }}
