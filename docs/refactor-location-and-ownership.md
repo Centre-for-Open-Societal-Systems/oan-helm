@@ -26,7 +26,7 @@ ETH-OAN with agriculture is the intended configuration; existing data must not b
 replaced by a demo seed.
 
 Upstream's develop.118 seed image carries only ETH and XKM, so `geoSeed.image` pins
-`ghcr.io/asmitonweb/master-data-db-seed:0.0.0-develop.118-oan.1` by digest: the
+`379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/master-data-db-seed` (built by the openg2p-data Jenkins pipeline) by digest: the
 upstream image, by digest, with `/openg2p-data` replaced by the OAN openg2p-data
 fork at the commit recorded in `releases/1.0.0-dev.11.yaml`. Its loader, scripts
 and packages are upstream's, byte for byte. The fork builds it from
