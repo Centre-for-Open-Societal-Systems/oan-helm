@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-cropsown-registry 0.0.0-develop.512 (develop)
+
+- Give the disposable test database room and wait for real queries before each test module (#270) (Centre-for-Open-Societal-Systems/cropsown-regsitry@a0e7ca371f0b)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-10
+
 ### openg2p-livestock-registry 0.0.0-develop.450 (develop)
 
 - Give the disposable test database room and wait for real queries before each test module (#231) (Centre-for-Open-Societal-Systems/livestock-registry@c81f3f78b6c7)
