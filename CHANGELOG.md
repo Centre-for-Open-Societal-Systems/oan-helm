@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-farmer-registry 0.0.0-develop.834 (develop)
+
+- Docs: use the .development New Dev hostnames (#251) (Centre-for-Open-Societal-Systems/farmer-registry@303596597adb)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-10
+
 ### openg2p-livestock-registry 1.0.0-dev.26
 
 Previous version: 1.0.0-dev.25.
