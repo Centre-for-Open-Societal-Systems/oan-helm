@@ -8,6 +8,14 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-10
+
+### openg2p-livestock-registry 1.0.0-dev.26
+
+Previous version: 1.0.0-dev.25.
+
+- Use the .development New Dev hostnames in live settings and docs (#145) (a9aba38)
+
 ## 2026-11-09
 
 ### openg2p-cropsown-registry 0.0.0-develop.503 (develop)
