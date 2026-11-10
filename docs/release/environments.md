@@ -124,6 +124,26 @@ the branches `dev`, `main`, `develop` and `staging`. Deploy stages run on the ag
 | Farmer connector on staging | script `scripts/ci/deliver_staging_farmer_connector.sh` | - | staging | - |
 | Commons services | `ci/jenkins/staging-commons.Jenkinsfile` on `main` (the Jenkins job is still to be created; until then the last staging upgrade, revision 16 on 5 Nov 2026, was by hand) | - | staging, release `commons-services`, namespace `commons`, through `scripts/ci/deliver_staging_commons.sh` | `staging-rke2-kubeconfig`; `staging-commons-secret-values` |
 
+### Commons base on staging
+
+Before Commons services, every build of `main` runs `scripts/ci/deliver_staging_commons_base.sh` for the base
+release `commons` (chart `openg2p-commons-base`). No parameters, no click.
+
+1. `environments/staging/commons-base.chart` pins `<version> <sha256>`. The archive is downloaded from the OpenG2P
+   Helm repository and checked against the sha256, because OpenG2P can republish a version.
+2. The release keeps its saved values. They are a full copy of the chart defaults with the staging passwords and
+   cannot be rebuilt from git. `environments/staging/values/commons-base.yaml` is applied over them with
+   `--reuse-values`.
+3. `--reuse-values` does not pick up a new chart version's defaults, so the script delivers only the version the
+   release already runs. It refuses a pin with another version. A version change is a reviewed manual upgrade,
+   after which the pin is moved to match.
+4. ConfigMap `commons-base-delivery` records the pin, the archive sha256 and the sha256 of the overlay. If staging
+   already runs exactly that, the script stops. Otherwise it runs a server-side dry run, then
+   `helm upgrade --reuse-values --atomic --wait`, then writes the record.
+
+The first delivery applies the overlay as it is on `main`, including the Kafka controller heap and memory limit
+(#153).
+
 ### Commons services on staging
 
 Every build of `main` runs `scripts/ci/deliver_staging_commons.sh`. Staging follows `environments/staging/commons-services.chart`

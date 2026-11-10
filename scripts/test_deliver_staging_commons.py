@@ -40,5 +40,25 @@ class DeliverStagingCommons(unittest.TestCase):
         self.assertNotIn('changeset', pipeline.split('pipeline {', 1)[1])
 
 
+    def test_base_pin_names_a_version_and_its_archive_hash(self):
+        version, sha = (ROOT / 'environments/staging/commons-base.chart').read_text(encoding='utf-8').split()
+        self.assertRegex(version, r'^\d+\.\d+\.\d+')
+        self.assertRegex(sha, r'^[0-9a-f]{64}$')
+
+    def test_base_delivery_keeps_saved_values_and_never_changes_the_chart_version(self):
+        script = (ROOT / 'scripts/ci/deliver_staging_commons_base.sh').read_text(encoding='utf-8')
+        # The base release's saved values hold its passwords and cannot be rebuilt from git.
+        (flags,) = [line for line in script.splitlines() if line.startswith('flags=')]
+        self.assertIn('--reuse-values', flags)
+        self.assertNotIn('--reset-values', flags)
+        self.assertIn('--atomic', script)
+        self.assertIn('sha256sum -c', script)
+        self.assertIn('commons-base-delivery', script)
+        # A chart version change is refused before anything is downloaded or upgraded.
+        self.assertLess(script.index('--reuse-values cannot change the chart'), script.index('helm upgrade "$release"'))
+        self.assertLess(script.index('--atomic --wait'), script.index('kubectl create configmap'))
+        pipeline = (ROOT / 'ci/jenkins/staging-commons.Jenkinsfile').read_text(encoding='utf-8')
+        self.assertLess(pipeline.index('deliver_staging_commons_base.sh'), pipeline.index('deliver_staging_commons.sh "'))
+
 if __name__ == '__main__':
     unittest.main()
