@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-farmer-registry 0.0.0-develop.837 (develop)
+
+- Give the sample loader its Master Data settings and skip cleanly without them (#257) (Centre-for-Open-Societal-Systems/farmer-registry@4c5d8c3ff558)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-10
+
 ### openg2p-cropsown-registry 0.0.0-develop.510 (develop)
 
 - Staging connector: drop the admin-auth keys that commonEnv never renders (#266) (Centre-for-Open-Societal-Systems/cropsown-regsitry@f2fa56046f57)
