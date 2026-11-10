@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-livestock-registry 0.0.0-develop.444 (develop)
+
+- Add a load sample data option to the staging build (#222) (Centre-for-Open-Societal-Systems/livestock-registry@684febd3b773)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-10
+
 ### openg2p-cropsown-registry 0.0.0-develop.505 (develop)
 
 - Add a load sample data option to the staging build (#261) (Centre-for-Open-Societal-Systems/cropsown-regsitry@2a96fa5136e0)
