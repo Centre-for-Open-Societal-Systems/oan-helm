@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-livestock-registry 0.0.0-develop.449 (develop)
+
+- Subscribe the staging livestock connector to Farmer profile changes (#230) (Centre-for-Open-Societal-Systems/livestock-registry@4fd3dd7ce387)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-10
+
 ### openg2p-farmer-registry 0.0.0-develop.837 (develop)
 
 - Give the sample loader its Master Data settings and skip cleanly without them (#257) (Centre-for-Open-Societal-Systems/farmer-registry@4c5d8c3ff558)
