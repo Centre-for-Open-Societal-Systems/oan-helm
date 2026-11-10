@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-cropsown-registry 0.0.0-develop.507 (develop)
+
+- Staging connector: expect the staging Keycloak issuer (#263) (Centre-for-Open-Societal-Systems/cropsown-regsitry@8db1a47c8475)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-10
+
 ### openg2p-farmer-registry 0.0.0-develop.835 (develop)
 
 - Add a load sample data option to the staging build (#253) (Centre-for-Open-Societal-Systems/farmer-registry@b46a215b6731)
