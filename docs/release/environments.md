@@ -126,15 +126,22 @@ the branches `dev`, `main`, `develop` and `staging`. Deploy stages run on the ag
 
 ### Commons services on staging
 
-A merge to `main` that changes `environments/staging/values/commons-services.yaml` or
-`environments/staging/commons-services.chart` (the chart version, an archive in `repository/`) delivers Commons
-services to staging. Nothing else starts it, and it has no parameters. The job runs
-`scripts/ci/deliver_staging_commons.sh`:
+Every build of `main` runs `scripts/ci/deliver_staging_commons.sh`. Staging follows `environments/staging/commons-services.chart`
+(the chart version, an archive in `repository/`) and `environments/staging/values/commons-services.yaml`. No
+parameters, no click.
 
 1. Checks the pinned archive against `repository/SHA256SUMS`.
-2. Fails if the release's saved values hold a key that neither the staging values nor the secret values file
-   sets. `--reset-values` would drop it. Only key names are printed.
-3. Runs a server-side dry run, then `helm upgrade --reset-values --atomic --wait`.
+2. Compares the pin and the sha256 of the values and secret files with ConfigMap `commons-services-delivery` in
+   namespace `commons`, the record of the last successful delivery. If they match, it stops. Otherwise it delivers,
+   so a failed delivery is retried by the next build of `main`.
+3. Fails if the release's saved values hold a key that neither the staging values nor the secret values file
+   sets. `--reset-values` would drop it. The merged values are rendered by `helm template` of a throwaway chart,
+   so the deploy agent needs no YAML library. Only key names are printed.
+4. Runs a server-side dry run, then `helm upgrade --reset-values --atomic --wait`, then writes the record.
+
+The first delivery is not a no-op. It applies `master-data.geoSeed.load.samples: true` (#151), so the geo-seed hook
+loads the pack's sample people. Until staging Master Data is on the pack's geography, the hook warns that their
+place codes are not published.
 
 The secret values file (Jenkins secret-file credential `staging-commons-secret-values`) holds the values that are
 not kept in git: `keymanager.p12KeystorePass` and

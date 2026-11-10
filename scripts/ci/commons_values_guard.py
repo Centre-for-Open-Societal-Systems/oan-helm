@@ -1,14 +1,13 @@
-"""Fail if a release's saved values hold a key that the delivery's value files do not set.
+"""Fail if a release's saved values hold a key that the delivery's values do not set.
 
 --reset-values replaces the saved values with the files given, so a key set only by an earlier hand upgrade would be
-dropped silently. Only key names are printed, never values.
+dropped silently. Both inputs are JSON: the saved values from `helm get values -o json`, and the merged value files
+rendered by helm itself (deliver_staging_commons.sh), so this needs no YAML library. Only key names are printed.
 
-    commons_values_guard.py <saved values json> <values file> [<values file> ...]
+    commons_values_guard.py <saved values json> <merged values json>
 """
 import json
 import sys
-
-import yaml
 
 
 def keys(document, prefix=""):
@@ -19,21 +18,17 @@ def keys(document, prefix=""):
         yield prefix
 
 
-def missing(saved, files):
-    given = set()
-    for document in files:
-        given |= set(keys(document or {}))
-    return sorted(k for k in keys(saved or {}) if k not in given)
+def missing(saved, given):
+    have = set(keys(given or {}))
+    return sorted(k for k in keys(saved or {}) if k not in have)
 
 
 def main(argv):
-    with open(argv[1], encoding="utf-8") as handle:
-        saved = json.load(handle)
-    files = []
-    for path in argv[2:]:
+    documents = []
+    for path in argv[1:3]:
         with open(path, encoding="utf-8") as handle:
-            files.append(yaml.safe_load(handle))
-    lost = missing(saved, files)
+            documents.append(json.load(handle))
+    lost = missing(*documents)
     if lost:
         print("FAIL: --reset-values would drop saved keys that no value file sets: " + ", ".join(lost), file=sys.stderr)
         return 1

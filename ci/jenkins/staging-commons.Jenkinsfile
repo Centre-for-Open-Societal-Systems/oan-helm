@@ -1,6 +1,7 @@
-// Commons services on staging follow main: a merge that changes the staging Commons values or the pinned chart version
-// delivers them with scripts/ci/deliver_staging_commons.sh (helm upgrade --reset-values --atomic). No parameters, no
-// click. Other merges to main build nothing here.
+// Commons services on staging follow main. Every build of main runs scripts/ci/deliver_staging_commons.sh, which
+// compares what staging runs (ConfigMap commons-services-delivery: pinned chart, sha256 of the staging values and of
+// the secret values) with this commit and delivers only when they differ (helm upgrade --reset-values --atomic). A
+// failed delivery is therefore retried by the next build of main. No parameters, no click; pull requests never deliver.
 //
 // Jenkins: a multibranch job on Centre-for-Open-Societal-Systems/oan-helm, branch main only, script path
 // ci/jenkins/staging-commons.Jenkinsfile. Credentials: staging-rke2-kubeconfig (as the registries) and
@@ -15,16 +16,7 @@ pipeline {
     }
     stages {
         stage('Deliver Commons services') {
-            when {
-                allOf {
-                    branch 'main'
-                    not { changeRequest() }
-                    anyOf {
-                        changeset 'environments/staging/values/commons-services.yaml'
-                        changeset 'environments/staging/commons-services.chart'
-                    }
-                }
-            }
+            when { allOf { branch 'main'; not { changeRequest() } } }
             steps {
                 withCredentials([
                     file(credentialsId: 'staging-rke2-kubeconfig', variable: 'KUBECONFIG'),

@@ -21,9 +21,9 @@ class DeliverStagingCommons(unittest.TestCase):
     def test_guard_names_saved_keys_no_file_sets(self):
         saved = {'keymanager': {'p12KeystorePass': 'x'}, 'master-data': {'geoSeed': {'load': {'samples': False}}}}
         overlay = {'master-data': {'geoSeed': {'load': {'samples': True}}}}
-        self.assertEqual(guard.missing(saved, [overlay]), ['keymanager.p12KeystorePass'])
-        self.assertEqual(guard.missing(saved, [overlay, {'keymanager': {'p12KeystorePass': 'y'}}]), [])
-        self.assertEqual(guard.missing(None, [overlay]), [])
+        self.assertEqual(guard.missing(saved, overlay), ['keymanager.p12KeystorePass'])
+        self.assertEqual(guard.missing(saved, {**overlay, 'keymanager': {'p12KeystorePass': 'y'}}), [])
+        self.assertEqual(guard.missing(None, overlay), [])
 
     def test_delivery_never_reuses_saved_values(self):
         script = (ROOT / 'scripts/ci/deliver_staging_commons.sh').read_text(encoding='utf-8')
@@ -31,6 +31,13 @@ class DeliverStagingCommons(unittest.TestCase):
         self.assertIn('--atomic', script)
         self.assertNotIn('--reuse-values', script)
         self.assertIn('commons_values_guard.py', script)
+        # The guard and the record need only helm, kubectl and the standard library on the deploy agent.
+        self.assertNotIn('import yaml', (ROOT / 'scripts/ci/commons_values_guard.py').read_text(encoding='utf-8'))
+        # Delivery is decided from the cluster's record, not the changeset, and recorded only after the upgrade.
+        self.assertIn('commons-services-delivery', script)
+        self.assertLess(script.index('--atomic --wait'), script.index('kubectl create configmap'))
+        pipeline = (ROOT / 'ci/jenkins/staging-commons.Jenkinsfile').read_text(encoding='utf-8')
+        self.assertNotIn('changeset', pipeline.split('pipeline {', 1)[1])
 
 
 if __name__ == '__main__':
