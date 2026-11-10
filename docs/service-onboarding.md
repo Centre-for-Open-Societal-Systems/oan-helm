@@ -84,7 +84,7 @@ reverse database migrations or external Keycloak/partner changes.
   issuer/JWKS, cookies/CORS and the component's own readiness checks. A generic
   root HTTP status alone does not establish readiness.
 - **Renewal:** the Jenkins job `oan-development-wildcard-certificate-renewal`
-  runs daily through `vpn-agent2`, using the existing protected AWS and SSH
+  runs daily through the `oan-ci-deploy` agent, using the existing protected AWS and SSH
   credential bindings. Check its latest result and the protected server renewal
   log. The certificate key never belongs in Git.
 
