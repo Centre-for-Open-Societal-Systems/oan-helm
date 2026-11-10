@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-farmer-registry 1.0.0-rc.838 (staging)
+
+- Add a load sample data option to the staging build (#253) (Centre-for-Open-Societal-Systems/farmer-registry@b46a215b6731)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-10
+
 ### openg2p-livestock-registry 1.0.0-rc.455 (staging)
 
 - Staging connector: expect the staging Keycloak issuer (#224) (Centre-for-Open-Societal-Systems/livestock-registry@1c74138c15aa)
