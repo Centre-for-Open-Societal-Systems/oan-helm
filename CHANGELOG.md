@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-livestock-registry 0.0.0-develop.450 (develop)
+
+- Give the disposable test database room and wait for real queries before each test module (#231) (Centre-for-Open-Societal-Systems/livestock-registry@c81f3f78b6c7)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-10
+
 ### openg2p-farmer-registry 0.0.0-develop.838 (develop)
 
 - Declare the Farmer connector definitions in git and apply them after every services deploy (#259) (Centre-for-Open-Societal-Systems/farmer-registry@c2efce305864)
