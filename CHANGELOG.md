@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-farmer-registry 1.0.0-rc.836 (staging)
+
+- Docs: use the .development New Dev hostnames (#251) (Centre-for-Open-Societal-Systems/farmer-registry@303596597adb)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-10
+
 ### openg2p-cropsown-registry 1.0.0-rc.508 (staging)
 
 - Staging connector upgrade: parse on the build agents' bash 4.2 (#258) (Centre-for-Open-Societal-Systems/cropsown-regsitry@7880d51210c4)
