@@ -24,7 +24,7 @@ release=commons namespace=commons record=commons-base-delivery chart=openg2p-com
 repository=${OPENG2P_HELM_REPOSITORY:-https://openg2p.github.io/openg2p-helm}
 root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 values="$root/environments/staging/values/commons-base.yaml"
-read -r version sha < "$root/environments/staging/commons-base.chart"
+read -r version sha < "$root/environments/staging/commons-base.chart" || true  # a missing final newline must not stop the script; the check below decides
 [[ "$version" && "$sha" =~ ^[0-9a-f]{64}$ ]] || { echo "environments/staging/commons-base.chart must be '<version> <sha256>'" >&2; exit 1; }
 
 values_sha=$(sha256sum "$values" | cut -d' ' -f1)
