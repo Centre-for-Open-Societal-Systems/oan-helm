@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-da-registry 0.0.0-develop.88 (develop)
+
+- Run deploy stages on the oan-ci-deploy label (#54) (Centre-for-Open-Societal-Systems/da-registry@4cb243d9ef73)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-10
+
 ### openg2p-cropsown-registry 0.0.0-develop.508 (develop)
 
 - Crop Sown: plot registered question, record header lock, Afaan Oromoo/Tigrinya routes, intake ID label, ODK forms on Master Data (#248) (Centre-for-Open-Societal-Systems/cropsown-regsitry@7cd9b2c3dd5e)
