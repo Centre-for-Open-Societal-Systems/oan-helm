@@ -10,6 +10,18 @@ postgresql:
         # New Dev runs Postgres without a memory limit. Staging's saved limit of 1Gi killed Postgres during dumps, and
         # Helm cannot clear a saved value with null on this chart, so the limit is set well above what Postgres uses.
         memory: 8Gi
+kafka:
+  controller:
+    # Staging's saved values give the controller a 1Gi memory limit and an empty heapOpts, so Kafka starts with its
+    # built-in 1 GB heap and the container is OOMKilled (542 restarts by 10 Nov 2026). New Dev runs without a limit.
+    # As with Postgres, the saved limit cannot be cleared with null: set an explicit heap and a limit with room for
+    # the JVM's off-heap memory.
+    heapOpts: -Xmx1024m -Xms1024m
+    resources:
+      requests:
+        memory: 1536Mi
+      limits:
+        memory: 3Gi
 minio:
   istio:
     virtualservice:
