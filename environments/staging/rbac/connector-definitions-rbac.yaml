@@ -8,13 +8,17 @@
 #   cannot get resource "secrets" in API group "" in the namespace "commons"
 #
 # This grants get on that single named secret only, the same rule New Dev has
-# (Role connector-definitions-read-client-secret in commons).
+# (Role connector-definitions-read-client-secret in commons). The connector-definitions
+# post-upgrade Jobs read the same secret, so their ServiceAccounts are bound too: on staging
+# Crop runs in crop and Livestock in live (the hook creates the ServiceAccounts).
 #
 # Apply once as the cluster admin on the staging box (safe to re-apply):
 #   sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml apply -f connector-definitions-rbac.yaml
 # Check:
 #   sudo ... kubectl auth can-i get secret/registry-connector -n commons --as=system:serviceaccount:live:livestock-ci   # yes
 #   sudo ... kubectl auth can-i list secrets -n commons --as=system:serviceaccount:live:livestock-ci                  # no
+#   sudo ... kubectl auth can-i get secret/registry-connector -n commons --as=system:serviceaccount:crop:cropsown-connector-definitions   # yes
+#   sudo ... kubectl auth can-i get secret/registry-connector -n commons --as=system:serviceaccount:live:livestock-connector-definitions  # yes
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -34,6 +38,34 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: livestock-ci
+    namespace: live
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: connector-definitions-read-client-secret
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cropsown-connector-definitions-client-secret
+  namespace: commons
+subjects:
+  - kind: ServiceAccount
+    name: cropsown-connector-definitions
+    namespace: crop
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: connector-definitions-read-client-secret
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: livestock-connector-definitions-client-secret
+  namespace: commons
+subjects:
+  - kind: ServiceAccount
+    name: livestock-connector-definitions
     namespace: live
 roleRef:
   apiGroup: rbac.authorization.k8s.io
