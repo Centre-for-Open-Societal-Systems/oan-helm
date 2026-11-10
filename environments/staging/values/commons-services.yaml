@@ -51,7 +51,11 @@ master-data:
   # them at once. geo stays false: the pack's level ids differ from the migrated catalogue,
   # so loading it fails on the unique level mnemonic and stops the upgrade at this hook.
   # Set geo true only for a fresh Commons with an empty master_data database.
-  # Sample data stays off.
+  # samples: the pack's sample people (g2p_sample_individuals/households), which the
+  # registries' sample loaders read from Master Data /samples. Staging only; the chart
+  # default stays false. The load is an upsert (a re-run changes nothing). The people
+  # sit on the pack's P-codes (ET01010102 ...), so until staging's geography is the
+  # pack's, the seed warns that they are not in g2p_geo_level_values.
   geoSeed:
     enabled: true
     publishInitial: true
@@ -59,7 +63,7 @@ master-data:
     load:
       geo: false
       codelists: true
-      samples: false
+      samples: true
   masterDataUi:
     iamPublicUrl: https://staff-iam.oanstaging.com
     envVars:
