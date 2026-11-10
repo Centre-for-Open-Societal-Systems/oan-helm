@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-cropsown-registry 0.0.0-develop.508 (develop)
+
+- Crop Sown: plot registered question, record header lock, Afaan Oromoo/Tigrinya routes, intake ID label, ODK forms on Master Data (#248) (Centre-for-Open-Societal-Systems/cropsown-regsitry@7cd9b2c3dd5e)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-10
+
 ### openg2p-farmer-registry 1.0.0-rc.838 (staging)
 
 - Add a load sample data option to the staging build (#253) (Centre-for-Open-Societal-Systems/farmer-registry@b46a215b6731)
