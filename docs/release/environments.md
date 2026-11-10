@@ -122,7 +122,41 @@ the branches `dev`, `main`, `develop` and `staging`. Deploy stages run on the ag
 | Master Data | `MDS/mds` | job exists for `develop` and `staging`; last runs started by timer | - | Not verified: the target of each branch |
 | Registry dashboards | inside the registry jobs on New Dev (`ci/dashboard/deploy-ui.sh`) | New Dev | staging script `scripts/ci/deliver_staging_dashboards.sh` | - |
 | Farmer connector on staging | script `scripts/ci/deliver_staging_farmer_connector.sh` | - | staging | - |
-| Commons services | Not verified: no Jenkins job for the Commons chart was found in the job tree | - | - | - |
+| Commons services | `ci/jenkins/staging-commons.Jenkinsfile` on `main` (the Jenkins job is still to be created; until then the last staging upgrade, revision 16 on 5 Nov 2026, was by hand) | - | staging, release `commons-services`, namespace `commons`, through `scripts/ci/deliver_staging_commons.sh` | `staging-rke2-kubeconfig`; `staging-commons-secret-values` |
+
+### Commons services on staging
+
+Every build of `main` runs `scripts/ci/deliver_staging_commons.sh`. Staging follows `environments/staging/commons-services.chart`
+(the chart version, an archive in `repository/`) and `environments/staging/values/commons-services.yaml`. No
+parameters, no click.
+
+1. Checks the pinned archive against `repository/SHA256SUMS`.
+2. Compares the pin and the sha256 of the values and secret files with ConfigMap `commons-services-delivery` in
+   namespace `commons`, the record of the last successful delivery. If they match, it stops. Otherwise it delivers,
+   so a failed delivery is retried by the next build of `main`.
+3. Fails if the release's saved values hold a key that neither the staging values nor the secret values file
+   sets. `--reset-values` would drop it. The merged values are rendered by `helm template` of a throwaway chart,
+   so the deploy agent needs no YAML library. Only key names are printed.
+4. Runs a server-side dry run, then `helm upgrade --reset-values --atomic --wait`, then writes the record.
+
+The first delivery is not a no-op. It applies `master-data.geoSeed.load.samples: true` (#151), so the geo-seed hook
+loads the pack's sample people. Until staging Master Data is on the pack's geography, the hook warns that their
+place codes are not published.
+
+The secret values file (Jenkins secret-file credential `staging-commons-secret-values`) holds the values that are
+not kept in git: `keymanager.p12KeystorePass` and
+`odk-central.odk-central-enketo.{enketoSecret,enketoLessSecret}`. Create it once from the saved values on the
+staging host (JSON is valid YAML for Helm), then upload it as that credential and delete the file:
+
+```
+sudo KUBECONFIG=/etc/rancher/rke2/rke2.yaml helm get values commons-services -n commons -o json | python3 -c '
+import json, sys
+v = json.load(sys.stdin)
+out = {"keymanager": {"p12KeystorePass": v["keymanager"]["p12KeystorePass"]},
+       "odk-central": {"odk-central-enketo": {k: v["odk-central"]["odk-central-enketo"][k]
+                                               for k in ("enketoSecret", "enketoLessSecret")}}}
+print(json.dumps(out))' > commons-secret-values.yaml
+```
 
 Not verified: which job or person runs `deliver_staging_dashboards.sh` and
 `deliver_staging_farmer_connector.sh`. No Jenkins job in the job tree references them. They are scripts that
