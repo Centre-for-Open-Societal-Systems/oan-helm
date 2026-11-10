@@ -54,6 +54,11 @@ dependencies:
   name: openg2p-iam-service
   repository: https://openg2p.github.io/openg2p-helm
   version: 1.4.4-rc.125
+- condition: openg2p-iam-service-internal.enabled
+  name: openg2p-iam-service
+  alias: openg2p-iam-service-internal
+  repository: https://openg2p.github.io/openg2p-helm
+  version: 1.4.4-rc.125
 - condition: openg2p-inji-certify.enabled
   name: openg2p-inji-certify
   repository: https://openg2p.github.io/openg2p-helm
