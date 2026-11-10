@@ -32,6 +32,14 @@ class RefactorContracts(unittest.TestCase):
         self.assertFalse(values['geoSeed']['load']['samples'])
         self.assertFalse(values['geoSeed']['autoPublish'])
 
+    def test_only_staging_loads_the_pack_sample_people(self):
+        load = lambda env: yaml.safe_load((ROOT/f'environments/{env}/values/commons-services.yaml').read_text(
+            encoding='utf-8'))['master-data']['geoSeed']['load']
+        self.assertTrue(load('staging')['samples'])
+        self.assertFalse(load('dev')['samples'])
+        for env in ('staging','dev'):
+            self.assertFalse(load(env)['geo'])
+
     def test_seed_image_is_the_recorded_eth_oan_build(self):
         # The newest release-train manifest that records the seed image.
         manifests = sorted(ROOT.glob('releases/1.0.0-dev.*.yaml'),key=lambda p:int(p.stem.rsplit('.',1)[1]),reverse=True)
