@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-cropsown-registry 0.0.0-develop.510 (develop)
+
+- Staging connector: drop the admin-auth keys that commonEnv never renders (#266) (Centre-for-Open-Societal-Systems/cropsown-regsitry@f2fa56046f57)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-10
+
 ### openg2p-livestock-registry 0.0.0-develop.448 (develop)
 
 - Staging connector: drop the admin-auth keys that commonEnv never renders (#228) (Centre-for-Open-Societal-Systems/livestock-registry@7e2729a7bf4e)
