@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-livestock-registry 0.0.0-develop.446 (develop)
+
+- Staging connector: expect the staging Keycloak issuer (#224) (Centre-for-Open-Societal-Systems/livestock-registry@1c74138c15aa)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-10
+
 ### openg2p-cropsown-registry 0.0.0-develop.506 (develop)
 
 - Staging connector: accept admin tokens from the staging Keycloak issuer (#262) (Centre-for-Open-Societal-Systems/cropsown-regsitry@3a9b4df787dc)
