@@ -1,0 +1,18 @@
+chartVersion: 1.0.0-dev.39
+status: commons-services release record
+versionPolicy: Immutable after publication; component images retain independent versions.
+note: Only the Master Data seed image changed since 1.0.0-dev.38; it adds the CROP_DISEASE list to the ETH-OAN pack. The other entries of earlier manifests still apply.
+charts:
+- name: openg2p-commons-services
+  release: commons-services
+  namespace: commons
+  masterDataImageVersion: 0.0.0-develop.118
+  masterDataSeedImage:
+    repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/master-data-db-seed
+    tag: f929965ce2a9-mds-e569a59b
+    digest: sha256:27520bf4706809a30a8aacdc5372e22310c81972dd04ba9d12a68d281c8b068a
+    base: openg2p/master-data-db-seed:0.0.0-develop.118@sha256:cfa91c1bcc1798a8a82454073ac5454c8099041511bf6d0c7380b492232d809f
+    dataRepository: https://github.com/Centre-for-Open-Societal-Systems/openg2p-data
+    dataCommit: f929965ce2a9
+    countryPack: ETH-OAN
+    note: Built and pushed to ECR by the openg2p-data Jenkins pipeline (build 50) from openg2p-data develop with the CROP_DISEASE list (#56)
