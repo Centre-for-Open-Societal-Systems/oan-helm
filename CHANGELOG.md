@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-da-registry 0.0.0-develop.87 (develop)
+
+- Add a load sample data option to the staging build (#51) (Centre-for-Open-Societal-Systems/da-registry@b2eea8171fad)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-10
+
 ### openg2p-livestock-registry 1.0.0-rc.451 (staging)
 
 - New Dev: point the ODK connectors at odk-central.development.oanstaging.com (#213) (Centre-for-Open-Societal-Systems/livestock-registry@b6656cdfba74)
