@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-cropsown-registry 1.0.0-rc.508 (staging)
+
+- Staging connector upgrade: parse on the build agents' bash 4.2 (#258) (Centre-for-Open-Societal-Systems/cropsown-regsitry@7880d51210c4)
+- Images and rollback: [releases/history/staging/openg2p-cropsown-registry.md](releases/history/staging/openg2p-cropsown-registry.md)
+
+## 2026-11-10
+
 ### openg2p-da-registry 1.0.0-rc.89 (staging)
 
 - Right-align and group every number widget in the DA register (#49) (Centre-for-Open-Societal-Systems/da-registry@ea2fa29f43af)
