@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-farmer-registry 0.0.0-develop.838 (develop)
+
+- Declare the Farmer connector definitions in git and apply them after every services deploy (#259) (Centre-for-Open-Societal-Systems/farmer-registry@c2efce305864)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-10
+
 ### openg2p-livestock-registry 0.0.0-develop.449 (develop)
 
 - Subscribe the staging livestock connector to Farmer profile changes (#230) (Centre-for-Open-Societal-Systems/livestock-registry@4fd3dd7ce387)
