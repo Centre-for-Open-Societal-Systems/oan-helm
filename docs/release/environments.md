@@ -109,7 +109,8 @@ Source: Jenkins reading of the job tree, job configuration and the latest consol
 
 Every registry repository has one Jenkins multibranch job. Its `Jenkinsfile` loads `ci/pipelines/staging.groovy`
 for the branch `staging` and `ci/pipelines/dev.groovy` for every other branch. The branch source includes only
-the branches `dev`, `main`, `develop` and `staging`. Builds run on the agent labelled `vpn-agent2`.
+the branches `dev`, `main`, `develop` and `staging`. Deploy stages run on the agent labelled `oan-ci-deploy`
+(node `oan-ci-deploy-agent-1`, the one that reaches the clusters); build stages run on any build agent.
 
 | Registry | Jenkins job | `develop` branch deploys to | `staging` branch deploys to | Credential name for the cluster |
 | --- | --- | --- | --- | --- |
