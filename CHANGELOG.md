@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-da-registry 1.0.0-rc.89 (staging)
+
+- Right-align and group every number widget in the DA register (#49) (Centre-for-Open-Societal-Systems/da-registry@ea2fa29f43af)
+- Images and rollback: [releases/history/staging/openg2p-da-registry.md](releases/history/staging/openg2p-da-registry.md)
+
+## 2026-11-10
+
 ### openg2p-livestock-registry 0.0.0-develop.443 (develop)
 
 - New Dev: point the ODK connectors at odk-central.development.oanstaging.com (#213) (Centre-for-Open-Societal-Systems/livestock-registry@b6656cdfba74)
