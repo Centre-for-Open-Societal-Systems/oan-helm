@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-livestock-registry 0.0.0-develop.443 (develop)
+
+- New Dev: point the ODK connectors at odk-central.development.oanstaging.com (#213) (Centre-for-Open-Societal-Systems/livestock-registry@b6656cdfba74)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-10
+
 ### openg2p-cropsown-registry 0.0.0-develop.504 (develop)
 
 - Staging connector upgrade: parse on the build agents' bash 4.2 (#258) (Centre-for-Open-Societal-Systems/cropsown-regsitry@7880d51210c4)
