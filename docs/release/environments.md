@@ -140,7 +140,9 @@ release `commons` (chart `openg2p-commons-base`). No parameters, no click.
    Helm repository and checked against the sha256, because OpenG2P can republish a version.
 2. The release keeps its saved values. They are a full copy of the chart defaults with the staging passwords and
    cannot be rebuilt from git. `environments/staging/values/commons-base.yaml` is applied over them with
-   `--reuse-values`.
+   `--reuse-values`. So deleting a key from the overlay changes nothing on staging: the saved value stays. To
+   change a value, set the new value in the overlay. A key that must go back to the chart default needs its
+   default value written into the overlay.
 3. `--reuse-values` does not pick up a new chart version's defaults, so the script delivers only the version the
    release already runs. It refuses a pin with another version. A version change is a reviewed manual upgrade,
    after which the pin is moved to match.
