@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-da-registry 0.0.0-develop.89 (develop)
+
+- CI: ECR layer cache and retry on agent loss for on-demand agents (#55) (Centre-for-Open-Societal-Systems/da-registry@e275ed0fbe04)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-10
+
 ### openg2p-cropsown-registry 0.0.0-develop.512 (develop)
 
 - Give the disposable test database room and wait for real queries before each test module (#270) (Centre-for-Open-Societal-Systems/cropsown-regsitry@a0e7ca371f0b)
