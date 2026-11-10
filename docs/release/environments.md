@@ -11,7 +11,7 @@ Readings of 5 November 2026, 20:45 to 20:55 UTC. Source for every table unless s
 | Cluster | One node, RKE2 v1.35.8, Rancher 2.15.1 | One node, RKE2 v1.33.6, Rancher 2.12.3 |
 | Public host pattern | `<name>.development.oanstaging.com` | `<name>.oanstaging.com` |
 | Istio gateway for public hosts | `istio-system/development` (host `*.development.oanstaging.com`) | `istio-system/staging` (host `*.oanstaging.com`) |
-| Old host names | Kept on gateway `istio-system/development-legacy` (names such as `farmer-registry-development.oanstaging.com`) | None observed |
+| Old host names | Retired: since 9 November 2026 the `<name>-development.oanstaging.com` records are gone from Route 53 and those names reach staging through the `*.oanstaging.com` wildcard. The `istio-system/development-legacy` gateway and `environments/dev/legacy/` remain only as a record | None observed |
 | Host reverse proxy | nginx file `oan-development-wildcard.conf` with server name `*.development.oanstaging.com` | nginx, one file per host in `/etc/nginx/sites-enabled/` (no file contains `*.oanstaging.com`) |
 | Repository values | `environments/dev/` | `environments/staging/` |
 
