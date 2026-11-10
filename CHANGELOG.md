@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-cropsown-registry 0.0.0-develop.505 (develop)
+
+- Add a load sample data option to the staging build (#261) (Centre-for-Open-Societal-Systems/cropsown-regsitry@2a96fa5136e0)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-10
+
 ### openg2p-da-registry 0.0.0-develop.87 (develop)
 
 - Add a load sample data option to the staging build (#51) (Centre-for-Open-Societal-Systems/da-registry@b2eea8171fad)
