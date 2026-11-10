@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-farmer-registry 0.0.0-develop.836 (develop)
+
+- Run deploy stages on the oan-ci-deploy label (#255) (Centre-for-Open-Societal-Systems/farmer-registry@2e61eec84e35)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-10
+
 ### openg2p-da-registry 0.0.0-develop.88 (develop)
 
 - Run deploy stages on the oan-ci-deploy label (#54) (Centre-for-Open-Societal-Systems/da-registry@4cb243d9ef73)
