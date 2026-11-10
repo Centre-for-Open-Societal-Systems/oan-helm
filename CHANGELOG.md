@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-livestock-registry 0.0.0-develop.451 (develop)
+
+- CI: on-demand agents: ECR layer cache, retry on agent loss, real Postgres readiness (#229) (Centre-for-Open-Societal-Systems/livestock-registry@2eeb5e826da1)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-10
+
 ### openg2p-cropsown-registry 0.0.0-develop.513 (develop)
 
 - CI: on-demand agents: ECR layer cache, retry on agent loss, real Postgres readiness (#268) (Centre-for-Open-Societal-Systems/cropsown-regsitry@36d4f2277c7a)
