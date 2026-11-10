@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-10
 
+### openg2p-livestock-registry 1.0.0-rc.451 (staging)
+
+- New Dev: point the ODK connectors at odk-central.development.oanstaging.com (#213) (Centre-for-Open-Societal-Systems/livestock-registry@b6656cdfba74)
+- Images and rollback: [releases/history/staging/openg2p-livestock-registry.md](releases/history/staging/openg2p-livestock-registry.md)
+
+## 2026-11-10
+
 ### openg2p-farmer-registry 1.0.0-rc.836 (staging)
 
 - Docs: use the .development New Dev hostnames (#251) (Centre-for-Open-Societal-Systems/farmer-registry@303596597adb)
