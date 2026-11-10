@@ -56,12 +56,20 @@ master-data:
   # default stays false. The load is an upsert (a re-run changes nothing). The people
   # sit on the pack's P-codes (ET01010102 ...), so until staging's geography is the
   # pack's, the seed warns that they are not in g2p_geo_level_values.
+  # 10 Nov 2026 geography cutover (ASMIT approved): the legacy master_data database is
+  # renamed to master_data_archive_20261110 and an empty master_data is created, so this
+  # upgrade is a first load of the ETH-OAN pack: geography on the pack's P-codes, code
+  # lists and sample people, published at once. A follow-up change sets geo back to false.
+  # The image is the seed build with CROP_DISEASE (release record 1.0.0-dev.39); staging
+  # still runs chart 1.0.0-dev.35, whose default seed image is older.
   geoSeed:
     enabled: true
     publishInitial: true
     autoPublish: true
+    image:
+      tag: f929965ce2a9-mds-e569a59b@sha256:27520bf4706809a30a8aacdc5372e22310c81972dd04ba9d12a68d281c8b068a
     load:
-      geo: false
+      geo: true
       codelists: true
       samples: true
   masterDataUi:
