@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-11
 
+### openg2p-farmer-registry 1.0.0-rc.856 (staging)
+
+- Re-publish farmers whose first notice carried the TEMP- placeholder (#272) (Centre-for-Open-Societal-Systems/farmer-registry@83049b98b473)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-11
+
 ### openg2p-farmer-registry 0.0.0-develop.846 (develop)
 
 - Re-publish farmers whose first notice carried the TEMP- placeholder (#272) (Centre-for-Open-Societal-Systems/farmer-registry@83049b98b473)
