@@ -5,8 +5,10 @@
 # in-chart postgresql-sts StatefulSet on the official postgres image. Redis is on Bitnami the
 # same way (frappe-service redis-cache / redis-queue).
 #
-# Secret created outside Git, in the release namespace:
-# - oan-frappe-common-db (key `password`): password of the `postgres` superuser
+# The `postgres` superuser password lives in the Secret oan-frappe-common-db (key `password`).
+# The chart creates it on first install with a random password, reuses it on upgrade and keeps it
+# on uninstall. Read it with:
+#   kubectl get secret oan-frappe-common-db -o jsonpath='{.data.password}' | base64 -d
 
 frappe-common:
   postgresql-sts:
