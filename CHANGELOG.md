@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-11
 
+### openg2p-farmer-registry 0.0.0-develop.844 (develop)
+
+- Sample loader: a failed head's members don't stop the load; no samples is SKIPPED (#269) (Centre-for-Open-Societal-Systems/farmer-registry@fd9d33ce18fd)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-11
+
 ### openg2p-farmer-registry 0.0.0-develop.843 (develop)
 
 - Sample loader: one stuck intake no longer stops the load; staging shows the summary (#268) (Centre-for-Open-Societal-Systems/farmer-registry@3e841ba3e9f5)
