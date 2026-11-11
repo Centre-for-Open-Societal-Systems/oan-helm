@@ -1,0 +1,20 @@
+# Values for the oan-grievance-ui chart (charts/oan-grievance-ui).
+# Release `grievance-ui`, namespace `develop`.
+#
+# Set at install, not here:
+# - ui.image.tag: the Jenkins tag `develop-<build>-<sha>`
+
+ui:
+  image:
+    # Jenkinsfile IMAGE_REGISTRY/IMAGE_NAME.
+    repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan-grievance-ui
+
+  env:
+    # Read at runtime (src/lib/env.ts). The Frappe backend the UI's auth and proxy routes call.
+    AUTH_API_BASE_URL: https://grievance-backend-dev.oanstaging.com
+
+  # Exposure is not decided yet: the Jenkins verify URL is https://grievance.development.oanstaging.com.
+  # ingress:
+  #   enabled: true
+  #   hosts:
+  #   - host: grievance.development.oanstaging.com
