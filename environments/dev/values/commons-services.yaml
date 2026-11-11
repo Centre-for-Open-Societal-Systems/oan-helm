@@ -116,6 +116,18 @@ openg2p-iam-service:
     istio:
       virtualservice:
         gateway: istio-system/development
+# The internal IAM copy (lookups only) renders the same application URLs.
+openg2p-iam-service-internal:
+  global:
+    keycloakApplicationUrl: https://keycloak.development.oanstaging.com
+    registryApplicationUrl: https://farmer-registry.development.oanstaging.com
+    minioApplicationUrl: https://minio-console.development.oanstaging.com
+    supersetApplicationUrl: ''
+    iamStaffUiApplicationUrl: https://iam-staff-ui.development.oanstaging.com
+    masterDataApplicationUrl: https://master-data-ui.development.oanstaging.com
+    aweApplicationUrl: https://awe.development.oanstaging.com
+    staffPortalDefaultRedirectUri: https://staff-portal.development.oanstaging.com
+    agentPortalDefaultRedirectUri: ''
 openg2p-staff-portal-ui:
   staffPortalUi:
     envVars:
