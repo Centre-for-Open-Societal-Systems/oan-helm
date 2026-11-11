@@ -530,10 +530,8 @@ openg2p-iam-service:
       virtualservice:
         gateway: istio-system/development
     envVars:
-      # Permission and login-provider lookups go to the internal copy below, never
-      # to this Service. The public API resolving an unknown token issuer through
-      # itself recursed without end (each hop misses the table and calls again).
-      IAM_STAFF_AUTH_PROVIDER_API_URL: http://commons-services-iam-staff-portal-api-internal
+      COMMON_AUTH_PROVIDER_API_URL: http://commons-services-iam-staff-portal-api
+      IAM_STAFF_AUTH_PROVIDER_API_URL: http://commons-services-iam-staff-portal-api
   iamAgentPortalApi:
     hostname: '{{ tpl .Values.global.agentPortalApiHostname $ }}'
     resources:
@@ -545,7 +543,7 @@ openg2p-iam-service:
         gateway: istio-system/development
     envVars:
       IAM_AGENT_AUTH_PROVIDER_API_URL: ''
-  global: &iamServiceGlobal
+  global:
     iamHostname: '{{ tpl .Values.global.iamHostname $ }}'
     postgresqlHost: '{{ tpl .Values.global.postgresqlHost $ }}'
     iamDB: iam
@@ -584,39 +582,6 @@ openg2p-iam-service:
     istio:
       virtualservice:
         gateway: istio-system/development
-# Internal copy of the IAM staff API, from the same unmodified OpenG2P chart and
-# image. It answers the public IAM's lookups (role permissions, login provider by
-# issuer) from the database only: its own provider URL is empty, so a token from
-# an issuer missing in login_providers ends in one 401 instead of a loop. No
-# route, UI, agent API or init Jobs; it does not run migrations (the public
-# instance does).
-openg2p-iam-service-internal:
-  enabled: true
-  iamStaffPortalApi:
-    nameOverride: iam-staff-portal-api-internal
-    hostname: '{{ tpl .Values.global.staffPortalApiHostname $ }}'
-    loginProviders: []
-    istio:
-      enabled: false
-    resources:
-      requests:
-        cpu: 50m
-        memory: 256Mi
-    command:
-      - sh
-      - -c
-      - exec gunicorn iam_staff_portal_api.main:app --workers ${IAM_API_NO_OF_WORKERS} --worker-class uvicorn.workers.UvicornWorker --bind ${IAM_API_HOST}:${IAM_API_PORT}
-    envVars:
-      IAM_STAFF_AUTH_PROVIDER_API_URL: ''
-  iamAgentPortalApi:
-    enabled: false
-  iamStaffUi:
-    enabled: false
-  keycloak-init:
-    enabled: false
-  postgres-init:
-    enabled: false
-  global: *iamServiceGlobal
 openg2p-audit-manager:
   enabled: true
   global:
