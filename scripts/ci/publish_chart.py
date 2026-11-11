@@ -13,6 +13,8 @@ the token of a maintainer account, Jenkins credential oan-helm-fork-token. A Git
 configuration is done; only the credential changes, since commits always carry the PUBLISHER name below.
 DRY_RUN=1 prints the target and writes nothing.
 Exit codes: 0 published, 1 unexpected failure, 2 bad input, 3 no token, 4 version already published.
+HTTP 409 means another commit moved main while GitHub wrote this one (two pipelines, or the index workflow, at the
+same moment). The write is retried a few times; that is safe because the file is new and creation-only.
 
 Standard library only; runs on the stock Python 3.7 of the Jenkins agents.
 """
@@ -22,6 +24,7 @@ import os
 from pathlib import Path
 import re
 import sys
+import time
 import urllib.error
 import urllib.request
 
@@ -32,6 +35,8 @@ CHANNELS = (
     ("release", re.compile(r"\d+\.\d+\.\d+")),
 )
 PUBLISHER = {"name": "oan-chart-publisher", "email": "oan-chart-publisher@users.noreply.github.com"}
+CONFLICT_ATTEMPTS = 5
+CONFLICT_BACKOFF_SECONDS = 5
 ARCHIVE = re.compile(r"(?P<chart>[a-z0-9-]+?)-(?P<version>\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)\.tgz")
 
 
@@ -74,20 +79,28 @@ def main(argv):
         "author": PUBLISHER,
         "committer": PUBLISHER,
     }
-    request = urllib.request.Request(
-        "https://api.github.com/repos/%s/contents/%s" % (REPOSITORY, path), method="PUT",
-        data=json.dumps(body).encode("utf-8"),
-        headers={"Authorization": "Bearer " + token, "Accept": "application/vnd.github+json"})
-    try:
-        urllib.request.urlopen(request, timeout=60)
-    except urllib.error.HTTPError as error:
-        if error.code == 422:
-            print("%s is already published; a version is never replaced" % path, file=sys.stderr)
-            return 4
-        print("GitHub refused %s: HTTP %s" % (path, error.code), file=sys.stderr)
-        return 1
-    print("published %s" % path)
-    return 0
+    data = json.dumps(body).encode("utf-8")
+    for attempt in range(1, CONFLICT_ATTEMPTS + 1):
+        request = urllib.request.Request(
+            "https://api.github.com/repos/%s/contents/%s" % (REPOSITORY, path), method="PUT", data=data,
+            headers={"Authorization": "Bearer " + token, "Accept": "application/vnd.github+json"})
+        try:
+            urllib.request.urlopen(request, timeout=60)
+        except urllib.error.HTTPError as error:
+            if error.code == 422:
+                print("%s is already published; a version is never replaced" % path, file=sys.stderr)
+                return 4
+            if error.code == 409 and attempt < CONFLICT_ATTEMPTS:
+                wait = CONFLICT_BACKOFF_SECONDS * attempt
+                print("GitHub answered HTTP 409 for %s (main moved during the write); retry %d of %d in %ds"
+                      % (path, attempt, CONFLICT_ATTEMPTS - 1, wait), file=sys.stderr)
+                time.sleep(wait)
+                continue
+            print("GitHub refused %s: HTTP %s" % (path, error.code), file=sys.stderr)
+            return 1
+        print("published %s" % path)
+        return 0
+    return 1
 
 
 if __name__ == "__main__":
