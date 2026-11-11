@@ -38,7 +38,7 @@ Anything marked `# staging: confirm` is not yet decided (see [Open points](#open
 | farmerConnector | `https://connector-farmer-registry.qa.oanstaging.com` |
 
 Hosts that already exist on staging today (`farmer-registry`, `keycloak`, `odk-central`, the Crop and
-Livestock registries) keep their names. `odk-central.qa.oanstaging.com` currently points at the retired
+Livestock registries) keep their names. `odk-central.oanstaging.com` pointed at the retired
 ODK VM; it moves to the Commons ODK Central when the fresh install switches the public hosts.
 
 ## What runs on staging
