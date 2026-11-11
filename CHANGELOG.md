@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-11
 
+### oan-frappe-common 0.1.0-dev.2
+
+Previous version: 0.1.0-dev.1.
+
+- feat(frappe-common): create the PostgreSQL password Secret from the chart (efb1c04)
+
+## 2026-11-11
+
 ### openg2p-farmer-registry 0.0.0-develop.847 (develop)
 
 - Give the active Farmer connector its reviewed admin login (#274) (Centre-for-Open-Societal-Systems/farmer-registry@5986e4dc9fd5)

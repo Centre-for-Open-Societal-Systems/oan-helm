@@ -287,6 +287,38 @@ entries:
       oan.org/owner: OpenAgriNet (OAN)
     apiVersion: v2
     appVersion: version-16
+    created: "2026-11-11T10:39:56.491788986Z"
+    dependencies:
+    - alias: frappe-common
+      name: frappe-common
+      repository: ""
+      version: 8.0.91-oan.2
+    description: Shared MariaDB and PostgreSQL databases for the OAN Frappe apps;
+      deploys the frappe-common chart.
+    digest: d3abf0b81564efb01066d0226660120b337c5d0db00a1be3ca20d2ef8ccdcee1
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    keywords:
+    - oan
+    - openagrinet
+    - frappe
+    - postgresql
+    - mariadb
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-frappe-common
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-service-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-frappe-common-0.1.0-dev.2.tgz
+    version: 0.1.0-dev.2
+  - annotations:
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-frappe-common
+      oan.org/owner: OpenAgriNet (OAN)
+    apiVersion: v2
+    appVersion: version-16
     created: "2026-11-11T07:59:28.019979357Z"
     dependencies:
     - alias: frappe-common
@@ -9367,4 +9399,4 @@ entries:
     urls:
     - openg2p-livestock-registry-1.0.0-dev.1.tgz
     version: 1.0.0-dev.1
-generated: "2026-11-11T08:46:25.49697351Z"
+generated: "2026-11-11T10:39:56.485836864Z"
