@@ -1,0 +1,119 @@
+{{- /*
+  Keep the staff and agent login_providers rows on the Keycloak issuer these values declare.
+
+  The IAM APIs seed login_providers from the mounted login_providers.json on every migrate, keyed by
+  *issuer* (iam_staff_portal_api data_loader seed_login_providers_by_issuer): a row whose issuer is not
+  in the table is inserted with the id from the file (staff 1, agent 10). When the Keycloak address
+  changes (a new base domain), the new issuer is "missing", the insert reuses id 1 or 10, and the
+  migrate fails on the primary key. Until the row carries the new issuer the IAM also cannot resolve
+  the new tokens and falls back to calling itself.
+
+  This pre-upgrade Job moves the existing rows with those ids to the issuer, endpoints and callback
+  rendered from the same values the subchart renders login_providers.json from, so the seed finds the
+  issuer and inserts nothing. Rows are matched by id and only changed when they differ; nothing is
+  inserted or deleted, and running it with the previous values moves them back. Pre-upgrade only: on
+  a fresh install the table does not exist and the seed inserts the rows itself.
+
+  The IAM's own update_login_provider API is not usable here: it authenticates the caller's token
+  through this same table, so it cannot be reached once Keycloak issues tokens from the new address.
+*/ -}}
+{{- $c := .Values.iamLoginProviderIssuerSync -}}
+{{- $iam := index .Values "openg2p-iam-service" | default dict -}}
+{{- if and $c.enabled $iam.enabled }}
+{{- $keycloak := trimSuffix "/" (tpl .Values.global.keycloakBaseUrl $) -}}
+{{- $iamGlobal := $iam.global | default dict -}}
+{{- $rows := list -}}
+{{- range $api := list (dict "values" $iam.iamStaffPortalApi "redirect" $iamGlobal.staffPortalDefaultRedirectUri) (dict "values" $iam.iamAgentPortalApi "redirect" $iamGlobal.agentPortalDefaultRedirectUri) }}
+{{- $v := $api.values | default dict -}}
+{{- if and (ne (toString $v.enabled) "false") $v.loginProviders }}
+{{- $callback := printf "https://%s/auth/callback" (tpl (toString $v.hostname) $) -}}
+{{- $redirect := tpl (toString ($api.redirect | default "")) $ -}}
+{{- range $v.loginProviders }}
+{{- $realm := printf "%s/realms/%s" $keycloak .realm -}}
+{{- $rows = append $rows (dict
+  "id" (int .id)
+  "issuer" $realm
+  "authorization_endpoint" (printf "%s/protocol/openid-connect/auth" $realm)
+  "token_endpoint" (printf "%s/protocol/openid-connect/token" $realm)
+  "userinfo_endpoint" (printf "%s/protocol/openid-connect/userinfo" $realm)
+  "server_metadata_url" (printf "%s/.well-known/openid-configuration" $realm)
+  "jwks_uri" (printf "%s/protocol/openid-connect/certs" $realm)
+  "oauth_callback_url" $callback
+  "default_redirect_uri" $redirect) -}}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- if $rows }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-iam-login-provider-issuer-sync
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: iam-login-provider-issuer-sync
+  annotations:
+    helm.sh/hook: pre-upgrade
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 5
+  template:
+    spec:
+      restartPolicy: OnFailure
+      automountServiceAccountToken: false
+      {{- with $c.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: sync
+          image: {{ $c.image | quote }}
+          env:
+            - { name: DB_HOST, value: {{ tpl $c.db.hostname $ | quote }} }
+            - { name: DB_PORT, value: {{ $c.db.port | quote }} }
+            - { name: DB_NAME, value: {{ $c.db.name | quote }} }
+            - { name: DB_USER, value: {{ $c.db.username | quote }} }
+            - name: PGPASSWORD
+              valueFrom: { secretKeyRef: { name: {{ $c.db.passwordSecret.name | quote }}, key: {{ $c.db.passwordSecret.key | quote }} } }
+            - name: PROVIDER_ROWS
+              value: {{ $rows | toJson | quote }}
+          command: ["sh", "-c"]
+          args:
+            - |
+              set -eu
+              PSQL="psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -v ON_ERROR_STOP=1"
+              if [ "$($PSQL -tAc "SELECT to_regclass('public.login_providers') IS NOT NULL")" != "t" ]; then
+                echo "login_providers does not exist yet; the IAM seeds it on its first start"; exit 0
+              fi
+              $PSQL -v rows="$PROVIDER_ROWS" <<'SQL'
+              UPDATE login_providers AS lp SET
+                issuer = r.issuer,
+                authorization_endpoint = r.authorization_endpoint,
+                token_endpoint = r.token_endpoint,
+                userinfo_endpoint = r.userinfo_endpoint,
+                server_metadata_url = r.server_metadata_url,
+                jwks_uri = r.jwks_uri,
+                oauth_callback_url = r.oauth_callback_url,
+                default_redirect_uri = COALESCE(NULLIF(r.default_redirect_uri, ''), lp.default_redirect_uri),
+                updated_at = now()
+              FROM jsonb_to_recordset(:'rows'::jsonb) AS r(
+                id integer, issuer text, authorization_endpoint text, token_endpoint text, userinfo_endpoint text,
+                server_metadata_url text, jwks_uri text, oauth_callback_url text, default_redirect_uri text)
+              WHERE lp.id = r.id
+                AND (lp.issuer IS DISTINCT FROM r.issuer
+                  OR lp.authorization_endpoint IS DISTINCT FROM r.authorization_endpoint
+                  OR lp.token_endpoint IS DISTINCT FROM r.token_endpoint
+                  OR lp.userinfo_endpoint IS DISTINCT FROM r.userinfo_endpoint
+                  OR lp.server_metadata_url IS DISTINCT FROM r.server_metadata_url
+                  OR lp.jwks_uri IS DISTINCT FROM r.jwks_uri
+                  OR lp.oauth_callback_url IS DISTINCT FROM r.oauth_callback_url
+                  OR (r.default_redirect_uri <> '' AND lp.default_redirect_uri IS DISTINCT FROM r.default_redirect_uri))
+              RETURNING lp.id, lp.issuer;
+              SQL
+          resources:
+            requests: {cpu: 10m, memory: 32Mi}
+            limits: {memory: 128Mi}
+{{- end }}
+{{- end }}

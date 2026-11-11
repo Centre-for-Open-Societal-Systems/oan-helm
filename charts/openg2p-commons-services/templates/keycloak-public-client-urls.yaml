@@ -1,0 +1,94 @@
+{{- /*
+  Add the declared redirect URIs and web origins to the public Keycloak clients after every upgrade.
+
+  keycloak-init rewrites an existing client only when it mounts a secret for it, so confidential
+  clients follow the values but public ones (registry-connector-ui here, consent-manager-ui from the
+  consent manager subchart) keep the URLs they were created with. This Job reads the public clients
+  of this chart's keycloak-init realms plus keycloakPublicClientUrls.extraClients and adds their URLs
+  next to the existing ones (files/keycloak-public-client-urls.py). Nothing is removed unless
+  keycloakPublicClientUrls.prune is true.
+*/ -}}
+{{- $c := .Values.keycloakPublicClientUrls -}}
+{{- if $c.enabled }}
+{{- $clients := list -}}
+{{- $init := index .Values "keycloak-init" | default dict -}}
+{{- range $realm, $def := ($init.realms | default dict) }}
+{{- range ($def.clients | default list) }}
+{{- if .publicClient }}
+{{- $redirects := list -}}
+{{- range (.redirectUris | default list) }}{{ $redirects = append $redirects (tpl . $) }}{{ end -}}
+{{- $origins := list -}}
+{{- range (.webOrigins | default list) }}{{ $origins = append $origins (tpl . $) }}{{ end -}}
+{{- $clients = append $clients (dict "realm" $realm "clientId" .clientId "redirectUris" $redirects "webOrigins" $origins "prune" $c.prune) -}}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- range ($c.extraClients | default list) }}
+{{- $redirects := list -}}
+{{- range (.redirectUris | default list) }}{{ $redirects = append $redirects (tpl . $) }}{{ end -}}
+{{- $origins := list -}}
+{{- range (.webOrigins | default list) }}{{ $origins = append $origins (tpl . $) }}{{ end -}}
+{{- $clients = append $clients (dict "realm" .realm "clientId" .clientId "redirectUris" $redirects "webOrigins" $origins "prune" $c.prune) -}}
+{{- end }}
+{{- if $clients }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-keycloak-public-client-urls
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: keycloak-public-client-urls
+data:
+  reconcile.py: |
+{{ .Files.Get "files/keycloak-public-client-urls.py" | indent 4 }}
+  clients.json: {{ $clients | toJson | quote }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-keycloak-public-client-urls
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: keycloak-public-client-urls
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "30"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 5
+  template:
+    spec:
+      restartPolicy: OnFailure
+      automountServiceAccountToken: false
+      {{- with $c.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: reconcile
+          image: {{ $c.image | quote }}
+          command: [python, -B, /job/reconcile.py]
+          env:
+            - { name: KEYCLOAK_URL, value: {{ tpl $c.keycloak.url $ | quote }} }
+            - { name: KEYCLOAK_USER, value: {{ $c.keycloak.user | quote }} }
+            - name: KEYCLOAK_PASSWORD
+              valueFrom: { secretKeyRef: { name: {{ tpl $c.keycloak.existingSecret $ | quote }}, key: {{ $c.keycloak.existingSecretKey | quote }} } }
+            - name: CLIENTS_JSON
+              valueFrom: { configMapKeyRef: { name: {{ printf "%s-keycloak-public-client-urls" .Release.Name | quote }}, key: clients.json } }
+          volumeMounts:
+            - { name: job, mountPath: /job, readOnly: true }
+          resources:
+            requests: {cpu: 10m, memory: 32Mi}
+            limits: {memory: 128Mi}
+      volumes:
+        - name: job
+          configMap:
+            name: {{ .Release.Name }}-keycloak-public-client-urls
+            items:
+              - { key: reconcile.py, path: reconcile.py }
+{{- end }}
+{{- end }}
