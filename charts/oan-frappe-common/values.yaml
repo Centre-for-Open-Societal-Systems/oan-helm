@@ -16,9 +16,10 @@ frappe-common:
     enabled: true
     image:
       repository: bitnamilegacy/postgresql
-      # Same major as the previous postgres:15. A data directory from one major version cannot be
-      # opened by another, so do not change the major on an existing volume.
-      tag: 15.9.0-debian-12-r0
+      # The same image as openg2p/postgresql:16.4.0-debian-12-r14 (OpenG2P's commons-postgresql). A data
+      # directory from one major version cannot be opened by another, so do not change the major on
+      # an existing volume.
+      tag: 16.4.0-debian-12-r14
     auth:
       existingSecret: oan-frappe-common-db
       secretKeys:
