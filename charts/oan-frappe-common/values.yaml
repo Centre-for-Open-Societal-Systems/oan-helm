@@ -1,0 +1,37 @@
+# Defaults for the shared OAN Frappe databases. Everything sits under `frappe-common`, the values
+# of the frappe-common chart this one depends on.
+#
+# PostgreSQL is the Bitnami postgresql subchart (12.1.6) with the bitnamilegacy image, not the
+# in-chart postgresql-sts StatefulSet on the official postgres image. Redis is on Bitnami the
+# same way (frappe-service redis-cache / redis-queue).
+#
+# Secret created outside Git, in the release namespace:
+# - oan-frappe-common-db (key `password`): password of the `postgres` superuser
+
+frappe-common:
+  postgresql-sts:
+    enabled: false
+
+  postgresql-subchart:
+    enabled: true
+    image:
+      repository: bitnamilegacy/postgresql
+      # Same major as the previous postgres:15. A data directory from one major version cannot be
+      # opened by another, so do not change the major on an existing volume.
+      tag: 15.9.0-debian-12-r0
+    auth:
+      existingSecret: oan-frappe-common-db
+      secretKeys:
+        adminPasswordKey: password
+    primary:
+      # The apps sharing this database open many connections (gunicorn, workers, scheduler,
+      # socketio); the PostgreSQL default of 100 runs out. The sts used the same 300.
+      extendedConfiguration: |
+        max_connections = 300
+      persistence:
+        size: 8Gi
+      resourcesPreset: none
+      resources:
+        requests:
+          cpu: 250m
+          memory: 512Mi
