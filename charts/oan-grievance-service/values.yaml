@@ -1,7 +1,7 @@
 # Defaults for the OAN Grievance Service. Everything sits under `frappe`, the values of the
 # frappe chart this one depends on. Per-environment values live in
-# environments/<env>/values/oan-grievance-service.yaml. ClamAV is the separate release
-# `grievance-clamav` of charts/oan-clamav in the same namespace.
+# environments/<env>/values/oan-grievance-service.yaml. ClamAV is part of this chart
+# (templates/clamav.yaml, values under `clamav`).
 #
 # Set at install, not here:
 # - frappe.image.tag: the Jenkins tag `develop-<build>-<sha>` (locally: `develop`)
@@ -13,6 +13,22 @@
 # - oan-grievance-jwt (key `jwt_v1.pem`): unencrypted RSA private key, at least 2048 bits
 # - oan-grievance-sentry (key `dsn`): Sentry DSN. Optional.
 # - oan-grievance-seed (key `password`): password for the demo users. Optional.
+
+# ClamAV for attachment scanning (services/scanning.py): a single-replica Deployment and a ClusterIP
+# Service named <release>-clamav. The signature database is downloaded by freshclam on every start
+# into an emptyDir. Set enabled to false to run without it (attachments then stay Pending).
+clamav:
+  enabled: true
+  image:
+    repository: clamav/clamav-debian
+    tag: "1.4"
+    pullPolicy: IfNotPresent
+  port: 3310
+  resources:
+    requests:
+      memory: 1536Mi
+    limits:
+      memory: 3Gi
 
 frappe:
   image:
@@ -37,7 +53,7 @@ frappe:
         v1: keys/jwt_v1.pem
       jwt_self_registerable_roles:
       - Grievance Submitter
-      # The Service of release `grievance-clamav`. Without it attachments stay Pending.
+      # The Service of the bundled ClamAV (<release>-clamav; release `grievance` gives `grievance-clamav`). Without it attachments stay Pending.
       grievance_clamav_host: grievance-clamav
       grievance_clamav_port: 3310
     files:

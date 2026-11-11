@@ -1,7 +1,7 @@
 # Values for the oan-a2c-gateway chart (oan_a2c/apisix/k8s).
 # Target: the gateway cluster, namespace `a2c`, next to the grievance routes. The routes
 # reach A2C Frappe in the A2C app cluster through the node port of gatewayAccess in
-# oan-a2c.yaml. See docs/apisix-gateway.md and docs/a2c.md.
+# oan-a2c-service.yaml. See docs/apisix-gateway.md and docs/a2c.md.
 #
 # Set at install, not here:
 # - web.externalHosts: the private addresses of the A2C app nodes, from the gateway
@@ -25,11 +25,11 @@ tls:
   secretName: oan-a2c-tls
 
 # Frappe site name, sent as Host because Frappe selects the site from it. Must equal
-# siteName in oan-a2c.yaml.
+# siteName in oan-a2c-service.yaml.
 siteName: a2c-backend.development.oanstaging.com
 
 # With externalHosts set, serviceName only names the ApisixUpstream, and port is the node
-# port of oan-a2c.yaml gatewayAccess. Without it, serviceName and port are a Service in
+# port of oan-a2c-service.yaml gatewayAccess. Without it, serviceName and port are a Service in
 # this namespace (APISIX and Frappe in one cluster).
 web:
   serviceName: a2c-frappe-gunicorn

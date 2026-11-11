@@ -25,7 +25,7 @@ against a real NFS or MariaDB server.
 
 Files:
 
-- [oan-grievance-service.yaml](../environments/dev/values/oan-grievance-service.yaml) and [oan-a2c.yaml](../environments/dev/values/oan-a2c.yaml): the base files already hold the external-database and `nfs-csi` settings.
+- [oan-grievance-service.yaml](../environments/dev/values/oan-grievance-service.yaml) and [oan-a2c-service.yaml](../environments/dev/values/oan-a2c-service.yaml): the base files already hold the external-database and `nfs-csi` settings.
 - [nfs-csi.yaml](../environments/dev/values/nfs-csi.yaml): the NFS CSI driver and the `nfs-csi` StorageClass.
 
 The charts only require that `frappe.dbHost` or `frappe.mariadb-sts` is set. The upstream
@@ -188,7 +188,7 @@ helm upgrade --install grievance charts/oan-grievance-service -n develop \
   --wait --wait-for-jobs --timeout 20m
 ```
 
-A2C is the same with `charts/oan-a2c`, namespace `a2c-develop`, `oan-a2c.yaml` and
+A2C is the same with `charts/oan-a2c-service`, namespace `a2c-develop`, `oan-a2c-service.yaml` and
 Secret `oan-a2c-db`. Through Rancher, paste the base file into the values editor and set
 `frappe.dbHost`.
 

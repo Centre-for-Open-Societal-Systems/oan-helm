@@ -1,0 +1,27 @@
+apiVersion: v2
+name: oan-frappe-common
+description: Shared MariaDB and PostgreSQL databases for the OAN Frappe apps; deploys the
+  frappe-common chart.
+type: application
+version: 0.1.0-dev.1
+appVersion: version-16
+keywords:
+- oan
+- openagrinet
+- frappe
+- postgresql
+- mariadb
+home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+sources:
+- https://github.com/Centre-for-Open-Societal-Systems/oan-service-helm
+- https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+maintainers:
+- name: OpenAgriNet (OAN)
+  url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+dependencies:
+- name: frappe-common
+  alias: frappe-common
+  version: 8.0.91-oan.1
+annotations:
+  oan.org/owner: OpenAgriNet (OAN)
+  oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-frappe-common
