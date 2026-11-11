@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-11
 
+### openg2p-farmer-registry 0.0.0-develop.845 (develop)
+
+- Staging promotion applies the declared connector definitions (#271) (Centre-for-Open-Societal-Systems/farmer-registry@51b906f97be0)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-11
+
 ### openg2p-commons-services 1.0.0-dev.40
 
 Previous version: 1.0.0-dev.39.
