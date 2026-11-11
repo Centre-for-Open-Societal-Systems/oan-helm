@@ -19,8 +19,13 @@ maintainers:
 - name: OpenAgriNet (OAN)
   url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
 dependencies:
-- name: frappe
-  version: 8.0.91
+- name: frappe-service
+  alias: frappe
+  version: 8.0.91-oan.1
+- name: oan-clamav
+  alias: clamav
+  condition: clamav.enabled
+  version: 0.1.0-dev.1
 annotations:
   oan.org/owner: OpenAgriNet (OAN)
   oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service

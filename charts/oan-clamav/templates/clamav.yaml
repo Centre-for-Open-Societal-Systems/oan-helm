@@ -7,7 +7,7 @@ start, so readiness waits on the clamd port.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ include "clamav.fullname" . }}
   labels:
     {{- include "clamav.labels" . | nindent 4 }}
     app.kubernetes.io/component: clamav
@@ -54,7 +54,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ include "clamav.fullname" . }}
   labels:
     {{- include "clamav.labels" . | nindent 4 }}
     app.kubernetes.io/component: clamav

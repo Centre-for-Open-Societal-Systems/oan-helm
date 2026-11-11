@@ -1,5 +1,5 @@
 apiVersion: v2
-name: oan-a2c
+name: oan-a2c-service
 description: OAN Access to Credit (A2C) Frappe app with oan_auth_service for OpenAgriNet (OAN);
   deploys the OAN frappe chart with the A2C defaults.
 type: application
@@ -19,9 +19,10 @@ maintainers:
 - name: OpenAgriNet (OAN)
   url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
 dependencies:
-- name: frappe
-  version: 8.0.91
+- name: frappe-service
+  alias: frappe
+  version: 8.0.91-oan.1
 annotations:
   oan.org/owner: OpenAgriNet (OAN)
   oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c
-  oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-a2c
+  oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-a2c-service

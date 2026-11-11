@@ -11,7 +11,7 @@ different for A2C.
 
 | | Grievance | A2C |
 |---|---|---|
-| Chart | [charts/oan-grievance-service](../charts/oan-grievance-service) | [charts/oan-a2c](../charts/oan-a2c) |
+| Chart | [charts/oan-grievance-service](../charts/oan-grievance-service) | [charts/oan-a2c-service](../charts/oan-a2c-service) |
 | Release / namespace | `grievance` / `develop` | `a2c` / `a2c-develop` |
 | Frappe site | `grievance-backend.development.oanstaging.com` | `a2c-backend.development.oanstaging.com` |
 | Public host | `grievance-backend.development.oanstaging.com` | `a2c-backend.development.oanstaging.com` (confirm) |
@@ -19,7 +19,7 @@ different for A2C.
 | Image | `oan-frappe` | `oan/a2c` (ECR repository of the A2C Jenkinsfile) |
 | Extra workloads | ClamAV, four queue workers | none: A2C uses only the default, short and long queues |
 | Gateway routes | `oan-grievance-gateway`, namespace `grievance` | `oan-a2c-gateway`, namespace `a2c` |
-| Values | [oan-grievance-service.yaml](../environments/dev/values/oan-grievance-service.yaml) | [oan-a2c.yaml](../environments/dev/values/oan-a2c.yaml), [oan-a2c-gateway.yaml](../environments/dev/values/oan-a2c-gateway.yaml) |
+| Values | [oan-grievance-service.yaml](../environments/dev/values/oan-grievance-service.yaml) | [oan-a2c-service.yaml](../environments/dev/values/oan-a2c-service.yaml), [oan-a2c-gateway.yaml](../environments/dev/values/oan-a2c-gateway.yaml) |
 
 APISIX tells the two apart by hostname: every route lists its app's `hosts`, and both
 apps serve `/v1/auth/*`, so the host is the only separator. An unknown host gets
@@ -65,8 +65,8 @@ openssl genrsa -out jwt_v1.pem 2048
 kubectl -n a2c-develop create secret generic oan-a2c-jwt --from-file=jwt_v1.pem=jwt_v1.pem
 rm jwt_v1.pem
 
-helm upgrade --install a2c charts/oan-a2c -n a2c-develop \
-  -f environments/dev/values/oan-a2c.yaml \
+helm upgrade --install a2c charts/oan-a2c-service -n a2c-develop \
+  -f environments/dev/values/oan-a2c-service.yaml \
   --set-string frappe.image.tag=<develop-build> \
   --set-string frappe.dbHost=<mariadb host> \
   --wait --wait-for-jobs --timeout 25m
