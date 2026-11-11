@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-11
 
+### openg2p-farmer-registry 1.0.0-rc.846 (staging)
+
+- Run the sample loader as the chart's own hook Job with its settings (#262) (Centre-for-Open-Societal-Systems/farmer-registry@ac551813beb0)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-11
+
 ### openg2p-farmer-registry 0.0.0-develop.840 (develop)
 
 - Run the sample loader as the chart's own hook Job with its settings (#262) (Centre-for-Open-Societal-Systems/farmer-registry@ac551813beb0)
