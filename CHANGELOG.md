@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-11
 
+### openg2p-livestock-registry 0.0.0-develop.452 (develop)
+
+- AWE callback registration follows the registry's HMAC Secret (#233) (Centre-for-Open-Societal-Systems/livestock-registry@798ea765f01b)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+### openg2p-cropsown-registry 1.0.0-rc.523 (staging)
+
+- AWE callback registration follows the registry's HMAC Secret (#274) (Centre-for-Open-Societal-Systems/cropsown-regsitry@2af99b4c005c)
+- Images and rollback: [releases/history/staging/openg2p-cropsown-registry.md](releases/history/staging/openg2p-cropsown-registry.md)
+
+## 2026-11-11
+
 ### openg2p-cropsown-registry 1.0.0-rc.521 (staging)
 
 - Staging connector: sign Farmer-reference deliveries with the crop lookup key (#272) (Centre-for-Open-Societal-Systems/cropsown-regsitry@6a554d1708b3)
