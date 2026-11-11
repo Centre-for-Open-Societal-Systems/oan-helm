@@ -8,6 +8,15 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-11
+
+### openg2p-commons-services 1.0.0-dev.39
+
+Previous version: 1.0.0-dev.38.
+
+- Stop the IAM staff API resolving token issuers through itself (#159) (934b22c)
+- Master Data seed image with the CROP_DISEASE list (#155) (dac93a2)
+
 ## 2026-11-10
 
 ### openg2p-livestock-registry 0.0.0-develop.451 (develop)
