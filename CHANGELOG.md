@@ -10,6 +10,43 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-11
 
+### oan-a2c-service 0.1.0-dev.3
+
+First published version.
+
+- feat(a2c,grievance): rename oan-a2c to oan-a2c-service, depend on frappe-service, and bundle ClamAV (cfd3af0)
+
+### oan-a2c-ui 0.1.0-dev.1
+
+First published version.
+
+- feat(ui): add oan-a2c-ui and oan-grievance-ui wrapper charts on the ui-service chart (35ae934)
+
+### oan-frappe-common 0.1.0-dev.1
+
+First published version.
+
+- feat(frappe-common): use PostgreSQL 16.4.0 in oan-frappe-common (a7293c7)
+- feat(frappe-common): use the Bitnami PostgreSQL subchart in oan-frappe-common (51b781c)
+- feat(a2c,grievance): rename oan-a2c to oan-a2c-service, depend on frappe-service, and bundle ClamAV (cfd3af0)
+
+### oan-grievance-service 0.1.0-dev.4
+
+Previous version: 0.1.0-dev.3.
+
+- refactor(grievance): fold ClamAV into oan-grievance-service and remove the oan-clamav chart (3584a31)
+- feat(a2c,grievance): rename oan-a2c to oan-a2c-service, depend on frappe-service, and bundle ClamAV (cfd3af0)
+- feat(apisix,a2c,grievance): bundle Redis with the gateway and use the Bitnami images (ff81b94)
+- feat(a2c,grievance): use the openg2p redis image for cache and queue (17e6b74)
+
+### oan-grievance-ui 0.1.0-dev.1
+
+First published version.
+
+- feat(ui): add oan-a2c-ui and oan-grievance-ui wrapper charts on the ui-service chart (35ae934)
+
+## 2026-11-11
+
 ### openg2p-cropsown-registry 0.0.0-develop.514 (develop)
 
 - Staging connector: sign Farmer-reference deliveries with the crop lookup key (#272) (Centre-for-Open-Societal-Systems/cropsown-regsitry@6a554d1708b3)

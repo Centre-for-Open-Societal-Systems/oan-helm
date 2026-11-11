@@ -155,6 +155,71 @@ entries:
     urls:
     - oan-a2c-0.1.0-dev.1.tgz
     version: 0.1.0-dev.1
+  oan-a2c-service:
+  - annotations:
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-a2c-service
+      oan.org/owner: OpenAgriNet (OAN)
+    apiVersion: v2
+    appVersion: version-16
+    created: "2026-11-11T07:59:28.013066517Z"
+    dependencies:
+    - alias: frappe
+      name: frappe-service
+      repository: ""
+      version: 8.0.91-oan.1
+    description: OAN Access to Credit (A2C) Frappe app with oan_auth_service for OpenAgriNet
+      (OAN); deploys the OAN frappe chart with the A2C defaults.
+    digest: a4b5e572f669500771fb12448f36420af5af94b26657f8592e38956afe228861
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c
+    keywords:
+    - oan
+    - openagrinet
+    - frappe
+    - a2c
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-a2c-service
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_a2c
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_auth_service
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-a2c-service-0.1.0-dev.3.tgz
+    version: 0.1.0-dev.3
+  oan-a2c-ui:
+  - annotations:
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-a2c-ui
+      oan.org/owner: OpenAgriNet (OAN)
+    apiVersion: v2
+    appVersion: latest
+    created: "2026-11-11T07:59:28.013664785Z"
+    dependencies:
+    - alias: ui
+      name: ui-service
+      repository: ""
+      version: 0.1.0
+    description: OAN Access to Credit (A2C) Next.js UI; deploys the OAN ui-service
+      chart with the A2C defaults.
+    digest: 34a34b97b368c2ff0a7e56236b81a9ffde679e60e9a10adc745dbeab12080b06
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    keywords:
+    - oan
+    - openagrinet
+    - nextjs
+    - a2c
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-a2c-ui
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-a2c-ui-0.1.0-dev.1.tgz
+    version: 0.1.0-dev.1
   oan-apisix-gateway:
   - annotations:
       oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-apisix-gateway
@@ -216,7 +281,73 @@ entries:
     urls:
     - oan-clamav-0.1.0-dev.1.tgz
     version: 0.1.0-dev.1
+  oan-frappe-common:
+  - annotations:
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-frappe-common
+      oan.org/owner: OpenAgriNet (OAN)
+    apiVersion: v2
+    appVersion: version-16
+    created: "2026-11-11T07:59:28.019979357Z"
+    dependencies:
+    - alias: frappe-common
+      name: frappe-common
+      repository: ""
+      version: 8.0.91-oan.1
+    description: Shared MariaDB and PostgreSQL databases for the OAN Frappe apps;
+      deploys the frappe-common chart.
+    digest: 3fcd793ae806fed2b43bc9955ad01d0302ddb00b6e41f44cd4a6b55c3056d766
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    keywords:
+    - oan
+    - openagrinet
+    - frappe
+    - postgresql
+    - mariadb
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-frappe-common
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-service-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-frappe-common-0.1.0-dev.1.tgz
+    version: 0.1.0-dev.1
   oan-grievance-service:
+  - annotations:
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-grievance-service
+      oan.org/owner: OpenAgriNet (OAN)
+    apiVersion: v2
+    appVersion: version-16
+    created: "2026-11-11T07:59:28.028571971Z"
+    dependencies:
+    - alias: frappe
+      name: frappe-service
+      repository: ""
+      version: 8.0.91-oan.1
+    description: OAN Grievance Service (Frappe app with oan_auth_service) for OpenAgriNet
+      (OAN); deploys the OAN frappe chart with the grievance defaults and queue workers.
+    digest: 55119723a09d4f1a55023ea5d7419d06d5787ac8b7e1a69b0e1ebde261bd3bf6
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service
+    keywords:
+    - oan
+    - openagrinet
+    - frappe
+    - grievance
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-grievance-service
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service
+    - https://github.com/Centre-for-Open-Societal-Systems/oan_auth_service
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-grievance-service-0.1.0-dev.4.tgz
+    version: 0.1.0-dev.4
   - annotations:
       oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service
       oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-grievance-service
@@ -319,6 +450,37 @@ entries:
     type: application
     urls:
     - oan-grievance-service-0.1.0-dev.1.tgz
+    version: 0.1.0-dev.1
+  oan-grievance-ui:
+  - annotations:
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-grievance-ui
+      oan.org/owner: OpenAgriNet (OAN)
+    apiVersion: v2
+    appVersion: latest
+    created: "2026-11-11T07:59:28.029196258Z"
+    dependencies:
+    - alias: ui
+      name: ui-service
+      repository: ""
+      version: 0.1.0
+    description: OAN Grievance Next.js UI; deploys the OAN ui-service chart with the
+      grievance defaults.
+    digest: 7962330adf0d7319c3dd560da22c4b41d2a94457797a4d5052185e1c4a6bf32e
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    keywords:
+    - oan
+    - openagrinet
+    - nextjs
+    - grievance
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-grievance-ui
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-grievance-ui-0.1.0-dev.1.tgz
     version: 0.1.0-dev.1
   oan-logging:
   - annotations:
@@ -9097,4 +9259,4 @@ entries:
     urls:
     - openg2p-livestock-registry-1.0.0-dev.1.tgz
     version: 1.0.0-dev.1
-generated: "2026-11-11T05:00:10.980964683Z"
+generated: "2026-11-11T07:59:28.004110149Z"
