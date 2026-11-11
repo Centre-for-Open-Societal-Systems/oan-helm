@@ -59,7 +59,9 @@ master-data:
   # 10 Nov 2026 geography cutover (ASMIT approved): the legacy master_data database is
   # renamed to master_data_archive_20261110 and an empty master_data is created, so this
   # upgrade is a first load of the ETH-OAN pack: geography on the pack's P-codes, code
-  # lists and sample people, published at once. A follow-up change sets geo back to false.
+  # lists and sample people, published at once. It ran on 11 Nov 2026 (commons-services
+  # revision 19: 1 published version, 21,037 units). geo is false again so later upgrades
+  # only upsert code lists and samples; the archive database stays as the record.
   # The image is the seed build with CROP_DISEASE (release record 1.0.0-dev.39); staging
   # still runs chart 1.0.0-dev.35, whose default seed image is older.
   geoSeed:
@@ -72,7 +74,7 @@ master-data:
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/master-data-db-seed
       tag: f929965ce2a9-mds-e569a59b@sha256:27520bf4706809a30a8aacdc5372e22310c81972dd04ba9d12a68d281c8b068a
     load:
-      geo: true
+      geo: false
       codelists: true
       samples: true
   masterDataUi:
