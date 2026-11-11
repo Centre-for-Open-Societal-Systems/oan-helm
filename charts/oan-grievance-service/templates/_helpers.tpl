@@ -6,13 +6,9 @@ helm.sh/chart: {{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | 
 {{- end -}}
 
 {{/*
-Resource name. A release already named after clamav (the standalone `grievance-clamav`) keeps its
-name; embedded as a subchart of another release it becomes <release>-clamav.
+ClamAV resource name: <release>-clamav, so release `grievance` gives the Service `grievance-clamav`
+that grievance_clamav_host points at.
 */}}
 {{- define "clamav.fullname" -}}
-{{- if contains "clamav" .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
 {{- printf "%s-clamav" .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
 {{- end -}}
