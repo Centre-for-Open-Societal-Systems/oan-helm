@@ -37,8 +37,9 @@ class RefactorContracts(unittest.TestCase):
             encoding='utf-8'))['master-data']['geoSeed']['load']
         self.assertTrue(load('staging')['samples'])
         self.assertFalse(load('dev')['samples'])
-        # Only dev must never load geography; staging loads it once for the 10 Nov 2026 cutover.
+        # Neither loads geography on upgrade; staging's one-time cutover load ran on 11 Nov 2026.
         self.assertFalse(load('dev')['geo'])
+        self.assertFalse(load('staging')['geo'])
 
     def test_seed_image_is_the_recorded_eth_oan_build(self):
         # The newest release-train manifest that records the seed image.
