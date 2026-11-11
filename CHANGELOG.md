@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-11
 
+### openg2p-cropsown-registry 0.0.0-develop.515 (develop)
+
+- AWE callback registration follows the registry's HMAC Secret (#274) (Centre-for-Open-Societal-Systems/cropsown-regsitry@2af99b4c005c)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-11
+
 ### oan-a2c-service 0.1.0-dev.3
 
 First published version.
