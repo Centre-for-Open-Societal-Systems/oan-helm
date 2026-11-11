@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-11
 
+### openg2p-farmer-registry 1.0.0-rc.844 (staging)
+
+- CI: on-demand agents: retry on agent loss, real Postgres readiness (#258) (Centre-for-Open-Societal-Systems/farmer-registry@72f2fa0903fe)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-11
+
 ### openg2p-farmer-registry 1.0.0-rc.839 (staging)
 
 - CI: on-demand agents: retry on agent loss, real Postgres readiness (#258) (Centre-for-Open-Societal-Systems/farmer-registry@72f2fa0903fe)
