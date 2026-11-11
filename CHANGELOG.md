@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-11
 
+### openg2p-commons-services 1.0.0-dev.40
+
+Previous version: 1.0.0-dev.39.
+
+- Revert the internal IAM copy for issuer lookups (#163) (be32d5a)
+
+## 2026-11-11
+
 ### openg2p-livestock-registry 0.0.0-develop.452 (develop)
 
 - AWE callback registration follows the registry's HMAC Secret (#233) (Centre-for-Open-Societal-Systems/livestock-registry@798ea765f01b)
