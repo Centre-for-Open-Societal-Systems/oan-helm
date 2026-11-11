@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-11
 
+### openg2p-farmer-registry 0.0.0-develop.840 (develop)
+
+- Run the sample loader as the chart's own hook Job with its settings (#262) (Centre-for-Open-Societal-Systems/farmer-registry@ac551813beb0)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-11
+
 ### openg2p-cropsown-registry 1.0.0-rc.519 (staging)
 
 - CI: on-demand agents: ECR layer cache, retry on agent loss, real Postgres readiness (#268) (Centre-for-Open-Societal-Systems/cropsown-regsitry@36d4f2277c7a)
