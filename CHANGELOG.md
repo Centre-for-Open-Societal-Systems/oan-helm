@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### oan-a2c-service 0.0.0-develop.4 (develop)
+
+- Merge pull request #119 from arnavam/feat/a2c-base-domain (Centre-for-Open-Societal-Systems/oan_a2c@58d21b10b3f1)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-12
+
 ### openg2p-cropsown-registry 1.0.0-rc.530 (staging)
 
 - Staging connector moves to the qa.oanstaging.com scope (#276) (Centre-for-Open-Societal-Systems/cropsown-regsitry@63f888014163)
