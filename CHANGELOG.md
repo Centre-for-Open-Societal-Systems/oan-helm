@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-livestock-registry 1.0.0-rc.467 (staging)
+
+- Staging connector: name the build by the promoted chart's commit (#239) (Centre-for-Open-Societal-Systems/livestock-registry@602aed8dd912)
+- Images and rollback: [releases/history/staging/openg2p-livestock-registry.md](releases/history/staging/openg2p-livestock-registry.md)
+
+## 2026-11-12
+
 ### oan-a2c-service 0.0.0-develop.5 (develop)
 
 - Merge pull request #120 from arnavam/feat/a2c-generated-secrets (Centre-for-Open-Societal-Systems/oan_a2c@cf90ba71a3b3)
