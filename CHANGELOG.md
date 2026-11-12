@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-farmer-registry 1.0.0-rc.868 (staging)
+
+- Staging: the promotion delivers the Farmer dashboard UI from oan-helm (#286) (Centre-for-Open-Societal-Systems/farmer-registry@e7b12a88065c)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
 ### openg2p-farmer-registry 0.0.0-develop.854 (develop)
 
 - Staging: the promotion delivers the Farmer dashboard UI from oan-helm (#286) (Centre-for-Open-Societal-Systems/farmer-registry@e7b12a88065c)
