@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-da-registry 0.0.0-develop.96 (develop)
+
+- New Dev: pin oan-helm 488d505 (DA dev values load the sample agents) (#63) (Centre-for-Open-Societal-Systems/da-registry@ffbe64bf583d)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-12
+
 ### openg2p-cropsown-registry 0.0.0-develop.522 (develop)
 
 - Sowing area: compare with the farmer's own Cultivation, not any farmer's land of the same name (#289) (Centre-for-Open-Societal-Systems/cropsown-regsitry@d58e59be05fd)
