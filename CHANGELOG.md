@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### oan-a2c-service 0.0.0-develop.15 (develop)
+
+- Merge pull request #127 from arnavam/fix/a2c-seed-data-pin (Centre-for-Open-Societal-Systems/oan_a2c@d8a42f9400e3)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-12
+
 ### openg2p-cropsown-registry 0.0.0-develop.524 (develop)
 
 - Staging Crop ODK definitions: data model ODK_TO_CROP_INTAKE, not the retired CSR_DATA_MODEL (#291) (Centre-for-Open-Societal-Systems/cropsown-regsitry@994e485c7a73)
