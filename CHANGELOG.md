@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### frappe-service 0.0.0-develop.28 (develop)
+
+- No description recorded. (unknown source@unknown)
+- Images and rollback: [releases/history/develop/frappe-service.md](releases/history/develop/frappe-service.md)
+
+## 2026-11-12
+
 ### oan-a2c-service 0.0.0-develop.18 (develop)
 
 - Merge pull request #130 from arnavam/fix/a2c-iam-beneficiary-role (Centre-for-Open-Societal-Systems/oan_a2c@5a5a5fbea175)
