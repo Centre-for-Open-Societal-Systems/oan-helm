@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-livestock-registry 0.0.0-develop.454 (develop)
+
+- Give the sample approvers their declared password after every deploy (#237) (Centre-for-Open-Societal-Systems/livestock-registry@b275e4c48b1f)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-12
+
 ### oan-a2c-service 0.0.0-develop.4 (develop)
 
 - Merge pull request #119 from arnavam/feat/a2c-base-domain (Centre-for-Open-Societal-Systems/oan_a2c@58d21b10b3f1)
