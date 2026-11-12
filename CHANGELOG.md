@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### oan-a2c-service 0.0.0-develop.16 (develop)
+
+- Merge pull request #128 from arnavam/fix/a2c-router-registration-lock (Centre-for-Open-Societal-Systems/oan_a2c@91e6d629fbaa)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-12
+
 ### openg2p-cropsown-registry 0.0.0-develop.526 (develop)
 
 - Staging connector on its qa name and the staging Gateway (#292) (Centre-for-Open-Societal-Systems/cropsown-regsitry@b19248bf81ac)

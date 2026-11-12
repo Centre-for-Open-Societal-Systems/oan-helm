@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.0-develop.16
+
+<!-- source-commit: 91e6d629fbaa0c4ef54bb27a55ca782f4f8cf582 version: 0.0.0-develop.16 -->
+Published 2026-11-12. Archive SHA-256 `0f3218154e049574e7aa8b4d7651f857b721a2d686443283c2cf603313e3b546`.
+
+- Change: Merge pull request #128 from arnavam/fix/a2c-router-registration-lock
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@91e6d629fbaa](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/91e6d629fbaa0c4ef54bb27a55ca782f4f8cf582)
+- Changes since 0.0.0-develop.15: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/d8a42f9400e344cc71317f40b26d13ce124089f5...91e6d629fbaa0c4ef54bb27a55ca782f4f8cf582
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/oan-a2c-service/a2c-service:0.0.0-develop.16` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-service-0.0.0-develop.16.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.0-develop.15
 
 <!-- source-commit: d8a42f9400e344cc71317f40b26d13ce124089f5 version: 0.0.0-develop.15 -->
