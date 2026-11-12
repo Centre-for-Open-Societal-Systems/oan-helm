@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.0-develop.21
+
+<!-- source-commit: 73ba35650c5a78f65925268a921cd38c4020cf71 version: 0.0.0-develop.21 -->
+Published 2026-11-12. Archive SHA-256 `2fda39e61d68c2a0a03aab13321e377dc1f0039e184d4d66a68453ccf80b56f1`.
+
+- Change: Merge pull request #132 from arnavam/fix/a2c-gateway-consumer-namespace
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@73ba35650c5a](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/73ba35650c5a78f65925268a921cd38c4020cf71)
+- Changes since 0.0.0-develop.19: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/1f964d245ecc7d52049c33b03ff8bec56c1545b9...73ba35650c5a78f65925268a921cd38c4020cf71
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/oan-a2c-service/a2c-service:0.0.0-develop.21` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-service-0.0.0-develop.21.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.0-develop.19
 
 <!-- source-commit: 1f964d245ecc7d52049c33b03ff8bec56c1545b9 version: 0.0.0-develop.19 -->

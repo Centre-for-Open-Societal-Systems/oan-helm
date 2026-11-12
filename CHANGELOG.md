@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### oan-a2c-service 0.0.0-develop.21 (develop)
+
+- Merge pull request #132 from arnavam/fix/a2c-gateway-consumer-namespace (Centre-for-Open-Societal-Systems/oan_a2c@73ba35650c5a)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-12
+
 ### openg2p-livestock-registry 0.0.0-develop.461 (develop)
 
 - ci(refactor): add password protection to disposable database probe connections (S2115) (#236) (Centre-for-Open-Societal-Systems/livestock-registry@e8bef753094f)
