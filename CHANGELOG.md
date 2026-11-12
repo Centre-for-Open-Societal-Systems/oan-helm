@@ -8,6 +8,20 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-12
+
+### oan-a2c-service 0.1.0-dev.4
+
+Previous version: 0.1.0-dev.3.
+
+- feat(dev): run the Frappe apps on oan-frappe-common PostgreSQL over NFS (7141753)
+
+### oan-grievance-service 0.1.0-dev.5
+
+Previous version: 0.1.0-dev.4.
+
+- feat(dev): run the Frappe apps on oan-frappe-common PostgreSQL over NFS (7141753)
+
 ## 2026-11-11
 
 ### oan-frappe-common 0.1.0-dev.2
