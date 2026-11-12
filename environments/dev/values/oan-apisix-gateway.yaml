@@ -6,10 +6,17 @@
 # built-in etcd cannot be used: it does not render next to the bundled Redis (both ship a different version of
 # the Bitnami `common` templates, and Helm shares one template namespace).
 #
+# Install as release `apisix`: the chart's Services are named after it (`apisix-admin`, `apisix-redis-master`),
+# and the route charts and the Ingress Controller refer to those names. The node runs it in namespace
+# `api6-gateway`, not the chart's default `apisix`, hence adminService below.
+#
 #   kubectl apply -f environments/dev/manifests/apisix-etcd.yaml
-#   helm -n api6-gateway upgrade --install oan-apisix-gateway oan-helm/oan-apisix-gateway \
+#   helm -n api6-gateway upgrade --install apisix oan-helm/oan-apisix-gateway \
 #     -f environments/dev/values/oan-apisix-gateway.yaml
 apisix:
+  apisix:
+    adminService:
+      namespace: api6-gateway
   etcd:
     enabled: false
   externalEtcd:
