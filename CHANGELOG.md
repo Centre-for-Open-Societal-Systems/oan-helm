@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-farmer-registry 0.0.0-develop.848 (develop)
+
+- Staging Farmer moves to the qa.oanstaging.com scope (#273) (Centre-for-Open-Societal-Systems/farmer-registry@d1b420dc667b)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
 ### openg2p-livestock-registry 0.0.0-develop.453 (develop)
 
 - Staging connector moves to the qa.oanstaging.com scope (#234) (Centre-for-Open-Societal-Systems/livestock-registry@b053d120c8e0)
