@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-livestock-registry 0.0.0-develop.455 (develop)
+
+- Staging connector: name the build by the promoted chart's commit (#239) (Centre-for-Open-Societal-Systems/livestock-registry@602aed8dd912)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-12
+
 ### openg2p-da-registry 0.0.0-develop.94 (develop)
 
 - Run the sample loader tests in the dev pipeline (#60) (Centre-for-Open-Societal-Systems/da-registry@620d6c87af94)
