@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-farmer-registry 0.0.0-develop.849 (develop)
+
+- Give the sample approvers their declared password after every deploy (#277) (Centre-for-Open-Societal-Systems/farmer-registry@e959ce748a06)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
 ### openg2p-farmer-registry 1.0.0-rc.859 (staging)
 
 - Staging Farmer moves to the qa.oanstaging.com scope (#273) (Centre-for-Open-Societal-Systems/farmer-registry@d1b420dc667b)
