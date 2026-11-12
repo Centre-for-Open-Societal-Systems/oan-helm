@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-farmer-registry 0.0.0-develop.850 (develop)
+
+- Staging promotion upgrades the Farmer connector to oan-helm's staging values (#279) (Centre-for-Open-Societal-Systems/farmer-registry@35c4c97bf1d7)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
 ### openg2p-da-registry 0.0.0-develop.93 (develop)
 
 - Give the sample approvers their declared password after every deploy (#57) (Centre-for-Open-Societal-Systems/da-registry@cba80649ebcd)
