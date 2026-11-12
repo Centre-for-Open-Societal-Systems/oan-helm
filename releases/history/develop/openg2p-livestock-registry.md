@@ -2,6 +2,32 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.0-develop.453
+
+<!-- source-commit: b053d120c8e02c59a7db0b57ca66d52d67d3e6bc version: 0.0.0-develop.453 -->
+Published 2026-11-12. Archive SHA-256 `523ede90ec9ed6807ce3e8e8c902ef4ea46dd071a1e6021b3dd36ac6945e3bf8`.
+
+- Change: Staging connector moves to the qa.oanstaging.com scope (#234)
+- Source: [Centre-for-Open-Societal-Systems/livestock-registry@b053d120c8e0](https://github.com/Centre-for-Open-Societal-Systems/livestock-registry/commit/b053d120c8e02c59a7db0b57ca66d52d67d3e6bc)
+- Changes since 0.0.0-develop.452: https://github.com/Centre-for-Open-Societal-Systems/livestock-registry/compare/798ea765f01be019ced8737c33eb11f7254e4642...b053d120c8e02c59a7db0b57ca66d52d67d3e6bc
+
+| Values path | Image |
+| --- | --- |
+| `registry.staffApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/staff-api:b053d120c8e0@sha256:db862c5249f77ba0a8ebbd7acb81036fc797b62520cbc9a50dd86b41ded5e9a5` |
+| `registry.partnerApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/partner-api:b053d120c8e0@sha256:491c55b1f9bfc35e840734f20a2a18b715d86b852a5d29d215d6a7f9f26edb4d` |
+| `registry.celeryWorker.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/celery:b053d120c8e0@sha256:fa8eb00299d7279a554ce418e01e3dfcde47e844df0d1dcdec8d0c36d0483b43` |
+| `registry.celeryBeat.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/celery:b053d120c8e0@sha256:fa8eb00299d7279a554ce418e01e3dfcde47e844df0d1dcdec8d0c36d0483b43` |
+| `registry.dbSeed.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/db-seed:b053d120c8e0@sha256:29fdf78e002ccf469aaa232bffb30821d1edb4965aa4c8b84162c35fd32b9f72` |
+| `registry.staffUi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/staff-ui:b053d120c8e0@sha256:234cb128c8c06f7e3b72e66121b3bf314bbe973cdd14e860168cdac319f720e3` |
+| `registry.sanity.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/sanity-tests:b053d120c8e0@sha256:90cc503964e2c8f087ef7f3f651750a274832557478874e518c6ae46ef6d1574` |
+| `dashboardApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/livestock-registry/dashboard-api:b053d120c8e0@sha256:815a6b14439e57e74c552470390dd793fe1050a565d15e8e37871bca8865f369` |
+
+Return to this version:
+
+```sh
+helm upgrade livestock-registry https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/openg2p-livestock-registry-0.0.0-develop.453.tgz -n livestock --reset-values -f environments/dev/values/livestock.yaml --wait --timeout 15m
+```
+
 ## 0.0.0-develop.452
 
 <!-- source-commit: 798ea765f01be019ced8737c33eb11f7254e4642 version: 0.0.0-develop.452 -->
