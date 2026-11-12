@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-livestock-registry 1.0.0-rc.472 (staging)
+
+- Chart: the release keeps its own ECR pull secret, refreshed by a CronJob (#245) (Centre-for-Open-Societal-Systems/livestock-registry@61a63c3ab486)
+- Images and rollback: [releases/history/staging/openg2p-livestock-registry.md](releases/history/staging/openg2p-livestock-registry.md)
+
+## 2026-11-12
+
 ### openg2p-livestock-registry 0.0.0-develop.458 (develop)
 
 - Chart: the release keeps its own ECR pull secret, refreshed by a CronJob (#245) (Centre-for-Open-Societal-Systems/livestock-registry@61a63c3ab486)
