@@ -10,6 +10,20 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### oan-apisix-gateway 0.1.0-dev.2
+
+Previous version: 0.1.0-dev.1.
+
+- feat(apisix): create the Admin API credentials Secret with the chart (8a88778)
+
+### openg2p-commons-services 1.0.0-dev.42
+
+Previous version: 1.0.0-dev.41.
+
+- Commons pods roll when their ConfigMaps change (#168) (f222c3e)
+
+## 2026-11-12
+
 ### oan-a2c-service 0.0.0-develop.19 (develop)
 
 - Merge pull request #131 from arnavam/chore/a2c-shared-cluster-bootstrap (Centre-for-Open-Societal-Systems/oan_a2c@1f964d245ecc)
