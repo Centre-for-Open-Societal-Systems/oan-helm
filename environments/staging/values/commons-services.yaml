@@ -1,4 +1,4 @@
-# Staging (oanstaging.com) overlay for a freshly rebuilt Commons. It is the New Dev
+# Staging (qa.oanstaging.com) overlay for a freshly rebuilt Commons. It is the New Dev
 # overlay with the base domain changed; everything the chart enables by default
 # (ODK Central with Keycloak OIDC client openg2p-odk, consent manager and partner
 # portal, aggregation API, WebSub hub, eSignet mock, keymanager) stays on, as on
@@ -7,27 +7,27 @@
 # release that carries that derivation.
 # Lines marked "staging: confirm" are not yet decided for staging.
 global:
-  baseDomain: oanstaging.com
-  keycloakBaseUrl: https://keycloak.oanstaging.com
+  baseDomain: qa.oanstaging.com
+  keycloakBaseUrl: https://keycloak.qa.oanstaging.com
   keycloakInternalUrl: http://commons-keycloak.commons.svc.cluster.local:80
-  keycloakExternalIssuerUrl: https://keycloak.oanstaging.com/realms/staff
+  keycloakExternalIssuerUrl: https://keycloak.qa.oanstaging.com/realms/staff
   keycloakIssuerUrl: http://commons-keycloak.commons.svc.cluster.local:80/realms/staff
-  iamHostname: staff-iam.oanstaging.com
-  staffPortalApiHostname: staff-iam.oanstaging.com
-  agentPortalApiHostname: agent-iam.oanstaging.com
-  staffPortalHostname: staff-portal.oanstaging.com
-  staffPortalCookieDomain: .oanstaging.com
-  authCookieDomain: .oanstaging.com
-  cookieDomain: .oanstaging.com
-  iamUrl: https://staff-iam.oanstaging.com
+  iamHostname: staff-iam.qa.oanstaging.com
+  staffPortalApiHostname: staff-iam.qa.oanstaging.com
+  agentPortalApiHostname: agent-iam.qa.oanstaging.com
+  staffPortalHostname: staff-portal.qa.oanstaging.com
+  staffPortalCookieDomain: .qa.oanstaging.com
+  authCookieDomain: .qa.oanstaging.com
+  cookieDomain: .qa.oanstaging.com
+  iamUrl: https://staff-iam.qa.oanstaging.com
   iamServiceUrl: http://commons-services-iam-staff-portal-api.commons.svc.cluster.local
   # Tile URL (see the chart's values.yaml); the API keeps master-data.*.
-  masterDataHostname: master-data-ui.oanstaging.com
-  masterDataUiHostname: master-data-ui.oanstaging.com
+  masterDataHostname: master-data-ui.qa.oanstaging.com
+  masterDataUiHostname: master-data-ui.qa.oanstaging.com
   masterDataApiUrl: http://commons-services-master-data-api.commons.svc.cluster.local
-  aweHostname: awe.oanstaging.com
+  aweHostname: awe.qa.oanstaging.com
   aweBaseUrl: http://commons-services-awe.commons.svc.cluster.local
-  odkHostname: odk-central.oanstaging.com
+  odkHostname: odk-central.qa.oanstaging.com
   supersetHostname: ''
   certifyHostname: ''
   agentPortalHostname: ''
@@ -43,8 +43,8 @@ openg2p-inji-certify:
       gateway: istio-system/staging
 master-data:
   global:
-    masterDataHostname: master-data-ui.oanstaging.com
-    masterDataUiHostname: master-data-ui.oanstaging.com
+    masterDataHostname: master-data-ui.qa.oanstaging.com
+    masterDataUiHostname: master-data-ui.qa.oanstaging.com
   # Staging Commons is upgraded in place, like New Dev: its master_data database holds the
   # legacy catalogue (4 levels, 21053 geography values), which Master Data migrates on
   # start. The ETH-OAN pack (chart default countryPack) adds the code lists and publishes
@@ -78,26 +78,26 @@ master-data:
       codelists: true
       samples: true
   masterDataUi:
-    iamPublicUrl: https://staff-iam.oanstaging.com
+    iamPublicUrl: https://staff-iam.qa.oanstaging.com
     envVars:
-      COOKIE_DOMAIN: .oanstaging.com
+      COOKIE_DOMAIN: .qa.oanstaging.com
     istio:
       virtualservice:
         gateway: istio-system/staging
   masterDataAPI:
-    hostname: master-data.oanstaging.com
+    hostname: master-data.qa.oanstaging.com
     istio:
       virtualservice:
         gateway: istio-system/staging
 odk-central:
   backend:
     envVars:
-      OIDC_ISSUER_URL: https://keycloak.oanstaging.com/realms/staff
+      OIDC_ISSUER_URL: https://keycloak.qa.oanstaging.com/realms/staff
   istio:
     virtualservice:
       gateway: istio-system/staging
 esignet:
-  hostname: esignet.oanstaging.com
+  hostname: esignet.qa.oanstaging.com
   istio:
     virtualservice:
       gateway: istio-system/staging
@@ -106,26 +106,26 @@ esignet:
       virtualservice:
         gateway: istio-system/staging
 mock-identity-system:
-  hostname: esignet.oanstaging.com
+  hostname: esignet.qa.oanstaging.com
   istio:
     virtualservice:
       gateway: istio-system/staging
 openg2p-iam-service:
   global:
-    keycloakApplicationUrl: https://keycloak.oanstaging.com
-    registryApplicationUrl: https://farmer-registry.oanstaging.com
-    minioApplicationUrl: https://minio-console.oanstaging.com
+    keycloakApplicationUrl: https://keycloak.qa.oanstaging.com
+    registryApplicationUrl: https://farmer-registry.qa.oanstaging.com
+    minioApplicationUrl: https://minio-console.qa.oanstaging.com
     supersetApplicationUrl: ''
-    iamStaffUiApplicationUrl: https://iam-staff-ui.oanstaging.com
-    masterDataApplicationUrl: https://master-data-ui.oanstaging.com
-    aweApplicationUrl: https://awe.oanstaging.com
-    staffPortalDefaultRedirectUri: https://staff-portal.oanstaging.com
+    iamStaffUiApplicationUrl: https://iam-staff-ui.qa.oanstaging.com
+    masterDataApplicationUrl: https://master-data-ui.qa.oanstaging.com
+    aweApplicationUrl: https://awe.qa.oanstaging.com
+    staffPortalDefaultRedirectUri: https://staff-portal.qa.oanstaging.com
     agentPortalDefaultRedirectUri: ''
   iamStaffUi:
-    hostname: iam-staff-ui.oanstaging.com
+    hostname: iam-staff-ui.qa.oanstaging.com
     envVars:
-      COOKIE_DOMAIN: .oanstaging.com
-      BACKEND_API_URL: https://staff-iam.oanstaging.com
+      COOKIE_DOMAIN: .qa.oanstaging.com
+      BACKEND_API_URL: https://staff-iam.qa.oanstaging.com
     istio:
       virtualservice:
         gateway: istio-system/staging
@@ -140,26 +140,26 @@ openg2p-iam-service:
 openg2p-staff-portal-ui:
   staffPortalUi:
     envVars:
-      COOKIE_DOMAIN: .oanstaging.com
-      IAM_URL: https://staff-iam.oanstaging.com
+      COOKIE_DOMAIN: .qa.oanstaging.com
+      IAM_URL: https://staff-iam.qa.oanstaging.com
     istio:
       virtualservice:
         gateway: istio-system/staging
 openg2p-audit-manager:
   global:
-    auditManagerHostname: auditmanager.oanstaging.com
+    auditManagerHostname: auditmanager.qa.oanstaging.com
   auditManager:
     istio:
       virtualservice:
         gateway: istio-system/staging
 partner-management:
   global:
-    staffPortalUiHostname: partner-management.oanstaging.com
-    partnerApiHostname: partner-management-partner-api.oanstaging.com
+    staffPortalUiHostname: partner-management.qa.oanstaging.com
+    partnerApiHostname: partner-management-partner-api.qa.oanstaging.com
   staffPortalUi:
     envVars:
-      IAM_URL: https://staff-iam.oanstaging.com
-      KEYCLOAK_LOGOUT_URL: https://keycloak.oanstaging.com/realms/staff/protocol/openid-connect/logout
+      IAM_URL: https://staff-iam.qa.oanstaging.com
+      KEYCLOAK_LOGOUT_URL: https://keycloak.qa.oanstaging.com/realms/staff/protocol/openid-connect/logout
     istio:
       virtualservice:
         gateway: istio-system/staging
@@ -221,8 +221,8 @@ openg2p-consent-manager:
       gateway:
         enabled: false
   global:
-    consentManagerHostname: consent-manager.oanstaging.com
-    consentManagerPartnerHostname: consent-manager-partner.oanstaging.com
+    consentManagerHostname: consent-manager.qa.oanstaging.com
+    consentManagerPartnerHostname: consent-manager-partner.qa.oanstaging.com
     consentManagerBeneHostname: ''
   consentManagerApi:
     envVars:
@@ -263,8 +263,8 @@ iamBenePortalApi:
   enabled: true
   virtualService:
     enabled: true
-    host: bene-iam.oanstaging.com
+    host: bene-iam.qa.oanstaging.com
     gateway: istio-system/staging
   loginProvider:
     seed: false
-    defaultRedirectUri: https://bene-portal.oanstaging.com
+    defaultRedirectUri: https://bene-portal.qa.oanstaging.com

@@ -7,12 +7,12 @@ dashboardServices:
   FARMER_REGISTRY_DASHBOARD_API_URL: http://farmer-registry-dashboard-api.farmer
   CROPSOWN_REGISTRY_DASHBOARD_API_URL: http://cropsown-registry-dashboard-api.crop
   LIVESTOCK_REGISTRY_DASHBOARD_API_URL: http://livestock-registry-dashboard-api.live
-  A2C_DASHBOARD_API_URL: https://a2c-develop-gateway.oanstaging.com
+  A2C_DASHBOARD_API_URL: https://a2c-develop-gateway.qa.oanstaging.com
   A2C_DASHBOARD_API_CHARTS_PATH: /v1/charts
 ingress:
   private:
     enabled: true
     gateway: istio-system/staging
-    host: oan-dashboard.oanstaging.com
+    host: oan-dashboard.qa.oanstaging.com
   public:
     enabled: false

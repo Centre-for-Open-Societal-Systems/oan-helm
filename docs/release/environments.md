@@ -9,18 +9,19 @@ Readings of 5 November 2026, 20:45 to 20:55 UTC. Source for every table unless s
 | --- | --- | --- |
 | Purpose | Integration environment; every merge to `develop` deploys here | Rehearsal of promoted charts; a merge to `staging` promotes the chart `develop` already built |
 | Cluster | One node, RKE2 v1.35.8, Rancher 2.15.1 | One node, RKE2 v1.33.6, Rancher 2.12.3 |
-| Public host pattern | `<name>.development.oanstaging.com` | `<name>.oanstaging.com` |
-| Istio gateway for public hosts | `istio-system/development` (host `*.development.oanstaging.com`) | `istio-system/staging` (host `*.oanstaging.com`) |
-| Old host names | Retired: since 9 November 2026 the `<name>-development.oanstaging.com` records are gone from Route 53 and those names reach staging through the `*.oanstaging.com` wildcard. The `istio-system/development-legacy` gateway and `environments/dev/legacy/` remain only as a record | None observed |
-| Host reverse proxy | nginx file `oan-development-wildcard.conf` with server name `*.development.oanstaging.com` | nginx, one file per host in `/etc/nginx/sites-enabled/` (no file contains `*.oanstaging.com`) |
+| Public host pattern | `<name>.development.oanstaging.com` | `<name>.qa.oanstaging.com` |
+| Istio gateway for public hosts | `istio-system/development` (host `*.development.oanstaging.com`) | `istio-system/staging` (host `*.qa.oanstaging.com`) |
+| Old host names | Retired: since 9 November 2026 the `<name>-development.oanstaging.com` records are gone from Route 53 and those names reach staging through the `*.qa.oanstaging.com` wildcard. The `istio-system/development-legacy` gateway and `environments/dev/legacy/` remain only as a record | None observed |
+| Host reverse proxy | nginx file `oan-development-wildcard.conf` with server name `*.development.oanstaging.com` | nginx file `openg2p-qa-oanstaging.conf` with server name `*.qa.oanstaging.com` (installed from `environments/staging/ingress/nginx.conf` on 12 November 2026); the per-host `*.oanstaging.com` files stay until the move is verified |
 | Repository values | `environments/dev/` | `environments/staging/` |
 
 Sources: live readings of nodes, gateways and `/etc/nginx/sites-enabled`; `environments/dev/endpoints.yaml`,
 `environments/staging/endpoints.yaml`.
 
-Not verified: the staging wildcard nginx site. The repository holds the proposal
-`environments/staging/ingress/nginx.conf` (its header says "staging: confirm"). On 5 November 2026 the staging
-host had only per-host files. See [operations-runbook.md](operations-runbook.md), section 7.
+TLS for staging: one Let's Encrypt certificate, `qa.oanstaging.com`, issued by HTTP-01 through the certbot nginx
+plugin for every name in `environments/staging/ingress/certificate-names.txt` and renewed by `certbot.timer`. It
+is not a wildcard certificate: a staging host that is not on the list gets a TLS error until it is added and the
+certbot command in the `nginx.conf` header is re-run. See [operations-runbook.md](operations-runbook.md), section 7.
 
 ## 2. Namespaces and Helm release names
 
@@ -53,28 +54,28 @@ found for it.
 
 | Registry | Part | New Dev host | Staging host |
 | --- | --- | --- | --- |
-| Farmer | Staff user interface | `farmer-registry.development.oanstaging.com` | `farmer-registry.oanstaging.com` |
-| Farmer | Staff API | `staff-farmer.development.oanstaging.com` | `staff-farmer.oanstaging.com` |
-| Farmer | Partner API | `partner-farmer.development.oanstaging.com` | `partner-farmer.oanstaging.com` |
-| Farmer | Id generator | `idgenerator-farmer.development.oanstaging.com` | `idgenerator-farmer.oanstaging.com` |
-| Farmer | Connector | `connector-farmer-registry.development.oanstaging.com` | `connector-farmer-registry.oanstaging.com` |
-| Farmer | Dashboard | `farmer-registry-dashboard.development.oanstaging.com` | `farmer-registry-dashboard.oanstaging.com` |
-| Crop sown | Staff user interface | `crop-registry.development.oanstaging.com` | `crop-registry.oanstaging.com` |
-| Crop sown | Staff API | `staff-crop.development.oanstaging.com` | `staff-crop-registry.oanstaging.com` |
-| Crop sown | Partner API | `partner-crop.development.oanstaging.com` | `partner-crop-registry.oanstaging.com` |
+| Farmer | Staff user interface | `farmer-registry.development.oanstaging.com` | `farmer-registry.qa.oanstaging.com` |
+| Farmer | Staff API | `staff-farmer.development.oanstaging.com` | `staff-farmer.qa.oanstaging.com` |
+| Farmer | Partner API | `partner-farmer.development.oanstaging.com` | `partner-farmer.qa.oanstaging.com` |
+| Farmer | Id generator | `idgenerator-farmer.development.oanstaging.com` | `idgenerator-farmer.qa.oanstaging.com` |
+| Farmer | Connector | `connector-farmer-registry.development.oanstaging.com` | `connector-farmer-registry.qa.oanstaging.com` |
+| Farmer | Dashboard | `farmer-registry-dashboard.development.oanstaging.com` | `farmer-registry-dashboard.qa.oanstaging.com` |
+| Crop sown | Staff user interface | `crop-registry.development.oanstaging.com` | `crop-registry.qa.oanstaging.com` |
+| Crop sown | Staff API | `staff-crop.development.oanstaging.com` | `staff-crop-registry.qa.oanstaging.com` |
+| Crop sown | Partner API | `partner-crop.development.oanstaging.com` | `partner-crop-registry.qa.oanstaging.com` |
 | Crop sown | Id generator | `idgenerator-crop.development.oanstaging.com` | internal host only |
-| Crop sown | Connector | `connector-cropsown-registry.development.oanstaging.com` | `connector-cropsown-registry.oanstaging.com` |
+| Crop sown | Connector | `connector-cropsown-registry.development.oanstaging.com` | `connector-cropsown-registry.qa.oanstaging.com` |
 | Crop sown | Dashboard | `cropsown-registry-dashboard.development.oanstaging.com` | - |
-| Livestock | Staff user interface | `livestock-registry.development.oanstaging.com` | `livestock-registry.oanstaging.com` |
-| Livestock | Staff API | `staff-livestock.development.oanstaging.com` | `staff-livestock.oanstaging.com` |
-| Livestock | Partner API | `partner-livestock.development.oanstaging.com` | `partner-livestock.oanstaging.com` |
-| Livestock | Id generator | `idgenerator-livestock.development.oanstaging.com` | `idgenerator-livestock.oanstaging.com` |
-| Livestock | Connector | `connector-livestock-registry.development.oanstaging.com` | `connector-livestock.oanstaging.com` |
-| Livestock | Dashboard | `livestock-registry-dashboard.development.oanstaging.com` | `livestock-registry-dashboard.oanstaging.com` (a second host, `livestock-dashboard.oanstaging.com`, also exists) |
+| Livestock | Staff user interface | `livestock-registry.development.oanstaging.com` | `livestock-registry.qa.oanstaging.com` |
+| Livestock | Staff API | `staff-livestock.development.oanstaging.com` | `staff-livestock.qa.oanstaging.com` |
+| Livestock | Partner API | `partner-livestock.development.oanstaging.com` | `partner-livestock.qa.oanstaging.com` |
+| Livestock | Id generator | `idgenerator-livestock.development.oanstaging.com` | `idgenerator-livestock.qa.oanstaging.com` |
+| Livestock | Connector | `connector-livestock-registry.development.oanstaging.com` | `connector-livestock-registry.qa.oanstaging.com` |
+| Livestock | Dashboard | `livestock-registry-dashboard.development.oanstaging.com` | `livestock-registry-dashboard.qa.oanstaging.com` (a second host, `livestock-dashboard.qa.oanstaging.com`, also exists) |
 | Development Agent | Staff user interface | `da-registry.development.oanstaging.com` | - |
 | Development Agent | Staff API | `staff-da-registry.development.oanstaging.com` | - |
 | Development Agent | Partner API | `partner-da-registry.development.oanstaging.com` | - |
-| Development Agent | Id generator | `idgenerator-da.development.oanstaging.com` | `idgenerator-da.oanstaging.com` |
+| Development Agent | Id generator | `idgenerator-da.development.oanstaging.com` | `idgenerator-da.qa.oanstaging.com` |
 
 Drift: the Crop sown host names on staging (`staff-crop-registry`, `partner-crop-registry`) differ from the names
 in `environments/staging/endpoints.yaml` (`staff-crop`, `partner-crop`). Livestock follows the file on staging
@@ -85,21 +86,21 @@ not `istio-system/staging`.
 
 | Service | New Dev host | Staging host |
 | --- | --- | --- |
-| Keycloak | `keycloak.development.oanstaging.com` | `keycloak.oanstaging.com` |
-| Staff portal | `staff-portal.development.oanstaging.com` | `staff-portal.oanstaging.com` |
-| Identity staff API (also the Partner Management staff API on New Dev) | `staff-iam.development.oanstaging.com` | `staff-iam.oanstaging.com` |
-| Identity staff user interface | `iam-staff-ui.development.oanstaging.com` | `iam-staff-ui.oanstaging.com` |
-| Partner Management user interface | `partner-management.development.oanstaging.com` | `partner-management.oanstaging.com` |
-| Partner Management partner API | `partner-management-partner-api.development.oanstaging.com` | `partner-management-partner-api.oanstaging.com` |
-| Approval Workflow Engine | `awe.development.oanstaging.com` | `awe.oanstaging.com` |
-| Master Data API and user interface | `master-data.development.oanstaging.com`, `master-data-ui.development.oanstaging.com` | `master-data.oanstaging.com`, `master-data-ui.oanstaging.com` |
+| Keycloak | `keycloak.development.oanstaging.com` | `keycloak.qa.oanstaging.com` |
+| Staff portal | `staff-portal.development.oanstaging.com` | `staff-portal.qa.oanstaging.com` |
+| Identity staff API (also the Partner Management staff API on New Dev) | `staff-iam.development.oanstaging.com` | `staff-iam.qa.oanstaging.com` |
+| Identity staff user interface | `iam-staff-ui.development.oanstaging.com` | `iam-staff-ui.qa.oanstaging.com` |
+| Partner Management user interface | `partner-management.development.oanstaging.com` | `partner-management.qa.oanstaging.com` |
+| Partner Management partner API | `partner-management-partner-api.development.oanstaging.com` | `partner-management-partner-api.qa.oanstaging.com` |
+| Approval Workflow Engine | `awe.development.oanstaging.com` | `awe.qa.oanstaging.com` |
+| Master Data API and user interface | `master-data.development.oanstaging.com`, `master-data-ui.development.oanstaging.com` | `master-data.qa.oanstaging.com`, `master-data-ui.qa.oanstaging.com` |
 | Consent Manager (staff, partner, partner portal) | `consent-manager.`, `consent-manager-partner.`, `consent-partner-portal.` + `development.oanstaging.com` | same names + `oanstaging.com` |
-| Aggregation | `aggregation.development.oanstaging.com` | `aggregation.oanstaging.com` |
-| ODK Central | `odk-central.development.oanstaging.com` | `odk-central.oanstaging.com` |
-| MinIO (files, console) | `minio-farmer.development.oanstaging.com`, `minio-console.development.oanstaging.com` | `minio-farmer.oanstaging.com`, `minio-console.oanstaging.com` |
-| Audit manager | `auditmanager.development.oanstaging.com` | `auditmanager.oanstaging.com` |
-| eSignet | `esignet.development.oanstaging.com` | `esignet.oanstaging.com` |
-| Shared dashboard (private) | `oan-dashboard.development.oanstaging.com` | `oan-dashboard.oanstaging.com` |
+| Aggregation | `aggregation.development.oanstaging.com` | `aggregation.qa.oanstaging.com` |
+| ODK Central | `odk-central.development.oanstaging.com` | `odk-central.qa.oanstaging.com` |
+| MinIO (files, console) | `minio-farmer.development.oanstaging.com`, `minio-console.development.oanstaging.com` | `minio-farmer.qa.oanstaging.com`, `minio-console.qa.oanstaging.com` |
+| Audit manager | `auditmanager.development.oanstaging.com` | `auditmanager.qa.oanstaging.com` |
+| eSignet | `esignet.development.oanstaging.com` | `esignet.qa.oanstaging.com` |
+| Shared dashboard (private) | `oan-dashboard.development.oanstaging.com` | `oan-dashboard.qa.oanstaging.com` |
 | Logs (Grafana) | `logs.development.oanstaging.com` | - |
 
 ## 4. Which Jenkins job deploys what

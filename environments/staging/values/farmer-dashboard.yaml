@@ -5,11 +5,11 @@ image:
   tag: 8aa8dd8ab773@sha256:948811f5b98aa54b753003fd6a1911f57750ec3de30a62e7b11abb6e7fe75a99
 environment: ''
 iam:
-  url: https://staff-iam.oanstaging.com
-  cookieDomain: .oanstaging.com
+  url: https://staff-iam.qa.oanstaging.com
+  cookieDomain: .qa.oanstaging.com
 links:
-  staffPortalUrl: https://staff-portal.oanstaging.com
-  registryPortalUrl: https://farmer-registry.oanstaging.com
+  staffPortalUrl: https://staff-portal.qa.oanstaging.com
+  registryPortalUrl: https://farmer-registry.qa.oanstaging.com
 dashboardApi:
   service: farmer-registry-dashboard-api
   auth:
@@ -17,7 +17,7 @@ dashboardApi:
 iamSetup:
   grantUsers: [admin]
   description: Farmer Dashboard
-host: farmer-registry-dashboard.oanstaging.com
+host: farmer-registry-dashboard.qa.oanstaging.com
 ingress:
   public:
     existingGateway: istio-system/staging

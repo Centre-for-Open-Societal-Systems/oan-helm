@@ -5,11 +5,11 @@ image:
   tag: 829c1d3abd03
 environment: ''
 iam:
-  url: https://staff-iam.oanstaging.com
-  cookieDomain: .oanstaging.com
+  url: https://staff-iam.qa.oanstaging.com
+  cookieDomain: .qa.oanstaging.com
 links:
-  staffPortalUrl: https://staff-portal.oanstaging.com
-  registryPortalUrl: https://livestock-registry.oanstaging.com
+  staffPortalUrl: https://staff-portal.qa.oanstaging.com
+  registryPortalUrl: https://livestock-registry.qa.oanstaging.com
 dashboardApi:
   service: livestock-registry-dashboard-api
   auth:
@@ -17,7 +17,7 @@ dashboardApi:
 iamSetup:
   grantUsers: [admin]
   description: Livestock Dashboard
-host: livestock-registry-dashboard.oanstaging.com
+host: livestock-registry-dashboard.qa.oanstaging.com
 ingress:
   public:
     existingGateway: istio-system/staging

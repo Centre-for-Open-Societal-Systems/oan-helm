@@ -1,8 +1,12 @@
 # Staging overlay for the openg2p-commons-base release `commons`. Staging keeps its saved values, so apply it with
 # --reuse-values. Only what must match New Dev is here.
 global:
+  # Staging's own cookie and host scope. The saved values hold baseDomain oanstaging.com, from which this chart
+  # derives Keycloak's hostname (KC_HOSTNAME, so the issuer https://keycloak.<baseDomain>/realms/staff) and the
+  # other Commons hosts; .oanstaging.com contained New Dev's .development.oanstaging.com.
+  baseDomain: qa.oanstaging.com
   # Kafka UI signs in through the staff realm, so it needs a public host with a certificate (nginx on the box).
-  kafkaUiHostname: kafka.oanstaging.com
+  kafkaUiHostname: kafka.qa.oanstaging.com
 postgresql:
   primary:
     resources:
@@ -25,8 +29,8 @@ kafka:
 minio:
   istio:
     virtualservice:
-      host: minio-console.oanstaging.com
-      apiHost: minio-farmer.oanstaging.com
+      host: minio-console.qa.oanstaging.com
+      apiHost: minio-farmer.qa.oanstaging.com
       gateway: istio-system/staging
 kafkaUi:
   istio:
