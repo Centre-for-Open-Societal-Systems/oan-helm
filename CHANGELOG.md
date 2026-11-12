@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-cropsown-registry 0.0.0-develop.516 (develop)
+
+- Crop Sown: land rows for Cultivation, Sowing and Harvest, maps, ODK forms, FIN farmers (#278) (Centre-for-Open-Societal-Systems/cropsown-regsitry@1329040a210c)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
 ### openg2p-da-registry 0.0.0-develop.91 (develop)
 
 - Merge pull request #56 from yash7473/fix/da-id-on-intake-submission (Centre-for-Open-Societal-Systems/da-registry@9602fb226239)
