@@ -156,11 +156,12 @@ Commons has two Helm releases per environment, both in the namespace `commons`:
 
 | Release | Chart | New Dev revision | Staging revision |
 | --- | --- | --- | --- |
-| `commons` (base: PostgreSQL, Keycloak, Kafka, Redis, MinIO) | `openg2p-commons-base-2.3.3` | 4 | 6 |
-| `commons-services` | `openg2p-commons-services-1.0.0-dev.35` (application version 2.3.4-rc.247) | 36 | 16 |
+| `commons` (base: PostgreSQL, Keycloak, Kafka, Redis, MinIO) | `openg2p-commons-base-2.3.3` | 4 | 9 |
+| `commons-services` | New Dev `openg2p-commons-services-1.0.0-dev.35`, staging `1.0.0-dev.41` (application version 2.3.4-rc.247) | 40 | 20 |
 
-Source: live reading `helm list -A`; the image lists of both environments were compared line by line.
-Result: every image in the namespace `commons` is the same on both environments. The only difference is the
+Source: live reading `helm list -A` (revisions and versions on 12 Nov 2026); the image lists of both environments were compared line by line.
+Before 12 Nov every image in the namespace `commons` was the same on both environments; staging now runs
+dev.41 (the qa domain move) and New Dev dev.35. Before that, the only difference was the
 name of the pull-secret refresh job (New Dev `ecr-pull-secret-refresh`, staging `oan-dashboards-ecr-refresh`).
 
 | Service | Deployment or StatefulSet | Image (same on both environments) |
