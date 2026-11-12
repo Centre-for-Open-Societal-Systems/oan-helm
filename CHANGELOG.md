@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-da-registry 0.0.0-develop.94 (develop)
+
+- Run the sample loader tests in the dev pipeline (#60) (Centre-for-Open-Societal-Systems/da-registry@620d6c87af94)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-12
+
 ### openg2p-cropsown-registry 0.0.0-develop.520 (develop)
 
 - Give the sample approvers their declared password after every deploy (#283) (Centre-for-Open-Societal-Systems/cropsown-regsitry@37d1e75c05f1)
