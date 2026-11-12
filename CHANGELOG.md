@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-farmer-registry 0.0.0-develop.861 (develop)
+
+- ci(deploy): refactor bump_pin main to remove redundant return 0 (S3516) (#276) (Centre-for-Open-Societal-Systems/farmer-registry@8e9928e0a3b9)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
 ### oan-sandbox 1.0.0-dev.19
 
 Previous version: 1.0.0-dev.18.
