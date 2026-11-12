@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### oan-a2c-service 0.0.0-develop.19 (develop)
+
+- Merge pull request #131 from arnavam/chore/a2c-shared-cluster-bootstrap (Centre-for-Open-Societal-Systems/oan_a2c@1f964d245ecc)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-12
+
 ### frappe-service 0.0.0-develop.28 (develop)
 
 - No description recorded. (unknown source@unknown)

@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.0-develop.19
+
+<!-- source-commit: 1f964d245ecc7d52049c33b03ff8bec56c1545b9 version: 0.0.0-develop.19 -->
+Published 2026-11-12. Archive SHA-256 `aeb73fe3b7cedc87e2601bd97b1095b1cd4aa3db55cc4f7deeae11625b865d57`.
+
+- Change: Merge pull request #131 from arnavam/chore/a2c-shared-cluster-bootstrap
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@1f964d245ecc](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/1f964d245ecc7d52049c33b03ff8bec56c1545b9)
+- Changes since 0.0.0-develop.18: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/5a5a5fbea1752132e25e1c6269b443c04a0769b8...1f964d245ecc7d52049c33b03ff8bec56c1545b9
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/oan-a2c-service/a2c-service:0.0.0-develop.19` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-service-0.0.0-develop.19.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.0-develop.18
 
 <!-- source-commit: 5a5a5fbea1752132e25e1c6269b443c04a0769b8 version: 0.0.0-develop.18 -->
