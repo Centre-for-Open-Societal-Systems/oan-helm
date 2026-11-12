@@ -1,7 +1,6 @@
-# Staging counterpart of environments/dev/endpoints.yaml. Hosts only: the dev file also records
-# routes and workloads observed on the live cluster, which do not exist until staging is rebuilt.
-# Fill `verifiedRoutes` from a read-only check after the install.
-checkedAt: null
+# Staging counterpart of environments/dev/endpoints.yaml: the public hosts and the routes that serve them.
+# verifiedRoutes is read from the live cluster (read-only); re-read it after a host or route change.
+checkedAt: 2026-11-12T19:02:00Z  # read-only check: every public host below has a route; HTTPS answered (APIs 404 on /)
 server: 52.66.116.220  # staging: confirm (single-node RKE2 box today)
 publicHosts:
   keycloak: keycloak.qa.oanstaging.com
@@ -49,6 +48,250 @@ unconfirmed:
 - Inji Certify
 - agent portal UI
 - notifications
-- DA
-- Crop and Livestock registries (not part of this promotion)
-verifiedRoutes: []
+verifiedRoutes:
+- namespace: commons
+  name: commons-kafka-ui
+  hosts:
+  - kafka.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-keycloak
+  hosts:
+  - keycloak.qa.oanstaging.com
+  gateways:
+  - commons-keycloak
+- namespace: commons
+  name: commons-minio
+  hosts:
+  - minio-console.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-minio-api
+  hosts:
+  - minio-farmer.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-services-aggregation-api
+  hosts:
+  - aggregation.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-services-auditmanager
+  hosts:
+  - auditmanager.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-services-awe
+  hosts:
+  - awe.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-services-cm-partner-api
+  hosts:
+  - consent-manager-partner.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-services-cm-partner-portal
+  hosts:
+  - consent-partner-portal.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-services-console
+  hosts:
+  - consent-manager.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-services-esignet-oidc-ui
+  hosts:
+  - esignet.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-services-iam-agent-portal-api
+  hosts:
+  - agent-iam.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-services-iam-staff-portal-api
+  hosts:
+  - staff-iam.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-services-iam-staff-ui
+  hosts:
+  - iam-staff-ui.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-services-master-data-api
+  hosts:
+  - master-data.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-services-master-data-ui
+  hosts:
+  - master-data-ui.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-services-mock-identity-system
+  hosts:
+  - esignet.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-services-odk-central
+  hosts:
+  - odk-central.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-services-pm-partner-api
+  hosts:
+  - partner-management-partner-api.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-services-pm-staff-portal-api
+  hosts:
+  - staff-iam.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-services-pm-staff-portal-ui
+  hosts:
+  - partner-management.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-services-staff-portal-ui
+  hosts:
+  - staff-portal.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: crop
+  name: cropsown-connector
+  hosts:
+  - connector-cropsown-registry.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: crop
+  name: cropsown-registry-id-generator
+  hosts:
+  - idgenerator-crop.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: crop
+  name: cropsown-registry-partner-api
+  hosts:
+  - partner-crop.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: crop
+  name: cropsown-registry-staff-portal-api
+  hosts:
+  - staff-crop.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: crop
+  name: cropsown-registry-staff-portal-ui
+  hosts:
+  - crop-registry.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: da-registry
+  name: da-registry-id-generator
+  hosts:
+  - idgenerator-da.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: da-registry
+  name: da-registry-partner-api
+  hosts:
+  - partner-da-registry.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: da-registry
+  name: da-registry-staff-portal-api
+  hosts:
+  - staff-da-registry.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: da-registry
+  name: da-registry-staff-portal-ui
+  hosts:
+  - da-registry.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: farmer
+  name: farmer-registry-connector
+  hosts:
+  - connector-farmer-registry.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: farmer
+  name: farmer-registry-id-generator
+  hosts:
+  - idgenerator-farmer.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: farmer
+  name: farmer-registry-partner-api
+  hosts:
+  - partner-farmer.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: farmer
+  name: farmer-registry-staff-portal-api
+  hosts:
+  - staff-farmer.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: farmer
+  name: farmer-registry-staff-portal-ui
+  hosts:
+  - farmer-registry.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: live
+  name: livestock-connector
+  hosts:
+  - connector-livestock-registry.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: live
+  name: livestock-registry-id-generator
+  hosts:
+  - idgenerator-livestock.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: live
+  name: livestock-registry-partner-api
+  hosts:
+  - partner-livestock.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: live
+  name: livestock-registry-staff-portal-api
+  hosts:
+  - staff-livestock.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: live
+  name: livestock-registry-staff-portal-ui
+  hosts:
+  - livestock-registry.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
