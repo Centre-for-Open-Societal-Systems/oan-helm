@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-livestock-registry 0.0.0-develop.457 (develop)
+
+- Staging Livestock: connector on the staging Gateway; pipeline delivers the dashboard UI (#243) (Centre-for-Open-Societal-Systems/livestock-registry@0b74fcd3436f)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-12
+
 ### openg2p-farmer-registry 1.0.0-rc.868 (staging)
 
 - Staging: the promotion delivers the Farmer dashboard UI from oan-helm (#286) (Centre-for-Open-Societal-Systems/farmer-registry@e7b12a88065c)
