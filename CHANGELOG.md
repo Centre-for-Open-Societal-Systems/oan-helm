@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### oan-grievance-service 0.0.0-develop.79 (develop)
+
+- Merge pull request #108 from arnavam/fix/grievance-develop-chart-version (Centre-for-Open-Societal-Systems/oan_grievance_service@c84d8e9af2ee)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-12
+
 ### oan-a2c-service 0.0.0-develop.21 (develop)
 
 - Merge pull request #132 from arnavam/fix/a2c-gateway-consumer-namespace (Centre-for-Open-Societal-Systems/oan_a2c@73ba35650c5a)
