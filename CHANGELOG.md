@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### oan-apisix-gateway 0.1.0-dev.3
+
+Previous version: 0.1.0-dev.2.
+
+- chore(apisix): make api6-gateway the default namespace of the gateway (fda5acc)
+
+## 2026-11-12
+
 ### oan-apisix-gateway 0.1.0-dev.2
 
 Previous version: 0.1.0-dev.1.
