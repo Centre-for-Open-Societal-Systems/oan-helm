@@ -268,3 +268,30 @@ iamBenePortalApi:
   loginProvider:
     seed: false
     defaultRedirectUri: https://bene-portal.qa.oanstaging.com
+
+# Staff-realm public clients answer only on the qa hosts. prune: true replaces each listed
+# client's redirect URIs and web origins with exactly the declared ones, so the old
+# *.oanstaging.com, *.commons.staging.openg2p.test and *.commons.openg2p.org entries go.
+# registry-connector-ui comes from keycloak-init (connector-*.{{ baseDomain }}); the rest are
+# created by subcharts and are declared here.
+keycloakPublicClientUrls:
+  prune: true
+  extraClients:
+  - realm: staff
+    clientId: consent-manager-ui
+    redirectUris:
+    - 'https://{{ tpl (index .Values "openg2p-consent-manager" "global" "consentManagerHostname") $ }}/*'
+    webOrigins:
+    - 'https://{{ tpl (index .Values "openg2p-consent-manager" "global" "consentManagerHostname") $ }}'
+  - realm: staff
+    clientId: awe-admin-portal
+    redirectUris:
+    - 'https://{{ .Values.global.aweHostname }}/*'
+    webOrigins:
+    - 'https://{{ .Values.global.aweHostname }}'
+  - realm: staff
+    clientId: iam-staff-ui
+    redirectUris:
+    - 'https://iam-staff-ui.{{ .Values.global.baseDomain }}/*'
+    webOrigins:
+    - 'https://iam-staff-ui.{{ .Values.global.baseDomain }}'
