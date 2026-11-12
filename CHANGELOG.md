@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-cropsown-registry 0.0.0-develop.518 (develop)
+
+- Sample loader: no Address section; the land position goes on the Planning rows (#281) (Centre-for-Open-Societal-Systems/cropsown-regsitry@9384c7f77f8e)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
 ### openg2p-cropsown-registry 1.0.0-rc.526 (staging)
 
 - db-seed: pin openg2p-data at the sample crop records with list codes (#279) (Centre-for-Open-Societal-Systems/cropsown-regsitry@afb7129dee43)
