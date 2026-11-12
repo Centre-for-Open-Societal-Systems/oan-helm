@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-farmer-registry 1.0.0-rc.866 (staging)
+
+- New Dev deploy check: allow the sample loader there (#284) (Centre-for-Open-Societal-Systems/farmer-registry@1e21bd9c1c57)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
 ### oan-a2c-service 0.0.0-develop.16 (develop)
 
 - Merge pull request #128 from arnavam/fix/a2c-router-registration-lock (Centre-for-Open-Societal-Systems/oan_a2c@91e6d629fbaa)
