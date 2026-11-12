@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-farmer-registry 1.0.0-rc.862 (staging)
+
+- Staging promotion upgrades the Farmer connector to oan-helm's staging values (#279) (Centre-for-Open-Societal-Systems/farmer-registry@35c4c97bf1d7)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
 ### openg2p-livestock-registry 1.0.0-rc.467 (staging)
 
 - Staging connector: name the build by the promoted chart's commit (#239) (Centre-for-Open-Societal-Systems/livestock-registry@602aed8dd912)
