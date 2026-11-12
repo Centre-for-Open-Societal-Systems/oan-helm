@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-da-registry 1.0.0-rc.101 (staging)
+
+- Enter sample DAs as the signed-in submit user (#61) (Centre-for-Open-Societal-Systems/da-registry@f9a4aabe4080)
+- Images and rollback: [releases/history/staging/openg2p-da-registry.md](releases/history/staging/openg2p-da-registry.md)
+
+## 2026-11-12
+
 ### openg2p-da-registry 0.0.0-develop.95 (develop)
 
 - Enter sample DAs as the signed-in submit user (#61) (Centre-for-Open-Societal-Systems/da-registry@f9a4aabe4080)
