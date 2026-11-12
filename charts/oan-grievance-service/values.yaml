@@ -5,10 +5,10 @@
 #
 # Set at install, not here:
 # - frappe.image.tag: the Jenkins tag `develop-<build>-<sha>` (locally: `develop`)
-# - frappe.dbHost: the external PostgreSQL server (docs/external-db-and-nfs.md)
+# - frappe.dbHost: the PostgreSQL server (set in the environment file)
 # Image repositories, the seed image and dbRootUser are per environment.
 # Secrets created outside Git, in the release namespace:
-# - oan-grievance-db (key `password`): password of dbRootUser on that server
+# - oan-frappe-common-db (key `password`): the `postgres` password, copied from the frappe-common namespace
 # - oan-grievance-admin (key `password`): Frappe Administrator password
 # - oan-grievance-jwt (key `jwt_v1.pem`): unencrypted RSA private key, at least 2048 bits
 # - oan-grievance-sentry (key `dsn`): Sentry DSN. Optional.
@@ -37,10 +37,10 @@ frappe:
     tag: ""
 
   # PostgreSQL runs outside the cluster. The create-site job reads the password of dbRootUser
-  # from Secret oan-grievance-db.
+  # from Secret oan-frappe-common-db, a copy of the one the frappe-common release creates.
   dbHost: ""
   dbPort: 5432
-  dbExistingSecret: oan-grievance-db
+  dbExistingSecret: oan-frappe-common-db
   dbExistingSecretPasswordKey: password
   postgresql-sts:
     enabled: false

@@ -30,7 +30,7 @@ upstream chart (`erpnext` 8.0.89, alias `frappe`). Its site-config job waits for
 writes `siteConfig` and the JWT key, adds the OpenG2P credentials when their Secret
 exists, and runs `bench migrate`.
 
-MariaDB runs outside the cluster and the sites volume is on NFS; see
+PostgreSQL is the `oan-frappe-common-db` release in the A2C cluster and the sites volume is on NFS; see
 [external-db-and-nfs.md](external-db-and-nfs.md). There is one set of values for every
 environment.
 
@@ -40,7 +40,7 @@ Created by hand, never in values files.
 
 | Secret | Cluster | Namespace | Keys | Used for |
 |---|---|---|---|---|
-| `oan-a2c-db` | A2C | `a2c-develop` | `password` | Password of `frappe_admin` on the external MariaDB ([setup](external-db-and-nfs.md)) |
+| `oan-frappe-common-db` | A2C | `a2c-develop` | `password` | `postgres` password, copied from namespace `frappe-common` ([setup](external-db-and-nfs.md)) |
 | `oan-a2c-admin` | A2C | `a2c-develop` | `password` | Frappe `Administrator` password |
 | `oan-a2c-jwt` | A2C | `a2c-develop` | `jwt_v1.pem` | RS256 signing key for `oan_auth_service` |
 | `oan-a2c-openg2p` | A2C | `a2c-develop` | `username`, `password` | Optional: OpenG2P portal agent login |
@@ -59,7 +59,7 @@ Same order as grievance. The A2C cluster:
 
 ```sh
 kubectl create namespace a2c-develop
-kubectl -n a2c-develop create secret generic oan-a2c-db --from-literal=password='<frappe_admin password>'
+# oan-frappe-common-db: copy it from namespace frappe-common, see external-db-and-nfs.md section 2
 kubectl -n a2c-develop create secret generic oan-a2c-admin --from-literal=password="$(openssl rand -hex 12)"
 openssl genrsa -out jwt_v1.pem 2048
 kubectl -n a2c-develop create secret generic oan-a2c-jwt --from-file=jwt_v1.pem=jwt_v1.pem
@@ -68,7 +68,6 @@ rm jwt_v1.pem
 helm upgrade --install a2c charts/oan-a2c-service -n a2c-develop \
   -f environments/dev/values/oan-a2c-service.yaml \
   --set-string frappe.image.tag=<develop-build> \
-  --set-string frappe.dbHost=<mariadb host> \
   --wait --wait-for-jobs --timeout 25m
 kubectl -n a2c-develop get svc a2c-gateway-web          # NodePort 30810
 ```

@@ -1,25 +1,38 @@
 # Values for the csi-driver-nfs chart 4.13.6 (repo https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts).
-# Target: every app cluster that uses an NFS server for the shared Frappe sites volume
-# (the base app values). Installs the driver and a StorageClass named `nfs-csi`. See
-# docs/external-db-and-nfs.md.
+# Target: every app cluster, once per cluster (namespace kube-system). Installs the driver
+# and the default StorageClass `nfs-csi`, which every volume of the cluster uses: the
+# Frappe sites volumes and the oan-frappe-common PostgreSQL. See docs/external-db-and-nfs.md.
+#
+# The same StorageClass as the OpenG2P dev cluster, which OpenG2P creates with
+# kubernetes/nfs-client/install-nfs-csi-driver.sh and storage-class.template.yaml in
+# OpenG2P/openg2p-deployment. That script pins driver v4.7.0; this file uses chart 4.13.6.
 #
 # Set at install, not here:
-# - storageClass.parameters.server: the NFS server address, reachable from every node
-#   of the cluster
+# - storageClass.parameters.server: the NFS server address, reachable from every node.
+#   On a single-node cluster the server is the node itself: use its internal address,
+#   not localhost.
+# - storageClass.parameters.share: /srv/nfs/<cluster name>, one directory per cluster.
 #
 # The share must exist and be exported to the nodes; see the guide.
 
 storageClass:
   create: true
   name: nfs-csi
+  annotations:
+    # Volumes that name no class land here. RKE2 has no default class of its own.
+    storageclass.kubernetes.io/is-default-class: "true"
   parameters:
     server: ""
-    share: /srv/nfs/k8s
-  # Retain keeps the data when a release or PVC is deleted, as local-path-shared does.
+    share: ""
+    # One directory per volume, named after its namespace and claim, so the share shows
+    # which app owns which directory.
+    subDir: ${pvc.metadata.namespace}-${pvc.metadata.name}-${pv.metadata.name}
+    # New volume directories are writable by every user: Frappe runs as 1000, Bitnami
+    # PostgreSQL as 1001.
+    mountPermissions: "0777"
+  # Retain keeps the data when a release or PVC is deleted.
   reclaimPolicy: Retain
   volumeBindingMode: Immediate
-  mountOptions:
-    - nfsvers=4.1
 
 # One controller is enough for a small cluster.
 controller:
