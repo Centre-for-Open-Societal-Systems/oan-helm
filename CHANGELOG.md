@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-da-registry 1.0.0-rc.97 (staging)
+
+- Sample DA loader: sign the approvers in again (#58) (Centre-for-Open-Societal-Systems/da-registry@2fb048e4f5f6)
+- Images and rollback: [releases/history/staging/openg2p-da-registry.md](releases/history/staging/openg2p-da-registry.md)
+
+## 2026-11-12
+
 ### openg2p-farmer-registry 0.0.0-develop.849 (develop)
 
 - Give the sample approvers their declared password after every deploy (#277) (Centre-for-Open-Societal-Systems/farmer-registry@e959ce748a06)
