@@ -37,5 +37,15 @@ pipeline {
                 }
             }
         }
+        // The shared dashboards (oan-dashboards, namespace commons) from environments/staging/values/oan-dashboards.yaml.
+        // The registry dashboard UIs are delivered by each registry's staging pipeline, whose deployer has rights there.
+        stage('Deliver oan-dashboards') {
+            when { allOf { branch 'main'; not { changeRequest() } } }
+            steps {
+                withCredentials([file(credentialsId: 'staging-commons-deployer-kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh 'bash scripts/ci/deliver_staging_dashboards.sh oan-dashboards'
+                }
+            }
+        }
     }
 }

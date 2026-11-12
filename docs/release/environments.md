@@ -121,7 +121,7 @@ the branches `dev`, `main`, `develop` and `staging`. Deploy stages run on the ag
 | Development Agent | `DA/da-registry` | New Dev, namespace `da-registry` | staging, namespace `da-registry`, through `deliver_staging.sh` | `da-registry-newdev-kubeconfig`; `staging-rke2-kubeconfig` |
 | Registry seed data | `Gen2-Package/openg2p-data` | `develop` only (no `staging` branch) | - | Not verified |
 | Master Data | `MDS/mds` | job exists for `develop` and `staging`; last runs started by timer | - | Not verified: the target of each branch |
-| Registry dashboards | inside the registry jobs on New Dev (`ci/dashboard/deploy-ui.sh`) | New Dev | staging script `scripts/ci/deliver_staging_dashboards.sh` | - |
+| Registry dashboards | inside the registry jobs on New Dev (`ci/dashboard/deploy-ui.sh`) | New Dev | staging: `scripts/ci/deliver_staging_dashboards.sh <registry>` from each registry's staging pipeline; `oan-dashboards` from the Commons job (stage Deliver oan-dashboards) | registry staging kubeconfigs; `staging-commons-deployer-kubeconfig` |
 | Farmer connector on staging | script `scripts/ci/deliver_staging_farmer_connector.sh` | - | staging | - |
 | Commons services | `ci/jenkins/staging-commons.Jenkinsfile` on `main` (Jenkins job `oan-helm-staging-commons`, defined in `ci/jenkins/jobs/oan-helm-staging-commons.xml` and created by `ci/jenkins/apply-job.sh`; until it exists, Commons upgrades are by hand: the last were services revision 20 = 1.0.0-dev.41 and base revision 9 on 12 Nov 2026) | - | staging, release `commons-services`, namespace `commons`, through `scripts/ci/deliver_staging_commons.sh` | `staging-commons-deployer-kubeconfig` (ServiceAccount `commons/commons-deployer`, `environments/staging/rbac/commons-deployer-rbac.yaml`); `staging-commons-secret-values` |
 
@@ -194,9 +194,10 @@ out = {"keymanager": {"p12KeystorePass": v["keymanager"]["p12KeystorePass"]},
 print(json.dumps(out))' > commons-secret-values.yaml
 ```
 
-Not verified: which job or person runs `deliver_staging_dashboards.sh` and
-`deliver_staging_farmer_connector.sh`. No Jenkins job in the job tree references them. They are scripts that
-run from a checkout of this repository.
+`deliver_staging_farmer_connector.sh` runs in the Farmer staging pipeline (farmer-registry
+`ci/deploy/connector-staging.sh`). `deliver_staging_dashboards.sh` takes the dashboards to deliver (`farmer`,
+`cropsown`, `livestock`, `oan-dashboards`; none means all four): the Commons job delivers `oan-dashboards`, each
+registry's staging pipeline its own dashboard UI, each with the kubeconfig that has rights in that namespace.
 
 Latest builds read on 5 November 2026:
 

@@ -64,7 +64,11 @@ class DeliverStagingCommons(unittest.TestCase):
     def test_commons_deliveries_use_their_own_deployer_in_commons_only(self):
         pipeline = (ROOT / 'ci/jenkins/staging-commons.Jenkinsfile').read_text(encoding='utf-8')
         self.assertNotIn('staging-rke2-kubeconfig', pipeline.split('pipeline {', 1)[1])
-        self.assertEqual(pipeline.count("credentialsId: 'staging-commons-deployer-kubeconfig'"), 2)
+        # Commons base, Commons services and oan-dashboards (namespace commons).
+        self.assertEqual(pipeline.count("credentialsId: 'staging-commons-deployer-kubeconfig'"), 3)
+        # Only oan-dashboards: the registry dashboard UIs live in namespaces this deployer has no rights in.
+        self.assertIn("deliver_staging_dashboards.sh oan-dashboards'", pipeline)
+        self.assertEqual(pipeline.count('deliver_staging_dashboards.sh'), 1)
         rbac = (ROOT / 'environments/staging/rbac/commons-deployer-rbac.yaml').read_text(encoding='utf-8')
         body = '\n'.join(line for line in rbac.splitlines() if not line.startswith('#'))
         self.assertNotIn('ClusterRole', body)
