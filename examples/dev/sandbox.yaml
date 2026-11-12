@@ -20,12 +20,12 @@
 #      JWT keys: python -c "import secrets; print(secrets.token_urlsafe(48))" (two different values).
 #      APP_CREDENTIAL_ENCRYPTION_KEY: python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
 #        (never change it once apps have keys). GATEWAY_ADMIN_TOKEN: the APISIX `viewer` key
-#        (Secret apisix-admin-credentials in namespace apisix): with partnerAuth oauth the sandbox
+#        (Secret apisix-admin-credentials in namespace api6-gateway): with partnerAuth oauth the sandbox
 #        only reads routes. The `admin` key is needed only in apikey / keycloak mode (consumers).
 #   5. APISIX (docs/apisix-gateway.md, section 8b): partner host DNS + TLS Secret
 #      oan-partner-gateway-tls, the partner routes
 #        helm upgrade --install oan-partner-gateway <sandbox-platform>/deploy/apisix-partner-gateway/k8s \
-#          -n apisix -f environments/dev/values/gateway-common.yaml -f environments/dev/values/oan-partner-gateway.yaml
+#          -n api6-gateway -f environments/dev/values/gateway-common.yaml -f environments/dev/values/oan-partner-gateway.yaml
 #      and a way for this cluster to reach the Admin API (config.gateway.sync.adminUrl).
 #   6. Set the image digests below, enabled: true on api, web and virtualService,
 #      and install with environments/dev/values/sandbox.yaml.

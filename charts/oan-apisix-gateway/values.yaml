@@ -1,7 +1,7 @@
 # Defaults for the OAN APISIX gateway: the upstream apisix/apisix 2.18.2 chart (APISIX
 # 3.19.0, with its bundled apisix-ingress-controller), vendored in charts/.
 # Target: the gateway cluster, which runs only APISIX and fronts every app cluster
-# (grievance, A2C). Install as release `apisix` in namespace `apisix`, so the Service
+# (grievance, A2C). Install as release `apisix` in namespace `api6-gateway`, so the Service
 # names (`apisix-admin`) match the route charts. Per-environment values
 # (environments/<env>/values/oan-apisix-gateway.yaml) set etcd members and hosts.
 # See docs/apisix-gateway.md.
@@ -48,7 +48,7 @@ apisix:
   # - A2C partner routes: the A2C service user. Secret a2c-frappe-service-credential.
   # - Grievance IVR webhook: the Grievance IVR Integration user. Secret
   #   oan-grievance-ivr-frappe-credential.
-  # Both in namespace apisix, key `authorization`, value `token <api_key>:<api_secret>`.
+  # Both in namespace api6-gateway, key `authorization`, value `token <api_key>:<api_secret>`.
   extraEnvVars:
     - name: A2C_FRAPPE_SERVICE_AUTHORIZATION
       valueFrom:
@@ -104,7 +104,7 @@ apisix:
   #   --set 'externalEtcd.host={http://<m1>:2379,http://<m2>:2379,http://<m3>:2379}'
   # Use https URLs when the members have TLS. The password of `user` is read from the
   # Secret, key `etcd-root-password`, created outside Git:
-  #   kubectl -n apisix create secret generic apisix-etcd-credentials --from-literal=etcd-root-password=...
+  #   kubectl -n api6-gateway create secret generic apisix-etcd-credentials --from-literal=etcd-root-password=...
   # Set `user: ""` for an etcd without authentication.
   etcd:
     enabled: false
@@ -148,7 +148,7 @@ apisix:
                   key: admin
     apisix:
       adminService:
-        namespace: apisix
+        namespace: api6-gateway
         name: apisix-admin
         port: 9180
 

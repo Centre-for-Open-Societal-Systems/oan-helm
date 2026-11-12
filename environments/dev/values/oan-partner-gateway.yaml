@@ -1,7 +1,7 @@
 # Values for the oan-partner-gateway chart (sandbox-platform deploy/apisix-partner-gateway/k8s):
 # the partner APIs that sandbox apps call, with the app's OAuth token in X-Partner-Token.
-# Target: the dev APISIX (release `apisix`, namespace `apisix`), not the OpenG2P cluster.
-# Install in namespace `apisix`: the upstreams are external hosts (externalNodes).
+# Target: the dev APISIX (release `apisix`, namespace `api6-gateway`), not the OpenG2P cluster.
+# Install in namespace `api6-gateway`: the upstreams are external hosts (externalNodes).
 # See docs/apisix-gateway.md, section 8b.
 
 ingressClassName: apisix
@@ -11,7 +11,7 @@ ingressClassName: apisix
 hosts:
   - partner-api-dev.oanstaging.com
 
-# APISIX terminates TLS for `hosts` with this Secret (tls.crt, tls.key) in namespace apisix,
+# APISIX terminates TLS for `hosts` with this Secret (tls.crt, tls.key) in namespace api6-gateway,
 # provided outside Git like oan-grievance-tls (section 11).
 tls:
   secretName: oan-partner-gateway-tls

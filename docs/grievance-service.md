@@ -202,15 +202,15 @@ hop between them crosses the internet in plain HTTP: add a VPN or TLS before goi
 4. **Create the Secret.**
 
    ```sh
-   kubectl create namespace apisix
-   kubectl -n apisix create secret generic apisix-admin-credentials \
+   kubectl create namespace api6-gateway
+   kubectl -n api6-gateway create secret generic apisix-admin-credentials \
      --from-literal=admin="$(openssl rand -hex 16)" --from-literal=viewer="$(openssl rand -hex 16)"
    ```
 
 5. **Install APISIX and its Redis.**
 
    ```sh
-   helm upgrade --install apisix charts/oan-apisix-gateway -n apisix --wait --timeout 10m
+   helm upgrade --install apisix charts/oan-apisix-gateway -n api6-gateway --wait --timeout 10m
    curl -s -o /dev/null -w '%{http_code}\n' http://<gateway node public IP>/   # 404 from APISIX: no routes yet
    ```
 
@@ -295,8 +295,8 @@ hop between them crosses the internet in plain HTTP: add a VPN or TLS before goi
     curl -si $H/v1/grievances/health | head -12        # 200, X-Request-Id header
     curl -si $H/v1/does-not-exist | head -3            # 404 from APISIX
     curl -s $H/v1/auth/keys | head -c 200              # kid v1: the JWT key loaded
-    kubectl -n apisix logs deploy/apisix -c apisix --tail=3   # first field: your public IP, not 10.42.x
-    kubectl -n apisix exec statefulset/apisix-redis-master -- redis-cli --scan | head -3   # plugin-limit-count:... keys
+    kubectl -n api6-gateway logs deploy/apisix -c apisix --tail=3   # first field: your public IP, not 10.42.x
+    kubectl -n api6-gateway exec statefulset/apisix-redis-master -- redis-cli --scan | head -3   # plugin-limit-count:... keys
     ```
 
     If the access log shows a `10.42.x` address, the node rewrites the source address
@@ -398,7 +398,7 @@ It needs about 8 GB of memory for the cluster, of which ClamAV takes 1.5 GB.
    curl -s --cacert ca.crt -H 'Content-Type: application/json' \
      -d "{\"usr\":\"Administrator\",\"pwd\":\"$PW\"}" \
      https://grievance-backend.development.oanstaging.com/v1/auth/login | head -c 120
-   kubectl -n apisix exec statefulset/apisix-redis-master -- redis-cli --scan | head -3
+   kubectl -n api6-gateway exec statefulset/apisix-redis-master -- redis-cli --scan | head -3
    kubectl -n develop logs deploy/grievance-worker-scan --tail=5
    ```
 
