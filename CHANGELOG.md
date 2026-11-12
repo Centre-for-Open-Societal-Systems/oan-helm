@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### oan-a2c-service 0.0.0-develop.3 (develop)
+
+- Merge pull request #118 from arnavam/feat/a2c-helm-chart-ci (Centre-for-Open-Societal-Systems/oan_a2c@5dee47de0581)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-12
+
 ### openg2p-commons-services 1.0.0-dev.41
 
 Previous version: 1.0.0-dev.40.
