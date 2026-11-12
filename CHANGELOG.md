@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-da-registry 0.0.0-develop.92 (develop)
+
+- Sample DA loader: sign the approvers in again (#58) (Centre-for-Open-Societal-Systems/da-registry@2fb048e4f5f6)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+### openg2p-livestock-registry 1.0.0-rc.464 (staging)
+
+- Staging connector moves to the qa.oanstaging.com scope (#234) (Centre-for-Open-Societal-Systems/livestock-registry@b053d120c8e0)
+- Images and rollback: [releases/history/staging/openg2p-livestock-registry.md](releases/history/staging/openg2p-livestock-registry.md)
+
+## 2026-11-12
+
 ### openg2p-cropsown-registry 0.0.0-develop.519 (develop)
 
 - Staging connector moves to the qa.oanstaging.com scope (#276) (Centre-for-Open-Societal-Systems/cropsown-regsitry@63f888014163)
