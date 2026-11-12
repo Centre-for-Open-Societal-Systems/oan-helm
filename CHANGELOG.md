@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-da-registry 0.0.0-develop.93 (develop)
+
+- Give the sample approvers their declared password after every deploy (#57) (Centre-for-Open-Societal-Systems/da-registry@cba80649ebcd)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-12
+
 ### openg2p-livestock-registry 0.0.0-develop.454 (develop)
 
 - Give the sample approvers their declared password after every deploy (#237) (Centre-for-Open-Societal-Systems/livestock-registry@b275e4c48b1f)
