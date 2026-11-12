@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-cropsown-registry 0.0.0-develop.520 (develop)
+
+- Give the sample approvers their declared password after every deploy (#283) (Centre-for-Open-Societal-Systems/cropsown-regsitry@37d1e75c05f1)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
 ### openg2p-farmer-registry 0.0.0-develop.850 (develop)
 
 - Staging promotion upgrades the Farmer connector to oan-helm's staging values (#279) (Centre-for-Open-Societal-Systems/farmer-registry@35c4c97bf1d7)
