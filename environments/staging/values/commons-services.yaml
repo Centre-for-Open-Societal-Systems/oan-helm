@@ -63,7 +63,7 @@ master-data:
   # revision 19: 1 published version, 21,037 units). geo is false again so later upgrades
   # only upsert code lists and samples; the archive database stays as the record.
   # The image is the seed build with CROP_DISEASE (release record 1.0.0-dev.39); staging
-  # still runs chart 1.0.0-dev.35, whose default seed image is older.
+  # pinned it while staging ran chart 1.0.0-dev.35, whose default seed image is older.
   geoSeed:
     enabled: true
     publishInitial: true
