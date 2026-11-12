@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-cropsown-registry 0.0.0-develop.522 (develop)
+
+- Sowing area: compare with the farmer's own Cultivation, not any farmer's land of the same name (#289) (Centre-for-Open-Societal-Systems/cropsown-regsitry@d58e59be05fd)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
 ### openg2p-farmer-registry 0.0.0-develop.851 (develop)
 
 - Staging: unpause the Farmer ODK connector definition (#281) (Centre-for-Open-Societal-Systems/farmer-registry@bca255b3564f)
