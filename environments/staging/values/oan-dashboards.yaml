@@ -2,7 +2,7 @@
 # A2C has no staging or qa gateway, so it reads the develop one (a2c-develop-gateway.oanstaging.com; no qa name).
 image:
   repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/oan-dashboards
-  tag: 3aecc3171303
+  tag: 3aecc3171303@sha256:a90465b3226732e780b64f9f7438addaca528c32086f61a6128eed2fd9de05e9
 dashboardServices:
   FARMER_REGISTRY_DASHBOARD_API_URL: http://farmer-registry-dashboard-api.farmer
   CROPSOWN_REGISTRY_DASHBOARD_API_URL: http://cropsown-registry-dashboard-api.crop
