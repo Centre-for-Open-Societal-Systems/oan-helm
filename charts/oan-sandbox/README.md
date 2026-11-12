@@ -34,6 +34,9 @@ partners copy into Postman use it.
 | `config.gateway.appSync.enabled` | Apps follow the gateway (`config.gateway.sync.adminUrl`, key `GATEWAY_ADMIN_TOKEN`). `apikey` / `keycloak` mode: every app is written to the APISIX Admin API as a consumer (needs the **admin** key). `oauth` mode: the routes are only read (their ids go into the app tokens; the **viewer** key is enough) and nothing is written to the gateway. |
 | `config.keycloak.enabled` | Participants become Keycloak users in `config.keycloak.realm` (default `partner`); with `participantAuth: keycloak` Keycloak checks the portal password. Secrets `KEYCLOAK_ADMIN_CLIENT_SECRET`, `KEYCLOAK_LOGIN_CLIENT_SECRET`. |
 | `config.gateway.partnerAuth: oauth` | OAuth 2.0 client credentials: every app key is also a Keycloak client (client_id = API key, client_secret = API secret). Partners get a token from the realm's token endpoint and send only that token in `X-Partner-Token`; the portal's try-it page has **Get token**. Needs `keycloak.enabled`, `appSync.enabled` (the chart refuses otherwise) and the partner routes of chart `oan-partner-gateway` ([sandbox-platform `deploy/apisix-partner-gateway`](https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform/tree/develop/deploy/apisix-partner-gateway)) on the gateway. |
+| `config.keycloak.prod.*`, `config.gateway.prodAdminUrl` | Production's own Keycloak and APISIX Admin API (each cluster has its own). All optional: **empty = production apps use the main Keycloak / gateway**, still with their own keys and a token naming only `production`. With `keycloak.prod.url` set, the Secret needs `KEYCLOAK_PROD_ADMIN_CLIENT_SECRET` (that Keycloak's `oan-sandbox-provisioner`, made with `setup_partner_realm.py`); with `gateway.prodAdminUrl`, `GATEWAY_PROD_ADMIN_TOKEN`. Participants and portal sign-in stay on the main Keycloak. |
+| `config.apps.*` | Per-participant app and key limits, and the life of API keys: `keyLifetimeDays` (0 = never expire), `keyRotationGraceDays` (a rotated key keeps working this long), `keyExpiryWarnDays`, `keyMaintenanceMinutes`. A partner sees a key's secret once; rotating gives a new one. |
+| `config.support.slaHours`, `config.audit.retentionDays` | Hours before an unanswered support query shows as overdue (0 = no SLA); days after which audit entries are deleted (0 = keep forever). |
 | `config.partnerPortal.clientId` | OpenG2P Consent Manager partner portal: approved participants get its role and `partner_id`. |
 | `config.partnerManagement.enabled` | Approved participants are onboarded in OpenG2P Partner Management. Secret `PM_CLIENT_SECRET`. |
 
@@ -58,7 +61,8 @@ The realm's clients (`oan-partner-api`, `oan-sandbox-provisioner` with manage-cl
    Optional: `SMTP_PASSWORD`, `GATEWAY_ADMIN_TOKEN` (APISIX Admin API key: viewer for
    "Pull from gateway" and oauth mode, admin for app sync in apikey / keycloak mode), `KEYCLOAK_ADMIN_CLIENT_SECRET` and
    `KEYCLOAK_LOGIN_CLIENT_SECRET` (Keycloak), `GATEWAY_LOG_INGEST_TOKEN`,
-   `PM_CLIENT_SECRET`, `SEED_ADMIN_PASSWORD` with `config.seed.adminEmail` (first start
+   `PM_CLIENT_SECRET`, `KEYCLOAK_PROD_ADMIN_CLIENT_SECRET` and `GATEWAY_PROD_ADMIN_TOKEN` (only with
+   a production Keycloak / gateway of its own), `SEED_ADMIN_PASSWORD` with `config.seed.adminEmail` (first start
    on an empty database: master administrator, masters, CMS content).
 4. **Route.** Set `global.hostname` (one wildcard name such as
    `sandbox.development.oanstaging.com`) and enable `virtualService` on the shared

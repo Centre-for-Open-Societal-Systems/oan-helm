@@ -141,6 +141,8 @@ spec:
               value: {{ $gw.tokenHeader | default "X-Partner-Token" | quote }}
             - name: GATEWAY_APP_KEY_HEADER
               value: {{ $gw.appKeyHeader | default "apikey" | quote }}
+            - name: GATEWAY_PROD_ADMIN_URL
+              value: {{ $gw.prodAdminUrl | default "" | quote }}
             {{- with $gw.logIngest }}
             - name: GATEWAY_LOG_INGEST_ENABLED
               value: {{ .enabled | default false | quote }}
@@ -178,6 +180,18 @@ spec:
               value: {{ $kc.participantAuth | default "local" | quote }}
             - name: KEYCLOAK_LOGIN_CLIENT_ID
               value: {{ $kc.loginClientId | quote }}
+            {{- with $kc.prod }}
+            - name: KEYCLOAK_PROD_URL
+              value: {{ .url | default "" | quote }}
+            - name: KEYCLOAK_PROD_PUBLIC_URL
+              value: {{ .publicUrl | default "" | quote }}
+            - name: KEYCLOAK_PROD_REALM
+              value: {{ .realm | default "" | quote }}
+            - name: KEYCLOAK_PROD_ADMIN_CLIENT_ID
+              value: {{ .adminClientId | default "" | quote }}
+            - name: KEYCLOAK_PROD_JWKS_URL
+              value: {{ .jwksUrl | default "" | quote }}
+            {{- end }}
             {{- end }}
             {{- with $config.partnerPortal }}
             - name: KEYCLOAK_PORTAL_CLIENT_ID
@@ -204,6 +218,30 @@ spec:
             - name: PM_DEFAULT_POLICIES
               value: {{ .defaultPolicies | default "[]" | quote }}
             {{- end }}
+            {{- end }}
+            {{- with $config.apps }}
+            - name: MAX_APPS_PER_PARTICIPANT
+              value: {{ .maxPerParticipant | default 10 | quote }}
+            - name: MAX_ACTIVE_CREDENTIALS_PER_APP
+              value: {{ .maxActiveKeys | default 2 | quote }}
+            - name: MAX_ALLOWED_IPS_PER_APP
+              value: {{ .maxAllowedIps | default 20 | quote }}
+            - name: APP_KEY_LIFETIME_DAYS
+              value: {{ .keyLifetimeDays | default 0 | quote }}
+            - name: APP_KEY_ROTATION_GRACE_DAYS
+              value: {{ if hasKey . "keyRotationGraceDays" }}{{ .keyRotationGraceDays | quote }}{{ else }}"7"{{ end }}
+            - name: APP_KEY_EXPIRY_WARN_DAYS
+              value: {{ if hasKey . "keyExpiryWarnDays" }}{{ .keyExpiryWarnDays | quote }}{{ else }}"14"{{ end }}
+            - name: APP_KEY_MAINTENANCE_MINUTES
+              value: {{ if hasKey . "keyMaintenanceMinutes" }}{{ .keyMaintenanceMinutes | quote }}{{ else }}"60"{{ end }}
+            {{- end }}
+            {{- with $config.support }}
+            - name: SUPPORT_SLA_HOURS
+              value: {{ if hasKey . "slaHours" }}{{ .slaHours | quote }}{{ else }}"72"{{ end }}
+            {{- end }}
+            {{- with $config.audit }}
+            - name: AUDIT_LOG_RETENTION_DAYS
+              value: {{ .retentionDays | default 0 | quote }}
             {{- end }}
             - name: SEED_ADMIN_EMAIL
               value: {{ $config.seed.adminEmail | quote }}

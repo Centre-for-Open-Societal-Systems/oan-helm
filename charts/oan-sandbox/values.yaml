@@ -72,6 +72,9 @@ config:
       enabled: false
       # The API as APISIX reaches it, e.g. https://<global.hostname>/oan/internal/gateway/logs
       url: ""
+    # Production's own APISIX Admin API (key in the Secret: GATEWAY_PROD_ADMIN_TOKEN).
+    # Empty = production apps are handled like UAT ones (one gateway). Used with prodUrl.
+    prodAdminUrl: ""
     # Per-product rate limits on app consumers (limit-count).
     rateLimit:
       enabled: false
@@ -97,6 +100,18 @@ config:
     # Portal sign-in: local (sandbox password) | keycloak (Keycloak checks the password).
     participantAuth: local
     loginClientId: oan-sandbox-portal
+    # Production's own Keycloak (each cluster has one). All optional: empty = production
+    # apps use the Keycloak above (still with their own keys). With url set, the Secret
+    # needs KEYCLOAK_PROD_ADMIN_CLIENT_SECRET (that Keycloak's oan-sandbox-provisioner).
+    # Participants and the portal sign-in always stay on the main Keycloak.
+    prod:
+      url: ""
+      publicUrl: ""
+      # Empty = realm / adminClientId above.
+      realm: ""
+      adminClientId: ""
+      # Empty = <url>/realms/<realm>/protocol/openid-connect/certs.
+      jwksUrl: ""
   # OpenG2P Consent Manager partner portal: an approved participant gets the portal
   # client's role and a partner_id attribute in keycloak.realm. Empty clientId = off.
   partnerPortal:
@@ -115,6 +130,25 @@ config:
     # This API as PM reaches it (partner JWKS), e.g. https://<global.hostname>/oan
     jwksBaseUrl: ""
     defaultPolicies: "[]"
+  # Participant apps: limits and the life of API keys.
+  apps:
+    maxPerParticipant: 10
+    maxActiveKeys: 2
+    maxAllowedIps: 20
+    # Days a key lives from issue; 0 = keys never expire.
+    keyLifetimeDays: 0
+    # Days a rotated key keeps working so the partner can switch over (0 = revoked at once).
+    keyRotationGraceDays: 7
+    # Owners get an email this many days before a key expires.
+    keyExpiryWarnDays: 14
+    # How often the API expires old keys and sends those warnings; 0 = never.
+    keyMaintenanceMinutes: 60
+  support:
+    # Hours to answer a support query before the console shows it overdue; 0 = no SLA.
+    slaHours: 72
+  audit:
+    # Audit entries ("User tracking") older than this many days are deleted; 0 = keep forever.
+    retentionDays: 0
   # Only used on an empty database: creates the master administrator, masters
   # and CMS content when the Secret holds SEED_ADMIN_PASSWORD (idempotent).
   seed:
@@ -125,7 +159,8 @@ config:
 # Required with participant apps: APP_CREDENTIAL_ENCRYPTION_KEY (Fernet key; never change it).
 # Optional keys: SMTP_PASSWORD, GATEWAY_ADMIN_TOKEN, SEED_ADMIN_PASSWORD,
 # KEYCLOAK_ADMIN_CLIENT_SECRET, KEYCLOAK_LOGIN_CLIENT_SECRET, GATEWAY_LOG_INGEST_TOKEN,
-# GATEWAY_RATE_LIMIT_REDIS_PASSWORD, PM_CLIENT_SECRET.
+# GATEWAY_RATE_LIMIT_REDIS_PASSWORD, PM_CLIENT_SECRET, and, only with config.keycloak.prod /
+# config.gateway.prodAdminUrl: KEYCLOAK_PROD_ADMIN_CLIENT_SECRET, GATEWAY_PROD_ADMIN_TOKEN.
 secret:
   name: ""
 
