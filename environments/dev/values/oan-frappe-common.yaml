@@ -1,0 +1,12 @@
+# Values for the oan-frappe-common chart (charts/oan-frappe-common).
+# Target: each app cluster. Release `oan-frappe-common-db`, namespace `frappe-common`;
+# frappe.dbHost in the app values is derived from that release name.
+# See docs/external-db-and-nfs.md.
+
+frappe-common:
+  postgresql-subchart:
+    primary:
+      persistence:
+        # On NFS, as the commons PostgreSQL of the OpenG2P dev cluster. `nfs-csi` is the
+        # default class too; it is named so the volume does not move if the default changes.
+        storageClass: nfs-csi

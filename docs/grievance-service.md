@@ -18,7 +18,7 @@ client -> DNS (dev) or /etc/hosts (local): grievance-backend.development.oanstag
        -> gateway cluster: APISIX, ports 80/443 (hostPort)   TLS, routes, CORS, rate limits
             picks the app by Host; rate-limit counters in Redis next to it
        -> grievance cluster: node ports 30800 (gunicorn) and 30900 (socket.io), private network
-       -> Frappe Pods, MariaDB, Redis, ClamAV
+       -> Frappe Pods, PostgreSQL (oan-frappe-common), Redis, ClamAV
 ```
 
 There is no nginx anywhere on this path. APISIX terminates TLS and proxies straight to
@@ -36,21 +36,24 @@ node ports must accept only the gateway cluster's addresses.
 | grievance | `grievance` | [charts/oan-grievance-service](../charts/oan-grievance-service) | `develop` | [oan-grievance-service.yaml](../environments/dev/values/oan-grievance-service.yaml) |
 | gateway | `oan-grievance-gateway` | `apisix/k8s` in the oan_grievance_service repository | `grievance` | [oan-grievance-gateway.yaml](../environments/dev/values/oan-grievance-gateway.yaml) |
 
-Outside Kubernetes: a MariaDB server, an NFS server, and three etcd members for APISIX
-([external-db-and-nfs.md](external-db-and-nfs.md), [apisix-gateway.md](apisix-gateway.md)
-section 10). Install the releases in this order: storage driver, gateway, app, routes. A2C adds its own app cluster
+Outside Kubernetes: an NFS server (on dev, the app node itself, as on the OpenG2P dev
+cluster) and three etcd members for APISIX ([external-db-and-nfs.md](external-db-and-nfs.md),
+[apisix-gateway.md](apisix-gateway.md) section 10). PostgreSQL runs in the app cluster, in
+the `oan-frappe-common-db` release. Install the releases in this order: `csi-driver-nfs`,
+`oan-frappe-common-db`, gateway, app, routes. A2C adds its own app cluster
 and one more release in the gateway cluster, `oan-a2c-gateway` in namespace `a2c`; see
 [apisix-gateway.md](apisix-gateway.md), section 8.
 
 ### Storage
 
 Every Frappe Pod mounts the sites volume, so it must be ReadWriteMany (RWX). The base
-values take it from NFS (`nfs-csi`) and use MariaDB outside the cluster; set both up with
+values take it from NFS (`nfs-csi`, the default StorageClass), and so does PostgreSQL, as
+on the OpenG2P dev cluster. Set both up with
 [external-db-and-nfs.md](external-db-and-nfs.md) before the app install.
 
-Nothing in the default setup uses `local-path-shared` any more: the gateway's etcd is
-external too. `environments/dev/values/local-path-shared.yaml` is left in the repository
-for a single-node cluster without NFS, but no guide installs it. The `nfs-csi` class
+Nothing in the default setup uses `local-path-shared`: the gateway's etcd is external.
+`environments/dev/values/local-path-shared.yaml` is left in the repository for a
+single-node cluster without NFS, but no guide installs it. The `nfs-csi` class
 keeps `Retain`, so deleting a release or namespace keeps the data; delete the
 PersistentVolumes and the directories on the NFS server yourself to remove it.
 
@@ -80,10 +83,9 @@ Upstream details that shaped the chart:
   the name, and they all start at once. Upstream's migrate job fails on a first install
   because the site does not exist yet, so it stays disabled and the site-config job
   migrates instead. The create-site job treats "already exists" as success.
-- Upstream reads the MariaDB root password only from the plain value
-  `frappe.mariadb-sts.rootPassword`. Our values use an external server and
-  `dbExistingSecret`, which reads the password from the Secret, so no value is passed. The
-  in-chart MariaDB is off (`frappe.mariadb-sts.enabled: false`).
+- Upstream reads the database root password only from a plain value. Our values point at
+  the `oan-frappe-common` PostgreSQL and use `dbExistingSecret`, which reads the password
+  from the Secret, so no value is passed. The in-chart databases are off.
 - The site name is set twice, as `siteName` and `frappe.jobs.createSite.siteName`,
   because a subchart cannot read its parent's values. A mismatch stops the render.
 - Upstream always renders an nginx Deployment. Its replicas are 0, so nothing runs.
@@ -137,7 +139,7 @@ dev value in the team's secret manager.
 | --- | --- | --- | --- | --- |
 | `apisix-admin-credentials` | gateway | `apisix` | `admin`, `viewer` | APISIX Admin API keys |
 | `oan-grievance-tls` | gateway | `grievance` | `tls.crt`, `tls.key` | Certificate APISIX serves for the host |
-| `oan-grievance-db` | grievance | `develop` | `password` | Password of `frappe_admin` on the external MariaDB ([setup](external-db-and-nfs.md)) |
+| `oan-frappe-common-db` | grievance | `develop` | `password` | `postgres` password, copied from namespace `frappe-common` ([setup](external-db-and-nfs.md)) |
 | `oan-grievance-admin` | grievance | `develop` | `password` | Frappe `Administrator` password |
 | `oan-grievance-jwt` | grievance | `develop` | `jwt_v1.pem` | RS256 signing key for `oan_auth_service` |
 | `oan-grievance-sentry` | grievance | `develop` | `dsn` | Optional: Sentry DSN |
@@ -227,7 +229,7 @@ hop between them crosses the internet in plain HTTP: add a VPN or TLS before goi
 
    ```sh
    kubectl create namespace develop
-   kubectl -n develop create secret generic oan-grievance-db --from-literal=password='<frappe_admin password>'
+   # oan-frappe-common-db: copy it from namespace frappe-common, see external-db-and-nfs.md section 2
    kubectl -n develop create secret generic oan-grievance-admin --from-literal=password="$(openssl rand -hex 12)"
    openssl genrsa -out jwt_v1.pem 2048
    kubectl -n develop create secret generic oan-grievance-jwt --from-file=jwt_v1.pem=jwt_v1.pem
@@ -242,7 +244,6 @@ hop between them crosses the internet in plain HTTP: add a VPN or TLS before goi
    helm upgrade --install grievance charts/oan-grievance-service -n develop \
      -f environments/dev/values/oan-grievance-service.yaml \
      --set-string frappe.image.tag=<develop-build-sha> \
-     --set-string frappe.dbHost=<mariadb host> \
      --wait --wait-for-jobs --timeout 20m
    kubectl -n develop get pods
    kubectl -n develop get svc grievance-gateway-web grievance-gateway-socket   # NodePort 30800, 30900

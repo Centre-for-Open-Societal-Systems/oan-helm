@@ -4,10 +4,10 @@
 #
 # Set at install, not here:
 # - frappe.image.tag: the Jenkins tag `develop-<build>` (locally: `develop`)
-# - frappe.dbHost: the external PostgreSQL server (docs/external-db-and-nfs.md)
+# - frappe.dbHost: the PostgreSQL server (set in the environment file)
 # Image repositories, the seed image and dbRootUser are per environment.
 # Secrets created outside Git, in the release namespace:
-# - oan-a2c-db (key `password`): password of dbRootUser on that server
+# - oan-frappe-common-db (key `password`): the `postgres` password, copied from the frappe-common namespace
 # - oan-a2c-admin (key `password`): Frappe Administrator password
 # - oan-a2c-jwt (key `jwt_v1.pem`): unencrypted RSA private key, at least 2048 bits
 # - oan-a2c-secret-key (key `secret_key`): signs consent receipts
@@ -21,10 +21,10 @@ frappe:
     tag: ""
 
   # PostgreSQL runs outside the cluster. The create-site job reads the password of dbRootUser
-  # from Secret oan-a2c-db.
+  # from Secret oan-frappe-common-db, a copy of the one the frappe-common release creates.
   dbHost: ""
   dbPort: 5432
-  dbExistingSecret: oan-a2c-db
+  dbExistingSecret: oan-frappe-common-db
   dbExistingSecretPasswordKey: password
   postgresql-sts:
     enabled: false
