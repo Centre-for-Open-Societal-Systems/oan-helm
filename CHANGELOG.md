@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-cropsown-registry 1.0.0-rc.530 (staging)
+
+- Staging connector moves to the qa.oanstaging.com scope (#276) (Centre-for-Open-Societal-Systems/cropsown-regsitry@63f888014163)
+- Images and rollback: [releases/history/staging/openg2p-cropsown-registry.md](releases/history/staging/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
 ### openg2p-da-registry 1.0.0-rc.97 (staging)
 
 - Sample DA loader: sign the approvers in again (#58) (Centre-for-Open-Societal-Systems/da-registry@2fb048e4f5f6)
