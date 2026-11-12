@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-commons-services 1.0.0-dev.41
+
+Previous version: 1.0.0-dev.40.
+
+- Staging moves to its own qa.oanstaging.com scope (#164) (7a07147)
+
+## 2026-11-12
+
 ### openg2p-cropsown-registry 1.0.0-rc.528 (staging)
 
 - Sample loader: no Address section; the land position goes on the Planning rows (#281) (Centre-for-Open-Societal-Systems/cropsown-regsitry@9384c7f77f8e)
