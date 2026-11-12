@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-cropsown-registry 0.0.0-develop.527 (develop)
+
+- ci(refactor): add password protection to disposable database probe connections (S2115) (#277) (Centre-for-Open-Societal-Systems/cropsown-regsitry@41216ae404cf)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
 ### oan-grievance-service 0.0.0-develop.79 (develop)
 
 - Merge pull request #108 from arnavam/fix/grievance-develop-chart-version (Centre-for-Open-Societal-Systems/oan_grievance_service@c84d8e9af2ee)
