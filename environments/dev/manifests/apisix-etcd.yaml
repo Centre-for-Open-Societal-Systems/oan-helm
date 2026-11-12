@@ -1,0 +1,73 @@
+# Single-member etcd for the dev APISIX on the oan_dev k3s node. Development only: one member, no authentication,
+# no backup. APISIX keeps its routes here; the Ingress Controller rebuilds them from the Apisix* resources if the
+# data is lost. Production runs three members on separate machines (docs/apisix-gateway.md, "etcd").
+#
+#   kubectl apply -f environments/dev/manifests/apisix-etcd.yaml
+#
+# Data is on the node's local disk: etcd must not run on NFS, and the node has two default StorageClasses, so the
+# class is named. Used by environments/dev/values/oan-apisix-gateway.yaml.
+apiVersion: v1
+kind: Service
+metadata:
+  name: apisix-etcd
+  namespace: api6-gateway
+spec:
+  selector:
+    app.kubernetes.io/name: apisix-etcd
+  ports:
+    - name: client
+      port: 2379
+      targetPort: client
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: apisix-etcd
+  namespace: api6-gateway
+spec:
+  serviceName: apisix-etcd
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: apisix-etcd
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: apisix-etcd
+    spec:
+      containers:
+        - name: etcd
+          image: quay.io/coreos/etcd:v3.5.12
+          command:
+            - etcd
+            - --name=apisix-etcd
+            - --data-dir=/var/lib/etcd
+            - --listen-client-urls=http://0.0.0.0:2379
+            - --advertise-client-urls=http://apisix-etcd.api6-gateway.svc.cluster.local:2379
+            - --auto-compaction-mode=periodic
+            - --auto-compaction-retention=1h
+          ports:
+            - name: client
+              containerPort: 2379
+          readinessProbe:
+            exec:
+              command: [etcdctl, endpoint, health]
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              memory: 512Mi
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/etcd
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ReadWriteOnce]
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 2Gi

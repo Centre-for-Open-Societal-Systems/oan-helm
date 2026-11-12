@@ -109,10 +109,14 @@ kubectl get ingressclass
 
 ## 3. Secrets and values
 
-Create the secrets outside Git. Use random values (for example `openssl rand -hex 16`).
+The chart creates the Admin API Secret `apisix-admin-credentials` (keys `admin` and `viewer`) with random
+values on the first install and keeps it across upgrades. To provide your own, set `adminCredentials.create`
+to `false`, or create the Secret before the first install (a Secret the chart does not own is left alone).
+Create any other secrets outside Git, with random values (for example `openssl rand -hex 16`).
 
 ```sh
 kubectl create namespace apisix
+# Only to provide the keys yourself:
 kubectl -n apisix create secret generic apisix-admin-credentials \
   --from-literal=admin="$(openssl rand -hex 16)" \
   --from-literal=viewer="$(openssl rand -hex 16)"

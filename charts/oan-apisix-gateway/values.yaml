@@ -5,6 +5,11 @@
 # names (`apisix-admin`) match the route charts. Per-environment values
 # (environments/<env>/values/oan-apisix-gateway.yaml) set etcd members and hosts.
 # See docs/apisix-gateway.md.
+# Create the Admin API Secret (keys `admin` and `viewer`, named by apisix.apisix.admin.credentials.secretName)
+# with random values on the first install, and keep it. Set to false to provide the Secret yourself.
+adminCredentials:
+  create: true
+
 apisix:
   apisix:
     # OAN routes use `:param` path segments.
@@ -21,8 +26,8 @@ apisix:
       enabled: true
     admin:
       credentials:
-        # Namespace-local Secret with keys `admin` and `viewer`, provisioned through the
-        # environment's secret process. Never commit the keys.
+        # Namespace-local Secret with keys `admin` and `viewer`. The chart creates it with random
+        # values (adminCredentials.create); never commit the keys.
         secretName: apisix-admin-credentials
       allow:
         # The Ingress Controller Pod. The Admin API Service is ClusterIP and needs the admin
