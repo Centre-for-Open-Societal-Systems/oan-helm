@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### oan-sandbox 1.0.0-dev.19
+
+Previous version: 1.0.0-dev.18.
+
+- feat(oan-sandbox): production Keycloak/gateway, app key lifecycle, support SLA and audit retention settings (#171) (16915e9)
+
+## 2026-11-12
+
 ### openg2p-farmer-registry 1.0.0-rc.872 (staging)
 
 - Deploy: the ECR refresher is a reviewed new resource (#290) (Centre-for-Open-Societal-Systems/farmer-registry@f34933b40049)

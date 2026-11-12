@@ -707,6 +707,36 @@ entries:
       org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
     apiVersion: v2
     appVersion: develop
+    created: "2026-11-12T20:39:06.230426627Z"
+    description: OAN Sandbox for OpenAgriNet (OAN), developed in the OAN sandbox-platform
+      repository; developer portal with the API catalogue, participant portal, try-it
+      console and admin console. Component images have independent versions.
+    digest: 24b721c2a253dc796c7307491d8034e266978a5706f07cc1b50a75e008f88d08
+    home: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    keywords:
+    - oan
+    - openagrinet
+    - sandbox
+    - developer-portal
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-sandbox
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-sandbox-1.0.0-dev.19.tgz
+    version: 1.0.0-dev.19
+  - annotations:
+      catalog.cattle.io/display-name: OAN Sandbox
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-sandbox
+      oan.org/owner: OpenAgriNet (OAN)
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform
+    apiVersion: v2
+    appVersion: develop
     created: "2026-11-06T12:00:24.112110151Z"
     description: OAN Sandbox for OpenAgriNet (OAN), developed in the OAN sandbox-platform
       repository; developer portal with the API catalogue, participant portal, try-it
@@ -9749,4 +9779,4 @@ entries:
     urls:
     - openg2p-livestock-registry-1.0.0-dev.1.tgz
     version: 1.0.0-dev.1
-generated: "2026-11-12T18:54:42.726544918Z"
+generated: "2026-11-12T20:39:06.228436241Z"
