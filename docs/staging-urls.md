@@ -118,4 +118,4 @@ the seed metadata checks (`90_checks.sql`, `check_native_metadata.py`) against t
 - Master Data geography: `master-data.geoSeed.load.geo: true` is for a fresh Commons only; set it false for any upgrade of an existing one.
   (`master-data.geoSeed.load.geo: true`); New Dev keeps it off to protect a migrated catalogue.
 - eSignet mock for Fayda verification is kept as on New Dev; confirm that is wanted on staging.
-- Server address in `endpoints.yaml` and the TLS certificate path in `ingress/nginx.conf` are placeholders to confirm.
+- Server address in `endpoints.yaml` is a placeholder to confirm. TLS: `ingress/nginx.conf` is installed and its certificate names every host in `ingress/certificate-names.txt`; add a new staging host there and re-issue.

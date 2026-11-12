@@ -12,15 +12,16 @@ Readings of 5 November 2026, 20:45 to 20:55 UTC. Source for every table unless s
 | Public host pattern | `<name>.development.oanstaging.com` | `<name>.qa.oanstaging.com` |
 | Istio gateway for public hosts | `istio-system/development` (host `*.development.oanstaging.com`) | `istio-system/staging` (host `*.qa.oanstaging.com`) |
 | Old host names | Retired: since 9 November 2026 the `<name>-development.oanstaging.com` records are gone from Route 53 and those names reach staging through the `*.qa.oanstaging.com` wildcard. The `istio-system/development-legacy` gateway and `environments/dev/legacy/` remain only as a record | None observed |
-| Host reverse proxy | nginx file `oan-development-wildcard.conf` with server name `*.development.oanstaging.com` | nginx, one file per host in `/etc/nginx/sites-enabled/` (no file contains `*.qa.oanstaging.com`) |
+| Host reverse proxy | nginx file `oan-development-wildcard.conf` with server name `*.development.oanstaging.com` | nginx file `openg2p-qa-oanstaging.conf` with server name `*.qa.oanstaging.com` (installed from `environments/staging/ingress/nginx.conf` on 12 November 2026); the per-host `*.oanstaging.com` files stay until the move is verified |
 | Repository values | `environments/dev/` | `environments/staging/` |
 
 Sources: live readings of nodes, gateways and `/etc/nginx/sites-enabled`; `environments/dev/endpoints.yaml`,
 `environments/staging/endpoints.yaml`.
 
-Not verified: the staging wildcard nginx site. The repository holds the proposal
-`environments/staging/ingress/nginx.conf` (its header says "staging: confirm"). On 5 November 2026 the staging
-host had only per-host files. See [operations-runbook.md](operations-runbook.md), section 7.
+TLS for staging: one Let's Encrypt certificate, `qa.oanstaging.com`, issued by HTTP-01 through the certbot nginx
+plugin for every name in `environments/staging/ingress/certificate-names.txt` and renewed by `certbot.timer`. It
+is not a wildcard certificate: a staging host that is not on the list gets a TLS error until it is added and the
+certbot command in the `nginx.conf` header is re-run. See [operations-runbook.md](operations-runbook.md), section 7.
 
 ## 2. Namespaces and Helm release names
 
