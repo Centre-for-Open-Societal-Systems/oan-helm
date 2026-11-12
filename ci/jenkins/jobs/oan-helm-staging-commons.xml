@@ -1,0 +1,57 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<!--
+  Jenkins job oan-helm-staging-commons: a multibranch pipeline on Centre-for-Open-Societal-Systems/oan-helm that
+  builds main only and runs ci/jenkins/staging-commons.Jenkinsfile (Commons base, then Commons services, on staging).
+  Created and updated from this file by ci/jenkins/apply-job.sh; never edited in the Jenkins UI.
+  Same source settings as the other multibranch jobs on jenkins.oanstaging.com (GitHub App credential oan-ci-app,
+  branch discovery, scan every 4 hours plus the GitHub App's push events).
+-->
+<org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject>
+  <actions/>
+  <description>Commons on staging follows oan-helm main (ci/jenkins/staging-commons.Jenkinsfile). Defined in git: ci/jenkins/jobs/oan-helm-staging-commons.xml.</description>
+  <properties/>
+  <orphanedItemStrategy class="com.cloudbees.hudson.plugins.folder.computed.DefaultOrphanedItemStrategy">
+    <pruneDeadBranches>true</pruneDeadBranches>
+    <daysToKeep>-1</daysToKeep>
+    <numToKeep>-1</numToKeep>
+    <abortBuilds>false</abortBuilds>
+  </orphanedItemStrategy>
+  <triggers>
+    <com.cloudbees.hudson.plugins.folder.computed.PeriodicFolderTrigger>
+      <spec>H H/4 * * *</spec>
+      <interval>86400000</interval>
+    </com.cloudbees.hudson.plugins.folder.computed.PeriodicFolderTrigger>
+  </triggers>
+  <disabled>false</disabled>
+  <sources class="jenkins.branch.MultiBranchProject$BranchSourceList">
+    <data>
+      <jenkins.branch.BranchSource>
+        <source class="org.jenkinsci.plugins.github_branch_source.GitHubSCMSource">
+          <id>oan-helm-staging-commons</id>
+          <apiUri>https://api.github.com</apiUri>
+          <credentialsId>oan-ci-app</credentialsId>
+          <repoOwner>Centre-for-Open-Societal-Systems</repoOwner>
+          <repository>oan-helm</repository>
+          <traits>
+            <!-- Branches only (no pull requests, no forks): pull requests never deliver. -->
+            <org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait>
+              <strategyId>3</strategyId>
+            </org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait>
+            <jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait>
+              <includes>main</includes>
+              <excludes></excludes>
+            </jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait>
+          </traits>
+        </source>
+        <strategy class="jenkins.branch.DefaultBranchPropertyStrategy">
+          <properties class="empty-list"/>
+        </strategy>
+      </jenkins.branch.BranchSource>
+    </data>
+    <owner class="org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject" reference="../.."/>
+  </sources>
+  <factory class="org.jenkinsci.plugins.workflow.multibranch.WorkflowBranchProjectFactory">
+    <owner class="org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject" reference="../.."/>
+    <scriptPath>ci/jenkins/staging-commons.Jenkinsfile</scriptPath>
+  </factory>
+</org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject>
