@@ -123,7 +123,7 @@ the branches `dev`, `main`, `develop` and `staging`. Deploy stages run on the ag
 | Master Data | `MDS/mds` | job exists for `develop` and `staging`; last runs started by timer | - | Not verified: the target of each branch |
 | Registry dashboards | inside the registry jobs on New Dev (`ci/dashboard/deploy-ui.sh`) | New Dev | staging script `scripts/ci/deliver_staging_dashboards.sh` | - |
 | Farmer connector on staging | script `scripts/ci/deliver_staging_farmer_connector.sh` | - | staging | - |
-| Commons services | `ci/jenkins/staging-commons.Jenkinsfile` on `main` (the Jenkins job is still to be created; until then the last staging upgrade, revision 16 on 5 Nov 2026, was by hand) | - | staging, release `commons-services`, namespace `commons`, through `scripts/ci/deliver_staging_commons.sh` | `staging-commons-deployer-kubeconfig` (ServiceAccount `commons/commons-deployer`, `environments/staging/rbac/commons-deployer-rbac.yaml`); `staging-commons-secret-values` |
+| Commons services | `ci/jenkins/staging-commons.Jenkinsfile` on `main` (Jenkins job `oan-helm-staging-commons`, defined in `ci/jenkins/jobs/oan-helm-staging-commons.xml` and created by `ci/jenkins/apply-job.sh`; until it exists, Commons upgrades are by hand: the last were services revision 20 = 1.0.0-dev.41 and base revision 9 on 12 Nov 2026) | - | staging, release `commons-services`, namespace `commons`, through `scripts/ci/deliver_staging_commons.sh` | `staging-commons-deployer-kubeconfig` (ServiceAccount `commons/commons-deployer`, `environments/staging/rbac/commons-deployer-rbac.yaml`); `staging-commons-secret-values` |
 
 ### Commons base on staging
 
@@ -133,6 +133,12 @@ deployer `live/livestock-ci` has no rights in `commons`. This ServiceAccount has
 it can read every Secret, including the Keycloak and Postgres admin passwords. Helm keeps its release revisions as
 Secrets and the charts own password Secrets, so this cannot be narrowed. The file explains how to build the
 kubeconfig for Jenkins credential `staging-commons-deployer-kubeconfig` without printing the token.
+
+Creating the job, once: apply the RBAC file and upload both credentials, then
+`JENKINS_URL=https://jenkins.oanstaging.com JENKINS_USER=... JENKINS_TOKEN=... ci/jenkins/apply-job.sh oan-helm-staging-commons staging-commons-deployer-kubeconfig staging-commons-secret-values`.
+The script stops if either credential id is missing (it checks ids, never values). Creating the job scans the
+repository and builds `main`, which delivers only what differs from the records on staging. Later changes to the job
+are made in the XML and applied by the same command.
 
 Before Commons services, every build of `main` runs `scripts/ci/deliver_staging_commons_base.sh` for the base
 release `commons` (chart `openg2p-commons-base`). No parameters, no click.
