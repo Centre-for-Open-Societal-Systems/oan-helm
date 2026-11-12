@@ -3,6 +3,12 @@
 # sets every `gateway:` below (about 30 keys, listed in environments/dev/values/commons-services.yaml).
 websub:
   enabled: true
+  # Roll the pods when this component's values change: these Deployments mount ConfigMaps rendered from
+  # the values, and a ConfigMap change alone never restarts a pod (the qa issuer move left AWE on the old
+  # issuer). The subchart renders podAnnotations with tpl, so the hash is of its own .Values (component
+  # values plus global); unchanged values give the same hash and no restart.
+  podAnnotations: &rollPodsOnValuesChange
+    oan.org/values-checksum: '{{ .Values | toYaml | sha256sum }}'
   existingSecret: commons-websub-encryption
   securityOn: false
   kafka:
@@ -35,6 +41,7 @@ websub:
   istio:
     enabled: false
   consolidator:
+    podAnnotations: *rollPodsOnValuesChange
     replicaCount: 1
     initContainers: *websubTopicReadiness
     istio:
@@ -168,6 +175,7 @@ odk-central:
   s3BlobsEnabled: true
   s3ServerUrl: http://{{ tpl .Values.global.minioInstallationName $ }}:9000
   odk-central-enketo:
+    podAnnotations: *rollPodsOnValuesChange
     enabled: true
     resources:
       requests:
@@ -182,11 +190,13 @@ odk-central:
         cpu: 20m
         memory: 128Mi
   frontend:
+    podAnnotations: *rollPodsOnValuesChange
     resources:
       requests:
         cpu: 20m
         memory: 32Mi
   backend:
+    podAnnotations: *rollPodsOnValuesChange
     resources:
       requests:
         cpu: 50m
@@ -227,6 +237,7 @@ artifactory:
       memory: 32Mi
 keymanager:
   enabled: true
+  podAnnotations: *rollPodsOnValuesChange
   hostname: keymanager.{{ tpl .Values.global.baseDomain $ }}
   resources:
     requests:
@@ -412,6 +423,7 @@ superset:
         credentialName: ''
 esignet:
   enabled: true
+  podAnnotations: *rollPodsOnValuesChange
   hostname: 'esignet.{{ .Values.global.baseDomain }}'
   resources:
     requests:
@@ -453,11 +465,13 @@ esignet:
     virtualservice:
       gateway: istio-system/development
   oidcUi:
+    podAnnotations: *rollPodsOnValuesChange
     istio:
       virtualservice:
         gateway: istio-system/development
 mock-identity-system:
   enabled: true
+  podAnnotations: *rollPodsOnValuesChange
   hostname: 'esignet.{{ .Values.global.baseDomain }}'
   resources:
     requests:
@@ -606,6 +620,7 @@ openg2p-audit-manager:
       existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey
         $ }}'
   auditManager:
+    podAnnotations: *rollPodsOnValuesChange
     enabled: true
     nameOverride: auditmanager
     replicaCount: 1
@@ -649,6 +664,7 @@ openg2p-staff-portal-ui:
 openg2p-awe:
   enabled: true
   awe:
+    podAnnotations: *rollPodsOnValuesChange
     appConfig:
       keycloak:
         issuer: '{{ tpl .Values.global.keycloakExternalIssuerUrl $ }}'
@@ -1143,6 +1159,17 @@ iamLoginProviderIssuerSync:
     passwordSecret:
       name: iam
       key: iam-db-user
+
+# Deployments whose subchart templates take no pod annotations, so rollPodsOnValuesChange cannot reach them:
+# a post-upgrade Job rolls each one when a ConfigMap it reads has changed
+# (templates/configmap-change-pod-rollout.yaml).
+configMapChangePodRollout:
+  enabled: true
+  image: python:3.11.14-slim
+  imagePullSecrets: []
+  deployments:
+  - '{{ .Release.Name }}-awe-ui'
+  - '{{ .Release.Name }}-cm-ui'
 
 # Post-upgrade: add the declared redirect URIs and web origins to public Keycloak clients, which
 # keycloak-init does not update once they exist (templates/keycloak-public-client-urls.yaml). Covers

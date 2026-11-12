@@ -1470,6 +1470,12 @@
         "batch/v1",
         "Job",
         "verify-a",
+        "verify-configmap-change-pod-rollout"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
         "verify-db-password-sync"
       ],
       [
@@ -1702,9 +1708,21 @@
       ],
       [
         "rbac.authorization.k8s.io/v1",
+        "Role",
+        "verify-a",
+        "verify-configmap-change-pod-rollout"
+      ],
+      [
+        "rbac.authorization.k8s.io/v1",
         "RoleBinding",
         "verify-a",
         "verify-client-secrets-sync"
+      ],
+      [
+        "rbac.authorization.k8s.io/v1",
+        "RoleBinding",
+        "verify-a",
+        "verify-configmap-change-pod-rollout"
       ],
       [
         "v1",
@@ -1759,6 +1777,12 @@
         "ConfigMap",
         "verify-a",
         "verify-cm-ui-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-configmap-change-pod-rollout"
       ],
       [
         "v1",
@@ -2239,6 +2263,12 @@
         "ServiceAccount",
         "verify-a",
         "verify-cm-pg-init"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-configmap-change-pod-rollout"
       ],
       [
         "v1",
