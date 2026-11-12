@@ -61,10 +61,21 @@ class DeliverStagingCommons(unittest.TestCase):
         pipeline = (ROOT / 'ci/jenkins/staging-commons.Jenkinsfile').read_text(encoding='utf-8')
         self.assertLess(pipeline.index('deliver_staging_commons_base.sh'), pipeline.index('deliver_staging_commons.sh "'))
 
+    def test_oan_dashboards_delivery_follows_main_after_commons_services(self):
+        script = (ROOT / 'scripts/ci/deliver_staging_oan_dashboards.sh').read_text(encoding='utf-8')
+        self.assertIn('oan-dashboards-delivery', script)
+        self.assertIn('--reset-values', script)
+        self.assertLess(script.index('--atomic --wait'), script.index('kubectl create configmap'))
+        pipeline = (ROOT / 'ci/jenkins/staging-commons.Jenkinsfile').read_text(encoding='utf-8')
+        self.assertLess(pipeline.index('deliver_staging_commons.sh "'), pipeline.index('deliver_staging_oan_dashboards.sh'))
+        values = (ROOT / 'environments/staging/values/oan-dashboards.yaml').read_text(encoding='utf-8')
+        # A2C has no qa gateway; the develop one is the only A2C dashboard API.
+        self.assertIn('A2C_DASHBOARD_API_URL: https://a2c-develop-gateway.oanstaging.com', values)
+
     def test_commons_deliveries_use_their_own_deployer_in_commons_only(self):
         pipeline = (ROOT / 'ci/jenkins/staging-commons.Jenkinsfile').read_text(encoding='utf-8')
         self.assertNotIn('staging-rke2-kubeconfig', pipeline.split('pipeline {', 1)[1])
-        self.assertEqual(pipeline.count("credentialsId: 'staging-commons-deployer-kubeconfig'"), 2)
+        self.assertEqual(pipeline.count("credentialsId: 'staging-commons-deployer-kubeconfig'"), 3)
         rbac = (ROOT / 'environments/staging/rbac/commons-deployer-rbac.yaml').read_text(encoding='utf-8')
         body = '\n'.join(line for line in rbac.splitlines() if not line.startswith('#'))
         self.assertNotIn('ClusterRole', body)

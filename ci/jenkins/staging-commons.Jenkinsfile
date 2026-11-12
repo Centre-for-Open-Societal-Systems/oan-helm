@@ -37,5 +37,14 @@ pipeline {
                 }
             }
         }
+        // The shared dashboard no registry owns (scripts/ci/deliver_staging_oan_dashboards.sh, record oan-dashboards-delivery).
+        stage('Deliver oan-dashboards') {
+            when { allOf { branch 'main'; not { changeRequest() } } }
+            steps {
+                withCredentials([file(credentialsId: 'staging-commons-deployer-kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh 'bash scripts/ci/deliver_staging_oan_dashboards.sh'
+                }
+            }
+        }
     }
 }
