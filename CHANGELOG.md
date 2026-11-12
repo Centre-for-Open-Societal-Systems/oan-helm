@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-farmer-registry 0.0.0-develop.853 (develop)
+
+- New Dev deploy check: allow the sample loader there (#284) (Centre-for-Open-Societal-Systems/farmer-registry@1e21bd9c1c57)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
 ### oan-a2c-service 0.0.0-develop.15 (develop)
 
 - Merge pull request #127 from arnavam/fix/a2c-seed-data-pin (Centre-for-Open-Societal-Systems/oan_a2c@d8a42f9400e3)
