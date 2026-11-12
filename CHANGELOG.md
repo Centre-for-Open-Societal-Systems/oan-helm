@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-cropsown-registry 0.0.0-develop.523 (develop)
+
+- Staging: deliver the Crop dashboard UI on every promotion (#290) (Centre-for-Open-Societal-Systems/cropsown-regsitry@16c45325ab32)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
 ### openg2p-livestock-registry 0.0.0-develop.456 (develop)
 
 - New Dev: let livestock-ci read the connector client secret for the connector upgrade check (#242) (Centre-for-Open-Societal-Systems/livestock-registry@abc345bfc6ff)
