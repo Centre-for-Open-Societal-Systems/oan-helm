@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### oan-grievance-ui 0.0.0-develop.48 (develop)
+
+- Merge pull request #71 from arnavam/fix/helm-ingress-paths (Centre-for-Open-Societal-Systems/oan_grievance_ui@4d374c7e7b10)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-12
+
 ### openg2p-cropsown-registry 0.0.0-develop.527 (develop)
 
 - ci(refactor): add password protection to disposable database probe connections (S2115) (#277) (Centre-for-Open-Societal-Systems/cropsown-regsitry@41216ae404cf)
