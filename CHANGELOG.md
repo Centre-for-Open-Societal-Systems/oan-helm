@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-livestock-registry 0.0.0-develop.456 (develop)
+
+- New Dev: let livestock-ci read the connector client secret for the connector upgrade check (#242) (Centre-for-Open-Societal-Systems/livestock-registry@abc345bfc6ff)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-12
+
 ### openg2p-da-registry 0.0.0-develop.96 (develop)
 
 - New Dev: pin oan-helm 488d505 (DA dev values load the sample agents) (#63) (Centre-for-Open-Societal-Systems/da-registry@ffbe64bf583d)
