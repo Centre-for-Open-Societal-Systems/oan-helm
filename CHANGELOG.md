@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### oan-a2c-service 0.0.0-develop.18 (develop)
+
+- Merge pull request #130 from arnavam/fix/a2c-iam-beneficiary-role (Centre-for-Open-Societal-Systems/oan_a2c@5a5a5fbea175)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-12
+
 ### openg2p-livestock-registry 1.0.0-rc.470 (staging)
 
 - Staging Livestock: connector on the staging Gateway; pipeline delivers the dashboard UI (#243) (Centre-for-Open-Societal-Systems/livestock-registry@0b74fcd3436f)

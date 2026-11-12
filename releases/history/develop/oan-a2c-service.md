@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.0-develop.18
+
+<!-- source-commit: 5a5a5fbea1752132e25e1c6269b443c04a0769b8 version: 0.0.0-develop.18 -->
+Published 2026-11-12. Archive SHA-256 `8013878528f4a15f9a81250092368e7883535f92315d335df628fef039c90fb2`.
+
+- Change: Merge pull request #130 from arnavam/fix/a2c-iam-beneficiary-role
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@5a5a5fbea175](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/5a5a5fbea1752132e25e1c6269b443c04a0769b8)
+- Changes since 0.0.0-develop.16: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/91e6d629fbaa0c4ef54bb27a55ca782f4f8cf582...5a5a5fbea1752132e25e1c6269b443c04a0769b8
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/oan-a2c-service/a2c-service:0.0.0-develop.18` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-service-0.0.0-develop.18.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.0-develop.16
 
 <!-- source-commit: 91e6d629fbaa0c4ef54bb27a55ca782f4f8cf582 version: 0.0.0-develop.16 -->
