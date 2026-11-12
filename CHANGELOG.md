@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-farmer-registry 0.0.0-develop.857 (develop)
+
+- Deploy: the ECR refresher is a reviewed new resource (#290) (Centre-for-Open-Societal-Systems/farmer-registry@f34933b40049)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
 ### openg2p-livestock-registry 1.0.0-rc.472 (staging)
 
 - Chart: the release keeps its own ECR pull secret, refreshed by a CronJob (#245) (Centre-for-Open-Societal-Systems/livestock-registry@61a63c3ab486)
