@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-cropsown-registry 0.0.0-develop.526 (develop)
+
+- Staging connector on its qa name and the staging Gateway (#292) (Centre-for-Open-Societal-Systems/cropsown-regsitry@b19248bf81ac)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
 ### openg2p-farmer-registry 0.0.0-develop.853 (develop)
 
 - New Dev deploy check: allow the sample loader there (#284) (Centre-for-Open-Societal-Systems/farmer-registry@1e21bd9c1c57)
