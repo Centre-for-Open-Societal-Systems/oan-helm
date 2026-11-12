@@ -38,7 +38,6 @@ Rancher sees is a reviewed pull request.
 | `openg2p-commons-services` | [charts/openg2p-commons-services](charts/openg2p-commons-services) | Shared services: IAM, Master Data, AWE, ODK, Partner Management, Consent Manager, Aggregation | `commons-services` / `commons` |
 | `oan-sandbox` | [charts/oan-sandbox](charts/oan-sandbox) | OAN Sandbox developer portal (disabled until its images exist) | not installed |
 | `oan-grievance-service` | [charts/oan-grievance-service](charts/oan-grievance-service) | Grievance service (Frappe) | `grievance` / `develop`, see [the guide](docs/grievance-service.md) |
-| `oan-a2c-service` | [charts/oan-a2c-service](charts/oan-a2c-service) | Access to Credit (Frappe) | `a2c` / `a2c-develop`, see [the guide](docs/a2c.md) |
 | `oan-apisix-gateway` | [charts/oan-apisix-gateway](charts/oan-apisix-gateway) | APISIX gateway, Ingress Controller and Redis | `apisix`, see [the guide](docs/apisix-gateway.md) |
 | `oan-logging` | [charts/oan-logging](charts/oan-logging) | Node log agent, OTel gateway, Loki and Grafana | `oan-logging` / `observability`, see [the guide](docs/logging.md) |
 | `farmer-registry-dashboard`, `cropsown-registry-dashboard`, `livestock-registry-dashboard` | [addons/registry-dashboards](addons/registry-dashboards) | Per-registry dashboard UI and API | per registry |
