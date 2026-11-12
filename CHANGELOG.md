@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-cropsown-registry 0.0.0-develop.524 (develop)
+
+- Staging Crop ODK definitions: data model ODK_TO_CROP_INTAKE, not the retired CSR_DATA_MODEL (#291) (Centre-for-Open-Societal-Systems/cropsown-regsitry@994e485c7a73)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
 ### openg2p-cropsown-registry 0.0.0-develop.523 (develop)
 
 - Staging: deliver the Crop dashboard UI on every promotion (#290) (Centre-for-Open-Societal-Systems/cropsown-regsitry@16c45325ab32)
