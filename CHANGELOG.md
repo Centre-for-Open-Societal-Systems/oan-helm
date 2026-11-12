@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-12
 
+### openg2p-cropsown-registry 1.0.0-rc.533 (staging)
+
+- db-seed: pin openg2p-data at the crop samples with pest control codes and cluster land ids (#285) (Centre-for-Open-Societal-Systems/cropsown-regsitry@000d9c195548)
+- Images and rollback: [releases/history/staging/openg2p-cropsown-registry.md](releases/history/staging/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
 ### openg2p-cropsown-registry 0.0.0-develop.521 (develop)
 
 - db-seed: pin openg2p-data at the crop samples with pest control codes and cluster land ids (#285) (Centre-for-Open-Societal-Systems/cropsown-regsitry@000d9c195548)
