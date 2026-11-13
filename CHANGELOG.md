@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-13
 
+### oan-grievance-service 0.0.1-develop.81 (develop)
+
+- Merge pull request #110 from arnavam/chore/trigger-gateway-deploy (Centre-for-Open-Societal-Systems/oan_grievance_service@6c6922f765ac)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-13
+
 ### oan-a2c-service 0.0.1-develop.22 (develop)
 
 - Merge pull request #133 from arnavam/chore/eoan-ecr-path (Centre-for-Open-Societal-Systems/oan_a2c@ca103bc1af65)
