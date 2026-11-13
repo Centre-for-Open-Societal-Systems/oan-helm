@@ -1,0 +1,49 @@
+# Starting point for the partner routes (chart oan-partner-gateway) on a UAT gateway.
+# Not live values: copy to environments/<env>/values/oan-partner-gateway.yaml, replace every
+# <...>, and install as docs/apisix-gateway.md section 8c describes.
+# UAT apps: the sandbox's main settings (config.keycloak.url, config.gateway.uatUrl,
+# sync.adminUrl) point at this gateway and its Keycloak.
+
+ingressClassName: apisix
+
+# The public host partners call on this gateway; DNS to the gateway node.
+hosts:
+  - <partner API host of this environment>
+
+# Certificate of that host: Secret (tls.crt, tls.key) in namespace apisix, created outside Git.
+tls:
+  secretName: oan-partner-gateway-tls
+
+# The Keycloak realm that issues this environment's app tokens, exactly as in their `iss`.
+keycloak:
+  issuer: https://<keycloak host of this environment>/realms/partner
+
+# The gateway accepts only tokens of apps of this environment.
+environmentRole: uat
+
+# Switch on the APIs this environment serves; each host is the API's public host there.
+# Only what partners call: no staff API is routed.
+consentManager:
+  # The console host; only its partner portal API (/consent/v1/partner-portal) is routed.
+  portalApi:
+    enabled: true
+    host: <Consent Manager console host>
+  partnerApi:
+    enabled: true
+    host: <Consent Manager partner API host>
+    # Path the host serves the API under; empty when it is at the root.
+    basePath: /api/consent-manager-partner
+
+partnerManagement:
+  keysApi:
+    enabled: true
+    host: <Partner Management key fetch API host>
+
+aggregationLayer:
+  enabled: true
+  host: <Aggregation Layer host>
+
+# Calls of sandbox apps in the sandbox's API history (section 8b, "Call log").
+callLog:
+  enabled: true
+  url: https://<sandbox host>/oan/internal/gateway/logs

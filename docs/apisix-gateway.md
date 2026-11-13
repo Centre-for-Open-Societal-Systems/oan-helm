@@ -73,7 +73,9 @@ steps.
 ### Gateway-wide plugins
 
 `request-id` (`X-Request-Id`, echoed in the response) and `prometheus` are global rules,
-set as `gatewayProxy.plugins` in the chart's `values.yaml`, so they apply to every app's routes. Metrics
+set as `gatewayProxy.plugins` in the chart's `values.yaml`, so they apply to every app's routes.
+`gatewayProxy.pluginMetadata` holds a plugin's gateway-wide setting: for `http-logger`, the
+record format of the partner routes' call log (section 8b). Metrics
 are served on port 9091 at `/apisix/prometheus/metrics`; enable
 `metrics.serviceMonitor` once a Prometheus Operator scrapes the cluster. Per-app plugins
 (CORS, body size, rate limits, authentication) stay in each app's chart.
@@ -308,23 +310,48 @@ moment. Delete the old Secret once the A2C chart no longer creates its consumer.
 
 ## 8b. Partner APIs (OAN sandbox)
 
-Partners call OAN APIs (first: the Farmer Registry staff API) with apps they create in the
-OAN sandbox. The sandbox runs with `GATEWAY_PARTNER_AUTH=oauth`:
+Partners call OAN APIs with apps they create in the OAN sandbox: the Consent Manager, the
+Partner Management key fetch API and the Aggregation Layer. Only what partners call is
+routed: staff use their own portals, so no staff API (the registries' staff APIs, the
+Partner Management admin API, the Consent Manager staff routes) is on this gateway. The
+sandbox runs with `GATEWAY_PARTNER_AUTH=oauth`:
 
 ```
 partner -> POST https://keycloak.development.oanstaging.com/realms/partner/protocol/openid-connect/token
            grant_type=client_credentials, client_id=<API key>, client_secret=<API secret>
         <- access token (claims participant_uid, oan_app, oan_environments, oan_routes)
-partner -> https://<partner host>/farmer-registry/... with header X-Partner-Token: <token>
+partner -> https://<partner host>/consent-manager/... with header X-Partner-Token: <token>
         -> APISIX: openid-connect (realm JWKS, iss, exp), role `uat` in oan_environments,
-           this route's id in oan_routes, limit-count per app -> Farmer Registry
+           this route's id in oan_routes, limit-count per app -> Consent Manager
 ```
 
 The routes are the chart `oan-partner-gateway` (sandbox-platform
-`deploy/apisix-partner-gateway/k8s`), the same shape as the grievance chart: one
-`ApisixRoute` per upstream, `ApisixUpstream`s with `externalNodes` (the Farmer Registry and
-its Keycloak are public hosts), and an `ApisixTls` for the partner host. `hosts` is
+`deploy/apisix-partner-gateway/k8s`), and an `ApisixTls` for the partner host. `hosts` is
 required. Values: [dev/values/oan-partner-gateway.yaml](../environments/dev/values/oan-partner-gateway.yaml).
+
+Each API is switched on by its own value and has three resources:
+
+| Resource | Holds | Gateway path |
+|---|---|---|
+| `ApisixUpstream` | the API's public host (`externalNodes`, https) | |
+| `ApisixPluginConfig` | the plugins every route of the API shares: the token check (`serverless-pre-function`, `openid-connect`, `serverless-post-function`), the path rewrite, `limit-count` and the call log | |
+| `ApisixRoute` | one rule per operation, pointing at the plugin config (`plugin_config_name`); a plugin of its own only where it differs | |
+
+| Value | API | Gateway path |
+|---|---|---|
+| `consentManager.portalApi` | Consent Manager partner portal API (the console host, `/consent/v1/partner-portal` only) | `/consent-manager/...` |
+| `consentManager.partnerApi` | Consent Manager partner API (validate, status, receipts, JWKS) | `/consent-manager-partner/...` |
+| `partnerManagement.keysApi` | Partner Management key fetch API | `/partner-management-keys/...` |
+| `aggregationLayer` | Aggregation Layer (DCI search) | `/aggregation-layer/...` |
+
+The prefix is removed before the call. `Authorization` is the API's own credential (the
+partner's token, where the API asks for one) and is passed on untouched; the app token
+travels only in `X-Partner-Token`.
+
+**Not checked on a cluster:** that the Ingress Controller of this gateway resolves
+`plugin_config_name`. Check after the install (step 4). If the token check does not apply,
+set `inlineSharedPlugins: true`: the routes then carry a copy of the shared plugins, the
+shape the chart had before.
 
 What the sandbox does on the gateway: it **only reads** the routes through the Admin API
 (`GATEWAY_ADMIN_URL`, key `GATEWAY_ADMIN_TOKEN`; the **viewer** key is enough). Their ids go
@@ -355,15 +382,74 @@ kubectl -n apisix get apisixroutes,apisixupstreams,apisixtls -l app=oan-partner-
 ```bash
 H=https://partner-api-dev.oanstaging.com
 # No token: 401 {"message":"Missing app token (X-Partner-Token)"} from the gateway
-curl -s -X POST $H/farmer-registry/register-data/get_register_summary_data
+curl -s $H/consent-manager-partner/ping
 # A user's or a foreign realm's token: 401. An app token without this route: 403.
-# An app token from the sandbox (try-it page "Get token"): passes the gateway (the registry answers).
+# An app token from the sandbox (try-it page "Get token"): passes the gateway (the API answers "pong").
 ```
 
 The sandbox's own check: sign up and approve a participant, create and approve an app,
 **Get token** on the try-it page, then **Run**: the call passes the gateway.
 
 Rate limits count per app (`X-OAN-App`, set from the token) in the Redis at `redis.host`.
+
+There are no consumers: what an app's consumer would hold travels in its token. The
+sandbox writes the app's IP whitelist (`oan_ips`) and the limits of its API products
+(`oan_limit_minute`, `oan_limit_day`; sandbox `config.gateway.rateLimit.enabled`) on the
+app's Keycloak client, and the shared plugins check them: another caller address gets
+`403`, a call over the limit `429`. The app's limits count per API, and a change applies
+from the next token (five minutes at most). The caller address is the one APISIX sees
+(section 9, "Real client IP").
+
+### Call log (API history of direct calls)
+
+With `callLog.enabled`, the shared plugin config carries `http-logger`: APISIX posts a
+record of every call to the sandbox (`POST /oan/internal/gateway/logs`), and the sandbox
+shows the calls of its apps in API history with source **Direct**. Three parts, all needed:
+
+| Part | Where | What |
+|---|---|---|
+| The record format | `oan-apisix-gateway`, `gatewayProxy.pluginMetadata.http-logger` (already in the chart's `values.yaml`) | names the app (`app` = `X-OAN-App`); no credential header |
+| The token | Secret `oan-sandbox-log-ingest-credential` in namespace `apisix`, key `authorization`, value `Bearer <token>`; the APISIX pods get it as `OAN_SANDBOX_LOG_INGEST_AUTHORIZATION` and the plugin reads it at run time (`$env://`), so it is never written into a route | the sandbox's `GATEWAY_LOG_INGEST_TOKEN` |
+| The switch | `callLog.enabled: true`, `callLog.url` in the partner values; in the sandbox `config.gateway.logIngest.enabled: true` | the URL is the sandbox API as APISIX reaches it |
+
+```sh
+kubectl -n apisix create secret generic oan-sandbox-log-ingest-credential \
+  --from-literal=authorization="Bearer <GATEWAY_LOG_INGEST_TOKEN>"
+kubectl -n apisix rollout restart deploy/apisix     # the pods read the Secret at start
+```
+
+A call the gateway refuses before it knows the app (no token, a bad token) is not stored;
+a `403` (no API product for the route) and a `429` are. Check: one call with an app token,
+then the sandbox access log shows `POST /oan/internal/gateway/logs -> 200`
+(`401` = the token in the Secret differs, `404` = the sandbox has the callback off).
+
+## 8c. A new gateway: UAT and production
+
+UAT and production are two gateways, each with its own Keycloak. Each gets the same
+installs, with its own values; nothing is copied by hand into APISIX.
+
+1. **APISIX**: sections 2 to 4 (`oan-apisix-gateway`, release `apisix`). The global rules
+   and the `http-logger` record format come with it.
+2. **Values**: copy
+   [examples/gateway/oan-partner-gateway.uat.yaml](../examples/gateway/oan-partner-gateway.uat.yaml)
+   (or `.production.yaml`) to `environments/<env>/values/oan-partner-gateway.yaml` and fill
+   in the hosts. `keycloak.issuer` is that environment's realm, exactly as in the tokens'
+   `iss`; `environmentRole` is `uat` or `production`, so a UAT app's token is refused on
+   the production gateway and the other way round.
+3. **Secrets** in namespace `apisix`: `oan-partner-gateway-tls` (the partner host's
+   certificate) and, for the call log, `oan-sandbox-log-ingest-credential`.
+4. **Routes**: section 8b, step 2, with that environment's values files.
+5. **The sandbox** (one portal for both environments): UAT uses its main settings
+   (`config.keycloak.url`, `config.gateway.uatUrl`, `config.gateway.sync.adminUrl`).
+   Production has its own: `GATEWAY_PROD_URL`, `GATEWAY_PROD_ADMIN_URL` / `_TOKEN` (viewer
+   key), `KEYCLOAK_PROD_URL`, `KEYCLOAK_PROD_PUBLIC_URL`, `KEYCLOAK_PROD_ADMIN_CLIENT_SECRET`
+   (sandbox-platform `DEPLOYMENT.md`, "UAT and production apps").
+6. **Keycloak** of that environment: realm `partner` with `oan-sandbox-provisioner`
+   (sandbox-platform `backend/scripts/keycloak/setup_partner_realm.py`).
+7. **Check**: section 8b, step 4, on that environment's host.
+
+A new API: add it to the route generator in sandbox-platform (it regenerates the chart),
+merge, then `helm upgrade` the routes release and switch the API on in the values.
 
 ## 9. Known open items
 
@@ -402,7 +488,8 @@ Rate limits count per app (`X-OAN-App`, set from the token) in the Redis at `red
 - **ADC and APISIX 3.19.** The Ingress Controller uses ADC internally, and ADC's documented
   support stops at APISIX 3.17. Watch the controller logs on the first sync.
 - **Partner APIs:** the partner host name, DNS and certificate; how the sandbox reaches
-  the Admin API (read only) from the OpenG2P cluster (section 8b).
+  the Admin API (read only) from the OpenG2P cluster (section 8b). `plugin_config_name`
+  and `gatewayProxy.pluginMetadata` are rendered but not tried on a cluster.
 - **etcd.** the chart's `values.yaml` uses `externalEtcd`; see section 10. Not yet installed against
   a real etcd.
 - **Global plugins.** Confirm `request-id` and `prometheus` take effect: `X-Request-Id` in
