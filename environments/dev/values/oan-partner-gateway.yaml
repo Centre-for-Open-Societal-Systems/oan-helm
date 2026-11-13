@@ -2,7 +2,8 @@
 # the partner APIs that sandbox apps call, with the app's OAuth token in X-Partner-Token.
 # Target: the dev APISIX (release `apisix`, namespace `api6-gateway`), not the OpenG2P cluster.
 # Install in namespace `api6-gateway`: the upstreams are external hosts (externalNodes).
-# See docs/apisix-gateway.md, section 8b.
+# See docs/apisix-gateway.md, section 8b. A UAT or production gateway starts from
+# examples/gateway/.
 
 ingressClassName: apisix
 
@@ -22,7 +23,32 @@ keycloak:
 
 environmentRole: uat
 
-farmerRegistry:
-  upstreamHost: staff-farmer.development.oanstaging.com
-  keycloakHost: keycloak.development.oanstaging.com
-  keycloakRealm: staff
+# The APIs partners call (no staff API: staff use their own portals). Hosts are the public
+# dev hosts of environments/dev/endpoints.yaml.
+consentManager:
+  # The console host; only its partner portal API (/consent/v1/partner-portal) is routed.
+  portalApi:
+    enabled: true
+    host: consent-manager.development.oanstaging.com
+  partnerApi:
+    enabled: true
+    host: consent-manager-partner.development.oanstaging.com
+    basePath: /api/consent-manager-partner
+
+partnerManagement:
+  keysApi:
+    enabled: true
+    host: partner-management-partner-api.development.oanstaging.com
+
+aggregationLayer:
+  enabled: true
+  host: aggregation.development.oanstaging.com
+
+# Calls of sandbox apps in the sandbox's API history. Off until the sandbox is installed
+# with config.gateway.logIngest.enabled and the Secret oan-sandbox-log-ingest-credential
+# exists in namespace api6-gateway (section 8b, "Call log"). Then:
+#   enabled: true
+#   url: https://sandbox.development.oanstaging.com/oan/internal/gateway/logs
+callLog:
+  enabled: false
+  url: ""

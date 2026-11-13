@@ -49,6 +49,9 @@ apisix:
   # - Grievance IVR webhook: the Grievance IVR Integration user. Secret
   #   oan-grievance-ivr-frappe-credential.
   # Both in namespace api6-gateway, key `authorization`, value `token <api_key>:<api_secret>`.
+  # The partner routes' call log (oan-partner-gateway, callLog) reads its header the same
+  # way: Secret oan-sandbox-log-ingest-credential, key `authorization`, value
+  # `Bearer <the sandbox's GATEWAY_LOG_INGEST_TOKEN>`.
   extraEnvVars:
     - name: A2C_FRAPPE_SERVICE_AUTHORIZATION
       valueFrom:
@@ -60,6 +63,12 @@ apisix:
       valueFrom:
         secretKeyRef:
           name: oan-grievance-ivr-frappe-credential
+          key: authorization
+          optional: true
+    - name: OAN_SANDBOX_LOG_INGEST_AUTHORIZATION
+      valueFrom:
+        secretKeyRef:
+          name: oan-sandbox-log-ingest-credential
           key: authorization
           optional: true
 
@@ -134,6 +143,31 @@ apisix:
           config:
             # Label metrics by route and service name, not id.
             prefer_name: true
+      # A plugin's gateway-wide setting (APISIX plugin metadata). http-logger: the record
+      # of a call, for every route that logs. The partner routes (oan-partner-gateway,
+      # callLog) post these records to the OAN Sandbox, which reads the fields by name:
+      # keep them as they are. `app` is the sandbox app (X-OAN-App, set by the route from
+      # the verified token). No credential header is in it.
+      pluginMetadata:
+        http-logger:
+          log_format:
+            request_id: $request_id
+            time: $time_iso8601
+            consumer: $consumer_name
+            app: $http_x_oan_app
+            route_id: $route_id
+            method: $request_method
+            host: $host
+            uri: $uri
+            query: $args
+            status: $status
+            request_time: $request_time
+            upstream_time: $upstream_response_time
+            client_ip: $remote_addr
+            request_length: $request_length
+            bytes_sent: $bytes_sent
+            user_agent: $http_user_agent
+            sandbox_txn: $http_x_oan_sandbox_transaction
       provider:
         controlPlane:
           service:
