@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-13
 
+### oan-apisix-gateway 0.1.0-dev.4
+
+Previous version: 0.1.0-dev.3.
+
+- APISIX Helm chart update to add partner api (e7a06b6)
+
+## 2026-11-13
+
 ### oan-grievance-service 0.0.1-develop.84 (develop)
 
 - Merge pull request #112 from arnavam/fix/gateway-limit-count-no-group (Centre-for-Open-Societal-Systems/oan_grievance_service@7118e820e487)

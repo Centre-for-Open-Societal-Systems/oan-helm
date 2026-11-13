@@ -259,6 +259,40 @@ entries:
       oan.org/owner: OpenAgriNet (OAN)
     apiVersion: v2
     appVersion: 3.19.0
+    created: "2026-11-13T14:40:35.917567912Z"
+    dependencies:
+    - name: apisix
+      repository: ""
+      version: 2.18.2
+    - name: redis
+      repository: ""
+      version: 17.15.2
+    description: APISIX gateway and Ingress Controller for OpenAgriNet (OAN); deploys
+      the upstream apisix chart with the OAN gateway defaults. App routes install
+      separately.
+    digest: 22affd32918a34aa010b39e01edc45cc2e838e88f8ae745d93a3eb28e5b4bf22
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    keywords:
+    - oan
+    - openagrinet
+    - apisix
+    - gateway
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-apisix-gateway
+    sources:
+    - https://github.com/apache/apisix-helm-chart
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-apisix-gateway-0.1.0-dev.4.tgz
+    version: 0.1.0-dev.4
+  - annotations:
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-apisix-gateway
+      oan.org/owner: OpenAgriNet (OAN)
+    apiVersion: v2
+    appVersion: 3.19.0
     created: "2026-11-12T18:54:42.736804465Z"
     dependencies:
     - name: apisix
@@ -9779,4 +9813,4 @@ entries:
     urls:
     - openg2p-livestock-registry-1.0.0-dev.1.tgz
     version: 1.0.0-dev.1
-generated: "2026-11-12T20:39:06.228436241Z"
+generated: "2026-11-13T14:40:35.904382705Z"
