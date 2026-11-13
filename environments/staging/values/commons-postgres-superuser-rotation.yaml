@@ -1,0 +1,14 @@
+# Staging: rotation of the Commons Postgres superuser password (addons/commons-postgres-superuser-rotation).
+# A new id rotates once; the done id is in ConfigMap commons/commons-postgres-superuser-rotation-record.
+# 2026-11-13-1: the value was exposed in a 502 error page during the RKE2 upgrade and sat in the kubectl
+# last-applied annotations of the four hand-made copies below.
+rotation:
+  id: "2026-11-13-1"
+
+# Hand-made copies (kubectl apply, 2026-09-04 to 2026-11-05) read by farmer-registry-registrant-auth and the
+# registry-connector postgres-init jobs. Rights: environments/staging/rbac/commons-postgres-superuser-copies-rbac.yaml.
+copyTo: [crop, live, farmer, da-registry]
+
+restart:
+  deployments: [commons-services-keymanager]
+  statefulsets: []
