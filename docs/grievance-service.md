@@ -33,8 +33,8 @@ node ports must accept only the gateway cluster's addresses.
 | grievance, A2C | `csi-driver-nfs` | `csi-driver-nfs/csi-driver-nfs` 4.13.6 | `kube-system` | [nfs-csi.yaml](../environments/dev/values/nfs-csi.yaml) |
 | gateway | `apisix` | `oan-apisix-gateway` 0.1.0-dev.1 (apisix 2.18.2) | `apisix` | [values.yaml](../charts/oan-apisix-gateway/values.yaml) |
 | gateway | `apisix` (Redis included) | `bitnami/redis` 17.15.2, a dependency of `oan-apisix-gateway` | `apisix` | [values.yaml](../charts/oan-apisix-gateway/values.yaml) |
-| grievance | `grievance` | [charts/oan-grievance-service](../charts/oan-grievance-service) | `develop` | [oan-grievance-service.yaml](../environments/dev/values/oan-grievance-service.yaml) |
-| gateway | `oan-grievance-gateway` | `apisix/k8s` in the oan_grievance_service repository | `grievance` | [oan-grievance-gateway.yaml](../environments/dev/values/oan-grievance-gateway.yaml) |
+| grievance | `grievance` | [charts/oan-grievance-service](../charts/oan-grievance-service) | `develop` | [oan-grievance-service.yaml](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/blob/develop/helm/environments/dev/oan-grievance-service.yaml) |
+| gateway | `oan-grievance-gateway` | `apisix/k8s` in the oan_grievance_service repository | `grievance` | [oan-grievance-gateway.yaml](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/blob/develop/helm/environments/dev/oan-grievance-gateway.yaml) |
 
 Outside Kubernetes: an NFS server (on dev, the app node itself, as on the OpenG2P dev
 cluster) and three etcd members for APISIX ([external-db-and-nfs.md](external-db-and-nfs.md),
@@ -242,7 +242,7 @@ hop between them crosses the internet in plain HTTP: add a VPN or TLS before goi
 
    ```sh
    helm upgrade --install grievance charts/oan-grievance-service -n develop \
-     -f environments/dev/values/oan-grievance-service.yaml \
+     -f <oan_grievance_service>/helm/environments/dev/oan-grievance-service.yaml \
      --set-string frappe.image.tag=<develop-build-sha> \
      --wait --wait-for-jobs --timeout 20m
    kubectl -n develop get pods
@@ -280,7 +280,7 @@ hop between them crosses the internet in plain HTTP: add a VPN or TLS before goi
 
    ```sh
    helm upgrade --install oan-grievance-gateway <oan_grievance_service>/apisix/k8s -n grievance \
-     -f environments/dev/values/gateway-common.yaml -f environments/dev/values/oan-grievance-gateway.yaml \
+     -f environments/dev/values/gateway-common.yaml -f <oan_grievance_service>/helm/environments/dev/oan-grievance-gateway.yaml \
      --set "web.externalHosts={<grievance private IP>}" \
      --set "socket.externalHosts={<grievance private IP>}" --wait
    kubectl -n grievance get apisixtls,apisixroute,apisixupstream
@@ -386,7 +386,7 @@ It needs about 8 GB of memory for the cluster, of which ClamAV takes 1.5 GB.
 
    ```sh
    helm upgrade --install oan-grievance-gateway <oan_grievance_service>/apisix/k8s -n grievance \
-     -f environments/dev/values/gateway-common.yaml -f environments/dev/values/oan-grievance-gateway.yaml \
+     -f environments/dev/values/gateway-common.yaml -f <oan_grievance_service>/helm/environments/dev/oan-grievance-gateway.yaml \
      --set "web.externalHosts={192.168.139.2}" --set "socket.externalHosts={192.168.139.2}" --wait
    ```
 

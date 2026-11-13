@@ -1,0 +1,66 @@
+{{- /*
+APISIX as the edge of a whole domain (development): the wildcard certificate, the upstream that carries every
+host APISIX has no route of its own for (the OpenG2P istio ingress), and the catch-all route to it. Off by
+default. App and UI charts keep their own ApisixRoutes; the catch-all has the lowest priority, so any route
+they declare for the same host and path wins. See docs/apisix-gateway.md, "Dev: APISIX as the edge".
+*/ -}}
+{{- if .Values.edge.enabled }}
+{{- $domain := required "edge.domain is required when edge.enabled" .Values.edge.domain }}
+{{- $secret := required "edge.tlsSecretName is required when edge.enabled" .Values.edge.tlsSecretName }}
+{{- $host := required "edge.upstream.host is required when edge.enabled" .Values.edge.upstream.host }}
+apiVersion: apisix.apache.org/v2
+kind: ApisixTls
+metadata:
+  name: edge-wildcard
+spec:
+  ingressClassName: {{ .Values.edge.ingressClassName }}
+  hosts:
+    - {{ $domain }}
+    - {{ printf "*.%s" $domain | quote }}
+  secret:
+    name: {{ $secret }}
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: apisix.apache.org/v2
+kind: ApisixUpstream
+metadata:
+  name: edge-upstream
+spec:
+  ingressClassName: {{ .Values.edge.ingressClassName }}
+  externalNodes:
+    - type: Domain
+      name: {{ $host }}
+      port: {{ .Values.edge.upstream.port }}
+  scheme: {{ .Values.edge.upstream.scheme }}
+  # The upstream routes on the client's Host.
+  passHost: pass
+  timeout:
+    connect: {{ .Values.edge.upstream.timeout.connect }}
+    send: {{ .Values.edge.upstream.timeout.send }}
+    read: {{ .Values.edge.upstream.timeout.read }}
+---
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: edge-catch-all
+spec:
+  ingressClassName: {{ .Values.edge.ingressClassName }}
+  http:
+    - name: edge-catch-all
+      # Lowest priority: a route an app or UI declares for the same host and path wins.
+      priority: -100
+      match:
+        hosts:
+          - {{ $domain }}
+          - {{ printf "*.%s" $domain | quote }}
+        paths:
+          - /*
+      websocket: true
+      upstreams:
+        - name: edge-upstream
+      plugins:
+        - name: client-control
+          enable: true
+          config:
+            max_body_size: {{ .Values.edge.maxBodySize | int64 }}
+{{- end }}
