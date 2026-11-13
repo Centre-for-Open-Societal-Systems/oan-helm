@@ -1,0 +1,83 @@
+# Staging: lets the Commons Postgres superuser rotation Job (ServiceAccount commons/commons-postgres-superuser-rotation,
+# addons/commons-postgres-superuser-rotation) update the copy of Secret commons-postgresql in each registry namespace.
+# Applied once by the cluster admin, like commons-deployer-rbac.yaml: the Commons deployer has no rights outside
+# commons and cannot grant them. Each Role allows get and patch on that one Secret by name, nothing else.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: commons-postgres-superuser-copy
+  namespace: crop
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: ["commons-postgresql"]
+    verbs: ["get", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: commons-postgres-superuser-copy
+  namespace: crop
+subjects:
+  - {kind: ServiceAccount, name: commons-postgres-superuser-rotation, namespace: commons}
+roleRef: {apiGroup: rbac.authorization.k8s.io, kind: Role, name: commons-postgres-superuser-copy}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: commons-postgres-superuser-copy
+  namespace: live
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: ["commons-postgresql"]
+    verbs: ["get", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: commons-postgres-superuser-copy
+  namespace: live
+subjects:
+  - {kind: ServiceAccount, name: commons-postgres-superuser-rotation, namespace: commons}
+roleRef: {apiGroup: rbac.authorization.k8s.io, kind: Role, name: commons-postgres-superuser-copy}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: commons-postgres-superuser-copy
+  namespace: farmer
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: ["commons-postgresql"]
+    verbs: ["get", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: commons-postgres-superuser-copy
+  namespace: farmer
+subjects:
+  - {kind: ServiceAccount, name: commons-postgres-superuser-rotation, namespace: commons}
+roleRef: {apiGroup: rbac.authorization.k8s.io, kind: Role, name: commons-postgres-superuser-copy}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: commons-postgres-superuser-copy
+  namespace: da-registry
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: ["commons-postgresql"]
+    verbs: ["get", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: commons-postgres-superuser-copy
+  namespace: da-registry
+subjects:
+  - {kind: ServiceAccount, name: commons-postgres-superuser-rotation, namespace: commons}
+roleRef: {apiGroup: rbac.authorization.k8s.io, kind: Role, name: commons-postgres-superuser-copy}
