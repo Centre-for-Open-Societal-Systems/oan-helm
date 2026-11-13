@@ -248,6 +248,27 @@ not `/api/method/ping` (see Known open items). Watch for a few minutes:
 `kubectl -n api6-gateway logs deploy/apisix -f`, and the `apisix_http_status` metrics (look
 for 5xx and 429).
 
+### Dev: APISIX as the edge for the whole domain
+
+On oan_dev, APISIX is the edge for every `*.development.oanstaging.com` host, not only the OAN apps:
+
+```
+*.development.oanstaging.com -> APISIX on oan_dev (wildcard DNS, wildcard certificate)
+  ├─ grievance-service, a2c-service, the UIs, sandbox -> their own routes
+  └─ every other host (registries, keycloak, ...)   -> catch-all route -> OpenG2P istio, 10.0.1.58:30080
+```
+
+The catch-all, its upstream and the wildcard `ApisixTls` are in
+[environments/dev/manifests/apisix-edge.yaml](../environments/dev/manifests/apisix-edge.yaml). It does what the
+OpenG2P nginx (environments/dev/ingress/nginx.conf) did in front of istio. The certificate is Secret
+`oan-development-wildcard-tls` in `api6-gateway`, issued and renewed on the node by `automation/oan-dev/oan-k8s-tls.sh`
+in the openg2p-deployment fork (acme.sh, DNS-01 on Route 53). The app charts then leave `tls.secretName` unset.
+
+Order: issue the certificate, apply the manifest, test with `curl --resolve <host>:443:<node IP>` for an OAN
+host and an OpenG2P host (or `/etc/hosts` for a browser), then point the Route 53 wildcard at the node, with a short
+TTL first. Rollback is reverting that record. Every OpenG2P host then depends on this node, and OpenG2P sees
+APISIX's address as the client unless it trusts `X-Forwarded-For`.
+
 ## 7. After every later merge
 
 The routes are generated from the service's OpenAPI spec, so they change whenever an
@@ -453,7 +474,7 @@ There are four separate jobs. None is automated by this repository.
 
 | Job | Today | In production |
 |---|---|---|
-| Public certificate, clients to APISIX | Secret `oan-grievance-tls` (and `oan-a2c-tls`), referenced by `ApisixTls`. Lab: a local CA, made by hand. The dev values say cert-manager writes the Secret in dev; that is not in this repository and I have not seen it. | Whoever issues the certificate (an ACME service such as Let's Encrypt, a company CA, or a bought certificate) writes the Secret before it expires, and the controller syncs the new one into APISIX without a restart. Let's Encrypt certificates last 90 days, so renewal must be automatic. Expiry needs an alert. |
+| Public certificate, clients to APISIX | Dev: one wildcard, Secret `oan-development-wildcard-tls` in `api6-gateway`, issued and renewed by acme.sh on the node (section 6, "Dev: APISIX as the edge"). Lab: Secret `oan-grievance-tls` from a local CA, made by hand. | Whoever issues the certificate (an ACME service such as Let's Encrypt, a company CA, or a bought certificate) writes the Secret before it expires, and the controller syncs the new one into APISIX without a restart. Let's Encrypt certificates last 90 days, so renewal must be automatic. Expiry needs an alert. |
 | APISIX to the apps, port 30800, 30900, 30810 | Plain HTTP over a private network, node ports open to the gateway's addresses only | Same, if the network is private. If this hop must be encrypted, it needs certificates from an internal CA on both sides (mutual TLS). Not set up, and not yet required by anyone I know of. |
 | APISIX to etcd | Plain HTTP in the lab | `https` URLs with certificates from an internal CA, reissued on a schedule. |
 | Kubernetes internals (RKE2) | RKE2 creates and rotates them itself. As I recall they last a year and rotate when the server restarts near expiry; I have not checked the current numbers. | Same. |
