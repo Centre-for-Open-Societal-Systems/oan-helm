@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-13
 
+### openg2p-cropsown-registry 0.0.0-develop.529 (develop)
+
+- Crop Sown ODK: Infestation Land ID not tied to Sowing rows; Type of Infestation single select, as on the web form (#295) (Centre-for-Open-Societal-Systems/cropsown-regsitry@aa9ac712314c)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-13
+
 ### openg2p-farmer-registry 0.0.0-develop.864 (develop)
 
 - Farmer save: a multi-select answer must be a list (#295) (Centre-for-Open-Societal-Systems/farmer-registry@d1dbe1899224)
