@@ -21,8 +21,8 @@ header. **Never install them into the OpenG2P cluster.**
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
 | APISIX and the Ingress Controller | Chart `oan-apisix-gateway`, which vendors upstream `apisix/apisix` 2.18.2 (bundles `apisix-ingress-controller`) and releases like the other charts                                                    | [charts/oan-apisix-gateway/values.yaml](../charts/oan-apisix-gateway/values.yaml)                               |
 | Rate-limit counters               | Dependency `bitnami/redis` 17.15.2 of `oan-apisix-gateway`, installed with APISIX in the same release                                                                                                                                      | [charts/oan-apisix-gateway/values.yaml](../charts/oan-apisix-gateway/values.yaml)            |
-| Grievance routes                  | Chart `oan-grievance-gateway` in [oan_grievance_service/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/tree/develop/apisix/k8s), generated from the service's OpenAPI spec. It is not copied here | [dev/values/oan-grievance-gateway.yaml](../environments/dev/values/oan-grievance-gateway.yaml) |
-| A2C routes                        | Chart `oan-a2c-gateway` in [oan_a2c/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/tree/develop/apisix/k8s), generated from the A2C OpenAPI spec                                                                | [dev/values/oan-a2c-gateway.yaml](../environments/dev/values/oan-a2c-gateway.yaml)             |
+| Grievance routes                  | Chart `oan-grievance-gateway` in [oan_grievance_service/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/tree/develop/apisix/k8s), generated from the service's OpenAPI spec. It is not copied here | [helm/environments/dev/oan-grievance-gateway.yaml](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/blob/develop/helm/environments/dev/oan-grievance-gateway.yaml) |
+| A2C routes                        | Chart `oan-a2c-gateway` in [oan_a2c/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/tree/develop/apisix/k8s), generated from the A2C OpenAPI spec                                                                | [helm/environments/dev/oan-a2c-gateway.yaml](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/blob/develop/helm/environments/dev/oan-a2c-gateway.yaml)             |
 | Partner APIs (OAN sandbox apps)   | Chart `oan-partner-gateway` in [sandbox-platform deploy/apisix-partner-gateway/k8s](https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform/tree/develop/deploy/apisix-partner-gateway), generated from the routes the sandbox is tested against | [dev/values/oan-partner-gateway.yaml](../environments/dev/values/oan-partner-gateway.yaml) |
 
 This repository holds only the values. Each app's route chart lives with the app, because
@@ -97,7 +97,7 @@ Collect these facts first. They are the values the install needs.
 | Browser origins of the grievance UI | ask the UI team | `corsOriginRegexes`, `realtimeAllowedOrigins` |
 
 The upstream names, node ports and the Redis for rate-limit counters are already in
-`oan-grievance-gateway.yaml`. The node ports belong to `gatewayAccess` of the
+`helm/environments/dev/oan-grievance-gateway.yaml` in the oan_grievance_service repository. The node ports belong to `gatewayAccess` of the
 `grievance` release of `charts/oan-grievance-service`.
 
 Confirm that the cluster has no APISIX CRDs from another install:
@@ -132,9 +132,9 @@ kubectl -n api6-gateway create secret generic apisix-etcd-credentials \
   --from-literal=etcd-root-password="$(openssl rand -hex 16)"
 ```
 
-Then edit the values, in a branch of this repo, and get the change reviewed:
+Then edit the values, in a branch of the repository that owns them, and get the change reviewed:
 
-- `environments/dev/values/oan-grievance-gateway.yaml`: the origin lists. `siteName`,
+- `helm/environments/dev/oan-grievance-gateway.yaml` in the oan_grievance_service repository: the origin lists. `siteName`,
   `hosts`, the upstream names and ports, and `tls.secretName` are already
   set. A missing required value stops `helm install` with "`<name>` is required".
 - The certificate: Secret `oan-grievance-tls` in `grievance` (see
@@ -185,7 +185,7 @@ Use the chart from the `oan_grievance_service` checkout at the **commit that is 
 
 ```sh
 CHART=<path to oan_grievance_service>/apisix/k8s
-VALUES=environments/dev/values/oan-grievance-gateway.yaml
+VALUES=<path to oan_grievance_service>/helm/environments/dev/oan-grievance-gateway.yaml
 
 APP_HOST=<grievance node private IP>
 SET="--set web.externalHosts={$APP_HOST} --set socket.externalHosts={$APP_HOST}"
@@ -293,11 +293,11 @@ namespace `a2c`, from the `oan_a2c` checkout at the deployed commit:
 
 ```sh
 helm upgrade --install oan-a2c-gateway <oan_a2c>/apisix/k8s -n a2c --create-namespace \
-  -f environments/dev/values/gateway-common.yaml -f environments/dev/values/oan-a2c-gateway.yaml \
+  -f environments/dev/values/gateway-common.yaml -f <oan_a2c>/helm/environments/dev/oan-a2c-gateway.yaml \
   --set "web.externalHosts={<A2C node private IP>}" --atomic --wait
 ```
 
-`hosts` is set in `oan-a2c-gateway.yaml` (confirm the real name): routes of both apps
+`hosts` is set in `helm/environments/dev/oan-a2c-gateway.yaml` in the oan_a2c repository: routes of both apps
 share paths such as `/v1/auth/*`, and an empty `hosts` would match any host. Expose A2C's
 Frappe web Service on node port 30810 to the gateway cluster only, and point the A2C
 host's DNS at the gateway node.
