@@ -21,7 +21,7 @@ hosts:
   - grievance-backend.development.oanstaging.com
 
 # No `tls`: in dev APISIX terminates TLS for every *.development.oanstaging.com host with one wildcard
-# (environments/dev/manifests/apisix-edge.yaml), so this chart creates no ApisixTls.
+# (`extraDeploy` in environments/dev/values/oan-apisix-gateway.yaml), so this chart creates no ApisixTls.
 
 # Frappe site name (Jenkinsfile `targets.develop.site`), sent as Host because Frappe
 # selects the site from it. Must equal siteName in oan-grievance-service.yaml.

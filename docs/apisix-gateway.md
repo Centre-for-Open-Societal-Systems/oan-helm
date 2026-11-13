@@ -258,13 +258,14 @@ On oan_dev, APISIX is the edge for every `*.development.oanstaging.com` host, no
   └─ every other host (registries, keycloak, ...)   -> catch-all route -> OpenG2P istio, 10.0.1.58:30080
 ```
 
-The catch-all, its upstream and the wildcard `ApisixTls` are in
-[environments/dev/manifests/apisix-edge.yaml](../environments/dev/manifests/apisix-edge.yaml). It does what the
+The catch-all, its upstream and the wildcard `ApisixTls` are the `extraDeploy` objects in
+[environments/dev/values/oan-apisix-gateway.yaml](../environments/dev/values/oan-apisix-gateway.yaml), installed by
+`helm upgrade apisix`. They do what the
 OpenG2P nginx (environments/dev/ingress/nginx.conf) did in front of istio. The certificate is Secret
 `oan-development-wildcard-tls` in `api6-gateway`, issued and renewed on the node by `automation/oan-dev/oan-k8s-tls.sh`
 in the openg2p-deployment fork (acme.sh, DNS-01 on Route 53). The app charts then leave `tls.secretName` unset.
 
-Order: issue the certificate, apply the manifest, test with `curl --resolve <host>:443:<node IP>` for an OAN
+Order: issue the certificate, run `helm upgrade apisix`, test with `curl --resolve <host>:443:<node IP>` for an OAN
 host and an OpenG2P host (or `/etc/hosts` for a browser), then point the Route 53 wildcard at the node, with a short
 TTL first. Rollback is reverting that record. Every OpenG2P host then depends on this node, and OpenG2P sees
 APISIX's address as the client unless it trusts `X-Forwarded-For`.
