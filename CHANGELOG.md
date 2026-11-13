@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-13
 
+### openg2p-farmer-registry 0.0.0-develop.865 (develop)
+
+- Reporting views read multi-select columns safely (#297) (Centre-for-Open-Societal-Systems/farmer-registry@4db9d979983b)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-13
+
 ### openg2p-farmer-registry 1.0.0-rc.880 (staging)
 
 - Farmer save: a multi-select answer must be a list (#295) (Centre-for-Open-Societal-Systems/farmer-registry@d1dbe1899224)
