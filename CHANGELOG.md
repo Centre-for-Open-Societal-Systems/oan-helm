@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-13
 
+### oan-a2c-ui 0.0.0-develop.6 (develop)
+
+- Merge pull request #114 from arnavam/feat/a2c-ui-helm-deploy-dev (Centre-for-Open-Societal-Systems/oan_a2c_ui@3fce7d7431f6)
+- Images and rollback: [releases/history/develop/oan-a2c-ui.md](releases/history/develop/oan-a2c-ui.md)
+
+## 2026-11-13
+
 ### openg2p-cropsown-registry 0.0.0-develop.528 (develop)
 
 - Reporting views run on a register without the legacy attribute table (#294) (Centre-for-Open-Societal-Systems/cropsown-regsitry@d83273b5256b)
