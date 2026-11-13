@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-13
 
+### openg2p-farmer-registry 1.0.0-rc.880 (staging)
+
+- Farmer save: a multi-select answer must be a list (#295) (Centre-for-Open-Societal-Systems/farmer-registry@d1dbe1899224)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-13
+
 ### oan-a2c-gateway 0.0.1-develop.23 (develop)
 
 - Merge pull request #134 from arnavam/feat/publish-gateway-chart (Centre-for-Open-Societal-Systems/oan_a2c@f7744a10cbf6)
