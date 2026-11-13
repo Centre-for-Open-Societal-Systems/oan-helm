@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-13
 
+### oan-grievance-ui 0.0.1-develop.50 (develop)
+
+- Merge pull request #73 from apoorvanengineer-cpu/feature/feedback-and-field-validations (Centre-for-Open-Societal-Systems/oan_grievance_ui@06f5f2994638)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-13
+
 ### oan-grievance-gateway 0.0.1-develop.82 (develop)
 
 - Merge pull request #111 from arnavam/feat/publish-gateway-chart (Centre-for-Open-Societal-Systems/oan_grievance_service@031d425de8bf)
