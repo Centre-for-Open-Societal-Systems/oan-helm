@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-13
 
+### oan-grievance-service 0.0.1-develop.83 (develop)
+
+- Merge pull request #115 from dhruvbhatt701/fix/category-admin-duplicate-message (Centre-for-Open-Societal-Systems/oan_grievance_service@9718a2878d4f)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-13
+
 ### oan-grievance-ui 0.0.1-develop.50 (develop)
 
 - Merge pull request #73 from apoorvanengineer-cpu/feature/feedback-and-field-validations (Centre-for-Open-Societal-Systems/oan_grievance_ui@06f5f2994638)
