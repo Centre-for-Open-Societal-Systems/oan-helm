@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-13
 
+### openg2p-farmer-registry 0.0.0-develop.864 (develop)
+
+- Farmer save: a multi-select answer must be a list (#295) (Centre-for-Open-Societal-Systems/farmer-registry@d1dbe1899224)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-13
+
 ### openg2p-farmer-registry 0.0.0-develop.862 (develop)
 
 - Farmer import: template workbook from the schema, code checks and production guide (#293) (Centre-for-Open-Societal-Systems/farmer-registry@956f88c36283)
