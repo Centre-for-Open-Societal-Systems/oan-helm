@@ -180,7 +180,17 @@ registry:
       REGISTRY_PARTNER_API_DCI_ID_TYPE_COLUMNS: '{"UIN": "fayda_fan_id", "FID": "functional_record_id"}'
       REGISTRY_PARTNER_API_DCI_ALLOWED_SEARCH_FIELDS: '["functional_record_id", "first_name", "middle_name", "last_name", "given_name", "gender", "birth_date", "foundational_id", "record_name", "record_status", "search_text", "fayda_fan_id"]'
       REGISTRY_CORE_VALIDATE_ATTRIBUTE_VALUES: 'true'
+      # The partner API's common database is the registry database, as on New Dev. Declared here so Helm
+      # owns it: a hand patch (21 Oct) had pointed it at the pre-rename cropsown_registry_crop.
+      COMMON_DB_DBNAME: cropsown_registry
+      COMMON_DB_USERNAME: cropsown_registry_user
+      COMMON_DB_PORT: '5432'
       <<: *farmerReferenceEnv
+    envVarsFrom:
+      COMMON_DB_PASSWORD:
+        secretKeyRef:
+          name: cropsown-registry
+          key: cropsown-registry-db-user
     hostname: partner-crop.qa.oanstaging.com
     istio:
       virtualservice:
