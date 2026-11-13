@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-13
 
+### oan-grievance-service 0.0.1-develop.84 (develop)
+
+- Merge pull request #112 from arnavam/fix/gateway-limit-count-no-group (Centre-for-Open-Societal-Systems/oan_grievance_service@7118e820e487)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-13
+
 ### oan-grievance-service 0.0.1-develop.83 (develop)
 
 - Merge pull request #115 from dhruvbhatt701/fix/category-admin-duplicate-message (Centre-for-Open-Societal-Systems/oan_grievance_service@9718a2878d4f)
