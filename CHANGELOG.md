@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-13
 
+### oan-grievance-ui 0.0.1-develop.49 (develop)
+
+- Merge pull request #72 from arnavam/chore/eoan-ecr-path (Centre-for-Open-Societal-Systems/oan_grievance_ui@f9a3e9978dfa)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-13
+
 ### openg2p-cropsown-registry 1.0.0-rc.543 (staging)
 
 - Crop Sown ODK: Infestation Land ID not tied to Sowing rows; Type of Infestation single select, as on the web form (#295) (Centre-for-Open-Societal-Systems/cropsown-regsitry@aa9ac712314c)
