@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-13
 
+### oan-grievance-gateway 0.0.1-develop.82 (develop)
+
+- Merge pull request #111 from arnavam/feat/publish-gateway-chart (Centre-for-Open-Societal-Systems/oan_grievance_service@031d425de8bf)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.82 (develop)
+
+- Merge pull request #111 from arnavam/feat/publish-gateway-chart (Centre-for-Open-Societal-Systems/oan_grievance_service@031d425de8bf)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-13
+
 ### openg2p-farmer-registry 1.0.0-rc.882 (staging)
 
 - Reporting views read multi-select columns safely (#297) (Centre-for-Open-Societal-Systems/farmer-registry@4db9d979983b)
