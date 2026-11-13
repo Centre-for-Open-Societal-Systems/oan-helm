@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-13
 
+### openg2p-farmer-registry 1.0.0-rc.882 (staging)
+
+- Reporting views read multi-select columns safely (#297) (Centre-for-Open-Societal-Systems/farmer-registry@4db9d979983b)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-13
+
 ### oan-a2c-gateway 0.0.1-develop.24 (develop)
 
 - Merge pull request #135 from arnavam/fix/gateway-limit-count-no-group (Centre-for-Open-Societal-Systems/oan_a2c@ad5a842e1fbe)
