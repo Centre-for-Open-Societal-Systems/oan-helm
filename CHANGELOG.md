@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-13
 
+### openg2p-farmer-registry 0.0.0-develop.862 (develop)
+
+- Farmer import: template workbook from the schema, code checks and production guide (#293) (Centre-for-Open-Societal-Systems/farmer-registry@956f88c36283)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-13
+
 ### oan-a2c-ui 0.0.0-develop.6 (develop)
 
 - Merge pull request #114 from arnavam/feat/a2c-ui-helm-deploy-dev (Centre-for-Open-Societal-Systems/oan_a2c_ui@3fce7d7431f6)
