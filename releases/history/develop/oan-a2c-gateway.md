@@ -1,0 +1,18 @@
+# oan-a2c-gateway: develop history
+
+Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
+
+## 0.0.1-develop.23
+
+<!-- source-commit: f7744a10cbf66e2990c200fd4f62436cb6b1d3bc version: 0.0.1-develop.23 -->
+Published 2026-11-13. Archive SHA-256 `f25e821e0dd3530544405c6d334c9c276887c9ad2efa379dd1be86e4d7323583`.
+
+- Change: Merge pull request #134 from arnavam/feat/publish-gateway-chart
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@f7744a10cbf6](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/f7744a10cbf66e2990c200fd4f62436cb6b1d3bc)
+
+Return to this version:
+
+```sh
+helm upgrade a2c-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-gateway-0.0.1-develop.23.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-gateway.yaml --wait --timeout 15m
+```
+

@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.23
+
+<!-- source-commit: f7744a10cbf66e2990c200fd4f62436cb6b1d3bc version: 0.0.1-develop.23 -->
+Published 2026-11-13. Archive SHA-256 `aefd8e60f9e208470fa774b6f6b83a3965c5f3db1d8a9c865d04b6b915305f57`.
+
+- Change: Merge pull request #134 from arnavam/feat/publish-gateway-chart
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@f7744a10cbf6](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/f7744a10cbf66e2990c200fd4f62436cb6b1d3bc)
+- Changes since 0.0.1-develop.22: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/ca103bc1af65d0626d4f8b0ae05f1af0bcfbf5d6...f7744a10cbf66e2990c200fd4f62436cb6b1d3bc
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-service/a2c-service:0.0.1-develop.23` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-service-0.0.1-develop.23.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.22
 
 <!-- source-commit: ca103bc1af65d0626d4f8b0ae05f1af0bcfbf5d6 version: 0.0.1-develop.22 -->
