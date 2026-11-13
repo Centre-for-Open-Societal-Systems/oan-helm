@@ -2,14 +2,14 @@
 # Install with scripts/ci/deliver_staging_dashboards.sh. Secret contents stay outside Git.
 image:
   repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/cropsown-registry/dashboard-ui
-  tag: 1027e7775505
+  tag: 1027e7775505@sha256:6b8a89f722235bf8873ebce65e37277f6d8a1b201b85788fa4302e1c86ccf7f8
 environment: ''
 iam:
-  url: https://staff-iam.oanstaging.com
-  cookieDomain: .oanstaging.com
+  url: https://staff-iam.qa.oanstaging.com
+  cookieDomain: .qa.oanstaging.com
 links:
-  staffPortalUrl: https://staff-portal.oanstaging.com
-  registryPortalUrl: https://crop-registry.oanstaging.com
+  staffPortalUrl: https://staff-portal.qa.oanstaging.com
+  registryPortalUrl: https://crop-registry.qa.oanstaging.com
 dashboardApi:
   service: cropsown-registry-dashboard-api
   auth:
@@ -17,7 +17,7 @@ dashboardApi:
 iamSetup:
   grantUsers: [admin]
   description: Crop Sown Dashboard
-host: cropsown-registry-dashboard.oanstaging.com
+host: cropsown-registry-dashboard.qa.oanstaging.com
 ingress:
   public:
     existingGateway: istio-system/staging

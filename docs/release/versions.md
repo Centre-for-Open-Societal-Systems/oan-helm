@@ -156,11 +156,12 @@ Commons has two Helm releases per environment, both in the namespace `commons`:
 
 | Release | Chart | New Dev revision | Staging revision |
 | --- | --- | --- | --- |
-| `commons` (base: PostgreSQL, Keycloak, Kafka, Redis, MinIO) | `openg2p-commons-base-2.3.3` | 4 | 6 |
-| `commons-services` | `openg2p-commons-services-1.0.0-dev.35` (application version 2.3.4-rc.247) | 36 | 16 |
+| `commons` (base: PostgreSQL, Keycloak, Kafka, Redis, MinIO) | `openg2p-commons-base-2.3.3` | 4 | 9 |
+| `commons-services` | New Dev `openg2p-commons-services-1.0.0-dev.35`, staging `1.0.0-dev.41` (application version 2.3.4-rc.247) | 40 | 20 |
 
-Source: live reading `helm list -A`; the image lists of both environments were compared line by line.
-Result: every image in the namespace `commons` is the same on both environments. The only difference is the
+Source: live reading `helm list -A` (revisions and versions on 12 Nov 2026); the image lists of both environments were compared line by line.
+Before 12 Nov every image in the namespace `commons` was the same on both environments; staging now runs
+dev.41 (the qa domain move) and New Dev dev.35. Before that, the only difference was the
 name of the pull-secret refresh job (New Dev `ecr-pull-secret-refresh`, staging `oan-dashboards-ecr-refresh`).
 
 | Service | Deployment or StatefulSet | Image (same on both environments) |
@@ -196,15 +197,16 @@ Not verified: the version number inside the digest-pinned Master Data and Consen
 | `oan-dashboards` | `oan-dashboards-0.1.0` | rev 2 | rev 1 |
 | Connectors | `openg2p-connector-0.1.0` (releases `farmer-registry-connector`, `cropsown-connector`, `livestock-connector`) | Farmer rev 13, Crop sown rev 8, Livestock rev 7 | Farmer rev 4, Crop sown rev 2, Livestock rev 2 |
 | `farmer-connector-credentials` | 0.1.0 | rev 2 | rev 1 |
-| `da` (in namespace `commons`) | `openg2p-da-registry-1.0.0-dev.5` | rev 1, installed 20 October 2026 | not present |
 | Logs | Loki 6.24.0, OpenTelemetry collector 0.111.0 (`otel-agent`, `otel-gateway`) | present; Grafana 10.5.15 present | Loki and OpenTelemetry present; no Grafana release |
 | Platform | Rancher | 2.15.1 | 2.12.3 |
 | Platform | Kubernetes (RKE2) | v1.35.8+rke2r1 | v1.33.6+rke2r1 |
 
 Drift: staging is two Kubernetes minor versions and three Rancher minor versions behind New Dev. Staging has
 no Grafana release, so staging logs have no viewer in the cluster (see [operations-runbook.md](operations-runbook.md)).
-Not verified: what the New Dev release `da` in the namespace `commons` runs. No Development Agent Deployment
-exists in `commons`, and the live registry is the release `da-registry` in the namespace `da-registry`.
+The New Dev release `da` in the namespace `commons` (`openg2p-da-registry-1.0.0-dev.5`, left by the first DA dev
+pipeline of 20 October 2026) was uninstalled on 13 November 2026: it held only four Services with no endpoints. The
+empty namespace `da`, created by hand on 21 October, was deleted the same day. The Development Agent registry is the
+release `da-registry` in the namespace `da-registry` on both clusters.
 
 ## 6. Summary of drift
 

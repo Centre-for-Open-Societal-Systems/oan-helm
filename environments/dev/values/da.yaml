@@ -31,6 +31,10 @@ global:
   idGeneratorHostname: idgenerator-da.development.oanstaging.com
   staffPortalBaseUrl: https://da-registry.development.oanstaging.com
 registry:
+  # Sample development agents on New Dev, as Crop and Livestock load their samples there. The db-seed loader
+  # submits and approves them as the sample approvers (password from the chart); agents already present are skipped.
+  dbSeed:
+    loadSampleData: true
   keycloak-init:
     keycloak:
       url: http://commons-keycloak.commons.svc.cluster.local:80

@@ -1,10 +1,10 @@
 # Values shared by every route chart on the dev APISIX: oan-grievance-gateway,
 # oan-a2c-gateway and oan-partner-gateway. Pass it first, before the app's own file:
 #   -f environments/dev/values/gateway-common.yaml -f environments/dev/values/oan-<app>-gateway.yaml
-# Target: the gateway cluster, namespace `apisix`. See docs/apisix-gateway.md.
+# Target: the gateway cluster, namespace `api6-gateway`. See docs/apisix-gateway.md.
 
 # Limit-count counters, in the gateway cluster (the `redis` dependency of oan-apisix-gateway). Service
-# apisix-redis-master.apisix.svc.cluster.local of the release `apisix`; no password.
+# apisix-redis-master.api6-gateway.svc.cluster.local of the release `apisix`; no password.
 redis:
-  host: apisix-redis-master.apisix.svc.cluster.local
+  host: apisix-redis-master.api6-gateway.svc.cluster.local
   port: 6379

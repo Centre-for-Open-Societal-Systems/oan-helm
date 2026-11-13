@@ -1,0 +1,115 @@
+{{- /*
+  Roll the Deployments in configMapChangePodRollout.deployments when a ConfigMap they read has changed.
+
+  A ConfigMap change alone never restarts a pod. Most Commons Deployments carry the values checksum through
+  podAnnotations (rollPodsOnValuesChange in values.yaml); the subchart templates of these take no pod annotations,
+  so after every install and upgrade this Job hashes the ConfigMaps each one references and patches
+  oan.org/configmap-checksum on its pod template only when the hash differs
+  (files/configmap-change-pod-rollout.py). Unchanged ConfigMaps restart nothing.
+*/ -}}
+{{- $c := .Values.configMapChangePodRollout -}}
+{{- if $c.enabled }}
+{{- $deployments := list -}}
+{{- range $c.deployments }}{{ $deployments = append $deployments (tpl . $) }}{{ end -}}
+{{- $name := printf "%s-configmap-change-pod-rollout" .Release.Name -}}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: configmap-change-pod-rollout
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: configmap-change-pod-rollout
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    resourceNames: {{ $deployments | toJson }}
+    verbs: ["get", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: configmap-change-pod-rollout
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ $name }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ $name }}
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: configmap-change-pod-rollout
+data:
+  rollout.py: |
+{{ .Files.Get "files/configmap-change-pod-rollout.py" | indent 4 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: configmap-change-pod-rollout
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "40"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: {{ $name }}
+      {{- with $c.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: rollout
+          image: {{ $c.image | quote }}
+          command: [python, -B, /job/rollout.py]
+          env:
+            - { name: NAMESPACE, value: {{ .Release.Namespace | quote }} }
+            - { name: DEPLOYMENTS, value: {{ $deployments | toJson | quote }} }
+          volumeMounts:
+            - { name: job, mountPath: /job, readOnly: true }
+          resources:
+            requests: {cpu: 10m, memory: 32Mi}
+            limits: {memory: 128Mi}
+      volumes:
+        - name: job
+          configMap:
+            name: {{ $name }}
+            items:
+              - { key: rollout.py, path: rollout.py }
+{{- end }}

@@ -34,6 +34,9 @@ publicHosts:
   daStaff: staff-da-registry.development.oanstaging.com
   daPartner: partner-da-registry.development.oanstaging.com
   daId: idgenerator-da.development.oanstaging.com
+  # A2C backend: the gateway host, the Frappe site name and the A2C UI API_BASE_URL all use it.
+  # The A2C charts and values live in oan_a2c (helm/) and oan_a2c_ui (helm/), not in this repository.
+  a2c: a2c-service.development.oanstaging.com
   consentPartnerPortal: consent-partner-portal.development.oanstaging.com
   farmerConnector: connector-farmer-registry.development.oanstaging.com
   cropsownConnector: connector-cropsown-registry.development.oanstaging.com

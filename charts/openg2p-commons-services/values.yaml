@@ -3,6 +3,12 @@
 # sets every `gateway:` below (about 30 keys, listed in environments/dev/values/commons-services.yaml).
 websub:
   enabled: true
+  # Roll the pods when this component's values change: these Deployments mount ConfigMaps rendered from
+  # the values, and a ConfigMap change alone never restarts a pod (the qa issuer move left AWE on the old
+  # issuer). The subchart renders podAnnotations with tpl, so the hash is of its own .Values (component
+  # values plus global); unchanged values give the same hash and no restart.
+  podAnnotations: &rollPodsOnValuesChange
+    oan.org/values-checksum: '{{ .Values | toYaml | sha256sum }}'
   existingSecret: commons-websub-encryption
   securityOn: false
   kafka:
@@ -35,6 +41,7 @@ websub:
   istio:
     enabled: false
   consolidator:
+    podAnnotations: *rollPodsOnValuesChange
     replicaCount: 1
     initContainers: *websubTopicReadiness
     istio:
@@ -168,6 +175,7 @@ odk-central:
   s3BlobsEnabled: true
   s3ServerUrl: http://{{ tpl .Values.global.minioInstallationName $ }}:9000
   odk-central-enketo:
+    podAnnotations: *rollPodsOnValuesChange
     enabled: true
     resources:
       requests:
@@ -182,11 +190,13 @@ odk-central:
         cpu: 20m
         memory: 128Mi
   frontend:
+    podAnnotations: *rollPodsOnValuesChange
     resources:
       requests:
         cpu: 20m
         memory: 32Mi
   backend:
+    podAnnotations: *rollPodsOnValuesChange
     resources:
       requests:
         cpu: 50m
@@ -227,6 +237,7 @@ artifactory:
       memory: 32Mi
 keymanager:
   enabled: true
+  podAnnotations: *rollPodsOnValuesChange
   hostname: keymanager.{{ tpl .Values.global.baseDomain $ }}
   resources:
     requests:
@@ -412,6 +423,7 @@ superset:
         credentialName: ''
 esignet:
   enabled: true
+  podAnnotations: *rollPodsOnValuesChange
   hostname: 'esignet.{{ .Values.global.baseDomain }}'
   resources:
     requests:
@@ -453,11 +465,13 @@ esignet:
     virtualservice:
       gateway: istio-system/development
   oidcUi:
+    podAnnotations: *rollPodsOnValuesChange
     istio:
       virtualservice:
         gateway: istio-system/development
 mock-identity-system:
   enabled: true
+  podAnnotations: *rollPodsOnValuesChange
   hostname: 'esignet.{{ .Values.global.baseDomain }}'
   resources:
     requests:
@@ -606,6 +620,7 @@ openg2p-audit-manager:
       existingSecretPostgresPasswordKey: '{{ tpl .Values.global.postgresqlSecretKey
         $ }}'
   auditManager:
+    podAnnotations: *rollPodsOnValuesChange
     enabled: true
     nameOverride: auditmanager
     replicaCount: 1
@@ -649,6 +664,7 @@ openg2p-staff-portal-ui:
 openg2p-awe:
   enabled: true
   awe:
+    podAnnotations: *rollPodsOnValuesChange
     appConfig:
       keycloak:
         issuer: '{{ tpl .Values.global.keycloakExternalIssuerUrl $ }}'
@@ -1125,6 +1141,58 @@ iamBenePortalApi:
       memory: 256Mi
     limits:
       memory: 768Mi
+
+# Pre-upgrade: move the staff (1) and agent (10) login_providers rows to the Keycloak issuer these
+# values render, so the IAM's issuer-keyed seed finds it and does not insert a second row with the
+# same id (templates/iam-login-provider-issuer-sync.yaml). A no-op while the issuer is unchanged.
+iamLoginProviderIssuerSync:
+  enabled: true
+  image: postgres:16-alpine
+  imagePullSecrets: []
+  # The IAM database the staff and agent APIs share (openg2p-iam-service.global iamDB, iamDBUser,
+  # iamDBSecret, iamDBUserPasswordKey).
+  db:
+    hostname: '{{ tpl .Values.global.postgresqlHost $ }}'
+    port: 5432
+    name: iam
+    username: iam_user
+    passwordSecret:
+      name: iam
+      key: iam-db-user
+
+# Deployments whose subchart templates take no pod annotations, so rollPodsOnValuesChange cannot reach them:
+# a post-upgrade Job rolls each one when a ConfigMap it reads has changed
+# (templates/configmap-change-pod-rollout.yaml).
+configMapChangePodRollout:
+  enabled: true
+  image: python:3.11.14-slim
+  imagePullSecrets: []
+  deployments:
+  - '{{ .Release.Name }}-awe-ui'
+  - '{{ .Release.Name }}-cm-ui'
+
+# Post-upgrade: add the declared redirect URIs and web origins to public Keycloak clients, which
+# keycloak-init does not update once they exist (templates/keycloak-public-client-urls.yaml). Covers
+# the public clients under keycloak-init.realms plus extraClients. Adds only; prune: true replaces
+# the lists with exactly the declared URLs (use after the old hosts are retired).
+keycloakPublicClientUrls:
+  enabled: true
+  prune: false
+  image: python:3.11.14-slim
+  imagePullSecrets: []
+  keycloak:
+    url: '{{ tpl .Values.global.keycloakInternalUrl $ }}'
+    user: admin
+    existingSecret: '{{ tpl .Values.global.keycloakAdminSecret $ }}'
+    existingSecretKey: admin-password
+  extraClients:
+  # Declared by the openg2p-consent-manager subchart's own keycloak-init.
+  - realm: staff
+    clientId: consent-manager-ui
+    redirectUris:
+    - 'https://{{ tpl (index .Values "openg2p-consent-manager" "global" "consentManagerHostname") $ }}/*'
+    webOrigins:
+    - 'https://{{ tpl (index .Values "openg2p-consent-manager" "global" "consentManagerHostname") $ }}'
 
 # Application catalog only: keeps the existing Consent UI/client/roles and grants no users.
 # Enable after the selected IAM trusts the Consent client's staff issuer.

@@ -8,6 +8,547 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-13
+
+### oan-grievance-gateway 0.0.1-develop.82 (develop)
+
+- Merge pull request #111 from arnavam/feat/publish-gateway-chart (Centre-for-Open-Societal-Systems/oan_grievance_service@031d425de8bf)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.82 (develop)
+
+- Merge pull request #111 from arnavam/feat/publish-gateway-chart (Centre-for-Open-Societal-Systems/oan_grievance_service@031d425de8bf)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-13
+
+### openg2p-farmer-registry 1.0.0-rc.882 (staging)
+
+- Reporting views read multi-select columns safely (#297) (Centre-for-Open-Societal-Systems/farmer-registry@4db9d979983b)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-13
+
+### oan-a2c-gateway 0.0.1-develop.24 (develop)
+
+- Merge pull request #135 from arnavam/fix/gateway-limit-count-no-group (Centre-for-Open-Societal-Systems/oan_a2c@ad5a842e1fbe)
+- Images and rollback: [releases/history/develop/oan-a2c-gateway.md](releases/history/develop/oan-a2c-gateway.md)
+
+### oan-a2c-service 0.0.1-develop.24 (develop)
+
+- Merge pull request #135 from arnavam/fix/gateway-limit-count-no-group (Centre-for-Open-Societal-Systems/oan_a2c@ad5a842e1fbe)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-13
+
+### openg2p-farmer-registry 0.0.0-develop.865 (develop)
+
+- Reporting views read multi-select columns safely (#297) (Centre-for-Open-Societal-Systems/farmer-registry@4db9d979983b)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-13
+
+### openg2p-farmer-registry 1.0.0-rc.880 (staging)
+
+- Farmer save: a multi-select answer must be a list (#295) (Centre-for-Open-Societal-Systems/farmer-registry@d1dbe1899224)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-13
+
+### oan-a2c-gateway 0.0.1-develop.23 (develop)
+
+- Merge pull request #134 from arnavam/feat/publish-gateway-chart (Centre-for-Open-Societal-Systems/oan_a2c@f7744a10cbf6)
+- Images and rollback: [releases/history/develop/oan-a2c-gateway.md](releases/history/develop/oan-a2c-gateway.md)
+
+### oan-a2c-service 0.0.1-develop.23 (develop)
+
+- Merge pull request #134 from arnavam/feat/publish-gateway-chart (Centre-for-Open-Societal-Systems/oan_a2c@f7744a10cbf6)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-13
+
+### oan-grievance-service 0.0.1-develop.81 (develop)
+
+- Merge pull request #110 from arnavam/chore/trigger-gateway-deploy (Centre-for-Open-Societal-Systems/oan_grievance_service@6c6922f765ac)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-13
+
+### oan-a2c-service 0.0.1-develop.22 (develop)
+
+- Merge pull request #133 from arnavam/chore/eoan-ecr-path (Centre-for-Open-Societal-Systems/oan_a2c@ca103bc1af65)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-13
+
+### oan-grievance-ui 0.0.1-develop.49 (develop)
+
+- Merge pull request #72 from arnavam/chore/eoan-ecr-path (Centre-for-Open-Societal-Systems/oan_grievance_ui@f9a3e9978dfa)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-13
+
+### openg2p-cropsown-registry 1.0.0-rc.543 (staging)
+
+- Crop Sown ODK: Infestation Land ID not tied to Sowing rows; Type of Infestation single select, as on the web form (#295) (Centre-for-Open-Societal-Systems/cropsown-regsitry@aa9ac712314c)
+- Images and rollback: [releases/history/staging/openg2p-cropsown-registry.md](releases/history/staging/openg2p-cropsown-registry.md)
+
+## 2026-11-13
+
+### openg2p-cropsown-registry 0.0.0-develop.529 (develop)
+
+- Crop Sown ODK: Infestation Land ID not tied to Sowing rows; Type of Infestation single select, as on the web form (#295) (Centre-for-Open-Societal-Systems/cropsown-regsitry@aa9ac712314c)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-13
+
+### openg2p-farmer-registry 0.0.0-develop.864 (develop)
+
+- Farmer save: a multi-select answer must be a list (#295) (Centre-for-Open-Societal-Systems/farmer-registry@d1dbe1899224)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-13
+
+### openg2p-farmer-registry 0.0.0-develop.862 (develop)
+
+- Farmer import: template workbook from the schema, code checks and production guide (#293) (Centre-for-Open-Societal-Systems/farmer-registry@956f88c36283)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-13
+
+### oan-a2c-ui 0.0.0-develop.6 (develop)
+
+- Merge pull request #114 from arnavam/feat/a2c-ui-helm-deploy-dev (Centre-for-Open-Societal-Systems/oan_a2c_ui@3fce7d7431f6)
+- Images and rollback: [releases/history/develop/oan-a2c-ui.md](releases/history/develop/oan-a2c-ui.md)
+
+## 2026-11-13
+
+### openg2p-cropsown-registry 0.0.0-develop.528 (develop)
+
+- Reporting views run on a register without the legacy attribute table (#294) (Centre-for-Open-Societal-Systems/cropsown-regsitry@d83273b5256b)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
+### oan-grievance-ui 0.0.0-develop.48 (develop)
+
+- Merge pull request #71 from arnavam/fix/helm-ingress-paths (Centre-for-Open-Societal-Systems/oan_grievance_ui@4d374c7e7b10)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-12
+
+### openg2p-cropsown-registry 0.0.0-develop.527 (develop)
+
+- ci(refactor): add password protection to disposable database probe connections (S2115) (#277) (Centre-for-Open-Societal-Systems/cropsown-regsitry@41216ae404cf)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
+### oan-grievance-service 0.0.0-develop.79 (develop)
+
+- Merge pull request #108 from arnavam/fix/grievance-develop-chart-version (Centre-for-Open-Societal-Systems/oan_grievance_service@c84d8e9af2ee)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-12
+
+### oan-a2c-service 0.0.0-develop.21 (develop)
+
+- Merge pull request #132 from arnavam/fix/a2c-gateway-consumer-namespace (Centre-for-Open-Societal-Systems/oan_a2c@73ba35650c5a)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-12
+
+### openg2p-livestock-registry 0.0.0-develop.461 (develop)
+
+- ci(refactor): add password protection to disposable database probe connections (S2115) (#236) (Centre-for-Open-Societal-Systems/livestock-registry@e8bef753094f)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-12
+
+### openg2p-farmer-registry 0.0.0-develop.861 (develop)
+
+- ci(deploy): refactor bump_pin main to remove redundant return 0 (S3516) (#276) (Centre-for-Open-Societal-Systems/farmer-registry@8e9928e0a3b9)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
+### oan-sandbox 1.0.0-dev.19
+
+Previous version: 1.0.0-dev.18.
+
+- feat(oan-sandbox): production Keycloak/gateway, app key lifecycle, support SLA and audit retention settings (#171) (16915e9)
+
+## 2026-11-12
+
+### openg2p-farmer-registry 1.0.0-rc.872 (staging)
+
+- Deploy: the ECR refresher is a reviewed new resource (#290) (Centre-for-Open-Societal-Systems/farmer-registry@f34933b40049)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
+### openg2p-farmer-registry 0.0.0-develop.857 (develop)
+
+- Deploy: the ECR refresher is a reviewed new resource (#290) (Centre-for-Open-Societal-Systems/farmer-registry@f34933b40049)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
+### openg2p-livestock-registry 1.0.0-rc.472 (staging)
+
+- Chart: the release keeps its own ECR pull secret, refreshed by a CronJob (#245) (Centre-for-Open-Societal-Systems/livestock-registry@61a63c3ab486)
+- Images and rollback: [releases/history/staging/openg2p-livestock-registry.md](releases/history/staging/openg2p-livestock-registry.md)
+
+## 2026-11-12
+
+### openg2p-livestock-registry 0.0.0-develop.458 (develop)
+
+- Chart: the release keeps its own ECR pull secret, refreshed by a CronJob (#245) (Centre-for-Open-Societal-Systems/livestock-registry@61a63c3ab486)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-12
+
+### openg2p-farmer-registry 0.0.0-develop.855 (develop)
+
+- Chart: the release keeps its own ECR pull secret, refreshed by a CronJob (#288) (Centre-for-Open-Societal-Systems/farmer-registry@4aaf98f142e5)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
+### oan-apisix-gateway 0.1.0-dev.3
+
+Previous version: 0.1.0-dev.2.
+
+- chore(apisix): make api6-gateway the default namespace of the gateway (fda5acc)
+
+## 2026-11-12
+
+### oan-apisix-gateway 0.1.0-dev.2
+
+Previous version: 0.1.0-dev.1.
+
+- feat(apisix): create the Admin API credentials Secret with the chart (8a88778)
+
+### openg2p-commons-services 1.0.0-dev.42
+
+Previous version: 1.0.0-dev.41.
+
+- Commons pods roll when their ConfigMaps change (#168) (f222c3e)
+
+## 2026-11-12
+
+### oan-a2c-service 0.0.0-develop.19 (develop)
+
+- Merge pull request #131 from arnavam/chore/a2c-shared-cluster-bootstrap (Centre-for-Open-Societal-Systems/oan_a2c@1f964d245ecc)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-12
+
+### frappe-service 0.0.0-develop.28 (develop)
+
+- No description recorded. (unknown source@unknown)
+- Images and rollback: [releases/history/develop/frappe-service.md](releases/history/develop/frappe-service.md)
+
+## 2026-11-12
+
+### oan-a2c-service 0.0.0-develop.18 (develop)
+
+- Merge pull request #130 from arnavam/fix/a2c-iam-beneficiary-role (Centre-for-Open-Societal-Systems/oan_a2c@5a5a5fbea175)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-12
+
+### openg2p-livestock-registry 1.0.0-rc.470 (staging)
+
+- Staging Livestock: connector on the staging Gateway; pipeline delivers the dashboard UI (#243) (Centre-for-Open-Societal-Systems/livestock-registry@0b74fcd3436f)
+- Images and rollback: [releases/history/staging/openg2p-livestock-registry.md](releases/history/staging/openg2p-livestock-registry.md)
+
+## 2026-11-12
+
+### openg2p-livestock-registry 0.0.0-develop.457 (develop)
+
+- Staging Livestock: connector on the staging Gateway; pipeline delivers the dashboard UI (#243) (Centre-for-Open-Societal-Systems/livestock-registry@0b74fcd3436f)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-12
+
+### openg2p-farmer-registry 1.0.0-rc.868 (staging)
+
+- Staging: the promotion delivers the Farmer dashboard UI from oan-helm (#286) (Centre-for-Open-Societal-Systems/farmer-registry@e7b12a88065c)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
+### openg2p-farmer-registry 0.0.0-develop.854 (develop)
+
+- Staging: the promotion delivers the Farmer dashboard UI from oan-helm (#286) (Centre-for-Open-Societal-Systems/farmer-registry@e7b12a88065c)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
+### openg2p-cropsown-registry 1.0.0-rc.539 (staging)
+
+- Staging connector on its qa name and the staging Gateway (#292) (Centre-for-Open-Societal-Systems/cropsown-regsitry@b19248bf81ac)
+- Images and rollback: [releases/history/staging/openg2p-cropsown-registry.md](releases/history/staging/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
+### openg2p-farmer-registry 1.0.0-rc.866 (staging)
+
+- New Dev deploy check: allow the sample loader there (#284) (Centre-for-Open-Societal-Systems/farmer-registry@1e21bd9c1c57)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
+### oan-a2c-service 0.0.0-develop.16 (develop)
+
+- Merge pull request #128 from arnavam/fix/a2c-router-registration-lock (Centre-for-Open-Societal-Systems/oan_a2c@91e6d629fbaa)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-12
+
+### openg2p-cropsown-registry 0.0.0-develop.526 (develop)
+
+- Staging connector on its qa name and the staging Gateway (#292) (Centre-for-Open-Societal-Systems/cropsown-regsitry@b19248bf81ac)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
+### openg2p-farmer-registry 0.0.0-develop.853 (develop)
+
+- New Dev deploy check: allow the sample loader there (#284) (Centre-for-Open-Societal-Systems/farmer-registry@1e21bd9c1c57)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
+### oan-a2c-service 0.0.0-develop.15 (develop)
+
+- Merge pull request #127 from arnavam/fix/a2c-seed-data-pin (Centre-for-Open-Societal-Systems/oan_a2c@d8a42f9400e3)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-12
+
+### openg2p-cropsown-registry 0.0.0-develop.524 (develop)
+
+- Staging Crop ODK definitions: data model ODK_TO_CROP_INTAKE, not the retired CSR_DATA_MODEL (#291) (Centre-for-Open-Societal-Systems/cropsown-regsitry@994e485c7a73)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
+### openg2p-cropsown-registry 0.0.0-develop.523 (develop)
+
+- Staging: deliver the Crop dashboard UI on every promotion (#290) (Centre-for-Open-Societal-Systems/cropsown-regsitry@16c45325ab32)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
+### openg2p-livestock-registry 0.0.0-develop.456 (develop)
+
+- New Dev: let livestock-ci read the connector client secret for the connector upgrade check (#242) (Centre-for-Open-Societal-Systems/livestock-registry@abc345bfc6ff)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-12
+
+### openg2p-da-registry 0.0.0-develop.96 (develop)
+
+- New Dev: pin oan-helm 488d505 (DA dev values load the sample agents) (#63) (Centre-for-Open-Societal-Systems/da-registry@ffbe64bf583d)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-12
+
+### openg2p-cropsown-registry 0.0.0-develop.522 (develop)
+
+- Sowing area: compare with the farmer's own Cultivation, not any farmer's land of the same name (#289) (Centre-for-Open-Societal-Systems/cropsown-regsitry@d58e59be05fd)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
+### openg2p-farmer-registry 0.0.0-develop.851 (develop)
+
+- Staging: unpause the Farmer ODK connector definition (#281) (Centre-for-Open-Societal-Systems/farmer-registry@bca255b3564f)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
+### openg2p-cropsown-registry 1.0.0-rc.533 (staging)
+
+- db-seed: pin openg2p-data at the crop samples with pest control codes and cluster land ids (#285) (Centre-for-Open-Societal-Systems/cropsown-regsitry@000d9c195548)
+- Images and rollback: [releases/history/staging/openg2p-cropsown-registry.md](releases/history/staging/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
+### openg2p-cropsown-registry 0.0.0-develop.521 (develop)
+
+- db-seed: pin openg2p-data at the crop samples with pest control codes and cluster land ids (#285) (Centre-for-Open-Societal-Systems/cropsown-regsitry@000d9c195548)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
+### openg2p-da-registry 1.0.0-rc.101 (staging)
+
+- Enter sample DAs as the signed-in submit user (#61) (Centre-for-Open-Societal-Systems/da-registry@f9a4aabe4080)
+- Images and rollback: [releases/history/staging/openg2p-da-registry.md](releases/history/staging/openg2p-da-registry.md)
+
+## 2026-11-12
+
+### openg2p-da-registry 0.0.0-develop.95 (develop)
+
+- Enter sample DAs as the signed-in submit user (#61) (Centre-for-Open-Societal-Systems/da-registry@f9a4aabe4080)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-12
+
+### openg2p-farmer-registry 1.0.0-rc.862 (staging)
+
+- Staging promotion upgrades the Farmer connector to oan-helm's staging values (#279) (Centre-for-Open-Societal-Systems/farmer-registry@35c4c97bf1d7)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
+### openg2p-livestock-registry 1.0.0-rc.467 (staging)
+
+- Staging connector: name the build by the promoted chart's commit (#239) (Centre-for-Open-Societal-Systems/livestock-registry@602aed8dd912)
+- Images and rollback: [releases/history/staging/openg2p-livestock-registry.md](releases/history/staging/openg2p-livestock-registry.md)
+
+## 2026-11-12
+
+### oan-a2c-service 0.0.0-develop.5 (develop)
+
+- Merge pull request #120 from arnavam/feat/a2c-generated-secrets (Centre-for-Open-Societal-Systems/oan_a2c@cf90ba71a3b3)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-12
+
+### openg2p-livestock-registry 0.0.0-develop.455 (develop)
+
+- Staging connector: name the build by the promoted chart's commit (#239) (Centre-for-Open-Societal-Systems/livestock-registry@602aed8dd912)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-12
+
+### openg2p-da-registry 0.0.0-develop.94 (develop)
+
+- Run the sample loader tests in the dev pipeline (#60) (Centre-for-Open-Societal-Systems/da-registry@620d6c87af94)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-12
+
+### openg2p-cropsown-registry 0.0.0-develop.520 (develop)
+
+- Give the sample approvers their declared password after every deploy (#283) (Centre-for-Open-Societal-Systems/cropsown-regsitry@37d1e75c05f1)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
+### openg2p-farmer-registry 0.0.0-develop.850 (develop)
+
+- Staging promotion upgrades the Farmer connector to oan-helm's staging values (#279) (Centre-for-Open-Societal-Systems/farmer-registry@35c4c97bf1d7)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
+### openg2p-da-registry 0.0.0-develop.93 (develop)
+
+- Give the sample approvers their declared password after every deploy (#57) (Centre-for-Open-Societal-Systems/da-registry@cba80649ebcd)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-12
+
+### openg2p-livestock-registry 0.0.0-develop.454 (develop)
+
+- Give the sample approvers their declared password after every deploy (#237) (Centre-for-Open-Societal-Systems/livestock-registry@b275e4c48b1f)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-12
+
+### oan-a2c-service 0.0.0-develop.4 (develop)
+
+- Merge pull request #119 from arnavam/feat/a2c-base-domain (Centre-for-Open-Societal-Systems/oan_a2c@58d21b10b3f1)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-12
+
+### openg2p-cropsown-registry 1.0.0-rc.530 (staging)
+
+- Staging connector moves to the qa.oanstaging.com scope (#276) (Centre-for-Open-Societal-Systems/cropsown-regsitry@63f888014163)
+- Images and rollback: [releases/history/staging/openg2p-cropsown-registry.md](releases/history/staging/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
+### openg2p-da-registry 1.0.0-rc.97 (staging)
+
+- Sample DA loader: sign the approvers in again (#58) (Centre-for-Open-Societal-Systems/da-registry@2fb048e4f5f6)
+- Images and rollback: [releases/history/staging/openg2p-da-registry.md](releases/history/staging/openg2p-da-registry.md)
+
+## 2026-11-12
+
+### openg2p-farmer-registry 0.0.0-develop.849 (develop)
+
+- Give the sample approvers their declared password after every deploy (#277) (Centre-for-Open-Societal-Systems/farmer-registry@e959ce748a06)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
+### openg2p-farmer-registry 1.0.0-rc.859 (staging)
+
+- Staging Farmer moves to the qa.oanstaging.com scope (#273) (Centre-for-Open-Societal-Systems/farmer-registry@d1b420dc667b)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
+### openg2p-da-registry 0.0.0-develop.92 (develop)
+
+- Sample DA loader: sign the approvers in again (#58) (Centre-for-Open-Societal-Systems/da-registry@2fb048e4f5f6)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+### openg2p-livestock-registry 1.0.0-rc.464 (staging)
+
+- Staging connector moves to the qa.oanstaging.com scope (#234) (Centre-for-Open-Societal-Systems/livestock-registry@b053d120c8e0)
+- Images and rollback: [releases/history/staging/openg2p-livestock-registry.md](releases/history/staging/openg2p-livestock-registry.md)
+
+## 2026-11-12
+
+### openg2p-cropsown-registry 0.0.0-develop.519 (develop)
+
+- Staging connector moves to the qa.oanstaging.com scope (#276) (Centre-for-Open-Societal-Systems/cropsown-regsitry@63f888014163)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-12
+
+### openg2p-farmer-registry 0.0.0-develop.848 (develop)
+
+- Staging Farmer moves to the qa.oanstaging.com scope (#273) (Centre-for-Open-Societal-Systems/farmer-registry@d1b420dc667b)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-12
+
+### openg2p-livestock-registry 0.0.0-develop.453 (develop)
+
+- Staging connector moves to the qa.oanstaging.com scope (#234) (Centre-for-Open-Societal-Systems/livestock-registry@b053d120c8e0)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-12
+
+### oan-a2c-service 0.0.0-develop.3 (develop)
+
+- Merge pull request #118 from arnavam/feat/a2c-helm-chart-ci (Centre-for-Open-Societal-Systems/oan_a2c@5dee47de0581)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-12
+
+### openg2p-commons-services 1.0.0-dev.41
+
+Previous version: 1.0.0-dev.40.
+
+- Staging moves to its own qa.oanstaging.com scope (#164) (7a07147)
+
+## 2026-11-12
+
+### openg2p-cropsown-registry 1.0.0-rc.528 (staging)
+
+- Sample loader: no Address section; the land position goes on the Planning rows (#281) (Centre-for-Open-Societal-Systems/cropsown-regsitry@9384c7f77f8e)
+- Images and rollback: [releases/history/staging/openg2p-cropsown-registry.md](releases/history/staging/openg2p-cropsown-registry.md)
+
 ## 2026-11-12
 
 ### openg2p-cropsown-registry 0.0.0-develop.518 (develop)

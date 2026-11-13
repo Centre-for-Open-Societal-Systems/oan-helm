@@ -10,7 +10,7 @@ ingressClassName: apisix
 hosts:
   - <partner API host of this environment>
 
-# Certificate of that host: Secret (tls.crt, tls.key) in namespace apisix, created outside Git.
+# Certificate of that host: Secret (tls.crt, tls.key) in namespace api6-gateway, created outside Git.
 tls:
   secretName: oan-partner-gateway-tls
 

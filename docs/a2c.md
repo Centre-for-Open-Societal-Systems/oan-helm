@@ -1,5 +1,13 @@
 # A2C on Kubernetes
 
+> The A2C chart, its values and the gateway routes moved out of this repository: the service chart is
+> `helm/oan-a2c-service` and the dev values are `helm/environments/dev/` in
+> [oan_a2c](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c), the gateway route chart is
+> `apisix/k8s` there, and the UI chart is `helm/oan-a2c-ui` in
+> [oan_a2c_ui](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c_ui). Their Jenkins pipelines
+> publish `oan-a2c-service` and `oan-a2c-ui` to `repository/develop/` here. Paths below that start with
+> `charts/oan-a2c-*` or `environments/dev/values/oan-a2c-*` now refer to those repositories.
+
 OAN Access to Credit (`oan_a2c`, with `oan_auth_service` in the same bench) is a Frappe
 app. It runs in an app cluster of its own and is reached through the central APISIX
 gateway, the same way as the grievance service. Read
@@ -13,8 +21,8 @@ different for A2C.
 |---|---|---|
 | Chart | [charts/oan-grievance-service](../charts/oan-grievance-service) | [charts/oan-a2c-service](../charts/oan-a2c-service) |
 | Release / namespace | `grievance` / `develop` | `a2c` / `a2c-develop` |
-| Frappe site | `grievance-backend.development.oanstaging.com` | `a2c-backend.development.oanstaging.com` |
-| Public host | `grievance-backend.development.oanstaging.com` | `a2c-backend.development.oanstaging.com` (confirm) |
+| Frappe site | `grievance-backend.development.oanstaging.com` | `a2c-service.development.oanstaging.com` |
+| Public host | `grievance-backend.development.oanstaging.com` | `a2c-service.development.oanstaging.com` (confirm) |
 | Node port in the app cluster | 30800 (web), 30900 (socket.io) | 30810 (web) |
 | Image | `oan-frappe` | `oan/a2c` (ECR repository of the A2C Jenkinsfile) |
 | Extra workloads | ClamAV, four queue workers | none: A2C uses only the default, short and long queues |
@@ -92,7 +100,7 @@ Point DNS for the A2C host at the gateway node.
 ## 4. Check
 
 ```sh
-H=https://a2c-backend.development.oanstaging.com
+H=https://a2c-service.development.oanstaging.com
 curl -si -X POST $H/v1/auth/login -H 'Content-Type: application/json' -d '{}' | head -3   # 400: reached A2C, no health route exists
 curl -si -X POST $H/v1/webhooks/consent-data | head -3    # 401: no partner key
 ```
@@ -126,7 +134,7 @@ Same releases and values on the one local cluster, as in
 
    Tag it `379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/a2c:develop` and install with
    `frappe.image.tag=develop`.
-2. **Certificate:** sign a second certificate for `a2c-backend.development.oanstaging.com` with the
+2. **Certificate:** sign a second certificate for `a2c-service.development.oanstaging.com` with the
    same local CA, and create `oan-a2c-tls` in namespace `a2c`.
 3. **Routes:** `--set "web.externalHosts={<node IP>}"` (for example `192.168.139.2`).
 4. **`/etc/hosts`:** a line for the A2C host next to the grievance one.

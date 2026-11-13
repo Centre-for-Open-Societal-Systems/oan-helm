@@ -1,8 +1,8 @@
 {
   "helm": "v3.19.0+g3d8990f",
   "chartVersions": {
-    "oan-sandbox": "1.0.0-dev.18",
-    "openg2p-commons-services": "1.0.0-dev.40",
+    "oan-sandbox": "1.0.0-dev.19",
+    "openg2p-commons-services": "1.0.0-dev.42",
     "openg2p-cropsown-registry": "1.0.0-dev.23",
     "openg2p-da-registry": "1.0.0-dev.23",
     "openg2p-farmer-registry": "1.0.0-dev.24",
@@ -26,7 +26,7 @@
     },
     "openg2p-commons-services": {
       "lint": "strict passed",
-      "resources": 175,
+      "resources": 183,
       "namespaces": [
         "verify-a",
         "verify-b"
@@ -76,7 +76,9 @@
         "openg2p/partner-management-staff-portal-api:1.0.2",
         "openg2p/partner-management-staff-portal-ui:1.0.2",
         "openg2p/postgres-init:1.2.0",
-        "postgres:15-alpine"
+        "postgres:15-alpine",
+        "postgres:16-alpine",
+        "python:3.11.14-slim"
       ],
       "devExample": "examples/dev/commons-services.yaml: strict lint and render passed",
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
@@ -186,9 +188,9 @@
   },
   "upstreamResolution": "not attempted",
   "offlineResolution": "All chart locks resolved from dependencies bundled with verified source packages",
-  "packages": 169,
+  "packages": 174,
   "currentPackages": 6,
-  "historicalPackages": 163,
+  "historicalPackages": 168,
   "unreleasedCharts": [],
   "index": "Relative URLs, SHA-256, HTTP download, exact Helm version selection and repository-based renders verified against loopback server"
 }

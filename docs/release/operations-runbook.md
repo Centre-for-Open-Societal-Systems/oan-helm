@@ -170,18 +170,18 @@ Path of a request: browser, host nginx, Istio ingress gateway, VirtualService, S
 | Environment | Host nginx | Istio |
 | --- | --- | --- |
 | New Dev | `/etc/nginx/sites-enabled/oan-development-wildcard.conf` with `server_name development.oanstaging.com *.development.oanstaging.com`, plus a legacy compatibility file | Gateway `istio-system/development` for `*.development.oanstaging.com`; Gateway `istio-system/development-legacy` for the old names |
-| Staging | one file per host in `/etc/nginx/sites-enabled/` (for example `farmer-registry-oanstaging.conf` with `server_name farmer-registry.oanstaging.com`) | Gateway `istio-system/staging` for `*.oanstaging.com`; some namespaces use their own gateway named `internal` |
+| Staging | `/etc/nginx/sites-enabled/openg2p-qa-oanstaging.conf` with `server_name qa.oanstaging.com *.qa.oanstaging.com` (from `environments/staging/ingress/nginx.conf`), plus the earlier per-host files for `*.oanstaging.com` (for example `farmer-registry-oanstaging.conf`), kept for rollback | Gateway `istio-system/staging` for `*.oanstaging.com` (it also matches the `.qa.` names; `gateway.yaml` lists `*.qa.oanstaging.com` explicitly); some namespaces use their own gateway named `internal` |
 
 Source: live reading of `/etc/nginx/sites-enabled`, `kubectl get gateway -A`.
 
-Not verified: the wildcard nginx site for staging. The proposal is `environments/staging/ingress/nginx.conf`
-(server name `oanstaging.com *.oanstaging.com`, certificate `wildcard.oanstaging.com`, proxy to `istio_ingress`
-with `Host` forwarded). On 5 November 2026 no file under `/etc/nginx` on staging contained `*.oanstaging.com`.
-Consequence: every new staging host needs its own nginx file until the wildcard site is installed and the wildcard
-certificate is in place. Not verified: certificate paths, issuer and expiry dates (not read).
+Staging certificate (12 November 2026): Let's Encrypt `qa.oanstaging.com` (ECDSA, HTTP-01 through the certbot
+nginx plugin, renewed by `certbot.timer`), naming every host in `environments/staging/ingress/certificate-names.txt`.
+DNS for `*.qa.oanstaging.com` (Route 53) points at the staging host. It is not a wildcard certificate.
+Check: `curl -sI https://keycloak.qa.oanstaging.com/` returns an Istio response with no TLS error.
 
-To add a host: create the VirtualService through the chart values (`docs/service-onboarding.md`), and on staging
-add the nginx file; on New Dev nothing else is needed because the wildcard covers it.
+To add a host: create the VirtualService through the chart values (`docs/service-onboarding.md`). On staging also
+add the name to `certificate-names.txt` and re-run the certbot command in the `nginx.conf` header (`--expand`);
+nginx itself needs no new file. On New Dev nothing else is needed because the wildcard covers it.
 
 ## 8. Logs
 

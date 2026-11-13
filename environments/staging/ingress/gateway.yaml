@@ -16,4 +16,8 @@ spec:
         name: staging-http
         protocol: HTTP
       hosts:
+        # Staging's own scope since the move off .oanstaging.com: its cookies (.qa.oanstaging.com) no longer
+        # cover New Dev's *.development.oanstaging.com.
+        - '*.qa.oanstaging.com'
+        # The previous names, kept for rollback until the move is verified (remove in the follow-up).
         - '*.oanstaging.com'

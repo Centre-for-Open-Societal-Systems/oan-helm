@@ -1,0 +1,23 @@
+# Values for the oan-apisix-gateway chart on the oan_dev k3s node: one node, APISIX and its Ingress Controller in
+# namespace `api6-gateway`, the app routes (a2c, grievance) installed from their own repositories.
+#
+# etcd: the chart expects an external etcd (production: three members on separate machines). The node has none,
+# so start the single-member development etcd of environments/dev/manifests/apisix-etcd.yaml first. The chart's
+# built-in etcd cannot be used: it does not render next to the bundled Redis (both ship a different version of
+# the Bitnami `common` templates, and Helm shares one template namespace).
+#
+# Install as release `apisix`: the chart's Services are named after it (`apisix-admin`, `apisix-redis-master`),
+# and the route charts and the Ingress Controller refer to those names. The release lives in namespace
+# `api6-gateway`, the chart's default.
+#
+#   kubectl apply -f environments/dev/manifests/apisix-etcd.yaml
+#   helm -n api6-gateway upgrade --install apisix oan-helm/oan-apisix-gateway \
+#     -f environments/dev/values/oan-apisix-gateway.yaml
+apisix:
+  etcd:
+    enabled: false
+  externalEtcd:
+    host:
+      - http://apisix-etcd.api6-gateway.svc.cluster.local:2379
+    # No authentication on this etcd: it is a single member inside the cluster, reachable only from it.
+    user: ""

@@ -1,10 +1,15 @@
 # Defaults for the OAN APISIX gateway: the upstream apisix/apisix 2.18.2 chart (APISIX
 # 3.19.0, with its bundled apisix-ingress-controller), vendored in charts/.
 # Target: the gateway cluster, which runs only APISIX and fronts every app cluster
-# (grievance, A2C). Install as release `apisix` in namespace `apisix`, so the Service
+# (grievance, A2C). Install as release `apisix` in namespace `api6-gateway`, so the Service
 # names (`apisix-admin`) match the route charts. Per-environment values
 # (environments/<env>/values/oan-apisix-gateway.yaml) set etcd members and hosts.
 # See docs/apisix-gateway.md.
+# Create the Admin API Secret (keys `admin` and `viewer`, named by apisix.apisix.admin.credentials.secretName)
+# with random values on the first install, and keep it. Set to false to provide the Secret yourself.
+adminCredentials:
+  create: true
+
 apisix:
   apisix:
     # OAN routes use `:param` path segments.
@@ -21,8 +26,8 @@ apisix:
       enabled: true
     admin:
       credentials:
-        # Namespace-local Secret with keys `admin` and `viewer`, provisioned through the
-        # environment's secret process. Never commit the keys.
+        # Namespace-local Secret with keys `admin` and `viewer`. The chart creates it with random
+        # values (adminCredentials.create); never commit the keys.
         secretName: apisix-admin-credentials
       allow:
         # The Ingress Controller Pod. The Admin API Service is ClusterIP and needs the admin
@@ -43,7 +48,7 @@ apisix:
   # - A2C partner routes: the A2C service user. Secret a2c-frappe-service-credential.
   # - Grievance IVR webhook: the Grievance IVR Integration user. Secret
   #   oan-grievance-ivr-frappe-credential.
-  # Both in namespace apisix, key `authorization`, value `token <api_key>:<api_secret>`.
+  # Both in namespace api6-gateway, key `authorization`, value `token <api_key>:<api_secret>`.
   # The partner routes' call log (oan-partner-gateway, callLog) reads its header the same
   # way: Secret oan-sandbox-log-ingest-credential, key `authorization`, value
   # `Bearer <the sandbox's GATEWAY_LOG_INGEST_TOKEN>`.
@@ -108,7 +113,7 @@ apisix:
   #   --set 'externalEtcd.host={http://<m1>:2379,http://<m2>:2379,http://<m3>:2379}'
   # Use https URLs when the members have TLS. The password of `user` is read from the
   # Secret, key `etcd-root-password`, created outside Git:
-  #   kubectl -n apisix create secret generic apisix-etcd-credentials --from-literal=etcd-root-password=...
+  #   kubectl -n api6-gateway create secret generic apisix-etcd-credentials --from-literal=etcd-root-password=...
   # Set `user: ""` for an etcd without authentication.
   etcd:
     enabled: false
@@ -177,7 +182,7 @@ apisix:
                   key: admin
     apisix:
       adminService:
-        namespace: apisix
+        namespace: api6-gateway
         name: apisix-admin
         port: 9180
 

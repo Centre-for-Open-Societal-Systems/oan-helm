@@ -1470,6 +1470,12 @@
         "batch/v1",
         "Job",
         "verify-a",
+        "verify-configmap-change-pod-rollout"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
         "verify-db-password-sync"
       ],
       [
@@ -1477,6 +1483,12 @@
         "Job",
         "verify-a",
         "verify-iam-kc-init-1-f05f53db"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-iam-login-provider-issuer-sync"
       ],
       [
         "batch/v1",
@@ -1495,6 +1507,12 @@
         "Job",
         "verify-a",
         "verify-keycloak-init-1-9c31f7f6"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-keycloak-public-client-urls"
       ],
       [
         "batch/v1",
@@ -1690,9 +1708,21 @@
       ],
       [
         "rbac.authorization.k8s.io/v1",
+        "Role",
+        "verify-a",
+        "verify-configmap-change-pod-rollout"
+      ],
+      [
+        "rbac.authorization.k8s.io/v1",
         "RoleBinding",
         "verify-a",
         "verify-client-secrets-sync"
+      ],
+      [
+        "rbac.authorization.k8s.io/v1",
+        "RoleBinding",
+        "verify-a",
+        "verify-configmap-change-pod-rollout"
       ],
       [
         "v1",
@@ -1752,6 +1782,12 @@
         "v1",
         "ConfigMap",
         "verify-a",
+        "verify-configmap-change-pod-rollout"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
         "verify-esignet-oidc-ui-nginx-cm"
       ],
       [
@@ -1771,6 +1807,12 @@
         "ConfigMap",
         "verify-a",
         "verify-keycloak-init-config"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-keycloak-public-client-urls"
       ],
       [
         "v1",
@@ -2221,6 +2263,12 @@
         "ServiceAccount",
         "verify-a",
         "verify-cm-pg-init"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-configmap-change-pod-rollout"
       ],
       [
         "v1",

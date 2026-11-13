@@ -30,7 +30,7 @@ the routes come from the app's OpenAPI spec and must change in the same PR as th
 The grievance service will get its own chart repository and releases later; until then,
 install its chart from a checkout of the service repository at the deployed commit.
 
-All of these install into the gateway cluster: APISIX and Redis in namespace `apisix`,
+All of these install into the gateway cluster: APISIX and Redis in namespace `api6-gateway`,
 each app's routes in a namespace named after the app (`grievance`, `a2c`).
 
 oan_auth_service is a library installed into each app's bench, not a service of its own,
@@ -111,11 +111,15 @@ kubectl get ingressclass
 
 ## 3. Secrets and values
 
-Create the secrets outside Git. Use random values (for example `openssl rand -hex 16`).
+The chart creates the Admin API Secret `apisix-admin-credentials` (keys `admin` and `viewer`) with random
+values on the first install and keeps it across upgrades. To provide your own, set `adminCredentials.create`
+to `false`, or create the Secret before the first install (a Secret the chart does not own is left alone).
+Create any other secrets outside Git, with random values (for example `openssl rand -hex 16`).
 
 ```sh
-kubectl create namespace apisix
-kubectl -n apisix create secret generic apisix-admin-credentials \
+kubectl create namespace api6-gateway
+# Only to provide the keys yourself:
+kubectl -n api6-gateway create secret generic apisix-admin-credentials \
   --from-literal=admin="$(openssl rand -hex 16)" \
   --from-literal=viewer="$(openssl rand -hex 16)"
 ```
@@ -126,7 +130,7 @@ APISIX keeps its routes in an etcd outside the release (section 10). Create its
 password Secret before the install, and have the etcd members running:
 
 ```sh
-kubectl -n apisix create secret generic apisix-etcd-credentials \
+kubectl -n api6-gateway create secret generic apisix-etcd-credentials \
   --from-literal=etcd-root-password="$(openssl rand -hex 16)"
 ```
 
@@ -142,10 +146,10 @@ Then edit the values, in a branch of this repo, and get the change reviewed:
 
 ```sh
 # Read the plan first.
-helm template apisix charts/oan-apisix-gateway -n apisix \
+helm template apisix charts/oan-apisix-gateway -n api6-gateway \
   --set 'apisix.externalEtcd.host={http://<m1>:2379,http://<m2>:2379,http://<m3>:2379}' | less
 
-helm upgrade --install apisix charts/oan-apisix-gateway -n apisix \
+helm upgrade --install apisix charts/oan-apisix-gateway -n api6-gateway \
   --set 'apisix.externalEtcd.host={http://<m1>:2379,http://<m2>:2379,http://<m3>:2379}' \
   --wait --timeout 10m
 ```
@@ -163,13 +167,13 @@ them, the APISIX Pod stays `Pending`: turn off `rke2-ingress-nginx` first
 Check:
 
 ```sh
-kubectl -n apisix get pods                       # apisix, etcd, apisix-ingress-controller, apisix-redis: Running
-kubectl -n apisix get svc                        # apisix-gateway, apisix-admin, apisix-prometheus-metrics
+kubectl -n api6-gateway get pods                       # apisix, etcd, apisix-ingress-controller, apisix-redis: Running
+kubectl -n api6-gateway get svc                        # apisix-gateway, apisix-admin, apisix-prometheus-metrics
 kubectl get ingressclass apisix
-kubectl -n apisix get gatewayproxy               # apisix-config
+kubectl -n api6-gateway get gatewayproxy               # apisix-config
 kubectl get crd | grep apisix.apache.org         # apisixroutes, apisixupstreams, apisixconsumers ...
 kubectl get crd apisixroutes.apisix.apache.org -o jsonpath='{.spec.versions[*].name}'   # includes v2
-kubectl -n apisix logs deploy/apisix-ingress-controller | tail -20   # no "unauthorized" or "connection refused"
+kubectl -n api6-gateway logs deploy/apisix-ingress-controller | tail -20   # no "unauthorized" or "connection refused"
 ```
 
 If the controller cannot reach the Admin API, check that `apisix-admin-credentials`
@@ -199,7 +203,7 @@ Check that the controller synced the routes:
 ```sh
 kubectl -n grievance get apisixroute,apisixupstream
 kubectl -n grievance describe apisixroute oan-grievance-service-v1 | tail -20   # status Accepted/Synced, no errors
-kubectl -n apisix logs deploy/apisix-ingress-controller | grep -i -E 'error|fail' | tail
+kubectl -n api6-gateway logs deploy/apisix-ingress-controller | grep -i -E 'error|fail' | tail
 ```
 
 ### Test through the gateway
@@ -208,7 +212,7 @@ Reach the gateway Service directly with a port-forward, so the tests do not depe
 DNS or the certificate. The `Host` header must be the public host.
 
 ```sh
-kubectl -n apisix port-forward svc/apisix-gateway 9080:80 &
+kubectl -n api6-gateway port-forward svc/apisix-gateway 9080:80 &
 H='Host: grievance-backend.development.oanstaging.com'
 
 # 1. Health: 200, with an X-Request-Id header.
@@ -230,7 +234,7 @@ curl -si -H "$H" -H 'Content-Type: application/json' \
   -d '{"identifier":"<test user>","password":"<password>"}' http://localhost:9080/v1/auth/login | head -5
 
 # 6. Metrics.
-kubectl -n apisix port-forward svc/apisix-prometheus-metrics 9091:9091 &
+kubectl -n api6-gateway port-forward svc/apisix-prometheus-metrics 9091:9091 &
 curl -s http://localhost:9091/apisix/prometheus/metrics | grep -c apisix_http_status
 ```
 
@@ -243,7 +247,7 @@ Dev is built fresh, so there is no traffic to move: once APISIX holds ports 80 a
 the grievance host is served by it. Run the checks from section 5 against
 `https://grievance-backend.development.oanstaging.com`, using `/v1/grievances/health` for health,
 not `/api/method/ping` (see Known open items). Watch for a few minutes:
-`kubectl -n apisix logs deploy/apisix -f`, and the `apisix_http_status` metrics (look
+`kubectl -n api6-gateway logs deploy/apisix -f`, and the `apisix_http_status` metrics (look
 for 5xx and 429).
 
 ## 7. After every later merge
@@ -285,20 +289,20 @@ A2C needs secrets that grievance does not, all provisioned outside Git:
 - `A2C_FRAPPE_SERVICE_AUTHORIZATION` (`token <api_key>:<api_secret>` of the Frappe service
   user) in the APISIX pods' environment, in the gateway cluster. Partner routes reference it as
   `$env://A2C_FRAPPE_SERVICE_AUTHORIZATION`. the chart's `values.yaml` reads it from the optional Secret
-  `a2c-frappe-service-credential` (key `authorization`) in namespace `apisix`.
+  `a2c-frappe-service-credential` (key `authorization`) in namespace `api6-gateway`.
 
 ### Consumers shared by several apps
 
 The telco IVR vendor calls A2C lead creation and the grievance IVR webhook with one key.
 Its consumer, `oan-ivr-vendor`, belongs to neither app chart: the APISIX release creates it
 (`extraDeploy` in the chart's `values.yaml`), so the controller names it `apisix_oan-ivr-vendor`. Both
-app charts whitelist that name through `sharedConsumerNamespace: apisix` in their values.
+app charts whitelist that name through `sharedConsumerNamespace: api6-gateway` in their values.
 Each app's route still calls Frappe with its own credential, from the APISIX environment:
 `A2C_FRAPPE_SERVICE_AUTHORIZATION` and `OAN_GRIEVANCE_IVR_FRAPPE_AUTHORIZATION`.
 
 ```sh
-kubectl -n apisix create secret generic oan-ivr-vendor --from-literal=key='<vendor key>'
-kubectl -n apisix create secret generic oan-grievance-ivr-frappe-credential \
+kubectl -n api6-gateway create secret generic oan-ivr-vendor --from-literal=key='<vendor key>'
+kubectl -n api6-gateway create secret generic oan-grievance-ivr-frappe-credential \
   --from-literal=authorization='token <api_key>:<api_secret>'
 ```
 
@@ -363,12 +367,12 @@ Install, in order:
 
 1. **Partner host.** **Confirm** the name (values use `partner-api-dev.oanstaging.com`).
    DNS to the gateway node, and a certificate in Secret `oan-partner-gateway-tls`
-   (`tls.crt`, `tls.key`) in namespace `apisix`, as for grievance (section 11).
+   (`tls.crt`, `tls.key`) in namespace `api6-gateway`, as for grievance (section 11).
 2. **Routes.** From a sandbox-platform checkout at the deployed commit:
 
 ```bash
-helm upgrade --install oan-partner-gateway deploy/apisix-partner-gateway/k8s   -n apisix -f <oan-helm>/environments/dev/values/gateway-common.yaml -f <oan-helm>/environments/dev/values/oan-partner-gateway.yaml
-kubectl -n apisix get apisixroutes,apisixupstreams,apisixtls -l app=oan-partner-gateway
+helm upgrade --install oan-partner-gateway deploy/apisix-partner-gateway/k8s   -n api6-gateway -f <oan-helm>/environments/dev/values/gateway-common.yaml -f <oan-helm>/environments/dev/values/oan-partner-gateway.yaml
+kubectl -n api6-gateway get apisixroutes,apisixupstreams,apisixtls -l app=oan-partner-gateway
 ```
 
 3. **Admin API for the sandbox.** The sandbox runs in the OpenG2P dev cluster. The Admin
@@ -409,13 +413,13 @@ shows the calls of its apps in API history with source **Direct**. Three parts, 
 | Part | Where | What |
 |---|---|---|
 | The record format | `oan-apisix-gateway`, `gatewayProxy.pluginMetadata.http-logger` (already in the chart's `values.yaml`) | names the app (`app` = `X-OAN-App`); no credential header |
-| The token | Secret `oan-sandbox-log-ingest-credential` in namespace `apisix`, key `authorization`, value `Bearer <token>`; the APISIX pods get it as `OAN_SANDBOX_LOG_INGEST_AUTHORIZATION` and the plugin reads it at run time (`$env://`), so it is never written into a route | the sandbox's `GATEWAY_LOG_INGEST_TOKEN` |
+| The token | Secret `oan-sandbox-log-ingest-credential` in namespace `api6-gateway`, key `authorization`, value `Bearer <token>`; the APISIX pods get it as `OAN_SANDBOX_LOG_INGEST_AUTHORIZATION` and the plugin reads it at run time (`$env://`), so it is never written into a route | the sandbox's `GATEWAY_LOG_INGEST_TOKEN` |
 | The switch | `callLog.enabled: true`, `callLog.url` in the partner values; in the sandbox `config.gateway.logIngest.enabled: true` | the URL is the sandbox API as APISIX reaches it |
 
 ```sh
-kubectl -n apisix create secret generic oan-sandbox-log-ingest-credential \
+kubectl -n api6-gateway create secret generic oan-sandbox-log-ingest-credential \
   --from-literal=authorization="Bearer <GATEWAY_LOG_INGEST_TOKEN>"
-kubectl -n apisix rollout restart deploy/apisix     # the pods read the Secret at start
+kubectl -n api6-gateway rollout restart deploy/apisix     # the pods read the Secret at start
 ```
 
 A call the gateway refuses before it knows the app (no token, a bad token) is not stored;
@@ -436,7 +440,7 @@ installs, with its own values; nothing is copied by hand into APISIX.
    in the hosts. `keycloak.issuer` is that environment's realm, exactly as in the tokens'
    `iss`; `environmentRole` is `uat` or `production`, so a UAT app's token is refused on
    the production gateway and the other way round.
-3. **Secrets** in namespace `apisix`: `oan-partner-gateway-tls` (the partner host's
+3. **Secrets** in namespace `api6-gateway`: `oan-partner-gateway-tls` (the partner host's
    certificate) and, for the call log, `oan-sandbox-log-ingest-credential`.
 4. **Routes**: section 8b, step 2, with that environment's values files.
 5. **The sandbox** (one portal for both environments): UAT uses its main settings
