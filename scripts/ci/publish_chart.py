@@ -1,6 +1,6 @@
 """Add one packaged chart to repository/<channel>/ of oan-helm. Run by registry Jenkins pipelines.
 
-The channel follows from the version: 0.0.0-develop.N goes to develop, N.N.N-rc.N to staging and
+The channel follows from the version: N.N.N-develop.N goes to develop, N.N.N-rc.N to staging and
 N.N.N to release. The archive is created through the GitHub contents API, so a file that already
 exists is refused and a published version can never be replaced. Only this new file is written;
 .github/workflows/publish-channels.yaml then updates the index, checksums and CHANGELOG.md, so
@@ -30,7 +30,7 @@ import urllib.request
 
 REPOSITORY = os.environ.get("OAN_HELM_REPOSITORY", "Centre-for-Open-Societal-Systems/oan-helm")
 CHANNELS = (
-    ("develop", re.compile(r"0\.0\.0-develop\.\d+")),
+    ("develop", re.compile(r"\d+\.\d+\.\d+-develop\.\d+")),
     ("staging", re.compile(r"\d+\.\d+\.\d+-rc\.\d+")),
     ("release", re.compile(r"\d+\.\d+\.\d+")),
 )
