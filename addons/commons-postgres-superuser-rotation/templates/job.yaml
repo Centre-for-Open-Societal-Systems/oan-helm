@@ -37,6 +37,9 @@ spec:
             - {name: ROTATION_ID, value: {{ .Values.rotation.id | quote }}}
             - {name: PENDING, value: {{ include "rotation.pending" . | quote }}}
             - {name: RECORD, value: {{ include "rotation.record" . | quote }}}
+            - {name: NAMESPACE, value: {{ .Release.Namespace | quote }}}
+            - {name: SECRET, value: {{ .Values.postgres.secret | quote }}}
+            - {name: COPY_TO, value: {{ join " " .Values.copyTo | quote }}}
           command: ["sh", "-c"]
           args:
             - |
@@ -45,6 +48,13 @@ spec:
               if [ "$done_id" = "$ROTATION_ID" ]; then
                 echo "rotation $ROTATION_ID is already done; nothing to do"; touch /work/skip; exit 0
               fi
+              # Every Secret the publish step writes must be writable before the password changes.
+              for ns in $NAMESPACE $COPY_TO; do
+                if [ "$(kubectl auth can-i patch "secret/$SECRET" -n "$ns")" != "yes" ]; then
+                  echo "cannot patch $ns/$SECRET (copies need environments/<env>/rbac/commons-postgres-superuser-copies-rbac.yaml); nothing changed" >&2
+                  exit 1
+                fi
+              done
               if kubectl get secret "$PENDING" >/dev/null 2>&1; then
                 pending_id=$(kubectl get secret "$PENDING" -o jsonpath='{.data.rotation}' | base64 -d)
                 if [ "$pending_id" != "$ROTATION_ID" ]; then

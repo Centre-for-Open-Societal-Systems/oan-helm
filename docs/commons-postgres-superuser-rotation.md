@@ -43,7 +43,8 @@ The password passes between the steps on an in-memory volume only.
 
 ## Failure and resume
 
-- Fails in `prepare` or before `ALTER ROLE`: nothing changed. Fix the cause and rerun the build.
+- Fails in `prepare` (including its check that every Secret to be written is writable) or before `ALTER ROLE`:
+  nothing changed. Fix the cause and rerun the build.
 - Fails after `ALTER ROLE`: the database already has the new password and the Secret still has the old one, so
   consumers that open new connections fail until the rerun. Rerun the build at once. The Job finds the pending
   password already active and only checks and publishes.
