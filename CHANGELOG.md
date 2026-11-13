@@ -8,6 +8,13 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-13
+
+### openg2p-cropsown-registry 0.0.0-develop.528 (develop)
+
+- Reporting views run on a register without the legacy attribute table (#294) (Centre-for-Open-Societal-Systems/cropsown-regsitry@d83273b5256b)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
 ## 2026-11-12
 
 ### oan-grievance-ui 0.0.0-develop.48 (develop)
