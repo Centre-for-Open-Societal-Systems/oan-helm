@@ -22,89 +22,24 @@ apisix:
     # No authentication on this etcd: it is a single member inside the cluster, reachable only from it.
     user: ""
 
-  # Helm replaces a list instead of merging it, so this repeats the chart's default `extraDeploy` entry
-  # (oan-ivr-vendor) before the dev edge objects. Keep it in step with charts/oan-apisix-gateway/values.yaml.
-  #
-  # APISIX is the edge for the whole development domain (replaces the OpenG2P nginx in front of istio):
-  #   *.development.oanstaging.com -> APISIX (this node, ports 80/443, wildcard certificate)
-  #     ├─ hosts APISIX serves itself: their own ApisixRoutes and Ingresses (app charts, UIs)
-  #     └─ every other host (registries, keycloak, ...) -> catch-all route -> OpenG2P istio
-  # Istio's Gateway (environments/dev/ingress/gateway.yaml) accepts plain HTTP for *.development.oanstaging.com on
-  # node port 30080, so no second TLS hop is needed.
-  #
-  # Certificate: Secret oan-development-wildcard-tls in api6-gateway, issued and renewed on the node by
-  # automation/oan-dev/oan-k8s-tls.sh in the openg2p-deployment fork (acme.sh, DNS-01 on Route 53). The app gateway
-  # charts leave tls.secretName unset.
-  #
-  # Test before Route 53 points at this node:
-  #   curl --resolve grievance-service.development.oanstaging.com:443:<node IP> https://grievance-service.development.oanstaging.com/v1/...
-  #   curl --resolve keycloak.development.oanstaging.com:443:<node IP> https://keycloak.development.oanstaging.com/
-  extraDeploy:
-    - apiVersion: apisix.apache.org/v2
-      kind: ApisixConsumer
-      metadata:
-        name: oan-ivr-vendor
-      spec:
-        ingressClassName: apisix
-        authParameter:
-          keyAuth:
-            secretRef:
-              name: oan-ivr-vendor
-
-    - apiVersion: apisix.apache.org/v2
-      kind: ApisixTls
-      metadata:
-        name: oan-development-wildcard
-      spec:
-        ingressClassName: apisix
-        hosts:
-          - development.oanstaging.com
-          - "*.development.oanstaging.com"
-        secret:
-          name: oan-development-wildcard-tls
-          namespace: api6-gateway
-
-    # The OpenG2P istio ingress gateway, as nginx's `upstream istio_ingress`.
-    - apiVersion: apisix.apache.org/v2
-      kind: ApisixUpstream
-      metadata:
-        name: openg2p-istio
-      spec:
-        ingressClassName: apisix
-        externalNodes:
-          - type: Domain
-            name: 10.0.1.58
-            port: 30080
-        scheme: http
-        # Istio routes on the client's Host.
-        passHost: pass
-        timeout:
-          connect: 60s
-          send: 300s
-          read: 300s
-
-    - apiVersion: apisix.apache.org/v2
-      kind: ApisixRoute
-      metadata:
-        name: openg2p-catch-all
-      spec:
-        ingressClassName: apisix
-        http:
-          - name: openg2p-catch-all
-            # Lowest priority: any route an app or UI declares for the same path wins.
-            priority: -100
-            match:
-              hosts:
-                - development.oanstaging.com
-                - "*.development.oanstaging.com"
-              paths:
-                - /*
-            websocket: true
-            upstreams:
-              - name: openg2p-istio
-            plugins:
-              # nginx allowed 100 MB (client_max_body_size).
-              - name: client-control
-                enable: true
-                config:
-                  max_body_size: 104857600
+# APISIX is the edge for the whole development domain (replaces the OpenG2P nginx in front of istio):
+#   *.development.oanstaging.com -> APISIX (this node, ports 80/443, wildcard certificate)
+#     ├─ hosts APISIX serves itself: their own ApisixRoutes and Ingresses (app charts, UIs)
+#     └─ every other host (registries, keycloak, ...) -> catch-all route -> OpenG2P istio
+# Istio's Gateway (environments/dev/ingress/gateway.yaml) accepts plain HTTP for *.development.oanstaging.com on
+# node port 30080, so no second TLS hop is needed.
+#
+# Certificate: Secret oan-development-wildcard-tls in api6-gateway, issued and renewed on the node by
+# automation/oan-dev/oan-k8s-tls.sh in the openg2p-deployment fork (acme.sh, DNS-01 on Route 53). The app gateway
+# charts leave tls.secretName unset.
+#
+# Test before Route 53 points at this node:
+#   curl --resolve grievance-service.development.oanstaging.com:443:<node IP> https://grievance-service.development.oanstaging.com/v1/...
+#   curl --resolve keycloak.development.oanstaging.com:443:<node IP> https://keycloak.development.oanstaging.com/
+edge:
+  enabled: true
+  domain: development.oanstaging.com
+  tlsSecretName: oan-development-wildcard-tls
+  upstream:
+    host: 10.0.1.58
+    port: 30080

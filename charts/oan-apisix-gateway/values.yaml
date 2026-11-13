@@ -10,6 +10,28 @@
 adminCredentials:
   create: true
 
+# APISIX as the edge of a whole domain (development): the wildcard ApisixTls, an upstream and a
+# catch-all route that sends every host APISIX has no route of its own for (registries, keycloak, ...) to
+# `upstream`, normally the OpenG2P istio ingress. Off by default; set per environment
+# (environments/<env>/values/oan-apisix-gateway.yaml). The certificate Secret `tlsSecretName` is created
+# outside this chart, in the release namespace.
+edge:
+  enabled: false
+  # Apex of the wildcard: the certificate and the catch-all cover `domain` and `*.domain`.
+  domain: ""
+  tlsSecretName: ""
+  ingressClassName: apisix
+  upstream:
+    host: ""
+    port: 80
+    scheme: http
+    timeout:
+      connect: 60s
+      send: 300s
+      read: 300s
+  # 100 MB, the limit of the nginx this replaces.
+  maxBodySize: 104857600
+
 apisix:
   apisix:
     # OAN routes use `:param` path segments.

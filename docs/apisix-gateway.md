@@ -258,9 +258,11 @@ On oan_dev, APISIX is the edge for every `*.development.oanstaging.com` host, no
   └─ every other host (registries, keycloak, ...)   -> catch-all route -> OpenG2P istio, 10.0.1.58:30080
 ```
 
-The catch-all, its upstream and the wildcard `ApisixTls` are the `extraDeploy` objects in
-[environments/dev/values/oan-apisix-gateway.yaml](../environments/dev/values/oan-apisix-gateway.yaml), installed by
-`helm upgrade apisix`. They do what the
+The catch-all, its upstream and the wildcard `ApisixTls` are rendered by the chart's
+[templates/edge.yaml](../charts/oan-apisix-gateway/templates/edge.yaml) when `edge.enabled` is set; dev sets it, with
+the domain, the Secret and the istio address, in
+[environments/dev/values/oan-apisix-gateway.yaml](../environments/dev/values/oan-apisix-gateway.yaml). `helm upgrade apisix`
+installs them. They do what the
 OpenG2P nginx (environments/dev/ingress/nginx.conf) did in front of istio. The certificate is Secret
 `oan-development-wildcard-tls` in `api6-gateway`, issued and renewed on the node by `automation/oan-dev/oan-k8s-tls.sh`
 in the openg2p-deployment fork (acme.sh, DNS-01 on Route 53). The app charts then leave `tls.secretName` unset.

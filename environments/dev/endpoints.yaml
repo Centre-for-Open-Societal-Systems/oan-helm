@@ -48,7 +48,7 @@ publicHosts:
   # Planned, not yet deployed: OAN Sandbox (charts/oan-sandbox), web and /oan API on one host.
   sandbox: sandbox.development.oanstaging.com
   # On the grievance RKE2 node 13.233.56.204, not `server` above.
-  grievanceBackend: grievance-service.development.oanstaging.com
+  grievanceBackend: grievance-backend.development.oanstaging.com
   # Dev APISIX Admin API (read by the OAN Sandbox, config.gateway.sync.adminUrl). Answers
   # only the IPs in its ip-restriction whitelist (403 otherwise, checked 2026-11-05).
   apisixAdmin: apisix-admin.oanstaging.com
