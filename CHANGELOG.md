@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-13
 
+### oan-a2c-service 0.0.1-develop.22 (develop)
+
+- Merge pull request #133 from arnavam/chore/eoan-ecr-path (Centre-for-Open-Societal-Systems/oan_a2c@ca103bc1af65)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-13
+
 ### oan-grievance-ui 0.0.1-develop.49 (develop)
 
 - Merge pull request #72 from arnavam/chore/eoan-ecr-path (Centre-for-Open-Societal-Systems/oan_grievance_ui@f9a3e9978dfa)
