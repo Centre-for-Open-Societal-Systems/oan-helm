@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-13
 
+### oan-apisix-gateway 0.1.0-dev.5
+
+Previous version: 0.1.0-dev.4.
+
+- feat(apisix): render the dev edge from the gateway chart (523012e)
+
+## 2026-11-13
+
 ### oan-apisix-gateway 0.1.0-dev.4
 
 Previous version: 0.1.0-dev.3.
