@@ -458,3 +458,20 @@ Open questions for the platform owners: who issues the public certificate in dev
 production, who owns renewal and the expiry alert, and whether the hop to the apps must
 be encrypted. No certificate manager is added to `oan-helm` until that is decided and
 the first releases of grievance and A2C are in place.
+
+## Resolve the dev names inside `oan_dev`
+
+Public DNS for `*.development.oanstaging.com` can point at other nodes while APISIX on `oan_dev` is being
+introduced. `addons/oan-dev-coredns/coredns-custom.yaml` makes CoreDNS on `oan_dev` answer those names with the
+`apisix-gateway.api6-gateway` Service, so a UI pod's server-side call to its backend goes through APISIX with the
+real host name and the wildcard certificate. Only pods on `oan_dev` are affected.
+
+k3s owns `coredns-custom` as an Addon from a file on the node, so install it there (CoreDNS reloads on its own):
+
+```sh
+scp addons/oan-dev-coredns/coredns-custom.yaml oan_dev:/tmp/
+ssh oan_dev 'sudo install -m 600 /tmp/coredns-custom.yaml /var/lib/rancher/k3s/server/manifests/coredns-custom.yaml'
+kubectl -n farmer run dnstest --rm -it --restart=Never --image=busybox -- nslookup a2c-service.development.oanstaging.com
+```
+
+Remove the `development.override` key and the file's change to undo it.
