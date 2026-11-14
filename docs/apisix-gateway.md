@@ -180,6 +180,28 @@ If the controller cannot reach the Admin API, check that `apisix-admin-credentia
 exists and that `allow.ipList` plus `ingressControllerExtraIpList` (the private address
 ranges) admit the controller Pod.
 
+### Who may manage routes
+
+The built-in `admin`, `edit` and `view` ClusterRoles cover built-in resources only. The chart
+adds the `apisix.apache.org` resources to them with three aggregated ClusterRoles,
+`apisix-crds-admin`, `apisix-crds-edit` and `apisix-crds-view` (`rbacAggregation`). Anyone
+bound to `admin` in an app namespace, such as the CI deployer
+([cluster-access.md](cluster-access.md)), can then install that app's routes chart:
+
+```sh
+kubectl auth can-i create apisixroutes -n grievance \
+  --as=system:serviceaccount:a2c:jenkins-a2c-deployer      # yes
+```
+
+A cluster where `apisix-crds-admin` was applied by hand (oan_dev) needs it handed to the
+release once, before the upgrade, or the upgrade stops on "exists and cannot be imported":
+
+```sh
+kubectl label clusterrole apisix-crds-admin app.kubernetes.io/managed-by=Helm
+kubectl annotate clusterrole apisix-crds-admin \
+  meta.helm.sh/release-name=apisix meta.helm.sh/release-namespace=api6-gateway
+```
+
 ## 5. Install the grievance routes
 
 Use the chart from the `oan_grievance_service` checkout at the **commit that is deployed**

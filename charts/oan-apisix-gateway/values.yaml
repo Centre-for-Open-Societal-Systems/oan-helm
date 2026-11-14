@@ -10,6 +10,16 @@
 adminCredentials:
   create: true
 
+# ClusterRoles that add the apisix.apache.org resources (ApisixRoute, ApisixUpstream, ApisixTls,
+# ApisixConsumer, PluginConfig, ...) to the built-in `admin`, `edit` and `view` roles through
+# aggregation. The built-in roles cover built-in resources only, so without them a namespace
+# admin, such as the CI deployer, cannot install an app's routes in its own namespace.
+# Cluster-scoped: one gateway release per cluster renders them.
+rbacAggregation:
+  enabled: true
+  # Names are <namePrefix>-admin, -edit and -view.
+  namePrefix: apisix-crds
+
 # APISIX as the edge of a whole domain (development): the wildcard ApisixTls, an upstream and a
 # catch-all route that sends every host APISIX has no route of its own for (registries, keycloak, ...) to
 # `upstream`, normally the OpenG2P istio ingress. Off by default; set per environment
