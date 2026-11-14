@@ -1,0 +1,25 @@
+# Defaults for the OAN CI deploy identity. Per-environment values
+# (environments/<env>/values/oan-cluster-access.yaml) set the name and the namespaces.
+# The identity can touch nothing but what is listed here. The kubeconfig Jenkins uses is
+# written from its token by a script, never stored in Git. See docs/cluster-access.md.
+
+# The ServiceAccount, created in the release namespace with a token Secret
+# `<name>-token` (Kubernetes no longer makes one for a ServiceAccount).
+serviceAccount:
+  name: jenkins-oan-dev-deployer
+
+# Namespaces the identity deploys into: each gets a RoleBinding `<name>` to the built-in
+# `admin` ClusterRole (its Helm release, Secrets, Jobs; also APISIX routes where the gateway
+# chart aggregates them into `admin`). They must exist before the install: the chart never
+# creates or deletes a namespace.
+deployNamespaces: []
+
+# `get` on this one Secret only: the create-site Job copies the shared PostgreSQL password
+# from it. Empty namespace skips the grant.
+readSecret:
+  namespace: frappe-common
+  name: oan-frappe-common-db
+
+# get/list Services in the APISIX namespace: the gateway deploy finds the release's Redis
+# there. Empty skips the grant.
+gatewayNamespace: api6-gateway
