@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.25
+
+<!-- source-commit: 3887b8bce3ebeb457007f35b9b414c0e66310056 version: 0.0.1-develop.25 -->
+Published 2026-11-14. Archive SHA-256 `bfd3888a9bac2019e1ffeea302995bfcd863eb90fbe9897bc45dbf9223287b79`.
+
+- Change: Merge pull request #136 from arnavam/chore/gateway-wildcard-tls
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@3887b8bce3eb](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/3887b8bce3ebeb457007f35b9b414c0e66310056)
+- Changes since 0.0.1-develop.24: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/ad5a842e1fbe24e263b975e10ca4efe7b2a65d3f...3887b8bce3ebeb457007f35b9b414c0e66310056
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-service/a2c-service:0.0.1-develop.25` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-service-0.0.1-develop.25.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.24
 
 <!-- source-commit: ad5a842e1fbe24e263b975e10ca4efe7b2a65d3f version: 0.0.1-develop.24 -->
