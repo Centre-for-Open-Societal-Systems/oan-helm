@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-14
 
+### oan-grievance-gateway 0.0.1-develop.85 (develop)
+
+- Merge pull request #114 from arnavam/chore/gateway-wildcard-tls (Centre-for-Open-Societal-Systems/oan_grievance_service@d8e7c9097ff1)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.85 (develop)
+
+- Merge pull request #114 from arnavam/chore/gateway-wildcard-tls (Centre-for-Open-Societal-Systems/oan_grievance_service@d8e7c9097ff1)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-14
+
 ### oan-a2c-gateway 0.0.1-develop.25 (develop)
 
 - Merge pull request #136 from arnavam/chore/gateway-wildcard-tls (Centre-for-Open-Societal-Systems/oan_a2c@3887b8bce3eb)

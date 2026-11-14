@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.85
+
+<!-- source-commit: d8e7c9097ff1c3beb8d00e3bdc7b0173cea2ba4a version: 0.0.1-develop.85 -->
+Published 2026-11-14. Archive SHA-256 `7172fc3840b050616387ea12a9a7690634dd73b9a186dd309636a126b3327b09`.
+
+- Change: Merge pull request #114 from arnavam/chore/gateway-wildcard-tls
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@d8e7c9097ff1](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/d8e7c9097ff1c3beb8d00e3bdc7b0173cea2ba4a)
+- Changes since 0.0.1-develop.84: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/7118e820e48709714b01ba6b7a8c8eae2f8eaa03...d8e7c9097ff1c3beb8d00e3bdc7b0173cea2ba4a
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-service/grievance-service:0.0.1-develop.85` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-service-0.0.1-develop.85.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.84
 
 <!-- source-commit: 7118e820e48709714b01ba6b7a8c8eae2f8eaa03 version: 0.0.1-develop.84 -->
