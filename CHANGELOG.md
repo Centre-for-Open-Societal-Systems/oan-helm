@@ -8,6 +8,20 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-14
+
+### oan-apisix-gateway 0.1.0-dev.6
+
+Previous version: 0.1.0-dev.5.
+
+- feat(apisix): aggregate the APISIX resources into the admin, edit and view roles (89af972)
+
+### oan-cluster-access 0.1.0-dev.1
+
+First published version.
+
+- feat(cluster-access): add the CI deploy identity as a chart (5ca5f3c)
+
 ## 2026-11-13
 
 ### oan-apisix-gateway 0.1.0-dev.5

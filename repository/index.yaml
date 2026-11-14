@@ -259,6 +259,40 @@ entries:
       oan.org/owner: OpenAgriNet (OAN)
     apiVersion: v2
     appVersion: 3.19.0
+    created: "2026-11-14T12:15:20.298235166Z"
+    dependencies:
+    - name: apisix
+      repository: ""
+      version: 2.18.2
+    - name: redis
+      repository: ""
+      version: 17.15.2
+    description: APISIX gateway and Ingress Controller for OpenAgriNet (OAN); deploys
+      the upstream apisix chart with the OAN gateway defaults. App routes install
+      separately.
+    digest: f029ba6efd07bf8f778ffe59846eaf8fc157fcc7b0d9685ae5085ca59de17818
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    keywords:
+    - oan
+    - openagrinet
+    - apisix
+    - gateway
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-apisix-gateway
+    sources:
+    - https://github.com/apache/apisix-helm-chart
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-apisix-gateway-0.1.0-dev.6.tgz
+    version: 0.1.0-dev.6
+  - annotations:
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-apisix-gateway
+      oan.org/owner: OpenAgriNet (OAN)
+    apiVersion: v2
+    appVersion: 3.19.0
     created: "2026-11-13T16:53:46.539931449Z"
     dependencies:
     - name: apisix
@@ -449,6 +483,32 @@ entries:
     type: application
     urls:
     - oan-clamav-0.1.0-dev.1.tgz
+    version: 0.1.0-dev.1
+  oan-cluster-access:
+  - annotations:
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-cluster-access
+      oan.org/owner: OpenAgriNet (OAN)
+    apiVersion: v2
+    created: "2026-11-14T12:15:20.298370141Z"
+    description: CI deploy identity for an OAN app cluster; a ServiceAccount with
+      the built-in admin role in the OAN service namespaces and read access to the
+      shared database Secret and the APISIX Services.
+    digest: 122345a2b3accd2fc3074da14c3c89f19aa70d558e89de1b8f79cf8a48a5f490
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    keywords:
+    - oan
+    - openagrinet
+    - rbac
+    - ci
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-cluster-access
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-cluster-access-0.1.0-dev.1.tgz
     version: 0.1.0-dev.1
   oan-frappe-common:
   - annotations:
@@ -9847,4 +9907,4 @@ entries:
     urls:
     - openg2p-livestock-registry-1.0.0-dev.1.tgz
     version: 1.0.0-dev.1
-generated: "2026-11-13T16:53:46.525651629Z"
+generated: "2026-11-14T12:15:20.286387523Z"
