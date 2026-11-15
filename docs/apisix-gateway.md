@@ -617,3 +617,18 @@ kubectl -n farmer run dnstest --rm -it --restart=Never --image=busybox -- nslook
 ```
 
 Remove the `development.override` key and the file's change to undo it.
+
+## Dashboard
+
+The APISIX dashboard (`/ui/`) and the Admin API it calls are published on a host of their own when
+`adminDashboard.enabled` is set (template `admin-dashboard.yaml`), so the address is part of the release.
+Dev: `https://apisix-dashboard.development.oanstaging.com/ui/`, served with the edge wildcard certificate.
+
+- `adminDashboard.allowlist` is required: an `ip-restriction` lets only those sources through. APISIX binds
+  the node's port 443 itself and sees the client's real address, so a request from the internet is refused
+  (403) even with a key. Dev allows `10.0.0.0/8`: the VPC, the VPN and in-cluster clients.
+- Public DNS points the name at the node's public address. From the VPN, reach the private address instead,
+  e.g. `/etc/hosts`: `10.0.1.131 apisix-dashboard.development.oanstaging.com`.
+- Log in with the `viewer` key (read-only) or the `admin` key from Secret `apisix-admin-credentials`
+  (`kubectl -n api6-gateway get secret apisix-admin-credentials -o jsonpath='{.data.viewer}' | base64 -d`).
+- The objects in the dashboard are written by the Ingress Controller; do not edit them there.
