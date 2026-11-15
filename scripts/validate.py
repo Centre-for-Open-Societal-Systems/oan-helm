@@ -555,23 +555,26 @@ def main():
                 check_url_contract(chart, upgraded)
                 assert ("render-only-private-db", "password") in secret_refs(upgraded)
                 assert deployment_env(upgraded, "verify-staff-portal-ui")["MIGRATION_PRESERVES_CUSTOM_SETTING"] == "render-only"
-            components = {"openg2p-commons-services": ["aggregationApi"], "oan-sandbox": []}.get(chart.name, ["dashboardApi", "dashboardUi"])
-            # Commons' Aggregation API runs in dev; its Secrets are provisioned in the namespace.
-            default_on = {"openg2p-commons-services": {"aggregationApi"}}.get(chart.name, set())
+            components = {"openg2p-commons-services": ["aggregation-api"], "oan-sandbox": []}.get(chart.name, ["dashboardApi", "dashboardUi"])
+            # Commons' Aggregation API (the oan-aggregation-api subchart) runs in dev; its Secrets are provisioned in the namespace.
+            default_on = {"openg2p-commons-services": {"aggregation-api"}}.get(chart.name, set())
             for component in components:
                 assert values[component]["enabled"] is (component in default_on)
-                fixture = {component: {"enabled": True, "image": dict(SYNTHETIC_IMAGE), "envFrom": [{"secretRef": {"name": "render-only-config"}}], "imagePullSecrets": [{"name": "render-only-pull"}]}}
+                env_from = [{"secretRef": {"name": "render-only-config"}}]
+                # The subchart takes the Secret name; the local add-on templates take envFrom as written.
+                secrets = {"runtimeSecret": "render-only-config"} if component == "aggregation-api" else {"envFrom": env_from}
+                fixture = {component: {"enabled": True, "image": dict(SYNTHETIC_IMAGE), "imagePullSecrets": [{"name": "render-only-pull"}], **secrets}}
                 test_values = build / "values.yaml"
                 test_values.write_text(yaml.safe_dump(fixture))
                 enabled, enabled_ids = documents(run("template", "verify", chart, "--namespace", "verify-a", "-f", test_values), "verify-a")
                 check_dev_endpoints(enabled)
                 assert identities <= enabled_ids, "Enabling an add-on removed an existing resource"
                 assert any(ref.startswith("example.invalid/render-only@sha256:") for ref in image_refs(enabled))
-                deployment = next(x for x in enabled if x["kind"] == "Deployment" and x["metadata"]["name"] == "verify-" + {"dashboardApi": "dashboard-api", "dashboardUi": "dashboard-ui", "aggregationApi": "aggregation-api"}[component])
+                deployment = next(x for x in enabled if x["kind"] == "Deployment" and x["metadata"]["name"] == "verify-" + {"dashboardApi": "dashboard-api", "dashboardUi": "dashboard-ui", "aggregation-api": "aggregation-api"}[component])
                 pod = deployment["spec"]["template"]["spec"]
                 assert pod["imagePullSecrets"] == [{"name": "render-only-pull"}]
-                assert pod["containers"][0]["envFrom"] == fixture[component]["envFrom"]
-                if component == "aggregationApi":
+                assert pod["containers"][0]["envFrom"] == env_from
+                if component == "aggregation-api":
                     assert pod["containers"][0]["ports"][0]["containerPort"] == 8100
                     for probe in ["startupProbe", "readinessProbe", "livenessProbe"]:
                         assert pod["containers"][0][probe]["httpGet"] == {"path": "/ping", "port": "http"}

@@ -955,87 +955,49 @@ keycloak-init:
           - Data Editor
           - Intake Officer
           - Integration Manager
-aggregationApi:
+# OAN Aggregation API: the oan-aggregation-api subchart (charts/oan-aggregation-api-<version>.tgz), bundled by
+# the oan-aggregation-api Jenkins pipeline through a pull request. Its image (tag@digest) is the one in that
+# archive, so no image is set here; set aggregation-api.image only to pin another. Names, selector and
+# Service are the ones the former templates/aggregation-api.yaml used (commons-services-aggregation-api).
+# Values: helm show values charts/oan-aggregation-api-<version>.tgz. env values and virtualService.host go
+# through tpl.
+aggregation-api:
   enabled: true
-  nameOverride: ''
-  image:
-    repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/aggregation-api
-    tag: ''
-    digest: sha256:3bd17245a75252bdf497cc1bab22b9e1148d0fedce376e7892a9e551bcefb7b4
-    pullPolicy: IfNotPresent
   imagePullSecrets:
   - name: ecr-pull-secret
   replicas: 1
-  containerPort: 8100
-  servicePort: 80
   virtualService:
     enabled: true
     host: 'aggregation.{{ .Values.global.baseDomain }}'
     gateway: istio-system/development
-  # Credentials come from the aggregation-api-runtime and signing Secrets,
-  # provisioned in the namespace outside this chart.
-  # This env block is passed through tpl: a literal `{{` in a value will be evaluated.
+  # Provisioned in the namespace outside this chart.
+  signing:
+    existingSecret: aggregation-api-signing-rsa-20261023
+    p12Key: aggregation.p12
+    passwordKey: password
+    kid: agg-2026-01
+  runtimeSecret: aggregation-api-runtime
+  catalog:
+    existingConfigMap: aggregation-api-catalog
+  # The chart sets the catalog path and the signing key path, password and kid.
   env:
-  - name: AGGREGATION_LAYER_CM_BASE_URL
-    value: http://commons-services-cm-partner-api.commons.svc.cluster.local
-  - name: AGGREGATION_LAYER_AUTH_ENABLED
-    value: 'true'
-  - name: AGGREGATION_LAYER_AUTH_ISSUER
-    value: 'https://keycloak.{{ .Values.global.baseDomain }}/realms/staff'
-  - name: AGGREGATION_LAYER_AUTH_JWKS_URL
-    value: http://commons-keycloak.commons.svc.cluster.local/realms/staff/protocol/openid-connect/certs
-  - name: AGGREGATION_LAYER_STAFF_SEARCH_ROLES
-    value: '["AGGREGATION_STAFF_VIEWER"]'
-  - name: AGGREGATION_LAYER_STAFF_API_TOKEN_URL
-    value: 'https://keycloak.{{ .Values.global.baseDomain }}/realms/staff/protocol/openid-connect/token'
-  - name: AGGREGATION_LAYER_STAFF_API_CLIENT_ID
-    value: aggregation-layer-staff
-  - name: AGGREGATION_LAYER_REGISTRY_CATALOG_PATH
-    value: /app/config/registries.yaml
-  - name: AGGREGATION_LAYER_SIGNING_P12_PATH
-    value: /app/keys/aggregation.p12
-  - name: AGGREGATION_LAYER_SIGNING_P12_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: aggregation-api-signing-rsa-20261023
-        key: password
-  - name: AGGREGATION_LAYER_SIGNING_KID
-    value: agg-2026-01
-  - name: AGGREGATION_LAYER_PARTNER_AUTH_ISSUER
-    value: 'https://keycloak.{{ .Values.global.baseDomain }}/realms/partner'
-  - name: AGGREGATION_LAYER_PARTNER_AUTH_JWKS_URL
-    value: http://commons-keycloak.commons.svc.cluster.local/realms/partner/protocol/openid-connect/certs
-  - name: AGGREGATION_LAYER_PARTNER_AUTH_PARTNER_CLAIM
-    value: partner_id
-  - name: AGGREGATION_LAYER_CM_DATA_CONTROLLER
-    value: aggregation_layer
-  envFrom:
-  - secretRef:
-      name: aggregation-api-runtime
+    AGGREGATION_LAYER_CM_BASE_URL: http://commons-services-cm-partner-api.commons.svc.cluster.local
+    AGGREGATION_LAYER_AUTH_ENABLED: 'true'
+    AGGREGATION_LAYER_AUTH_ISSUER: 'https://keycloak.{{ .Values.global.baseDomain }}/realms/staff'
+    AGGREGATION_LAYER_AUTH_JWKS_URL: http://commons-keycloak.commons.svc.cluster.local/realms/staff/protocol/openid-connect/certs
+    AGGREGATION_LAYER_STAFF_SEARCH_ROLES: '["AGGREGATION_STAFF_VIEWER"]'
+    AGGREGATION_LAYER_STAFF_API_TOKEN_URL: 'https://keycloak.{{ .Values.global.baseDomain }}/realms/staff/protocol/openid-connect/token'
+    AGGREGATION_LAYER_STAFF_API_CLIENT_ID: aggregation-layer-staff
+    AGGREGATION_LAYER_PARTNER_AUTH_ISSUER: 'https://keycloak.{{ .Values.global.baseDomain }}/realms/partner'
+    AGGREGATION_LAYER_PARTNER_AUTH_JWKS_URL: http://commons-keycloak.commons.svc.cluster.local/realms/partner/protocol/openid-connect/certs
+    AGGREGATION_LAYER_PARTNER_AUTH_PARTNER_CLAIM: partner_id
+    AGGREGATION_LAYER_CM_DATA_CONTROLLER: aggregation_layer
   resources:
     requests:
       cpu: 100m
       memory: 256Mi
     limits:
       memory: 768Mi
-  volumes:
-  - name: signing
-    secret:
-      secretName: aggregation-api-signing-rsa-20261023
-      items:
-      - key: aggregation.p12
-        path: aggregation.p12
-  - name: catalog
-    configMap:
-      name: aggregation-api-catalog
-      defaultMode: 420
-  volumeMounts:
-  - name: signing
-    mountPath: /app/keys
-    readOnly: true
-  - name: catalog
-    mountPath: /app/config
-    readOnly: true
 consentPartnerPortal:
   enabled: true
   nameOverride: ''
@@ -1067,7 +1029,7 @@ consentPartnerPortal:
       memory: 128Mi
 
 # IAM beneficiary portal API. Not part of the openg2p-iam-service subchart, so it
-# is defined here (templates/iam-bene-portal-api.yaml), like aggregationApi.
+# is defined here (templates/iam-bene-portal-api.yaml).
 # Pinned to image 1.1.0: the 1.4 line requires a refresh_token and a `sid` claim
 # at login, which eSignet/Fayda do not provide. 1.1.0 has no login-provider file
 # seeding, so loginProvider.seed upserts the row with a post-install Job.

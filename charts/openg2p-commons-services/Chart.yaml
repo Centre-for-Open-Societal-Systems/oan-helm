@@ -26,6 +26,11 @@ dependencies:
   name: openg2p-master-data
   repository: https://openg2p.github.io/openg2p-helm
   version: 0.0.0-develop.118
+- alias: aggregation-api
+  condition: aggregation-api.enabled
+  name: oan-aggregation-api
+  repository: https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop
+  version: 0.0.0-develop.1
 - condition: artifactory.enabled
   name: artifactory
   repository: https://openg2p.github.io/openg2p-helm

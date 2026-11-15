@@ -1,7 +1,7 @@
-aggregationApi:
-  enabled: false
+# Pins another Aggregation image than the one in the bundled oan-aggregation-api archive.
+aggregation-api:
   image:
     repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/aggregation-api
-    tag: ''
+    tag: dev-a5fa17fd7e7f
     digest: sha256:3bd17245a75252bdf497cc1bab22b9e1148d0fedce376e7892a9e551bcefb7b4
     pullPolicy: IfNotPresent

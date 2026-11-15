@@ -53,7 +53,7 @@ migration, queue or worker. Supply its persistent signing key, reviewed registry
 catalog, staff issuer/JWKS and optional staff service credentials through existing
 Secret/ConfigMap references. Complete Partner Management key registration and
 matching Consent bindings before claiming consent-based searches work.
-The optional `aggregationApi.virtualService` routes through the shared Gateway;
+The optional `aggregation-api.virtualService` routes through the shared Gateway;
 its hostname is `aggregation.development.oanstaging.com`. Readiness checks `/ping`.
 Keep OTP log/bucket publishing disabled pending SMS. The optional registry UIs
 still expose ClusterIP Services only.
@@ -157,7 +157,7 @@ view; the chart Home, Sources and README link directly to the OAN repositories.
 Consent Manager's dependency URL continues to point to OpenG2P because those
 are the reused Helm templates. Its OAN application source is
 [Centre-for-Open-Societal-Systems/consent-management](https://github.com/Centre-for-Open-Societal-Systems/consent-management).
-Aggregation is a template in the Commons chart, with source
+Aggregation is the `oan-aggregation-api` subchart of the Commons chart, with source
 [Centre-for-Open-Societal-Systems/oan-aggregation-api](https://github.com/Centre-for-Open-Societal-Systems/oan-aggregation-api).
 Changing these labels does not enable Aggregation or select newer candidate
 images. Use the explicit candidate overlays only after the prerequisites.
