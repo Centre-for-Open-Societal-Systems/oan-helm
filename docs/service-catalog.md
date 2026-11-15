@@ -13,7 +13,7 @@ no separately named `oan-consent-manager` or `oan-aggregator` child charts.
 | Component | Helm implementation | Configuration | Default state |
 | --- | --- | --- | --- |
 | OAN Consent Manager | Pinned upstream `openg2p-consent-manager:1.0.2` child chart, with OAN image overrides | [`openg2p-consent-manager` in Commons values](../charts/openg2p-commons-services/values.yaml); API image at `consentManagerApi.image`, UI at `ui.image`, sanity at `sanity.image` | Enabled; verified OAN API/UI/sanity digests |
-| OAN Aggregation API | Local [Deployment and Service template](../charts/openg2p-commons-services/templates/aggregation-api.yaml) inside the Commons parent chart | [`aggregationApi` in Commons values](../charts/openg2p-commons-services/values.yaml) | Verified image digest included; disabled by default pending runtime configuration |
+| OAN Aggregation API | The `oan-aggregation-api` child chart (alias `aggregation-api`), bundled in [Commons charts/](../charts/openg2p-commons-services/charts/) by the oan-aggregation-api pipeline | [`aggregation-api` in Commons values](../charts/openg2p-commons-services/values.yaml) | Image tag@digest carried in the bundled archive; enabled |
 | OAN Consent Partner Portal | Local [portal template](../charts/openg2p-commons-services/templates/consent-partner-portal.yaml) in the Commons parent chart; OAN `consent-management/partner-portal` source | `consentPartnerPortal.*`; [setup guide](consent-partner-portal.md) | Verified ECR digest; optional, disabled until partner login is prepared |
 
 This dependency entry in Commons `Chart.yaml` selects the reused Consent
@@ -32,10 +32,11 @@ API image. Template names, dependency pins and existing owners remain intact.
 See [current image/test evidence](../releases/consent-aggregation-20261019.json);
 `components.json` and older candidate reports are historical inventories.
 
-Aggregation is a local parent template, so it has no separate dependency entry.
+Aggregation is the `oan-aggregation-api` dependency (alias `aggregation-api`); its pipeline publishes each
+develop build to `repository/develop/` and opens the pull request that bundles it here.
 It is now stateless: no DB, queue, migration or OTP storage. Its optional
-VirtualService uses the shared Gateway. Defaults stay disabled until persistent
-signing, catalog, staff authentication and reviewed bindings are prepared.
+VirtualService uses the shared Gateway. It is enabled by default and needs the persistent
+signing, catalog, staff authentication and reviewed bindings prepared in the namespace.
 Consent uses per-binding `consent_method`; old global subject-consent flags are
 absent. OTP remains unavailable pending SMS. Follow the
 [current prerequisites](consent-aggregation-prerequisites.md).
@@ -67,7 +68,7 @@ absent. OTP remains unavailable pending SMS. Follow the
 | `oan_cropsown_dashboard` | Crop dashboard UI | [UI template](../charts/openg2p-cropsown-registry/templates/dashboard-ui.yaml), `dashboardUi.*` | Configurable workload included; current published image unavailable; disabled; legacy database-based UI is not substituted |
 | `oan_livestock_dashboard` | Livestock dashboard UI | [UI template](../charts/openg2p-livestock-registry/templates/dashboard-ui.yaml), `dashboardUi.*` | Configurable workload included; matching published image unavailable; disabled |
 | `consent-management` | Consent staff API, partner API, UI, expiry CronJob, seed/sanity and initialization | [Commons values](../charts/openg2p-commons-services/values.yaml), `openg2p-consent-manager.*`; bundled `openg2p-consent-manager:1.0.2` templates | OAN `48e64c249056` API/UI/sanity images pinned by ECR digest; beneficiary API and new partner portal remain disabled |
-| `oan-aggregation-api` | Aggregation API Deployment and ClusterIP Service | [Aggregation template](../charts/openg2p-commons-services/templates/aggregation-api.yaml), `aggregationApi.*` in Commons values | OAN `a5fa17fd7e7f` ECR image; 171 unit tests pass; stateless; disabled by default pending key/catalog/auth/bindings; optional route included |
+| `oan-aggregation-api` | Aggregation API Deployment and ClusterIP Service | Bundled `oan-aggregation-api` subchart, `aggregation-api.*` in Commons values | Image from the bundled archive (first: OAN `a5fa17fd7e7f`); stateless; enabled; optional route included |
 | No DA dashboard repository identified | Optional DA API/UI workload definitions | [DA templates](../charts/openg2p-da-registry/templates/), `dashboardApi.*`, `dashboardUi.*` | Explicit placeholders for future verified components; disabled; no source/image equivalence claimed |
 
 Application source code stays in those repositories. These charts configure

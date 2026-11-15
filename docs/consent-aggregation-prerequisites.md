@@ -49,12 +49,12 @@ binding to make a demo pass.
 | Partner bindings | PM identity/key registration and explicit CM bindings matching catalog audience/controller/scopes/purposes and current `consent_method`. Do not widen existing partner policies. |
 | Stored consent | `authorize.consent_id` requires a verified partner-realm issuer/JWKS, correct `partner_id` claim and stored grant for `aggregation_layer`. The partner realm and portal browser client are prepared. Aggregation partner issuer/JWKS and the appropriate integration identities/bindings still need configuration; an empty issuer refuses this path. |
 | Partner portal / OTP | Portal is deployed on new-dev using dev.6, with partner realm/client/roles/claims and same-origin routing. Prepare those resources before enabling another environment. SMS remains a separate prerequisite for OTP; see the [portal guide](consent-partner-portal.md). |
-| Public route | Optional `aggregationApi.virtualService` uses `aggregation.development.oanstaging.com` and `istio-system/development`. Existing wildcard DNS/TLS handles it. |
+| Public route | Optional `aggregation-api.virtualService` uses `aggregation.development.oanstaging.com` and `istio-system/development`. Existing wildcard DNS/TLS handles it. |
 
 ## Rancher values
 
-Defaults keep `aggregationApi.enabled: false`. A published image does not supply
-runtime resources. See [the runtime overlay](../examples/dev/aggregation-runtime.yaml);
+Aggregation is the `oan-aggregation-api` subchart, configured under `aggregation-api` and enabled by
+default. A published image does not supply runtime resources. See [the runtime overlay](../examples/dev/aggregation-runtime.yaml);
 create and verify referenced Secrets/ConfigMap before enabling. Credentials stay
 outside Git.
 
