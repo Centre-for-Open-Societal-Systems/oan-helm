@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-15
 
+### oan-aggregation-api 0.0.0-develop.1 (develop)
+
+- Bootstrap: aggregation-api as a commons-services subchart, image of the inline template (dev-a5fa17fd7e7f) (Centre-for-Open-Societal-Systems/oan-aggregation-api@99e42e03070f)
+- Images and rollback: [releases/history/develop/oan-aggregation-api.md](releases/history/develop/oan-aggregation-api.md)
+
+## 2026-11-15
+
 ### openg2p-commons-services 1.0.0-dev.43
 
 Previous version: 1.0.0-dev.42.
