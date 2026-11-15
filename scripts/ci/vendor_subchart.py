@@ -90,7 +90,7 @@ def bump(chart_yaml, chart_lock, name, version):
     chart_yaml = set_version(chart_yaml, name, version)
     chart_lock = set_version(chart_lock, name, version)
     digest = lock_digest(chart_yaml, chart_lock)
-    generated = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+    generated = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     lines = []
     for line in chart_lock.split("\n"):
         if line.startswith("digest: "):
