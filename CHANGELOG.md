@@ -10,6 +10,15 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-15
 
+### openg2p-commons-services 1.0.0-dev.43
+
+Previous version: 1.0.0-dev.42.
+
+- rebuild oan-aggregation-api 0.0.0-develop.1 without values-dev.yaml (b6a3e7a)
+- bundle aggregation-api as the oan-aggregation-api subchart (9b8df9f)
+
+## 2026-11-15
+
 ### oan-grievance-ui 0.0.1-develop.51 (develop)
 
 - Merge pull request #74 from arnavam/chore/disable-ui-autoscaling (Centre-for-Open-Societal-Systems/oan_grievance_ui@cb77b4bc4782)
