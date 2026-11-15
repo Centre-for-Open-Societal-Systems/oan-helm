@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-15
 
+### oan-apisix-gateway 0.1.0-dev.8
+
+Previous version: 0.1.0-dev.7.
+
+- feat(apisix-gateway): serve the admin dashboard on a host behind an IP allowlist (46f8824)
+
+## 2026-11-15
+
 ### oan-aggregation-api 0.0.0-develop.20 (develop)
 
 - Merge pull request #9 from simretyibeltal-commits/ci/helm-pipeline (Centre-for-Open-Societal-Systems/oan-aggregation-api@125ba647acb5)
