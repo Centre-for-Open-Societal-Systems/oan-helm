@@ -46,6 +46,8 @@ metadata:
 spec:
   ingressClassName: {{ .Values.edge.ingressClassName }}
   http:
+    # HTTPS: the backend (the OpenG2P istio) builds absolute URLs from X-Forwarded-*. APISIX would send its
+    # container port (9443) as X-Forwarded-Port; the client used 443.
     - name: edge-catch-all
       # Lowest priority: a route an app or UI declares for the same host and path wins.
       priority: -100
@@ -55,6 +57,12 @@ spec:
           - {{ printf "*.%s" $domain | quote }}
         paths:
           - /*
+        exprs:
+          - subject:
+              scope: Variable
+              name: scheme
+            op: Equal
+            value: https
       websocket: true
       upstreams:
         - name: edge-upstream
@@ -63,4 +71,34 @@ spec:
           enable: true
           config:
             max_body_size: {{ .Values.edge.maxBodySize | int64 }}
+        - name: proxy-rewrite
+          enable: true
+          config:
+            headers:
+              set:
+                X-Forwarded-Port: "443"
+    # Plain HTTP never reaches the backend: it is redirected to HTTPS.
+    - name: edge-catch-all-http
+      priority: -100
+      match:
+        hosts:
+          - {{ $domain }}
+          - {{ printf "*.%s" $domain | quote }}
+        paths:
+          - /*
+        exprs:
+          - subject:
+              scope: Variable
+              name: scheme
+            op: Equal
+            value: http
+      upstreams:
+        - name: edge-upstream
+      plugins:
+        - name: redirect
+          enable: true
+          config:
+            # Not http_to_https: it would put the container port (9443) in the Location.
+            ret_code: 301
+            uri: "https://$host$request_uri"
 {{- end }}
