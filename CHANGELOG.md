@@ -8,6 +8,14 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-15
+
+### oan-apisix-gateway 0.1.0-dev.7
+
+Previous version: 0.1.0-dev.6.
+
+- fix(apisix): send the edge's client port to istio and redirect HTTP to HTTPS (ca5b7ea)
+
 ## 2026-11-14
 
 ### oan-grievance-gateway 0.0.1-develop.85 (develop)
