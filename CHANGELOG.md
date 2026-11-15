@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-15
 
+### oan-reports-central 0.0.0-develop.7 (develop)
+
+- Merge pull request #2 from simretyibeltal-commits/developer (Centre-for-Open-Societal-Systems/OAN_Reports_Central@1f9322c0334c)
+- Images and rollback: [releases/history/develop/oan-reports-central.md](releases/history/develop/oan-reports-central.md)
+
+## 2026-11-15
+
 ### oan-a2c-gateway 0.0.1-develop.27 (develop)
 
 - Merge pull request #138 from arnavam/feat/frappe-desk-host (Centre-for-Open-Societal-Systems/oan_a2c@f6bb735f0f0f)
