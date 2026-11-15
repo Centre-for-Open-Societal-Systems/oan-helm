@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-15
 
+### oan-grievance-ui 0.0.1-develop.52 (develop)
+
+- Merge pull request #75 from arnavam/feat/api-path-prefix (Centre-for-Open-Societal-Systems/oan_grievance_ui@1c44b323a577)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-15
+
 ### oan-apisix-gateway 0.1.0-dev.8
 
 Previous version: 0.1.0-dev.7.
