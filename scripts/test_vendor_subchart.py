@@ -34,11 +34,13 @@ class Bump(unittest.TestCase):
         self.lock = (COMMONS / "Chart.lock").read_text(encoding="utf-8")
 
     def test_changes_only_that_dependency_and_reseals_the_lock(self):
+        # Whatever version is bundled now: the pipeline's pull requests move it.
+        current = vendor_subchart.dependency_version(self.chart, "oan-aggregation-api")
         chart, lock = vendor_subchart.bump(self.chart, self.lock, "oan-aggregation-api", "0.0.0-develop.99")
         self.assertEqual(vendor_subchart.dependency_version(chart, "oan-aggregation-api"), "0.0.0-develop.99")
         self.assertEqual(vendor_subchart.dependency_version(lock, "oan-aggregation-api"), "0.0.0-develop.99")
         changed = [(a, b) for a, b in zip(self.chart.split("\n"), chart.split("\n")) if a != b]
-        self.assertEqual(changed, [("  version: 0.0.0-develop.1", "  version: 0.0.0-develop.99")])
+        self.assertEqual(changed, [("  version: " + current, "  version: 0.0.0-develop.99")])
         digest = next(l for l in lock.splitlines() if l.startswith("digest: "))[len("digest: "):]
         self.assertEqual(digest, vendor_subchart.lock_digest(chart, lock))
         self.assertNotEqual(digest, vendor_subchart.lock_digest(self.chart, self.lock))
