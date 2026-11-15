@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.26
+
+<!-- source-commit: a5c55dc65fad64cb5a9deba03784dbba70fcfe20 version: 0.0.1-develop.26 -->
+Published 2026-11-15. Archive SHA-256 `d1cf9d14b6e5d3cd7cd6e0631be8d0c0005ffeb968fcaea5db4302db1d73e817`.
+
+- Change: Merge pull request #137 from arnavam/feat/a2c-iam-gateway-routes
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@a5c55dc65fad](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/a5c55dc65fad64cb5a9deba03784dbba70fcfe20)
+- Changes since 0.0.1-develop.25: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/3887b8bce3ebeb457007f35b9b414c0e66310056...a5c55dc65fad64cb5a9deba03784dbba70fcfe20
+
+Return to this version:
+
+```sh
+helm upgrade a2c-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-gateway-0.0.1-develop.26.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.25
 
 <!-- source-commit: 3887b8bce3ebeb457007f35b9b414c0e66310056 version: 0.0.1-develop.25 -->

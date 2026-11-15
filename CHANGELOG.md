@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-15
 
+### oan-a2c-gateway 0.0.1-develop.26 (develop)
+
+- Merge pull request #137 from arnavam/feat/a2c-iam-gateway-routes (Centre-for-Open-Societal-Systems/oan_a2c@a5c55dc65fad)
+- Images and rollback: [releases/history/develop/oan-a2c-gateway.md](releases/history/develop/oan-a2c-gateway.md)
+
+### oan-a2c-service 0.0.1-develop.26 (develop)
+
+- Merge pull request #137 from arnavam/feat/a2c-iam-gateway-routes (Centre-for-Open-Societal-Systems/oan_a2c@a5c55dc65fad)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-15
+
 ### oan-apisix-gateway 0.1.0-dev.9
 
 Previous version: 0.1.0-dev.8.
