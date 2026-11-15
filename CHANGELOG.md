@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-15
 
+### oan-grievance-service 0.0.1-develop.86 (develop)
+
+- Merge pull request #116 from arnavam/feat/iam-agent-beneficiary-rows (Centre-for-Open-Societal-Systems/oan_grievance_service@4d0341200dcb)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-15
+
 ### oan-grievance-ui 0.0.1-develop.52 (develop)
 
 - Merge pull request #75 from arnavam/feat/api-path-prefix (Centre-for-Open-Societal-Systems/oan_grievance_ui@1c44b323a577)

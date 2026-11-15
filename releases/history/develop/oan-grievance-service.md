@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.86
+
+<!-- source-commit: 4d0341200dcbf66697824198c659e39643c5a22d version: 0.0.1-develop.86 -->
+Published 2026-11-15. Archive SHA-256 `6f3d985f132687f5fb219ae95aded6df59ca59896aa1f846874ec2fc55ad5f1c`.
+
+- Change: Merge pull request #116 from arnavam/feat/iam-agent-beneficiary-rows
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@4d0341200dcb](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/4d0341200dcbf66697824198c659e39643c5a22d)
+- Changes since 0.0.1-develop.85: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/d8e7c9097ff1c3beb8d00e3bdc7b0173cea2ba4a...4d0341200dcbf66697824198c659e39643c5a22d
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-service/grievance-service:0.0.1-develop.86` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-service-0.0.1-develop.86.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.85
 
 <!-- source-commit: d8e7c9097ff1c3beb8d00e3bdc7b0173cea2ba4a version: 0.0.1-develop.85 -->
