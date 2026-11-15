@@ -8,6 +8,216 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-15
+
+### oan-grievance-ui 0.0.1-develop.51 (develop)
+
+- Merge pull request #74 from arnavam/chore/disable-ui-autoscaling (Centre-for-Open-Societal-Systems/oan_grievance_ui@cb77b4bc4782)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-15
+
+### oan-apisix-gateway 0.1.0-dev.7
+
+Previous version: 0.1.0-dev.6.
+
+- fix(apisix): send the edge's client port to istio and redirect HTTP to HTTPS (ca5b7ea)
+
+## 2026-11-14
+
+### oan-grievance-gateway 0.0.1-develop.85 (develop)
+
+- Merge pull request #114 from arnavam/chore/gateway-wildcard-tls (Centre-for-Open-Societal-Systems/oan_grievance_service@d8e7c9097ff1)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.85 (develop)
+
+- Merge pull request #114 from arnavam/chore/gateway-wildcard-tls (Centre-for-Open-Societal-Systems/oan_grievance_service@d8e7c9097ff1)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-14
+
+### oan-a2c-gateway 0.0.1-develop.25 (develop)
+
+- Merge pull request #136 from arnavam/chore/gateway-wildcard-tls (Centre-for-Open-Societal-Systems/oan_a2c@3887b8bce3eb)
+- Images and rollback: [releases/history/develop/oan-a2c-gateway.md](releases/history/develop/oan-a2c-gateway.md)
+
+### oan-a2c-service 0.0.1-develop.25 (develop)
+
+- Merge pull request #136 from arnavam/chore/gateway-wildcard-tls (Centre-for-Open-Societal-Systems/oan_a2c@3887b8bce3eb)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-14
+
+### oan-apisix-gateway 0.1.0-dev.6
+
+Previous version: 0.1.0-dev.5.
+
+- feat(apisix): aggregate the APISIX resources into the admin, edit and view roles (89af972)
+
+### oan-cluster-access 0.1.0-dev.1
+
+First published version.
+
+- feat(cluster-access): add the CI deploy identity as a chart (5ca5f3c)
+
+## 2026-11-13
+
+### oan-apisix-gateway 0.1.0-dev.5
+
+Previous version: 0.1.0-dev.4.
+
+- feat(apisix): render the dev edge from the gateway chart (523012e)
+
+## 2026-11-13
+
+### oan-apisix-gateway 0.1.0-dev.4
+
+Previous version: 0.1.0-dev.3.
+
+- APISIX Helm chart update to add partner api (e7a06b6)
+
+## 2026-11-13
+
+### oan-grievance-service 0.0.1-develop.84 (develop)
+
+- Merge pull request #112 from arnavam/fix/gateway-limit-count-no-group (Centre-for-Open-Societal-Systems/oan_grievance_service@7118e820e487)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-13
+
+### oan-grievance-service 0.0.1-develop.83 (develop)
+
+- Merge pull request #115 from dhruvbhatt701/fix/category-admin-duplicate-message (Centre-for-Open-Societal-Systems/oan_grievance_service@9718a2878d4f)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-13
+
+### oan-grievance-ui 0.0.1-develop.50 (develop)
+
+- Merge pull request #73 from apoorvanengineer-cpu/feature/feedback-and-field-validations (Centre-for-Open-Societal-Systems/oan_grievance_ui@06f5f2994638)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-13
+
+### oan-grievance-gateway 0.0.1-develop.82 (develop)
+
+- Merge pull request #111 from arnavam/feat/publish-gateway-chart (Centre-for-Open-Societal-Systems/oan_grievance_service@031d425de8bf)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.82 (develop)
+
+- Merge pull request #111 from arnavam/feat/publish-gateway-chart (Centre-for-Open-Societal-Systems/oan_grievance_service@031d425de8bf)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-13
+
+### openg2p-farmer-registry 1.0.0-rc.882 (staging)
+
+- Reporting views read multi-select columns safely (#297) (Centre-for-Open-Societal-Systems/farmer-registry@4db9d979983b)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-13
+
+### oan-a2c-gateway 0.0.1-develop.24 (develop)
+
+- Merge pull request #135 from arnavam/fix/gateway-limit-count-no-group (Centre-for-Open-Societal-Systems/oan_a2c@ad5a842e1fbe)
+- Images and rollback: [releases/history/develop/oan-a2c-gateway.md](releases/history/develop/oan-a2c-gateway.md)
+
+### oan-a2c-service 0.0.1-develop.24 (develop)
+
+- Merge pull request #135 from arnavam/fix/gateway-limit-count-no-group (Centre-for-Open-Societal-Systems/oan_a2c@ad5a842e1fbe)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-13
+
+### openg2p-farmer-registry 0.0.0-develop.865 (develop)
+
+- Reporting views read multi-select columns safely (#297) (Centre-for-Open-Societal-Systems/farmer-registry@4db9d979983b)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-13
+
+### openg2p-farmer-registry 1.0.0-rc.880 (staging)
+
+- Farmer save: a multi-select answer must be a list (#295) (Centre-for-Open-Societal-Systems/farmer-registry@d1dbe1899224)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-13
+
+### oan-a2c-gateway 0.0.1-develop.23 (develop)
+
+- Merge pull request #134 from arnavam/feat/publish-gateway-chart (Centre-for-Open-Societal-Systems/oan_a2c@f7744a10cbf6)
+- Images and rollback: [releases/history/develop/oan-a2c-gateway.md](releases/history/develop/oan-a2c-gateway.md)
+
+### oan-a2c-service 0.0.1-develop.23 (develop)
+
+- Merge pull request #134 from arnavam/feat/publish-gateway-chart (Centre-for-Open-Societal-Systems/oan_a2c@f7744a10cbf6)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-13
+
+### oan-grievance-service 0.0.1-develop.81 (develop)
+
+- Merge pull request #110 from arnavam/chore/trigger-gateway-deploy (Centre-for-Open-Societal-Systems/oan_grievance_service@6c6922f765ac)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-13
+
+### oan-a2c-service 0.0.1-develop.22 (develop)
+
+- Merge pull request #133 from arnavam/chore/eoan-ecr-path (Centre-for-Open-Societal-Systems/oan_a2c@ca103bc1af65)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-13
+
+### oan-grievance-ui 0.0.1-develop.49 (develop)
+
+- Merge pull request #72 from arnavam/chore/eoan-ecr-path (Centre-for-Open-Societal-Systems/oan_grievance_ui@f9a3e9978dfa)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-13
+
+### openg2p-cropsown-registry 1.0.0-rc.543 (staging)
+
+- Crop Sown ODK: Infestation Land ID not tied to Sowing rows; Type of Infestation single select, as on the web form (#295) (Centre-for-Open-Societal-Systems/cropsown-regsitry@aa9ac712314c)
+- Images and rollback: [releases/history/staging/openg2p-cropsown-registry.md](releases/history/staging/openg2p-cropsown-registry.md)
+
+## 2026-11-13
+
+### openg2p-cropsown-registry 0.0.0-develop.529 (develop)
+
+- Crop Sown ODK: Infestation Land ID not tied to Sowing rows; Type of Infestation single select, as on the web form (#295) (Centre-for-Open-Societal-Systems/cropsown-regsitry@aa9ac712314c)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-13
+
+### openg2p-farmer-registry 0.0.0-develop.864 (develop)
+
+- Farmer save: a multi-select answer must be a list (#295) (Centre-for-Open-Societal-Systems/farmer-registry@d1dbe1899224)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-13
+
+### openg2p-farmer-registry 0.0.0-develop.862 (develop)
+
+- Farmer import: template workbook from the schema, code checks and production guide (#293) (Centre-for-Open-Societal-Systems/farmer-registry@956f88c36283)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-13
+
+### oan-a2c-ui 0.0.0-develop.6 (develop)
+
+- Merge pull request #114 from arnavam/feat/a2c-ui-helm-deploy-dev (Centre-for-Open-Societal-Systems/oan_a2c_ui@3fce7d7431f6)
+- Images and rollback: [releases/history/develop/oan-a2c-ui.md](releases/history/develop/oan-a2c-ui.md)
+
+## 2026-11-13
+
+### openg2p-cropsown-registry 0.0.0-develop.528 (develop)
+
+- Reporting views run on a register without the legacy attribute table (#294) (Centre-for-Open-Societal-Systems/cropsown-regsitry@d83273b5256b)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
 ## 2026-11-12
 
 ### oan-grievance-ui 0.0.0-develop.48 (develop)

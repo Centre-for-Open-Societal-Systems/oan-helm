@@ -31,7 +31,7 @@ HISTORY = ROOT / "releases/history"
 CURRENT = ROOT / "releases/channels-current.yaml"
 RAW_URL = "https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository"
 CHANNELS = {
-    "develop": re.compile(r"0\.0\.0-develop\.\d+"),
+    "develop": re.compile(r"\d+\.\d+\.\d+-develop\.\d+"),
     "staging": re.compile(r"\d+\.\d+\.\d+-rc\.\d+"),
     "release": re.compile(r"\d+\.\d+\.\d+"),
 }

@@ -42,7 +42,7 @@ Files:
 
 - [nfs-csi.yaml](../environments/dev/values/nfs-csi.yaml): the NFS CSI driver and the `nfs-csi` StorageClass.
 - [oan-frappe-common.yaml](../environments/dev/values/oan-frappe-common.yaml): the PostgreSQL volume.
-- [oan-grievance-service.yaml](../environments/dev/values/oan-grievance-service.yaml) and [oan-a2c-service.yaml](../environments/dev/values/oan-a2c-service.yaml): `frappe.dbHost`, `dbRootUser: postgres` and the `nfs-csi` sites volume.
+- [oan-grievance-service.yaml](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/blob/develop/helm/environments/dev/oan-grievance-service.yaml) and [oan-a2c-service.yaml](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/blob/develop/helm/environments/dev/oan-a2c-service.yaml): `frappe.dbHost`, `dbRootUser: postgres` and the `nfs-csi` sites volume.
 
 Everything in this table is installed once per cluster except the app releases. With
 grievance and A2C in one cluster, they share the driver, the StorageClass and PostgreSQL.
@@ -168,7 +168,7 @@ and user are in the base values, so nothing about the database is passed:
 
 ```sh
 helm upgrade --install grievance charts/oan-grievance-service -n develop \
-  -f environments/dev/values/oan-grievance-service.yaml \
+  -f <oan_grievance_service>/helm/environments/dev/oan-grievance-service.yaml \
   --set-string frappe.image.tag=<tag> \
   --wait --wait-for-jobs --timeout 20m
 ```

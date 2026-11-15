@@ -1,0 +1,10 @@
+# Values for the oan-cluster-access chart on the oan_dev k3s node.
+# Release `oan-cluster-access`, namespace `a2c`: it keeps the deployer Jenkins already holds a
+# kubeconfig for (`oan-dev-kubeconfig`), so the token does not change. See docs/cluster-access.md.
+
+serviceAccount:
+  name: jenkins-a2c-deployer
+
+deployNamespaces:
+- a2c
+- grievance

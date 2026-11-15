@@ -1,0 +1,25 @@
+{{- /*
+Aggregates the APISIX custom resources into the built-in `admin`, `edit` and `view` ClusterRoles.
+A RoleBinding to `admin` or `edit` in a namespace then also allows managing that namespace's
+ApisixRoutes and the like, and `view` allows reading them. Nothing is bound here.
+*/ -}}
+{{- if .Values.rbacAggregation.enabled }}
+{{- $prefix := .Values.rbacAggregation.namePrefix }}
+{{- range $role := list "admin" "edit" "view" }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ printf "%s-%s" $prefix $role }}
+  labels:
+    rbac.authorization.k8s.io/aggregate-to-{{ $role }}: "true"
+rules:
+  - apiGroups: ["apisix.apache.org"]
+    resources: ["*"]
+    {{- if eq $role "view" }}
+    verbs: ["get", "list", "watch"]
+    {{- else }}
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete", "deletecollection"]
+    {{- end }}
+{{- end }}
+{{- end }}

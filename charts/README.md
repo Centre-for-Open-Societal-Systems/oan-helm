@@ -17,6 +17,7 @@ See [the inclusion details](../docs/service-catalog.md#where-are-oan-consent-man
 | OAN Grievance Service | [Chart.yaml](oan-grievance-service/Chart.yaml) | [values.yaml](oan-grievance-service/values.yaml) | None; all from the `frappe` dependency (`oan-service-helm`) |
 | OAN APISIX Gateway | [Chart.yaml](oan-apisix-gateway/Chart.yaml) | [values.yaml](oan-apisix-gateway/values.yaml) | None; all from the vendored `apisix` and `redis` dependencies |
 | OAN Logging | [Chart.yaml](oan-logging/Chart.yaml) | [values.yaml](oan-logging/values.yaml) | None; all from the vendored `loki`, `opentelemetry-collector` and `grafana` dependencies |
+| OAN Cluster Access (CI deploy identity; [guide](../docs/cluster-access.md)) | [Chart.yaml](oan-cluster-access/Chart.yaml) | [values.yaml](oan-cluster-access/values.yaml) | [ServiceAccount](oan-cluster-access/templates/serviceaccount.yaml), [RBAC](oan-cluster-access/templates/rbac.yaml) |
 
 [The service catalog](../docs/service-catalog.md) maps every included OAN
 repository and shared service to its chart, values key, source and enablement.

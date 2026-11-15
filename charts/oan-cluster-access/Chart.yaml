@@ -1,0 +1,20 @@
+apiVersion: v2
+name: oan-cluster-access
+description: CI deploy identity for an OAN app cluster; a ServiceAccount with the built-in admin role in the
+  OAN service namespaces and read access to the shared database Secret and the APISIX Services.
+type: application
+version: 0.1.0-dev.1
+keywords:
+- oan
+- openagrinet
+- rbac
+- ci
+home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+sources:
+- https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+maintainers:
+- name: OpenAgriNet (OAN)
+  url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+annotations:
+  oan.org/owner: OpenAgriNet (OAN)
+  oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-cluster-access

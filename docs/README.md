@@ -55,6 +55,7 @@ and deployed, and [CONTRIBUTING.md](../CONTRIBUTING.md) for the pull-request rul
 | [grievance-service.md](grievance-service.md) | Grievance service on Kubernetes |
 | [a2c.md](a2c.md) | A2C on Kubernetes |
 | [apisix-gateway.md](apisix-gateway.md) | APISIX gateway design, install, cutover and rollback |
+| [cluster-access.md](cluster-access.md) | CI deploy identity: what Jenkins may touch, install, takeover and token rotation |
 | [external-db-and-nfs.md](external-db-and-nfs.md) | PostgreSQL (oan-frappe-common) and the sites volume on NFS |
 
 ## Environment notes

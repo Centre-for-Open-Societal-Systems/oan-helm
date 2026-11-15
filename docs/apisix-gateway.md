@@ -21,8 +21,8 @@ header. **Never install them into the OpenG2P cluster.**
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
 | APISIX and the Ingress Controller | Chart `oan-apisix-gateway`, which vendors upstream `apisix/apisix` 2.18.2 (bundles `apisix-ingress-controller`) and releases like the other charts                                                    | [charts/oan-apisix-gateway/values.yaml](../charts/oan-apisix-gateway/values.yaml)                               |
 | Rate-limit counters               | Dependency `bitnami/redis` 17.15.2 of `oan-apisix-gateway`, installed with APISIX in the same release                                                                                                                                      | [charts/oan-apisix-gateway/values.yaml](../charts/oan-apisix-gateway/values.yaml)            |
-| Grievance routes                  | Chart `oan-grievance-gateway` in [oan_grievance_service/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/tree/develop/apisix/k8s), generated from the service's OpenAPI spec. It is not copied here | [dev/values/oan-grievance-gateway.yaml](../environments/dev/values/oan-grievance-gateway.yaml) |
-| A2C routes                        | Chart `oan-a2c-gateway` in [oan_a2c/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/tree/develop/apisix/k8s), generated from the A2C OpenAPI spec                                                                | [dev/values/oan-a2c-gateway.yaml](../environments/dev/values/oan-a2c-gateway.yaml)             |
+| Grievance routes                  | Chart `oan-grievance-gateway` in [oan_grievance_service/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/tree/develop/apisix/k8s), generated from the service's OpenAPI spec. It is not copied here | [helm/environments/dev/oan-grievance-gateway.yaml](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/blob/develop/helm/environments/dev/oan-grievance-gateway.yaml) |
+| A2C routes                        | Chart `oan-a2c-gateway` in [oan_a2c/apisix/k8s](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/tree/develop/apisix/k8s), generated from the A2C OpenAPI spec                                                                | [helm/environments/dev/oan-a2c-gateway.yaml](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/blob/develop/helm/environments/dev/oan-a2c-gateway.yaml)             |
 | Partner APIs (OAN sandbox apps)   | Chart `oan-partner-gateway` in [sandbox-platform deploy/apisix-partner-gateway/k8s](https://github.com/Centre-for-Open-Societal-Systems/sandbox-platform/tree/develop/deploy/apisix-partner-gateway), generated from the routes the sandbox is tested against | [dev/values/oan-partner-gateway.yaml](../environments/dev/values/oan-partner-gateway.yaml) |
 
 This repository holds only the values. Each app's route chart lives with the app, because
@@ -73,7 +73,9 @@ steps.
 ### Gateway-wide plugins
 
 `request-id` (`X-Request-Id`, echoed in the response) and `prometheus` are global rules,
-set as `gatewayProxy.plugins` in the chart's `values.yaml`, so they apply to every app's routes. Metrics
+set as `gatewayProxy.plugins` in the chart's `values.yaml`, so they apply to every app's routes.
+`gatewayProxy.pluginMetadata` holds a plugin's gateway-wide setting: for `http-logger`, the
+record format of the partner routes' call log (section 8b). Metrics
 are served on port 9091 at `/apisix/prometheus/metrics`; enable
 `metrics.serviceMonitor` once a Prometheus Operator scrapes the cluster. Per-app plugins
 (CORS, body size, rate limits, authentication) stay in each app's chart.
@@ -97,7 +99,7 @@ Collect these facts first. They are the values the install needs.
 | Browser origins of the grievance UI | ask the UI team | `corsOriginRegexes`, `realtimeAllowedOrigins` |
 
 The upstream names, node ports and the Redis for rate-limit counters are already in
-`oan-grievance-gateway.yaml`. The node ports belong to `gatewayAccess` of the
+`helm/environments/dev/oan-grievance-gateway.yaml` in the oan_grievance_service repository. The node ports belong to `gatewayAccess` of the
 `grievance` release of `charts/oan-grievance-service`.
 
 Confirm that the cluster has no APISIX CRDs from another install:
@@ -132,9 +134,9 @@ kubectl -n api6-gateway create secret generic apisix-etcd-credentials \
   --from-literal=etcd-root-password="$(openssl rand -hex 16)"
 ```
 
-Then edit the values, in a branch of this repo, and get the change reviewed:
+Then edit the values, in a branch of the repository that owns them, and get the change reviewed:
 
-- `environments/dev/values/oan-grievance-gateway.yaml`: the origin lists. `siteName`,
+- `helm/environments/dev/oan-grievance-gateway.yaml` in the oan_grievance_service repository: the origin lists. `siteName`,
   `hosts`, the upstream names and ports, and `tls.secretName` are already
   set. A missing required value stops `helm install` with "`<name>` is required".
 - The certificate: Secret `oan-grievance-tls` in `grievance` (see
@@ -178,6 +180,28 @@ If the controller cannot reach the Admin API, check that `apisix-admin-credentia
 exists and that `allow.ipList` plus `ingressControllerExtraIpList` (the private address
 ranges) admit the controller Pod.
 
+### Who may manage routes
+
+The built-in `admin`, `edit` and `view` ClusterRoles cover built-in resources only. The chart
+adds the `apisix.apache.org` resources to them with three aggregated ClusterRoles,
+`apisix-crds-admin`, `apisix-crds-edit` and `apisix-crds-view` (`rbacAggregation`). Anyone
+bound to `admin` in an app namespace, such as the CI deployer
+([cluster-access.md](cluster-access.md)), can then install that app's routes chart:
+
+```sh
+kubectl auth can-i create apisixroutes -n grievance \
+  --as=system:serviceaccount:a2c:jenkins-a2c-deployer      # yes
+```
+
+A cluster where `apisix-crds-admin` was applied by hand (oan_dev) needs it handed to the
+release once, before the upgrade, or the upgrade stops on "exists and cannot be imported":
+
+```sh
+kubectl label clusterrole apisix-crds-admin app.kubernetes.io/managed-by=Helm
+kubectl annotate clusterrole apisix-crds-admin \
+  meta.helm.sh/release-name=apisix meta.helm.sh/release-namespace=api6-gateway
+```
+
 ## 5. Install the grievance routes
 
 Use the chart from the `oan_grievance_service` checkout at the **commit that is deployed**
@@ -185,7 +209,7 @@ Use the chart from the `oan_grievance_service` checkout at the **commit that is 
 
 ```sh
 CHART=<path to oan_grievance_service>/apisix/k8s
-VALUES=environments/dev/values/oan-grievance-gateway.yaml
+VALUES=<path to oan_grievance_service>/helm/environments/dev/oan-grievance-gateway.yaml
 
 APP_HOST=<grievance node private IP>
 SET="--set web.externalHosts={$APP_HOST} --set socket.externalHosts={$APP_HOST}"
@@ -248,6 +272,35 @@ not `/api/method/ping` (see Known open items). Watch for a few minutes:
 `kubectl -n api6-gateway logs deploy/apisix -f`, and the `apisix_http_status` metrics (look
 for 5xx and 429).
 
+### Dev: APISIX as the edge for the whole domain
+
+On oan_dev, APISIX is the edge for every `*.development.oanstaging.com` host, not only the OAN apps:
+
+```
+*.development.oanstaging.com -> APISIX on oan_dev (wildcard DNS, wildcard certificate)
+  ├─ grievance-service, a2c-service, the UIs, sandbox -> their own routes
+  └─ every other host (registries, keycloak, ...)   -> catch-all route -> OpenG2P istio, 10.0.1.58:30080
+```
+
+The catch-all, its upstream and the wildcard `ApisixTls` are rendered by the chart's
+[templates/edge.yaml](../charts/oan-apisix-gateway/templates/edge.yaml) when `edge.enabled` is set; dev sets it, with
+the domain, the Secret and the istio address, in
+[environments/dev/values/oan-apisix-gateway.yaml](../environments/dev/values/oan-apisix-gateway.yaml). `helm upgrade apisix`
+installs them. They do what the
+OpenG2P nginx (environments/dev/ingress/nginx.conf) did in front of istio. The certificate is Secret
+`oan-development-wildcard-tls` in `api6-gateway`, issued and renewed on the node by `automation/oan-dev/oan-k8s-tls.sh`
+in the openg2p-deployment fork (acme.sh, DNS-01 on Route 53). The app charts then leave `tls.secretName` unset.
+
+The catch-all is two routes. HTTPS requests go to istio with `X-Forwarded-Port: 443`: APISIX would otherwise send its
+container port (9443), and a backend that builds absolute URLs from the forwarded headers (Keycloak) would redirect
+clients to `https://<host>:9443/`. Plain HTTP requests get a 301 to the same URL on `https://` and never reach the
+backend. The redirect names the target URI instead of using `http_to_https`, which also puts 9443 in the `Location`.
+
+Order: issue the certificate, run `helm upgrade apisix`, test with `curl --resolve <host>:443:<node IP>` for an OAN
+host and an OpenG2P host (or `/etc/hosts` for a browser), then point the Route 53 wildcard at the node, with a short
+TTL first. Rollback is reverting that record. Every OpenG2P host then depends on this node, and OpenG2P sees
+APISIX's address as the client unless it trusts `X-Forwarded-For`.
+
 ## 7. After every later merge
 
 The routes are generated from the service's OpenAPI spec, so they change whenever an
@@ -271,11 +324,11 @@ namespace `a2c`, from the `oan_a2c` checkout at the deployed commit:
 
 ```sh
 helm upgrade --install oan-a2c-gateway <oan_a2c>/apisix/k8s -n a2c --create-namespace \
-  -f environments/dev/values/gateway-common.yaml -f environments/dev/values/oan-a2c-gateway.yaml \
+  -f environments/dev/values/gateway-common.yaml -f <oan_a2c>/helm/environments/dev/oan-a2c-gateway.yaml \
   --set "web.externalHosts={<A2C node private IP>}" --atomic --wait
 ```
 
-`hosts` is set in `oan-a2c-gateway.yaml` (confirm the real name): routes of both apps
+`hosts` is set in `helm/environments/dev/oan-a2c-gateway.yaml` in the oan_a2c repository: routes of both apps
 share paths such as `/v1/auth/*`, and an empty `hosts` would match any host. Expose A2C's
 Frappe web Service on node port 30810 to the gateway cluster only, and point the A2C
 host's DNS at the gateway node.
@@ -312,23 +365,48 @@ moment. Delete the old Secret once the A2C chart no longer creates its consumer.
 
 ## 8b. Partner APIs (OAN sandbox)
 
-Partners call OAN APIs (first: the Farmer Registry staff API) with apps they create in the
-OAN sandbox. The sandbox runs with `GATEWAY_PARTNER_AUTH=oauth`:
+Partners call OAN APIs with apps they create in the OAN sandbox: the Consent Manager, the
+Partner Management key fetch API and the Aggregation Layer. Only what partners call is
+routed: staff use their own portals, so no staff API (the registries' staff APIs, the
+Partner Management admin API, the Consent Manager staff routes) is on this gateway. The
+sandbox runs with `GATEWAY_PARTNER_AUTH=oauth`:
 
 ```
 partner -> POST https://keycloak.development.oanstaging.com/realms/partner/protocol/openid-connect/token
            grant_type=client_credentials, client_id=<API key>, client_secret=<API secret>
         <- access token (claims participant_uid, oan_app, oan_environments, oan_routes)
-partner -> https://<partner host>/farmer-registry/... with header X-Partner-Token: <token>
+partner -> https://<partner host>/consent-manager/... with header X-Partner-Token: <token>
         -> APISIX: openid-connect (realm JWKS, iss, exp), role `uat` in oan_environments,
-           this route's id in oan_routes, limit-count per app -> Farmer Registry
+           this route's id in oan_routes, limit-count per app -> Consent Manager
 ```
 
 The routes are the chart `oan-partner-gateway` (sandbox-platform
-`deploy/apisix-partner-gateway/k8s`), the same shape as the grievance chart: one
-`ApisixRoute` per upstream, `ApisixUpstream`s with `externalNodes` (the Farmer Registry and
-its Keycloak are public hosts), and an `ApisixTls` for the partner host. `hosts` is
+`deploy/apisix-partner-gateway/k8s`), and an `ApisixTls` for the partner host. `hosts` is
 required. Values: [dev/values/oan-partner-gateway.yaml](../environments/dev/values/oan-partner-gateway.yaml).
+
+Each API is switched on by its own value and has three resources:
+
+| Resource | Holds | Gateway path |
+|---|---|---|
+| `ApisixUpstream` | the API's public host (`externalNodes`, https) | |
+| `ApisixPluginConfig` | the plugins every route of the API shares: the token check (`serverless-pre-function`, `openid-connect`, `serverless-post-function`), the path rewrite, `limit-count` and the call log | |
+| `ApisixRoute` | one rule per operation, pointing at the plugin config (`plugin_config_name`); a plugin of its own only where it differs | |
+
+| Value | API | Gateway path |
+|---|---|---|
+| `consentManager.portalApi` | Consent Manager partner portal API (the console host, `/consent/v1/partner-portal` only) | `/consent-manager/...` |
+| `consentManager.partnerApi` | Consent Manager partner API (validate, status, receipts, JWKS) | `/consent-manager-partner/...` |
+| `partnerManagement.keysApi` | Partner Management key fetch API | `/partner-management-keys/...` |
+| `aggregationLayer` | Aggregation Layer (DCI search) | `/aggregation-layer/...` |
+
+The prefix is removed before the call. `Authorization` is the API's own credential (the
+partner's token, where the API asks for one) and is passed on untouched; the app token
+travels only in `X-Partner-Token`.
+
+**Not checked on a cluster:** that the Ingress Controller of this gateway resolves
+`plugin_config_name`. Check after the install (step 4). If the token check does not apply,
+set `inlineSharedPlugins: true`: the routes then carry a copy of the shared plugins, the
+shape the chart had before.
 
 What the sandbox does on the gateway: it **only reads** the routes through the Admin API
 (`GATEWAY_ADMIN_URL`, key `GATEWAY_ADMIN_TOKEN`; the **viewer** key is enough). Their ids go
@@ -359,15 +437,74 @@ kubectl -n api6-gateway get apisixroutes,apisixupstreams,apisixtls -l app=oan-pa
 ```bash
 H=https://partner-api-dev.oanstaging.com
 # No token: 401 {"message":"Missing app token (X-Partner-Token)"} from the gateway
-curl -s -X POST $H/farmer-registry/register-data/get_register_summary_data
+curl -s $H/consent-manager-partner/ping
 # A user's or a foreign realm's token: 401. An app token without this route: 403.
-# An app token from the sandbox (try-it page "Get token"): passes the gateway (the registry answers).
+# An app token from the sandbox (try-it page "Get token"): passes the gateway (the API answers "pong").
 ```
 
 The sandbox's own check: sign up and approve a participant, create and approve an app,
 **Get token** on the try-it page, then **Run**: the call passes the gateway.
 
 Rate limits count per app (`X-OAN-App`, set from the token) in the Redis at `redis.host`.
+
+There are no consumers: what an app's consumer would hold travels in its token. The
+sandbox writes the app's IP whitelist (`oan_ips`) and the limits of its API products
+(`oan_limit_minute`, `oan_limit_day`; sandbox `config.gateway.rateLimit.enabled`) on the
+app's Keycloak client, and the shared plugins check them: another caller address gets
+`403`, a call over the limit `429`. The app's limits count per API, and a change applies
+from the next token (five minutes at most). The caller address is the one APISIX sees
+(section 9, "Real client IP").
+
+### Call log (API history of direct calls)
+
+With `callLog.enabled`, the shared plugin config carries `http-logger`: APISIX posts a
+record of every call to the sandbox (`POST /oan/internal/gateway/logs`), and the sandbox
+shows the calls of its apps in API history with source **Direct**. Three parts, all needed:
+
+| Part | Where | What |
+|---|---|---|
+| The record format | `oan-apisix-gateway`, `gatewayProxy.pluginMetadata.http-logger` (already in the chart's `values.yaml`) | names the app (`app` = `X-OAN-App`); no credential header |
+| The token | Secret `oan-sandbox-log-ingest-credential` in namespace `api6-gateway`, key `authorization`, value `Bearer <token>`; the APISIX pods get it as `OAN_SANDBOX_LOG_INGEST_AUTHORIZATION` and the plugin reads it at run time (`$env://`), so it is never written into a route | the sandbox's `GATEWAY_LOG_INGEST_TOKEN` |
+| The switch | `callLog.enabled: true`, `callLog.url` in the partner values; in the sandbox `config.gateway.logIngest.enabled: true` | the URL is the sandbox API as APISIX reaches it |
+
+```sh
+kubectl -n api6-gateway create secret generic oan-sandbox-log-ingest-credential \
+  --from-literal=authorization="Bearer <GATEWAY_LOG_INGEST_TOKEN>"
+kubectl -n api6-gateway rollout restart deploy/apisix     # the pods read the Secret at start
+```
+
+A call the gateway refuses before it knows the app (no token, a bad token) is not stored;
+a `403` (no API product for the route) and a `429` are. Check: one call with an app token,
+then the sandbox access log shows `POST /oan/internal/gateway/logs -> 200`
+(`401` = the token in the Secret differs, `404` = the sandbox has the callback off).
+
+## 8c. A new gateway: UAT and production
+
+UAT and production are two gateways, each with its own Keycloak. Each gets the same
+installs, with its own values; nothing is copied by hand into APISIX.
+
+1. **APISIX**: sections 2 to 4 (`oan-apisix-gateway`, release `apisix`). The global rules
+   and the `http-logger` record format come with it.
+2. **Values**: copy
+   [examples/gateway/oan-partner-gateway.uat.yaml](../examples/gateway/oan-partner-gateway.uat.yaml)
+   (or `.production.yaml`) to `environments/<env>/values/oan-partner-gateway.yaml` and fill
+   in the hosts. `keycloak.issuer` is that environment's realm, exactly as in the tokens'
+   `iss`; `environmentRole` is `uat` or `production`, so a UAT app's token is refused on
+   the production gateway and the other way round.
+3. **Secrets** in namespace `api6-gateway`: `oan-partner-gateway-tls` (the partner host's
+   certificate) and, for the call log, `oan-sandbox-log-ingest-credential`.
+4. **Routes**: section 8b, step 2, with that environment's values files.
+5. **The sandbox** (one portal for both environments): UAT uses its main settings
+   (`config.keycloak.url`, `config.gateway.uatUrl`, `config.gateway.sync.adminUrl`).
+   Production has its own: `GATEWAY_PROD_URL`, `GATEWAY_PROD_ADMIN_URL` / `_TOKEN` (viewer
+   key), `KEYCLOAK_PROD_URL`, `KEYCLOAK_PROD_PUBLIC_URL`, `KEYCLOAK_PROD_ADMIN_CLIENT_SECRET`
+   (sandbox-platform `DEPLOYMENT.md`, "UAT and production apps").
+6. **Keycloak** of that environment: realm `partner` with `oan-sandbox-provisioner`
+   (sandbox-platform `backend/scripts/keycloak/setup_partner_realm.py`).
+7. **Check**: section 8b, step 4, on that environment's host.
+
+A new API: add it to the route generator in sandbox-platform (it regenerates the chart),
+merge, then `helm upgrade` the routes release and switch the API on in the values.
 
 ## 9. Known open items
 
@@ -406,7 +543,8 @@ Rate limits count per app (`X-OAN-App`, set from the token) in the Redis at `red
 - **ADC and APISIX 3.19.** The Ingress Controller uses ADC internally, and ADC's documented
   support stops at APISIX 3.17. Watch the controller logs on the first sync.
 - **Partner APIs:** the partner host name, DNS and certificate; how the sandbox reaches
-  the Admin API (read only) from the OpenG2P cluster (section 8b).
+  the Admin API (read only) from the OpenG2P cluster (section 8b). `plugin_config_name`
+  and `gatewayProxy.pluginMetadata` are rendered but not tried on a cluster.
 - **etcd.** the chart's `values.yaml` uses `externalEtcd`; see section 10. Not yet installed against
   a real etcd.
 - **Global plugins.** Confirm `request-id` and `prometheus` take effect: `X-Request-Id` in
@@ -453,7 +591,7 @@ There are four separate jobs. None is automated by this repository.
 
 | Job | Today | In production |
 |---|---|---|
-| Public certificate, clients to APISIX | Secret `oan-grievance-tls` (and `oan-a2c-tls`), referenced by `ApisixTls`. Lab: a local CA, made by hand. The dev values say cert-manager writes the Secret in dev; that is not in this repository and I have not seen it. | Whoever issues the certificate (an ACME service such as Let's Encrypt, a company CA, or a bought certificate) writes the Secret before it expires, and the controller syncs the new one into APISIX without a restart. Let's Encrypt certificates last 90 days, so renewal must be automatic. Expiry needs an alert. |
+| Public certificate, clients to APISIX | Dev: one wildcard, Secret `oan-development-wildcard-tls` in `api6-gateway`, issued and renewed by acme.sh on the node (section 6, "Dev: APISIX as the edge"). Lab: Secret `oan-grievance-tls` from a local CA, made by hand. | Whoever issues the certificate (an ACME service such as Let's Encrypt, a company CA, or a bought certificate) writes the Secret before it expires, and the controller syncs the new one into APISIX without a restart. Let's Encrypt certificates last 90 days, so renewal must be automatic. Expiry needs an alert. |
 | APISIX to the apps, port 30800, 30900, 30810 | Plain HTTP over a private network, node ports open to the gateway's addresses only | Same, if the network is private. If this hop must be encrypted, it needs certificates from an internal CA on both sides (mutual TLS). Not set up, and not yet required by anyone I know of. |
 | APISIX to etcd | Plain HTTP in the lab | `https` URLs with certificates from an internal CA, reissued on a schedule. |
 | Kubernetes internals (RKE2) | RKE2 creates and rotates them itself. As I recall they last a year and rotate when the server restarts near expiry; I have not checked the current numbers. | Same. |
@@ -462,3 +600,20 @@ Open questions for the platform owners: who issues the public certificate in dev
 production, who owns renewal and the expiry alert, and whether the hop to the apps must
 be encrypted. No certificate manager is added to `oan-helm` until that is decided and
 the first releases of grievance and A2C are in place.
+
+## Resolve the dev names inside `oan_dev`
+
+Public DNS for `*.development.oanstaging.com` can point at other nodes while APISIX on `oan_dev` is being
+introduced. `addons/oan-dev-coredns/coredns-custom.yaml` makes CoreDNS on `oan_dev` answer those names with the
+`apisix-gateway.api6-gateway` Service, so a UI pod's server-side call to its backend goes through APISIX with the
+real host name and the wildcard certificate. Only pods on `oan_dev` are affected.
+
+k3s owns `coredns-custom` as an Addon from a file on the node, so install it there (CoreDNS reloads on its own):
+
+```sh
+scp addons/oan-dev-coredns/coredns-custom.yaml oan_dev:/tmp/
+ssh oan_dev 'sudo install -m 600 /tmp/coredns-custom.yaml /var/lib/rancher/k3s/server/manifests/coredns-custom.yaml'
+kubectl -n farmer run dnstest --rm -it --restart=Never --image=busybox -- nslookup a2c-service.development.oanstaging.com
+```
+
+Remove the `development.override` key and the file's change to undo it.

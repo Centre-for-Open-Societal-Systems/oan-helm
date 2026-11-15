@@ -1,0 +1,22 @@
+# Lets every `admin` RoleBinding manage the APISIX custom resources in its own namespace.
+#
+# The built-in `admin` ClusterRole covers built-in resources only. The CI deployer
+# (jenkins-a2c-deployer) holds `admin` in the app namespaces (a2c, grievance), so its
+# `helm upgrade --install <app>-gateway` fails with
+#   cannot get resource "apisixroutes" in API group "apisix.apache.org"
+# until the ClusterRole below is aggregated into `admin`.
+#
+# Apply once per cluster, as a cluster admin:
+#   kubectl apply -f examples/dev/apisix-crds-admin-rbac.yaml
+#   kubectl auth can-i get apisixroutes -n grievance \
+#     --as=system:serviceaccount:a2c:jenkins-a2c-deployer      # yes
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: apisix-crds-admin
+  labels:
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+rules:
+  - apiGroups: ["apisix.apache.org"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]

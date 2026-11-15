@@ -27,7 +27,7 @@ different for A2C.
 | Image | `oan-frappe` | `oan/a2c` (ECR repository of the A2C Jenkinsfile) |
 | Extra workloads | ClamAV, four queue workers | none: A2C uses only the default, short and long queues |
 | Gateway routes | `oan-grievance-gateway`, namespace `grievance` | `oan-a2c-gateway`, namespace `a2c` |
-| Values | [oan-grievance-service.yaml](../environments/dev/values/oan-grievance-service.yaml) | [oan-a2c-service.yaml](../environments/dev/values/oan-a2c-service.yaml), [oan-a2c-gateway.yaml](../environments/dev/values/oan-a2c-gateway.yaml) |
+| Values | [oan-grievance-service.yaml](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/blob/develop/helm/environments/dev/oan-grievance-service.yaml) | [oan-a2c-service.yaml](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/blob/develop/helm/environments/dev/oan-a2c-service.yaml), [oan-a2c-gateway.yaml](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/blob/develop/helm/environments/dev/oan-a2c-gateway.yaml) |
 
 APISIX tells the two apart by hostname: every route lists its app's `hosts`, and both
 apps serve `/v1/auth/*`, so the host is the only separator. An unknown host gets
@@ -74,7 +74,7 @@ kubectl -n a2c-develop create secret generic oan-a2c-jwt --from-file=jwt_v1.pem=
 rm jwt_v1.pem
 
 helm upgrade --install a2c charts/oan-a2c-service -n a2c-develop \
-  -f environments/dev/values/oan-a2c-service.yaml \
+  -f <oan_a2c>/helm/environments/dev/oan-a2c-service.yaml \
   --set-string frappe.image.tag=<develop-build> \
   --wait --wait-for-jobs --timeout 25m
 kubectl -n a2c-develop get svc a2c-gateway-web          # NodePort 30810
@@ -91,7 +91,7 @@ checkout at the deployed commit:
 
 ```sh
 helm upgrade --install oan-a2c-gateway <oan_a2c>/apisix/k8s -n a2c \
-  -f environments/dev/values/gateway-common.yaml -f environments/dev/values/oan-a2c-gateway.yaml \
+  -f environments/dev/values/gateway-common.yaml -f <oan_a2c>/helm/environments/dev/oan-a2c-gateway.yaml \
   --set "web.externalHosts={<A2C node private IP>}" --wait
 ```
 
