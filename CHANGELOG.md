@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-15
 
+### oan-apisix-gateway 0.1.0-dev.9
+
+Previous version: 0.1.0-dev.8.
+
+- fix(apisix-gateway): raise the proxy header buffers for Keycloak and IAM cookies (3b38216)
+
+## 2026-11-15
+
 ### oan-grievance-service 0.0.1-develop.86 (develop)
 
 - Merge pull request #116 from arnavam/feat/iam-agent-beneficiary-rows (Centre-for-Open-Societal-Systems/oan_grievance_service@4d0341200dcb)
