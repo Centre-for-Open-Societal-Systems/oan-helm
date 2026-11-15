@@ -1,0 +1,40 @@
+{{- /*
+The APISIX dashboard (/ui/) and the Admin API it calls (/apisix/admin/), published on one host so the
+address is part of the release instead of a port-forward. No redirect from `/`: a redirect would answer
+before ip-restriction runs. Off by default. Only `allowlist` sources get
+through (ip-restriction); every Admin API call still needs the admin or viewer key
+(adminCredentials). The certificate is the edge wildcard when `host` is under edge.domain; otherwise
+add an ApisixTls for it. See docs/apisix-gateway.md, "Dashboard".
+*/ -}}
+{{- if .Values.adminDashboard.enabled }}
+{{- $host := required "adminDashboard.host is required when adminDashboard.enabled" .Values.adminDashboard.host }}
+{{- if not .Values.adminDashboard.allowlist }}
+{{- fail "adminDashboard.allowlist is required when adminDashboard.enabled: the Admin API must not be open to every source" }}
+{{- end }}
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: admin-dashboard
+spec:
+  ingressClassName: {{ .Values.adminDashboard.ingressClassName }}
+  http:
+    - name: admin-dashboard
+      # Above the edge catch-all (-100), which would otherwise send this host to istio.
+      priority: 100
+      match:
+        hosts:
+          - {{ $host }}
+        paths:
+          - /ui
+          - /ui/*
+          - /apisix/admin/*
+      backends:
+        - serviceName: {{ .Values.adminDashboard.serviceName }}
+          servicePort: {{ .Values.adminDashboard.servicePort }}
+      plugins:
+        - name: ip-restriction
+          enable: true
+          config:
+            whitelist:
+              {{- toYaml .Values.adminDashboard.allowlist | nindent 14 }}
+{{- end }}

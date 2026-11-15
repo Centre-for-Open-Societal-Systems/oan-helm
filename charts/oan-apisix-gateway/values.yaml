@@ -20,6 +20,17 @@ rbacAggregation:
   # Names are <namePrefix>-admin, -edit and -view.
   namePrefix: apisix-crds
 
+# The APISIX dashboard (/ui/) and Admin API on a host of their own, instead of a port-forward. Off by
+# default. `allowlist` (CIDRs, required) is the only way in: keep it to the VPN and the VPC. Every Admin
+# API call still needs the admin or viewer key. `serviceName` is the Admin API Service of this release.
+adminDashboard:
+  enabled: false
+  host: ""
+  allowlist: []
+  ingressClassName: apisix
+  serviceName: apisix-admin
+  servicePort: 9180
+
 # APISIX as the edge of a whole domain (development): the wildcard ApisixTls, an upstream and a
 # catch-all route that sends every host APISIX has no route of its own for (registries, keycloak, ...) to
 # `upstream`, normally the OpenG2P istio ingress. Off by default; set per environment

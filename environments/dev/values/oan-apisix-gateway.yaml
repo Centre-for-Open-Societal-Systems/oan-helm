@@ -36,6 +36,15 @@ apisix:
 # Test before Route 53 points at this node:
 #   curl --resolve grievance-service.development.oanstaging.com:443:<node IP> https://grievance-service.development.oanstaging.com/v1/...
 #   curl --resolve keycloak.development.oanstaging.com:443:<node IP> https://keycloak.development.oanstaging.com/
+# https://apisix-dashboard.development.oanstaging.com/ui/ (log in with the admin or viewer key). Private
+# addresses only: the VPC, the VPN and in-cluster. Public DNS points the name at the node's public address,
+# where it is refused (403); from the VPN use the node's private address (10.0.1.131).
+adminDashboard:
+  enabled: true
+  host: apisix-dashboard.development.oanstaging.com
+  allowlist:
+  - 10.0.0.0/8
+
 edge:
   enabled: true
   domain: development.oanstaging.com
