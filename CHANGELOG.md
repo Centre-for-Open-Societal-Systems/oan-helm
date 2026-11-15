@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-15
 
+### oan-grievance-ui 0.0.1-develop.51 (develop)
+
+- Merge pull request #74 from arnavam/chore/disable-ui-autoscaling (Centre-for-Open-Societal-Systems/oan_grievance_ui@cb77b4bc4782)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-15
+
 ### oan-apisix-gateway 0.1.0-dev.7
 
 Previous version: 0.1.0-dev.6.

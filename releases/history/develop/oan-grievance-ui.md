@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.51
+
+<!-- source-commit: cb77b4bc47820935ff1f8f06babf8717cc806fd7 version: 0.0.1-develop.51 -->
+Published 2026-11-15. Archive SHA-256 `db7d2d7895ffec41486c0c903718336a561c9bf07a9c8398c7d42b73ea78502c`.
+
+- Change: Merge pull request #74 from arnavam/chore/disable-ui-autoscaling
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_ui@cb77b4bc4782](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/commit/cb77b4bc47820935ff1f8f06babf8717cc806fd7)
+- Changes since 0.0.1-develop.50: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/compare/06f5f2994638b1f4dd13743f909eeaac59020467...cb77b4bc47820935ff1f8f06babf8717cc806fd7
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-ui/grievance-ui:0.0.1-develop.51` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-ui-0.0.1-develop.51.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.50
 
 <!-- source-commit: 06f5f2994638b1f4dd13743f909eeaac59020467 version: 0.0.1-develop.50 -->
