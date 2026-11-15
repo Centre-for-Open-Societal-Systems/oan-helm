@@ -291,6 +291,11 @@ OpenG2P nginx (environments/dev/ingress/nginx.conf) did in front of istio. The c
 `oan-development-wildcard-tls` in `api6-gateway`, issued and renewed on the node by `automation/oan-dev/oan-k8s-tls.sh`
 in the openg2p-deployment fork (acme.sh, DNS-01 on Route 53). The app charts then leave `tls.secretName` unset.
 
+The catch-all is two routes. HTTPS requests go to istio with `X-Forwarded-Port: 443`: APISIX would otherwise send its
+container port (9443), and a backend that builds absolute URLs from the forwarded headers (Keycloak) would redirect
+clients to `https://<host>:9443/`. Plain HTTP requests get a 301 to the same URL on `https://` and never reach the
+backend. The redirect names the target URI instead of using `http_to_https`, which also puts 9443 in the `Location`.
+
 Order: issue the certificate, run `helm upgrade apisix`, test with `curl --resolve <host>:443:<node IP>` for an OAN
 host and an OpenG2P host (or `/etc/hosts` for a browser), then point the Route 53 wildcard at the node, with a short
 TTL first. Rollback is reverting that record. Every OpenG2P host then depends on this node, and OpenG2P sees
