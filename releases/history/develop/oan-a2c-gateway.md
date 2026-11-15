@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.27
+
+<!-- source-commit: f6bb735f0f0f93dc24c34fa50b8c35e6dab6f3c0 version: 0.0.1-develop.27 -->
+Published 2026-11-15. Archive SHA-256 `0498565eb66e60a1119d4463ff89bd7fb81ec54ce7663bf8c1a919091d3b252c`.
+
+- Change: Merge pull request #138 from arnavam/feat/frappe-desk-host
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@f6bb735f0f0f](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/f6bb735f0f0f93dc24c34fa50b8c35e6dab6f3c0)
+- Changes since 0.0.1-develop.26: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/a5c55dc65fad64cb5a9deba03784dbba70fcfe20...f6bb735f0f0f93dc24c34fa50b8c35e6dab6f3c0
+
+Return to this version:
+
+```sh
+helm upgrade a2c-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-gateway-0.0.1-develop.27.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.26
 
 <!-- source-commit: a5c55dc65fad64cb5a9deba03784dbba70fcfe20 version: 0.0.1-develop.26 -->

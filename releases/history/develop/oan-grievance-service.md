@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.87
+
+<!-- source-commit: 5afb43d83bc80418bcc841fee101cd9ec7aaa0df version: 0.0.1-develop.87 -->
+Published 2026-11-15. Archive SHA-256 `1b05ba7268991b112b45c9b6eaf74a40ebccb703385ab2c9d94c1d8e65ec2da6`.
+
+- Change: Merge pull request #117 from arnavam/feat/frappe-desk-host
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@5afb43d83bc8](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/5afb43d83bc80418bcc841fee101cd9ec7aaa0df)
+- Changes since 0.0.1-develop.86: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/4d0341200dcbf66697824198c659e39643c5a22d...5afb43d83bc80418bcc841fee101cd9ec7aaa0df
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-service/grievance-service:0.0.1-develop.87` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-service-0.0.1-develop.87.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.86
 
 <!-- source-commit: 4d0341200dcbf66697824198c659e39643c5a22d version: 0.0.1-develop.86 -->
