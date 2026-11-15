@@ -58,6 +58,15 @@ apisix:
     # OAN routes use `:param` path segments.
     router:
       http: radixtree_uri_with_parameter
+    # nginx buffers a response's headers in one buffer (4k by default). Keycloak and the IAM login callback
+    # answer a signed-in browser with several large Set-Cookie headers (session and token cookies), so
+    # APISIX returned 502 "upstream sent too big header" at the login redirect.
+    nginx:
+      configurationSnippet:
+        httpSrv: |
+          proxy_buffer_size 16k;
+          proxy_buffers 8 16k;
+          proxy_busy_buffers_size 32k;
     # APISIX is the edge: it terminates TLS itself (certificates come from each app's
     # ApisixTls) and binds the node's port 443.
     ssl:
