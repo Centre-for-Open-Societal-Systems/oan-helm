@@ -38,17 +38,17 @@ spec:
   template:
     metadata:
       annotations:
-        # Roll the pods when a config value changes.
+        # Roll the pods when a config value, or a chart-owned secret value, changes.
         checksum/config: {{ toJson .Values.config | sha256sum }}
+        {{- if .Values.secret.create }}
+        checksum/secret: {{ toJson .Values.secret.values | sha256sum }}
+        {{- end }}
       labels:
         {{- include "oan-leads-api.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/name: {{ .Chart.Name }}
     spec:
       automountServiceAccountToken: false
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+      {{- include "oan-leads-api.pullSecrets" . | nindent 6 }}
       {{- with .Values.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
@@ -70,11 +70,8 @@ spec:
                 name: {{ .Release.Name }}-config
             - secretRef:
                 name: {{ include "oan-leads-api.secretName" . }}
+          {{- if or .Values.javaOpts .Values.extraEnv }}
           env:
-            - name: NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: spec.nodeName
             {{- with .Values.javaOpts }}
             - name: JAVA_TOOL_OPTIONS
               value: {{ . | quote }}
@@ -82,6 +79,7 @@ spec:
             {{- with .Values.extraEnv }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
+          {{- end }}
           {{- with .Values.readinessProbe }}
           readinessProbe:
             {{- toYaml . | nindent 12 }}

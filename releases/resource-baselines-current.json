@@ -2879,5 +2879,118 @@
     "resourceIdentities": [],
     "secretKeyReferences": [],
     "selectors": {}
+  },
+  "oan-leads-api": {
+    "sourceCommit": "8844e7aca177ef6862055ace83095b7953bc6028",
+    "scope": "new chart in 0.1.0-dev.1: API, Redis cache, ECR pull-secret refresher (hook Job + CronJob) and PDB by default; leads-secrets referenced by envFrom; the chart-owned Secret, external DB bridge, route and HPA are opt-in",
+    "resourceIdentities": [
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-redis"
+      ],
+      [
+        "batch/v1",
+        "CronJob",
+        "verify-a",
+        "verify-ecr-refresh"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-ecr-refresh-init"
+      ],
+      [
+        "policy/v1",
+        "PodDisruptionBudget",
+        "verify-a",
+        "verify"
+      ],
+      [
+        "rbac.authorization.k8s.io/v1",
+        "Role",
+        "verify-a",
+        "verify-ecr-refresh"
+      ],
+      [
+        "rbac.authorization.k8s.io/v1",
+        "Role",
+        "verify-a",
+        "verify-ecr-refresh-init"
+      ],
+      [
+        "rbac.authorization.k8s.io/v1",
+        "RoleBinding",
+        "verify-a",
+        "verify-ecr-refresh"
+      ],
+      [
+        "rbac.authorization.k8s.io/v1",
+        "RoleBinding",
+        "verify-a",
+        "verify-ecr-refresh-init"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-config"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-redis"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-ecr-refresh"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-ecr-refresh-init"
+      ]
+    ],
+    "secretKeyReferences": [],
+    "selectors": {
+      "Service/verify": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/component": "api"
+      },
+      "Service/verify-redis": {
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/component": "redis"
+      },
+      "Deployment/verify": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/component": "api"
+        }
+      },
+      "Deployment/verify-redis": {
+        "matchLabels": {
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/component": "redis"
+        }
+      }
+    }
   }
 }

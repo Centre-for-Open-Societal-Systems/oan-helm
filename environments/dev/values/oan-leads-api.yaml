@@ -1,9 +1,8 @@
 # Values for the oan-leads-api chart on oan_dev.
-# Release `leads-api`, namespace `leads`. Credentials stay in the namespace-local
-# `leads-secrets` Secret; database endpoints go in private values.
-
-imagePullSecrets:
-- name: ecr-pull-secret
+# Release `leads-api`, namespace `leads`. The ECR pull secret (leads-api-ecr) is kept
+# by the release. Credentials and database endpoints come from the secret values file
+# (Jenkins secret-file credential `dev-leads-api-secret-values`), passed after this file;
+# see charts/oan-leads-api/README.md.
 
 virtualService:
   enabled: true
