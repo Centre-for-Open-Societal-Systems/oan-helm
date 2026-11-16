@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-16
 
+### openg2p-livestock-registry 0.0.0-develop.463 (develop)
+
+- Merge pull request #247 from simretyibeltal-commits/ci/eoan-image-names (Centre-for-Open-Societal-Systems/livestock-registry@07d9bbd40b25)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-16
+
 ### oan-a2c-ui 0.0.1-develop.8 (develop)
 
 - Merge pull request #117 from arnavam/fix/api-base-url-gateway (Centre-for-Open-Societal-Systems/oan_a2c_ui@a366a1216f81)
