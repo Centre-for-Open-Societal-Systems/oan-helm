@@ -25,8 +25,8 @@ class RefactorContracts(unittest.TestCase):
 
     def test_master_data_images_are_pinned_and_seed_is_off(self):
         values = yaml.safe_load((ROOT/'charts/openg2p-commons-services/values.yaml').read_text(encoding='utf-8'))['master-data']
-        for component in ('masterDataAPI','masterDataUi'):
-            self.assertEqual(values[component]['image']['tag'],'0.0.0-develop.118')
+        for component, tag in (('masterDataAPI','0.0.0-develop.118'),('masterDataUi','0.0.0-develop.121')):
+            self.assertEqual(values[component]['image']['tag'],tag)
             self.assertRegex(values[component]['image']['digest'],r'^sha256:[0-9a-f]{64}$')
         self.assertFalse(values['geoSeed']['enabled'])
         self.assertFalse(values['geoSeed']['load']['samples'])

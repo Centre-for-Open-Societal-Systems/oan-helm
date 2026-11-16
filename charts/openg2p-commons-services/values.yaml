@@ -146,8 +146,8 @@ master-data:
         gateway: istio-system/development
     # OpenG2P rebuilds develop.N tags in place; the digest fixes the image.
     image:
-      tag: 0.0.0-develop.118
-      digest: sha256:98a0f4fac7a72dcb4d0a24e11953495c5e04c39db77f54eb85ef00643c0abf9d
+      tag: 0.0.0-develop.121
+      digest: sha256:5a87245d99edf45064c66ae4f2423fb67c09d4311f3ee75cbe364aa59f00081d
   masterDataAPI:
     hostname: 'master-data.{{ .Values.global.baseDomain }}'
     istio:
