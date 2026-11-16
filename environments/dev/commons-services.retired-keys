@@ -1,0 +1,7 @@
+# Saved keys of the New Dev commons-services release that were renamed or removed on purpose. scripts/ci/commons_values_guard.py
+# lets --reset-values drop a listed key and every key under it; any other unset saved key still fails the delivery.
+# One key per line, with the change that retired it.
+
+# A hand-set seed image (master-data-db-seed 8c99b63725d7-mds-e569a59b). The chart's default seed image carries the
+# same pack (mds-e569a59b) from a later build; New Dev follows the chart from the first Jenkins delivery on.
+master-data.geoSeed.image

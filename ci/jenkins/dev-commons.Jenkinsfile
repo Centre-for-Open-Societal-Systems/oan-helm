@@ -1,0 +1,45 @@
+// Commons on New Dev follows main, the counterpart of ci/jenkins/staging-commons.Jenkinsfile. Every build of main runs
+// scripts/ci/deliver_dev_commons.sh, which compares what New Dev runs (ConfigMap commons-services-delivery: pinned chart
+// environments/dev/commons-services.chart, sha256 of environments/dev/values/commons-services.yaml and of the secret
+// values) with this commit and delivers only when they differ (helm upgrade --reset-values --atomic), then
+// scripts/ci/deliver_dev_odk_bootstrap.sh (addons/odk-bootstrap, record odk-bootstrap-delivery). A failed delivery is
+// therefore retried by the next build of main. No parameters, no click; pull requests never deliver.
+//
+// New Dev's Commons base release (commons) and oan-dashboards are not delivered here: they have no New Dev values in
+// git, and their saved values (passwords) cannot be rebuilt from git.
+//
+// Jenkins: multibranch job oan-helm-dev-commons on Centre-for-Open-Societal-Systems/oan-helm, branch main only,
+// defined in ci/jenkins/jobs/oan-helm-dev-commons.xml and created or updated by ci/jenkins/apply-job.sh. Credentials:
+// dev-commons-deployer-kubeconfig (environments/dev/rbac/commons-deployer-rbac.yaml) and dev-commons-secret-values (a
+// secret file with the values not kept in git; see docs/release/environments.md).
+pipeline {
+    agent { label 'oan-ci-deploy' }
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr: '30'))
+        timeout(time: 60, unit: 'MINUTES')
+    }
+    stages {
+        stage('Deliver Commons services') {
+            when { allOf { branch 'main'; not { changeRequest() } } }
+            steps {
+                withCredentials([
+                    file(credentialsId: 'dev-commons-deployer-kubeconfig', variable: 'KUBECONFIG'),
+                    file(credentialsId: 'dev-commons-secret-values', variable: 'COMMONS_SECRET_VALUES')
+                ]) {
+                    sh 'bash scripts/ci/deliver_dev_commons.sh "$COMMONS_SECRET_VALUES"'
+                }
+            }
+        }
+        // ODK Central runs in Commons services, so its bootstrap comes after them.
+        stage('Deliver ODK bootstrap') {
+            when { allOf { branch 'main'; not { changeRequest() } } }
+            steps {
+                withCredentials([file(credentialsId: 'dev-commons-deployer-kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh 'bash scripts/ci/deliver_dev_odk_bootstrap.sh'
+                }
+            }
+        }
+    }
+}
