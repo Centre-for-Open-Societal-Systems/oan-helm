@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-16
 
+### openg2p-cropsown-registry 0.0.0-develop.531 (develop)
+
+- Updates on ID generation (Centre-for-Open-Societal-Systems/cropsown-regsitry@5fdc5e053929)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-16
+
 ### openg2p-commons-services 1.0.0-dev.44
 
 Previous version: 1.0.0-dev.43.
