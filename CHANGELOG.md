@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-16
 
+### oan-a2c-ui 0.0.1-develop.8 (develop)
+
+- Merge pull request #117 from arnavam/fix/api-base-url-gateway (Centre-for-Open-Societal-Systems/oan_a2c_ui@a366a1216f81)
+- Images and rollback: [releases/history/develop/oan-a2c-ui.md](releases/history/develop/oan-a2c-ui.md)
+
+## 2026-11-16
+
 ### oan-a2c-ui 0.0.1-develop.7 (develop)
 
 - Merge pull request #115 from arnavam/chore/eoan-ecr-path (Centre-for-Open-Societal-Systems/oan_a2c_ui@6a866c042b74)
