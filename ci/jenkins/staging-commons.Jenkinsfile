@@ -17,6 +17,15 @@ pipeline {
         timeout(time: 60, unit: 'MINUTES')
     }
     stages {
+        // The ECR pull secret first: every later release pulls with commons/ecr-pull-secret.
+        stage('Deliver Commons ECR pull secret') {
+            when { allOf { branch 'main'; not { changeRequest() } } }
+            steps {
+                withCredentials([file(credentialsId: 'staging-commons-deployer-kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh 'bash scripts/ci/deliver_staging_commons_ecr_pull_secret.sh'
+                }
+            }
+        }
         // The base release first: Commons services run on it.
         stage('Deliver Commons base') {
             when { allOf { branch 'main'; not { changeRequest() } } }

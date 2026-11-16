@@ -118,10 +118,22 @@ class DeliverStagingCommons(unittest.TestCase):
         self.assertEqual(set(re.findall(r'verbs: (\[.*\])', rbac)), {'["get", "patch"]'})
         self.assertNotIn('ClusterRole', rbac)
 
+    def test_ecr_pull_secret_is_delivered_first_and_kept_fresh(self):
+        pipeline = (ROOT / 'ci/jenkins/staging-commons.Jenkinsfile').read_text(encoding='utf-8')
+        self.assertLess(pipeline.index("sh 'bash scripts/ci/deliver_staging_commons_ecr_pull_secret.sh'"),
+                        pipeline.index("sh 'bash scripts/ci/deliver_staging_commons_base.sh'"))
+        refresh = (ROOT / 'addons/commons-ecr-pull-secret/templates/refresh.yaml').read_text(encoding='utf-8')
+        self.assertIn('kind: CronJob', refresh)
+        self.assertIn('resourceNames: [{{ $.Values.name | quote }}]', refresh)
+        values = (ROOT / 'environments/staging/values/commons-ecr-pull-secret.yaml').read_text(encoding='utf-8')
+        self.assertIn('name: ecr-pull-secret', values)
+        farmer = (ROOT / 'environments/staging/values/farmer-connector.yaml').read_text(encoding='utf-8')
+        self.assertLess(farmer.index('farmer-registry-ecr-pull-secret'), farmer.index('- name: ecr-pull-secret'))
+
     def test_commons_deliveries_use_their_own_deployer_in_commons_only(self):
         pipeline = (ROOT / 'ci/jenkins/staging-commons.Jenkinsfile').read_text(encoding='utf-8')
         self.assertNotIn('staging-rke2-kubeconfig', pipeline.split('pipeline {', 1)[1])
-        self.assertEqual(pipeline.count("credentialsId: 'staging-commons-deployer-kubeconfig'"), 5)
+        self.assertEqual(pipeline.count("credentialsId: 'staging-commons-deployer-kubeconfig'"), 6)
         rbac = (ROOT / 'environments/staging/rbac/commons-deployer-rbac.yaml').read_text(encoding='utf-8')
         body = '\n'.join(line for line in rbac.splitlines() if not line.startswith('#'))
         self.assertNotIn('ClusterRole', body)

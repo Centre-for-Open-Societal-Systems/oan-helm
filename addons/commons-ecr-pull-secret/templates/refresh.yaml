@@ -1,0 +1,72 @@
+{{- /*
+A hook Job writes the secret before an install or upgrade completes, so the first delivery can pull; the CronJob keeps
+it fresh. Both write only the one Secret named in .Values.name, with the node's IAM role.
+*/ -}}
+{{- $name := printf "%s-refresh" .Release.Name }}
+{{- $hook := dict "helm.sh/hook" "pre-install,pre-upgrade" "helm.sh/hook-delete-policy" "before-hook-creation" }}
+{{- range $mode := list "hook" "release" }}
+{{- $isHook := eq $mode "hook" }}
+{{- $objName := ternary (printf "%s-init" $name) $name $isHook }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ $objName }}
+  labels: {{- include "ecrsecret.labels" $ | nindent 4 }}
+  {{- if $isHook }}
+  annotations: {{- toYaml (merge (dict "helm.sh/hook-weight" "-10") $hook) | nindent 4 }}
+  {{- end }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ $objName }}
+  labels: {{- include "ecrsecret.labels" $ | nindent 4 }}
+  {{- if $isHook }}
+  annotations: {{- toYaml (merge (dict "helm.sh/hook-weight" "-10") $hook) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: [{{ $.Values.name | quote }}]
+    verbs: ["get", "update", "patch"]
+  # create cannot be limited by resourceNames; needed the first time only.
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ $objName }}
+  labels: {{- include "ecrsecret.labels" $ | nindent 4 }}
+  {{- if $isHook }}
+  annotations: {{- toYaml (merge (dict "helm.sh/hook-weight" "-9") $hook) | nindent 4 }}
+  {{- end }}
+subjects:
+  - {kind: ServiceAccount, name: {{ $objName }}, namespace: {{ $.Release.Namespace }}}
+roleRef: {apiGroup: rbac.authorization.k8s.io, kind: Role, name: {{ $objName }}}
+{{- end }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $name }}-init
+  labels: {{- include "ecrsecret.labels" . | nindent 4 }}
+  annotations: {{- toYaml (merge (dict "helm.sh/hook-weight" "-5") $hook) | nindent 4 }}
+spec:
+  {{- include "ecrsecret.jobSpec" (dict "root" . "serviceAccount" (printf "%s-init" $name)) | nindent 2 }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $name }}
+  labels: {{- include "ecrsecret.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      {{- include "ecrsecret.jobSpec" (dict "root" . "serviceAccount" $name) | nindent 6 }}

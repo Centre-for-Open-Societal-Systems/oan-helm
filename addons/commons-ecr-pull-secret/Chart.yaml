@@ -1,0 +1,8 @@
+apiVersion: v2
+name: commons-ecr-pull-secret
+description: >-
+  Keeps the ECR pull secret of the Commons namespace (ecr-pull-secret) fresh: a pre-install/pre-upgrade hook Job writes
+  it, then a CronJob refreshes it before the 12-hour ECR token expires. The token comes from the node's IAM role.
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
