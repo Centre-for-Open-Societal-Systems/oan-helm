@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-16
 
+### openg2p-da-registry 0.0.0-develop.111 (develop)
+
+- Merge pull request #70 from yash7473/fix/da-id-copy-one-row (Centre-for-Open-Societal-Systems/da-registry@e623b553eff2)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-16
+
 ### openg2p-cropsown-registry 1.0.0-rc.546 (staging)
 
 - Updates on ID generation (Centre-for-Open-Societal-Systems/cropsown-regsitry@5fdc5e053929)
