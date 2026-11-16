@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-16
 
+### openg2p-farmer-registry 1.0.0-rc.892 (staging)
+
+- Connector definitions hook pulls with the connector API's pull secrets (#310) (Centre-for-Open-Societal-Systems/farmer-registry@b8ddaf93422e)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-16
+
 ### openg2p-farmer-registry 0.0.0-develop.873 (develop)
 
 - Connector definitions hook pulls with the connector API's pull secrets (#310) (Centre-for-Open-Societal-Systems/farmer-registry@b8ddaf93422e)
