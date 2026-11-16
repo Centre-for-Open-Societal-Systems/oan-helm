@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-16
 
+### openg2p-cropsown-registry 0.0.0-develop.534 (develop)
+
+- Run the extension test modules three at a time (#305) (Centre-for-Open-Societal-Systems/cropsown-regsitry@c125bf651181)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-16
+
 ### openg2p-livestock-registry 0.0.0-develop.465 (develop)
 
 - Pin the dev values at oan-helm 3ff2453 (farmer reference setting names) (#250) (Centre-for-Open-Societal-Systems/livestock-registry@93d20e48ca35)
