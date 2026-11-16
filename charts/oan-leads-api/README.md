@@ -18,7 +18,7 @@ changes no other chart's resources. It replaces the raw manifests in leads-api
 
 | Resource | Values key | Default |
 | --- | --- | --- |
-| API Deployment (2 replicas, rolling, TCP probes), Service, ConfigMap, PDB | `image`, `config`, `secret` | Enabled; `oan/leads-api` by digest |
+| API Deployment (2 replicas, rolling, TCP probes), Service, ConfigMap, PDB | `image`, `config`, `secret` | Enabled; `eoan/leads-api/leads-api` (`develop-latest` until a digest is set) |
 | Redis cache Deployment + Service (`<release>-redis`) | `redis` | Enabled, no AUTH |
 | `leads-postgres` / `leads-elasticsearch` Services + EndpointSlices to a private DB host | `externalDb` | Disabled |
 | Istio VirtualService on the shared Gateway | `virtualService` | Disabled |
@@ -29,9 +29,10 @@ is not part of this chart: apply it on the environment's gateway.
 
 ## Before installing
 
-1. **Image.** The leads-api Jenkinsfile (`DEPLOY_ENV=staging`) pushes
-   `379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/leads-api:staging-ati-<build>`.
-   Set `image.digest` to the reviewed build's digest and add the namespace-local ECR pull
+1. **Image.** The leads-api Jenkinsfile pushes
+   `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/leads-api/leads-api:0.1.0-develop.<build>`
+   (and `develop-latest`).
+   Set `image.digest` to the reviewed build's digest, `image.pullPolicy` to `IfNotPresent`, and add the namespace-local ECR pull
    Secret to `imagePullSecrets`.
 2. **Secret.** Create a Secret in the release namespace and set `secret.name`
    (default `leads-secrets`). Required keys: `SPRING_DATASOURCE_USERNAME`,
@@ -55,6 +56,6 @@ Elasticsearch.
 
 ## Upgrading the image
 
-Change `image.digest` (keep the `staging-ati-<build>` tag in the comment) and run
+Change `image.digest` (keep the `0.1.0-develop.<build>` tag in the comment) and run
 `helm upgrade`. Changing a `config` value rolls the pods; a Secret change needs
 `kubectl rollout restart deploy/<release>`.

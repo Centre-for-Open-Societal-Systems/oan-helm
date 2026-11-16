@@ -5,12 +5,14 @@
 # Secret (secret.name), never from Git.
 
 image:
-  # Published by the leads-api Jenkinsfile (DEPLOY_ENV=staging) to the cluster's ECR.
-  repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/leads-api
-  # staging-ati-1
-  tag: ""
-  digest: sha256:4e8af3e7eee596665ebbae27787112561b1150b899525a38172489c167dfb9ce
-  pullPolicy: IfNotPresent
+  # Published by the leads-api Jenkinsfile: <version>-develop.<build> (e.g. 0.1.0-develop.12)
+  # plus the moving alias develop-latest, same scheme as eoan/oan-a2c-service/a2c-service.
+  repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/leads-api/leads-api
+  # TODO before install: set digest to the published 0.1.0-develop.<build> image and
+  # pullPolicy to IfNotPresent; until then the moving tag is pulled on every start.
+  tag: develop-latest
+  digest: ""
+  pullPolicy: Always
 
 # e.g. [{name: ecr-pull-secret}] - a namespace-local ECR pull Secret.
 imagePullSecrets: []
