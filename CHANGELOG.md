@@ -8,6 +8,13 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-16
+
+### oan-a2c-ui 0.0.1-develop.7 (develop)
+
+- Merge pull request #115 from arnavam/chore/eoan-ecr-path (Centre-for-Open-Societal-Systems/oan_a2c_ui@6a866c042b74)
+- Images and rollback: [releases/history/develop/oan-a2c-ui.md](releases/history/develop/oan-a2c-ui.md)
+
 ## 2026-11-15
 
 ### oan-reports-central 0.0.0-develop.7 (develop)

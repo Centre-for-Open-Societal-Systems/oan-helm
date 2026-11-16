@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.7
+
+<!-- source-commit: 6a866c042b7432e3a32e3d02b4560175a66c0d1b version: 0.0.1-develop.7 -->
+Published 2026-11-16. Archive SHA-256 `2b77a3bf19f95a6fc8dc44ab8b27b52f058d84397615049d172e9566e0517c9b`.
+
+- Change: Merge pull request #115 from arnavam/chore/eoan-ecr-path
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c_ui@6a866c042b74](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c_ui/commit/6a866c042b7432e3a32e3d02b4560175a66c0d1b)
+- Changes since 0.0.0-develop.6: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c_ui/compare/3fce7d7431f631bf28befa87ab1a02301bfb97bd...6a866c042b7432e3a32e3d02b4560175a66c0d1b
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-ui/a2c-ui:0.0.1-develop.7` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-ui-0.0.1-develop.7.tgz -n a2c-develop --reset-values -f helm/environments/dev/oan-a2c-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.0-develop.6
 
 <!-- source-commit: 3fce7d7431f631bf28befa87ab1a02301bfb97bd version: 0.0.0-develop.6 -->
