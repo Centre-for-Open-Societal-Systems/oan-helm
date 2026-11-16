@@ -38,6 +38,8 @@ api:
   replicaCount: 1
   autoscaling:
     enabled: false
+  # Fallback only: each Farmer staging promotion passes the connector images of the promoted build
+  # (farmer-registry ci/deploy/connector-staging.sh).
   image: &api
     repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/farmer-registry/registry-connector
     tag: 90b2649a7b10@sha256:347e5f45bb078d06afc37ea7510ddc1d6eda5355764dc6fff9bfe446f7ab5ca6
