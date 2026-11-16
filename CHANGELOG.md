@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-16
 
+### openg2p-farmer-registry 1.0.0-rc.890 (staging)
+
+- One Postman collection for the three registries, passing on New Dev (#307) (Centre-for-Open-Societal-Systems/farmer-registry@13c95fa361c1)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-16
+
 ### openg2p-livestock-registry 0.0.0-develop.466 (develop)
 
 - One Postman collection for the three registries, passing on New Dev (#253) (Centre-for-Open-Societal-Systems/livestock-registry@978a84b5cca0)
