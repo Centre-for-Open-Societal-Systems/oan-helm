@@ -1,0 +1,37 @@
+# Rotation of the Commons Postgres superuser password. Nothing happens until rotation.id is set; each new id rotates
+# once (the done id is recorded in ConfigMap <release>-record), so redelivering the same values changes nothing.
+# The id is not a secret; the password is generated inside the Job and never appears in values, logs or git.
+rotation:
+  id: ""
+
+postgres:
+  host: commons-postgresql.commons.svc.cluster.local
+  port: 5432
+  user: postgres
+  # The Secret the Bitnami chart (release commons) created and keeps by lookup. Its value is what every consumer reads.
+  secret: commons-postgresql
+  secretKey: postgres-password
+
+# Namespaces holding a copy of the Secret (same name and key) for consumers there (registrant-auth, connector
+# postgres-init). The Job updates each copy and removes the kubectl last-applied annotation, which held the value.
+# Each namespace needs the Role in environments/<env>/rbac/commons-postgres-superuser-copies-rbac.yaml.
+copyTo: []
+
+# Workloads in this namespace that read the password only at start and are restarted after the rotation.
+restart:
+  deployments: [commons-services-keymanager]
+  # Postgres reads the password from its env only on first boot (empty data directory), so restarting it is optional;
+  # it makes every registry lose its connections for about a minute.
+  statefulsets: []
+
+images:
+  kubectl:
+    repository: docker.io/alpine/k8s
+    digest: sha256:b0523f0a244ddc4c8e055aa335c040d3d78b3ead5528f4544395f7f9f69c7b68
+  postgres:
+    repository: docker.io/openg2p/postgresql
+    digest: sha256:65b6faa9f30de7dc89f63f055a3dd3e4ba0334172ee95c8badf49da0d08ef1c0
+
+resources:
+  requests: {cpu: 25m, memory: 64Mi}
+  limits: {memory: 256Mi}

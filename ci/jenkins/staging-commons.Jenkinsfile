@@ -26,6 +26,16 @@ pipeline {
                 }
             }
         }
+        // Rotates the Commons Postgres superuser password when environments/staging/values/
+        // commons-postgres-superuser-rotation.yaml names a new rotation.id; otherwise a no-op.
+        stage('Rotate Commons Postgres superuser') {
+            when { allOf { branch 'main'; not { changeRequest() } } }
+            steps {
+                withCredentials([file(credentialsId: 'staging-commons-deployer-kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh 'bash scripts/ci/deliver_staging_commons_postgres_superuser_rotation.sh'
+                }
+            }
+        }
         stage('Deliver Commons services') {
             when { allOf { branch 'main'; not { changeRequest() } } }
             steps {

@@ -1,0 +1,8 @@
+apiVersion: v2
+name: commons-postgres-superuser-rotation
+description: >-
+  Rotates the password of the Commons Postgres superuser (role postgres, Secret commons-postgresql) without anyone
+  handling the value: generated in the Job, applied with ALTER ROLE, written to the Secret and its namespace copies.
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
