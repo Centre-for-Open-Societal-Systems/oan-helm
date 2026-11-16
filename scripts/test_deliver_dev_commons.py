@@ -62,7 +62,7 @@ class DeliverDevCommons(unittest.TestCase):
         self.assertNotIn('changeset', body)
         self.assertNotIn('staging', body)
         self.assertEqual(body.count("credentialsId: 'dev-commons-deployer-kubeconfig'"), 2)
-        self.assertEqual(body.count("allOf { branch 'main'; not { changeRequest() } }"), 2)
+        self.assertEqual(body.count("allOf { branch 'main'; not { changeRequest() } }"), 3)  # the gate and two deliveries
         job = read('ci/jenkins/jobs/oan-helm-dev-commons.xml')
         self.assertIn('<scriptPath>ci/jenkins/dev-commons.Jenkinsfile</scriptPath>', job)
         self.assertIn('<includes>main</includes>', job)

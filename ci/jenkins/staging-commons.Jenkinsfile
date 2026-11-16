@@ -17,6 +17,15 @@ pipeline {
         timeout(time: 60, unit: 'MINUTES')
     }
     stages {
+        // Nothing is delivered unless every GitHub check of this commit passed (scripts/ci/require_green_checks.sh).
+        stage('Checks green') {
+            when { allOf { branch 'main'; not { changeRequest() } } }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'oan-helm-fork-token', usernameVariable: 'GH_USER', passwordVariable: 'GH_TOKEN')]) {
+                    sh 'bash scripts/ci/require_green_checks.sh Centre-for-Open-Societal-Systems/oan-helm HEAD'
+                }
+            }
+        }
         // The ECR pull secret first: every later release pulls with commons/ecr-pull-secret.
         stage('Deliver Commons ECR pull secret') {
             when { allOf { branch 'main'; not { changeRequest() } } }
