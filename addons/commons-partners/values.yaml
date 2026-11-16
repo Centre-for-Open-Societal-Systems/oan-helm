@@ -1,0 +1,30 @@
+# Partners that must exist and be active in Partner Management. After every install and upgrade a hook Job onboards
+# each missing one (POST /partners/requests/onboarding, then approve) and leaves present ones alone, so redelivering
+# the same values changes nothing. A partner that exists but is disabled, or whose onboarding was rejected, fails the
+# Job: re-enabling it is a decision for a partner manager, not for a deployment.
+#   - partnerId: PARTNER_STAFF_PORTAL      # what the registry checks (registry-platform helpers/partner_management.py)
+#     name: Staff Portal (file import)
+#     orgName: OpenAgriNet
+#     description: Sender of staff portal file imports
+partners: []
+
+partnerManager:
+  # Admin endpoints of Partner Management (staff-portal-api).
+  url: http://commons-services-pm-staff-portal-api.commons.svc.cluster.local
+  # Keycloak staff realm token endpoint; the token's issuer must be one Partner Management accepts.
+  tokenUrl: ""
+  # A staff-realm client whose service account holds Partner Management's partner_manager role.
+  clientId: commons-services-staff-portal
+  clientSecret:
+    name: commons-services-staff-portal
+    key: client_secret
+
+image: docker.io/library/python:3.11.14-slim
+imagePullSecrets: []
+
+attempts: 30
+retrySeconds: 10
+
+resources:
+  requests: {cpu: 20m, memory: 32Mi}
+  limits: {memory: 96Mi}

@@ -1,0 +1,16 @@
+# New Dev partners that must exist and be active in Partner Management (addons/commons-partners).
+# PARTNER_STAFF_PORTAL: every staff portal file import ingests as sender "Staff Portal", which the registry maps to this
+# partner id and checks in Partner Management (registry-platform helpers/partner_management.py); without it each import
+# fails with PARTNER_NOT_REGISTERED (REGP-ERR-001).
+partners:
+  - partnerId: PARTNER_STAFF_PORTAL
+    name: Staff Portal (file import)
+    orgName: OpenAgriNet
+    description: Sender of staff portal file imports (Farmer, Crop, Livestock and DA registries)
+
+partnerManager:
+  tokenUrl: https://keycloak.development.oanstaging.com/realms/staff/protocol/openid-connect/token
+# New Dev already has PARTNER_STAFF_PORTAL (made by hand on 29 Oct through the Partner Management staff API); the Job
+# finds it active and leaves it as it is. Delivered with helm like the other dev overlays:
+#   helm upgrade --install commons-partners addons/commons-partners -n commons \
+#     -f environments/dev/values/commons-partners.yaml --atomic --wait

@@ -47,6 +47,16 @@ pipeline {
                 }
             }
         }
+        // Partners every registry relies on, onboarded in Partner Management (scripts/ci/deliver_staging_commons_partners.sh,
+        // record commons-partners-delivery). After Commons services, which run Partner Management and Keycloak.
+        stage('Deliver Commons partners') {
+            when { allOf { branch 'main'; not { changeRequest() } } }
+            steps {
+                withCredentials([file(credentialsId: 'staging-commons-deployer-kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh 'bash scripts/ci/deliver_staging_commons_partners.sh'
+                }
+            }
+        }
         // The shared dashboard no registry owns (scripts/ci/deliver_staging_oan_dashboards.sh, record oan-dashboards-delivery).
         stage('Deliver oan-dashboards') {
             when { allOf { branch 'main'; not { changeRequest() } } }

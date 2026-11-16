@@ -80,6 +80,19 @@ class DeliverStagingCommons(unittest.TestCase):
         # A2C has no qa gateway; the develop one is the only A2C dashboard API.
         self.assertIn('A2C_DASHBOARD_API_URL: https://a2c-develop-gateway.oanstaging.com', values)
 
+    def test_commons_partners_delivery_follows_main_after_commons_services(self):
+        script = (ROOT / 'scripts/ci/deliver_staging_commons_partners.sh').read_text(encoding='utf-8')
+        self.assertIn('record=commons-partners-delivery', script)
+        self.assertIn('addons/commons-partners', script)
+        self.assertIn('--reset-values', script)
+        self.assertLess(script.index('--atomic --wait'), script.index('kubectl create configmap'))
+        pipeline = (ROOT / 'ci/jenkins/staging-commons.Jenkinsfile').read_text(encoding='utf-8')
+        # Partner Management and Keycloak run in Commons services, so the partners come after them.
+        self.assertLess(pipeline.index('deliver_staging_commons.sh "'), pipeline.index('deliver_staging_commons_partners.sh'))
+        values = (ROOT / 'environments/staging/values/commons-partners.yaml').read_text(encoding='utf-8')
+        self.assertIn('partnerId: PARTNER_STAFF_PORTAL', values)
+        self.assertIn('https://keycloak.qa.oanstaging.com/realms/staff/', values)
+
     def test_superuser_rotation_runs_between_base_and_services_and_never_exposes_the_value(self):
         pipeline = (ROOT / 'ci/jenkins/staging-commons.Jenkinsfile').read_text(encoding='utf-8')
         rotate = pipeline.index('deliver_staging_commons_postgres_superuser_rotation.sh')
@@ -108,7 +121,7 @@ class DeliverStagingCommons(unittest.TestCase):
     def test_commons_deliveries_use_their_own_deployer_in_commons_only(self):
         pipeline = (ROOT / 'ci/jenkins/staging-commons.Jenkinsfile').read_text(encoding='utf-8')
         self.assertNotIn('staging-rke2-kubeconfig', pipeline.split('pipeline {', 1)[1])
-        self.assertEqual(pipeline.count("credentialsId: 'staging-commons-deployer-kubeconfig'"), 4)
+        self.assertEqual(pipeline.count("credentialsId: 'staging-commons-deployer-kubeconfig'"), 5)
         rbac = (ROOT / 'environments/staging/rbac/commons-deployer-rbac.yaml').read_text(encoding='utf-8')
         body = '\n'.join(line for line in rbac.splitlines() if not line.startswith('#'))
         self.assertNotIn('ClusterRole', body)
