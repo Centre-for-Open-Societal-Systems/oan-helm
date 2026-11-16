@@ -24,7 +24,10 @@ global:
   connectorDBUserPasswordKey: password
   redisHost: commons-redis-master.commons.svc.cluster.local
   partnerApiService: farmer-registry-partner-api
+# farmer-registry-ecr-pull-secret is refreshed every 6 h by the registry chart's ECR refresher. The hand-made
+# ecr-pull-secret lost its refresher and expired on 13 Nov 2026, so a new connector digest could not be pulled.
 imagePullSecrets:
+  - name: farmer-registry-ecr-pull-secret
   - name: ecr-pull-secret
 commonEnv:
   CONNECTOR_STORE_RUN_PAYLOADS: 'false'

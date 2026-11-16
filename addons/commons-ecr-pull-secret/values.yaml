@@ -1,0 +1,8 @@
+# The pull secret to keep fresh, in the release namespace. Workloads name it in imagePullSecrets.
+name: ecr-pull-secret
+# ECR registry host, <account>.dkr.ecr.<region>.amazonaws.com.
+registry: ""
+# ECR tokens last 12 hours.
+schedule: "0 */6 * * *"
+awsCliImage: amazon/aws-cli:2.36.43
+kubectlImage: alpine/k8s:1.31.1
