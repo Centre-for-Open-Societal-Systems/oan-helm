@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-16
 
+### openg2p-commons-services 1.0.0-dev.44
+
+Previous version: 1.0.0-dev.43.
+
+- feat(commons): upgrade Master Data UI to openg2p/master-data-ui 0.0.0-develop.121 (#202) (3c87b76)
+
+## 2026-11-16
+
 ### openg2p-livestock-registry 0.0.0-develop.463 (develop)
 
 - Merge pull request #247 from simretyibeltal-commits/ci/eoan-image-names (Centre-for-Open-Societal-Systems/livestock-registry@07d9bbd40b25)
