@@ -1,0 +1,72 @@
+{{- if .Values.partners }}
+{{- $partners := list }}
+{{- range .Values.partners }}
+{{- $partners = append $partners (dict
+      "partner_id" (required "partners[].partnerId is required" .partnerId)
+      "name" (required "partners[].name is required" .name)
+      "org_name" (.orgName | default "OpenAgriNet")
+      "description" (.description | default "")) }}
+{{- end }}
+{{- $pm := .Values.partnerManager }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+data:
+  partners.json: |
+    {{- dict "partnerManagerUrl" (required "partnerManager.url is required" $pm.url) "tokenUrl" (required "partnerManager.tokenUrl is required" $pm.tokenUrl) "clientId" (required "partnerManager.clientId is required" $pm.clientId) "attempts" .Values.attempts "retrySeconds" .Values.retrySeconds "partners" $partners | toPrettyJson | nindent 4 }}
+  onboard.py: |
+    {{- .Files.Get "files/onboard_partners.py" | nindent 4 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 2
+  activeDeadlineSeconds: 900
+  template:
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: onboard
+          image: {{ required "image is required" .Values.image | quote }}
+          command: [python, -B, /partners/onboard.py, /partners/partners.json]
+          env:
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ required "partnerManager.clientSecret.name is required" $pm.clientSecret.name | quote }}
+                  key: {{ required "partnerManager.clientSecret.key is required" $pm.clientSecret.key | quote }}
+          volumeMounts:
+            - name: partners
+              mountPath: /partners
+              readOnly: true
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: partners
+          configMap:
+            name: {{ .Release.Name }}
+{{- end }}
