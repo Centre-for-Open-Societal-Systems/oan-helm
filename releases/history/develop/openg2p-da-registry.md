@@ -2,6 +2,30 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.0-develop.114
+
+<!-- source-commit: b0fb8b85de0798940ca3223ebd979307e8c313a1 version: 0.0.0-develop.114 -->
+Published 2026-11-16. Archive SHA-256 `1db2831bdb3bb7854d624e0f0f915770b124186a00f79ce918cc7e7af2a42287`.
+
+- Change: Merge pull request #71 from yash7473/feat/view-record-files
+- Source: [Centre-for-Open-Societal-Systems/da-registry@b0fb8b85de07](https://github.com/Centre-for-Open-Societal-Systems/da-registry/commit/b0fb8b85de0798940ca3223ebd979307e8c313a1)
+- Changes since 0.0.0-develop.111: https://github.com/Centre-for-Open-Societal-Systems/da-registry/compare/e623b553eff2770a6bf5f45b85e938dfa87711cb...b0fb8b85de0798940ca3223ebd979307e8c313a1
+
+| Values path | Image |
+| --- | --- |
+| `registry.staffApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/da-registry/staff-api:b0fb8b85de07@sha256:cfcb0f1b0786eb86b850948beda8f6d7d127db5eec960c7d5fcefa6d46f5ca98` |
+| `registry.partnerApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/da-registry/partner-api:b0fb8b85de07@sha256:af21a181a2b9ec6f89d2354725273a30b0a546cf1a7bc83c1111089ace2b6a34` |
+| `registry.celeryWorker.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/da-registry/celery:b0fb8b85de07@sha256:6376f26f7a2af7550981622fe5f2f62d50dfb7f03c73475e0693d5a35b9c4103` |
+| `registry.celeryBeat.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/da-registry/celery:b0fb8b85de07@sha256:6376f26f7a2af7550981622fe5f2f62d50dfb7f03c73475e0693d5a35b9c4103` |
+| `registry.dbSeed.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/da-registry/db-seed:b0fb8b85de07@sha256:a5e84eeec9702ef953eae7d2aa88bd28f6345d3bb1049261bfec771ccb536965` |
+| `registry.staffUi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/da-registry/staff-ui:b0fb8b85de07@sha256:215c575b678ff16fe0b052d2ac8dcfc2aacd3edc9493e3981dc979dc8f4ea21a` |
+
+Return to this version:
+
+```sh
+helm upgrade da-registry https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/openg2p-da-registry-0.0.0-develop.114.tgz -n da-registry --reset-values -f environments/dev/values/da.yaml --wait --timeout 15m
+```
+
 ## 0.0.0-develop.111
 
 <!-- source-commit: e623b553eff2770a6bf5f45b85e938dfa87711cb version: 0.0.0-develop.111 -->
