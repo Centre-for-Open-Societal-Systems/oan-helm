@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-16
 
+### openg2p-da-registry 0.0.0-develop.115 (develop)
+
+- Add contracts and chart checks (#72) (Centre-for-Open-Societal-Systems/da-registry@bf099136e688)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-16
+
 ### openg2p-da-registry 0.0.0-develop.114 (develop)
 
 - Merge pull request #71 from yash7473/feat/view-record-files (Centre-for-Open-Societal-Systems/da-registry@b0fb8b85de07)
