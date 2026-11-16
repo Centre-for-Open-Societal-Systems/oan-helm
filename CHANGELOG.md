@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-16
 
+### openg2p-cropsown-registry 0.0.0-develop.533 (develop)
+
+- Pin the dev values at oan-helm 3ff2453 (farmer reference setting names) (#302) (Centre-for-Open-Societal-Systems/cropsown-regsitry@15e5c2fc940c)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-16
+
 ### openg2p-farmer-registry 0.0.0-develop.869 (develop)
 
 - Yes/No questions keep the answer No; Farming Type only for farmers (#302) (Centre-for-Open-Societal-Systems/farmer-registry@f2297fd6446b)
