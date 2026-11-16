@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-16
 
+### openg2p-farmer-registry 0.0.0-develop.869 (develop)
+
+- Yes/No questions keep the answer No; Farming Type only for farmers (#302) (Centre-for-Open-Societal-Systems/farmer-registry@f2297fd6446b)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-16
+
 ### openg2p-commons-services 1.0.0-dev.45
 
 Previous version: 1.0.0-dev.44.
