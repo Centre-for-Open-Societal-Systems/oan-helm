@@ -124,6 +124,7 @@ the branches `dev`, `main`, `develop` and `staging`. Deploy stages run on the ag
 | Registry dashboards | inside the registry jobs on New Dev (`ci/dashboard/deploy-ui.sh`) | New Dev | staging script `scripts/ci/deliver_staging_dashboards.sh` | - |
 | Farmer connector on staging | script `scripts/ci/deliver_staging_farmer_connector.sh` | - | staging | - |
 | Commons services | `ci/jenkins/staging-commons.Jenkinsfile` on `main` (Jenkins job `oan-helm-staging-commons`, defined in `ci/jenkins/jobs/oan-helm-staging-commons.xml` and created by `ci/jenkins/apply-job.sh`; until it exists, Commons upgrades are by hand: the last were services revision 20 = 1.0.0-dev.41 and base revision 9 on 12 Nov 2026) | - | staging, release `commons-services`, namespace `commons`, through `scripts/ci/deliver_staging_commons.sh` | `staging-commons-deployer-kubeconfig` (ServiceAccount `commons/commons-deployer`, `environments/staging/rbac/commons-deployer-rbac.yaml`); `staging-commons-secret-values` |
+| Commons services and ODK bootstrap on New Dev | `ci/jenkins/dev-commons.Jenkinsfile` on `main` (Jenkins job `oan-helm-dev-commons`, defined in `ci/jenkins/jobs/oan-helm-dev-commons.xml` and created by `ci/jenkins/apply-job.sh`; until it exists, New Dev Commons upgrades are by hand: the last was services revision 45 = 1.0.0-dev.41 on 16 Nov 2026) | New Dev, releases `commons-services` and `odk-bootstrap`, namespace `commons`, through `scripts/ci/deliver_dev_commons.sh` and `scripts/ci/deliver_dev_odk_bootstrap.sh` | - | `dev-commons-deployer-kubeconfig` (ServiceAccount `commons/commons-deployer` on New Dev, `environments/dev/rbac/commons-deployer-rbac.yaml`); `dev-commons-secret-values` |
 
 ### Commons base on staging
 
@@ -193,6 +194,41 @@ out = {"keymanager": {"p12KeystorePass": v["keymanager"]["p12KeystorePass"]},
                                                for k in ("enketoSecret", "enketoLessSecret")}}}
 print(json.dumps(out))' > commons-secret-values.yaml
 ```
+
+### Commons on New Dev
+
+Every build of `main` runs, in job `oan-helm-dev-commons`:
+
+1. `scripts/ci/deliver_dev_commons.sh`: the same steps as Commons services on staging, with
+   `environments/dev/commons-services.chart`, `environments/dev/values/commons-services.yaml`,
+   `environments/dev/commons-services.retired-keys` and the New Dev record `commons-services-delivery`.
+2. `scripts/ci/deliver_dev_odk_bootstrap.sh`: `addons/odk-bootstrap` with `environments/dev/values/odk-bootstrap.yaml`,
+   record `odk-bootstrap-delivery`. Its hook Job keeps each registry's ODK test-submitter token in a Secret in `commons`.
+
+New Dev's Commons base release (`commons`) and `oan-dashboards` stay out of the job: they have no New Dev values in
+git.
+
+Creating the job, once, on New Dev and in Jenkins (the same steps as staging):
+
+1. As the cluster admin on the New Dev box, apply `environments/dev/rbac/commons-deployer-rbac.yaml`. The file says
+   how to build the kubeconfig for credential `dev-commons-deployer-kubeconfig` without printing the token.
+2. Build the secret values file from the New Dev saved values, as for staging but with the Enketo API key as well,
+   upload it as secret-file credential `dev-commons-secret-values`, and delete the file:
+
+```
+sudo KUBECONFIG=/etc/rancher/rke2/rke2.yaml helm get values commons-services -n commons -o json | python3 -c '
+import json, sys
+v = json.load(sys.stdin)
+out = {"keymanager": {"p12KeystorePass": v["keymanager"]["p12KeystorePass"]},
+       "odk-central": {"odk-central-enketo": {k: v["odk-central"]["odk-central-enketo"][k]
+                                               for k in ("enketoSecret", "enketoLessSecret", "enketoApiKey")}}}
+print(json.dumps(out))' > commons-secret-values.yaml
+```
+
+3. `JENKINS_URL=https://jenkins.oanstaging.com JENKINS_USER=... JENKINS_TOKEN=... ci/jenkins/apply-job.sh oan-helm-dev-commons dev-commons-deployer-kubeconfig dev-commons-secret-values`.
+
+With the values on `main` when this was written, the guard's only unset saved keys on New Dev were those four secret
+keys and the hand-set `master-data.geoSeed.image`, which `environments/dev/commons-services.retired-keys` retires.
 
 Not verified: which job or person runs `deliver_staging_dashboards.sh` and
 `deliver_staging_farmer_connector.sh`. No Jenkins job in the job tree references them. They are scripts that

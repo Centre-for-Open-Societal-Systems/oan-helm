@@ -1,0 +1,96 @@
+# New Dev: the deployer of the Commons releases delivered from oan-helm main (commons-services and odk-bootstrap,
+# namespace commons), used only by ci/jenkins/dev-commons.Jenkinsfile through the Jenkins kubeconfig credential
+# dev-commons-deployer-kubeconfig. Same Role as environments/staging/rbac/commons-deployer-rbac.yaml; odk-bootstrap owns
+# only kinds already listed (ServiceAccount, Role, RoleBinding, ConfigMap, Job, and the token Secrets it writes).
+#
+# The Farmer dev deployer (credential farmer-dev-kubeconfig) is a separate identity; this one has rights in commons only,
+# and only on the object kinds the releases own. No cluster-scoped rights, nothing in any other namespace.
+#
+# What it can read, plainly: EVERY Secret in commons, including the Keycloak admin password, the Postgres admin
+# password and every client secret. This cannot be narrowed: Helm stores each release revision as a Secret in the
+# release namespace (names change per revision, so resourceNames cannot list them), the charts own and re-render their
+# own password Secrets, and the server-side dry run and the charts' `lookup` read existing Secrets. Because it can also
+# create Roles and RoleBindings in commons (the charts own some), it is in effect an administrator of the commons
+# namespace. Kubernetes still refuses a Role or RoleBinding granting more than this Role holds (escalation check), so it
+# cannot reach outside commons. Keep the kubeconfig only in that one Jenkins credential.
+#
+# Apply once as the cluster admin on the New Dev box (safe to re-apply):
+#   sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml apply -f commons-deployer-rbac.yaml
+# Check:
+#   K="sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml"
+#   $K auth can-i patch statefulsets -n commons --as=system:serviceaccount:commons:commons-deployer   # yes
+#   $K auth can-i list secrets -n farmer --as=system:serviceaccount:commons:commons-deployer         # no
+#   $K auth can-i create clusterroles --as=system:serviceaccount:commons:commons-deployer            # no
+# Then build the kubeconfig and upload it as Jenkins credential dev-commons-deployer-kubeconfig (Secret file); the
+# token is written to a 0600 file and never printed. The API server address is the New Dev node's private address, the
+# one the build agents already reach for farmer-dev-kubeconfig. Delete the file after the upload:
+#   umask 077; T=$($K -n commons get secret commons-deployer-token -o jsonpath='{.data.token}' | base64 -d)
+#   CA=$(sudo grep certificate-authority-data /etc/rancher/rke2/rke2.yaml | awk '{print $2}')
+#   printf 'apiVersion: v1\nkind: Config\nclusters:\n- name: new-dev\n  cluster:\n    server: https://10.0.1.58:6443\n    certificate-authority-data: %s\nusers:\n- name: commons-deployer\n  user:\n    token: %s\ncontexts:\n- name: commons-deployer\n  context: {cluster: new-dev, user: commons-deployer, namespace: commons}\ncurrent-context: commons-deployer\n' "$CA" "$T" > ~/commons-deployer.kubeconfig; unset T
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: commons-deployer
+  namespace: commons
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: commons-deployer-token
+  namespace: commons
+  annotations:
+    kubernetes.io/service-account.name: commons-deployer
+type: kubernetes.io/service-account-token
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: commons-deployer
+  namespace: commons
+rules:
+  # Helm release storage, the charts' own Secrets/ConfigMaps (incl. the delivery records), and the remaining core kinds.
+  - apiGroups: [""]
+    resources: ["secrets", "configmaps", "services", "serviceaccounts", "persistentvolumeclaims", "pods"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  # --wait and --atomic read events and pod logs only through these.
+  - apiGroups: [""]
+    resources: ["events", "pods/log"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "statefulsets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["apps"]
+    resources: ["replicasets"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["batch"]
+    resources: ["jobs", "cronjobs"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["policy"]
+    resources: ["poddisruptionbudgets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["networkpolicies"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["roles", "rolebindings"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["networking.istio.io"]
+    resources: ["virtualservices", "gateways"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["monitoring.coreos.com"]
+    resources: ["servicemonitors"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: commons-deployer
+  namespace: commons
+subjects:
+  - kind: ServiceAccount
+    name: commons-deployer
+    namespace: commons
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: commons-deployer
