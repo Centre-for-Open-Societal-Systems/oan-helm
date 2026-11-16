@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-16
 
+### openg2p-cropsown-registry 1.0.0-rc.548 (staging)
+
+- Staging Crop connector: pull with the refreshed cropsown-ecr secret (#300) (Centre-for-Open-Societal-Systems/cropsown-regsitry@4b796a51a1fe)
+- Images and rollback: [releases/history/staging/openg2p-cropsown-registry.md](releases/history/staging/openg2p-cropsown-registry.md)
+
+## 2026-11-16
+
 ### openg2p-livestock-registry 1.0.0-rc.479 (staging)
 
 - Staging Livestock connector: pull with the refreshed livestock-registry-ecr-pull-secret (#248) (Centre-for-Open-Societal-Systems/livestock-registry@10298fdc8b3d)
