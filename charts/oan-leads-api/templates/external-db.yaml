@@ -1,0 +1,35 @@
+{{- if .Values.externalDb.enabled }}
+{{- $ip := required "externalDb.ip (private IP of the DB host) is required when externalDb.enabled" .Values.externalDb.ip }}
+{{- range $svc := list .Values.externalDb.postgres .Values.externalDb.elasticsearch }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $svc.serviceName }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "oan-leads-api.labels" $ | nindent 4 }}
+spec:
+  ports:
+    - port: {{ $svc.port }}
+      targetPort: {{ $svc.port }}
+---
+# Selector-less Service: its address comes from this EndpointSlice.
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: {{ $svc.serviceName }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "oan-leads-api.labels" $ | nindent 4 }}
+    kubernetes.io/service-name: {{ $svc.serviceName }}
+    endpointslice.kubernetes.io/managed-by: helm
+addressType: IPv4
+ports:
+  - port: {{ $svc.port }}
+    protocol: TCP
+endpoints:
+  - addresses:
+      - {{ $ip | quote }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,129 @@
+# OAN Leads API: Spring Boot service (port 8080, Swagger at /swagger-ui/index.html).
+# Source: https://github.com/Centre-for-Open-Societal-Systems/leads-api
+#
+# Images are pinned by digest. Credentials come from an existing namespace-local
+# Secret (secret.name), never from Git.
+
+image:
+  # Published by the leads-api Jenkinsfile (DEPLOY_ENV=staging) to the cluster's ECR.
+  repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/leads-api
+  # staging-ati-1
+  tag: ""
+  digest: sha256:4e8af3e7eee596665ebbae27787112561b1150b899525a38172489c167dfb9ce
+  pullPolicy: IfNotPresent
+
+# e.g. [{name: ecr-pull-secret}] - a namespace-local ECR pull Secret.
+imagePullSecrets: []
+
+replicas: 2
+
+containerPort: 8080
+
+service:
+  port: 80
+
+# The app runs without a writable root filesystem requirement; it needs no API token.
+podSecurityContext: {}
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 250m
+  limits:
+    memory: 2Gi
+    cpu: 1000m
+
+readinessProbe:
+  tcpSocket:
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  failureThreshold: 5
+
+livenessProbe:
+  tcpSocket:
+    port: http
+  initialDelaySeconds: 60
+  periodSeconds: 20
+  failureThreshold: 3
+
+# Container-aware heap sizing (JAVA_TOOL_OPTIONS).
+javaOpts: "-XX:MaxRAMPercentage=75.0"
+
+# Non-secret settings (ConfigMap -> environment). Spring relaxed binding maps them onto
+# application.properties, e.g. SPRING_DATASOURCE_URL -> spring.datasource.url.
+config:
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://leads-postgres:5432/leads_db"
+  # Empty: the in-chart Redis Service (<release>-redis).
+  SPRING_REDIS_HOST: ""
+  SPRING_REDIS_PORT: "6379"
+  ELASTICSEARCH_HOST: "leads-elasticsearch"
+  ELASTICSEARCH_PORT: "9200"
+  SPRING_JPA_SHOW_SQL: "false"
+  A2C_WEBHOOK_INITIATE_URL: ""
+  A2C_WEBHOOK_INITIATE_ENABLED: "false"
+
+# Extra env vars (list of Kubernetes EnvVar).
+extraEnv: []
+
+# Existing Secret in the release namespace, loaded with envFrom. Required keys:
+# SPRING_DATASOURCE_USERNAME, SPRING_DATASOURCE_PASSWORD, ELASTICSEARCH_USERNAME,
+# ELASTICSEARCH_PASSWORD, A2C_WEBHOOK_API_KEY, A2C_WEBHOOK_API_SECRET.
+# Optional: SPRING_REDIS_PASSWORD (required when redis.auth.enabled).
+secret:
+  name: leads-secrets
+
+# In-cluster Redis cache (ephemeral).
+redis:
+  enabled: true
+  image:
+    repository: docker.io/library/redis
+    # 7-alpine
+    tag: ""
+    digest: sha256:e4ee3e03ce8f75471f40937a7c6b2b0e500390b6812fcdf5cb32c01295ded446
+    pullPolicy: IfNotPresent
+  args: ["redis-server", "--appendonly", "yes"]
+  auth:
+    # Start Redis with --requirepass from the SPRING_REDIS_PASSWORD key of secret.name;
+    # the app reads the same key.
+    enabled: false
+  resources:
+    requests: { memory: 64Mi, cpu: 100m }
+    limits: { memory: 128Mi, cpu: 200m }
+
+# Services leads-postgres / leads-elasticsearch pointing at a private DB host.
+# Leave disabled when config points at in-cluster databases.
+externalDb:
+  enabled: false
+  ip: ""
+  postgres:
+    serviceName: leads-postgres
+    port: 5432
+  elasticsearch:
+    serviceName: leads-elasticsearch
+    port: 9200
+
+# Istio route on the shared Gateway; the hostname must be covered by the wildcard
+# certificate (single label, e.g. leads.development.oanstaging.com).
+virtualService:
+  enabled: false
+  host: ""
+  gateway: istio-system/development
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 75
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

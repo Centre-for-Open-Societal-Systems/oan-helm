@@ -1,0 +1,11 @@
+OAN Leads API: {{ .Release.Name }} in {{ .Release.Namespace }}
+Image: {{ include "oan.image" .Values.image }}
+Secret: {{ .Values.secret.name }} (must exist in {{ .Release.Namespace }})
+{{- if .Values.virtualService.enabled }}
+Route: https://{{ .Values.virtualService.host }}/swagger-ui/index.html
+{{- end }}
+
+Check the rollout:
+  kubectl -n {{ .Release.Namespace }} rollout status deploy/{{ .Release.Name }}
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ .Release.Name }} 8080:{{ .Values.service.port }}
+  open http://localhost:8080/swagger-ui/index.html

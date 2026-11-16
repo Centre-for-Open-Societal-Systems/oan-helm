@@ -1,0 +1,11 @@
+# Values for the oan-leads-api chart on oan_dev.
+# Release `leads-api`, namespace `leads`. Credentials stay in the namespace-local
+# `leads-secrets` Secret; database endpoints go in private values.
+
+imagePullSecrets:
+- name: ecr-pull-secret
+
+virtualService:
+  enabled: true
+  host: leads.development.oanstaging.com
+  gateway: istio-system/development
