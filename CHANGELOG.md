@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-16
 
+### openg2p-commons-services 1.0.0-dev.45
+
+Previous version: 1.0.0-dev.44.
+
+- Render the New Dev aggregation catalog from Commons values (#209) (6c9c5d7)
+
+## 2026-11-16
+
 ### openg2p-da-registry 0.0.0-develop.115 (develop)
 
 - Add contracts and chart checks (#72) (Centre-for-Open-Societal-Systems/da-registry@bf099136e688)
