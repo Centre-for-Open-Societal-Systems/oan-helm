@@ -9,8 +9,10 @@ platform/platform-services/partner-management/api-reference.md):
                                                    finish an onboarding a previous run left unapproved
 
 A partner that is already active is left alone. A disabled partner, or one whose onboarding was rejected, stops the
-Job: turning it back on is a partner manager's decision. No keys or policies are added; a partner that signs requests
-gets its key from its own chart (for example addons/farmer-connector partnerRegistration).
+Job: turning it back on is a partner manager's decision. Partner Management onboards no partner without a public key
+("At least one public key is required"), so each partner is onboarded with the public key its values declare. For a
+sender that signs nothing, like the staff portal, that key's private half was discarded when it was made: nobody can
+sign as the partner. No policies are added, and an existing partner's keys are not changed.
 """
 import json
 import os
@@ -118,7 +120,7 @@ class PartnerManager:
         if found is None:
             status, payload = self.call("POST", "/partners/requests/onboarding", {
                 "partner_id": partner_id, "name": wanted["name"], "org_name": wanted["org_name"],
-                "description": wanted["description"], "keys": []})
+                "description": wanted["description"], "keys": wanted["keys"]})
             if status < 300 and isinstance(payload, dict) and payload.get("id"):
                 self.approve(partner_id, payload["id"])
                 return "onboarded and approved"

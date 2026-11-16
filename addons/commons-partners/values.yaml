@@ -6,6 +6,11 @@
 #     name: Staff Portal (file import)
 #     orgName: OpenAgriNet
 #     description: Sender of staff portal file imports
+#     keyId: staff-portal-2026-11
+#     publicKey: |                       # an RS256 public key (PEM); Partner Management onboards no partner without one
+#       -----BEGIN PUBLIC KEY-----
+#       ...
+# A sender that signs nothing (the staff portal) gets a key whose private half was discarded when it was made.
 partners: []
 
 partnerManager:

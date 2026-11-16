@@ -20,6 +20,10 @@ finally:
     sys.dont_write_bytecode = previous_bytecode_setting
 
 
+KEY = {"public_key": "-----BEGIN PUBLIC KEY-----\nfixture\n-----END PUBLIC KEY-----", "kid": "staff-portal-2026-11",
+       "algorithm": "RS256"}
+
+
 class FakePartnerManager:
     """The answers Partner Management gives (shapes taken from a live staff-portal-api)."""
 
@@ -74,7 +78,7 @@ class OnboardingTests(unittest.TestCase):
                 owner.assertEqual(self.headers["Authorization"], "Bearer fixture-token")
                 if self.path == "/partners/requests/onboarding":
                     wanted = json.loads(body)
-                    owner.assertEqual(wanted["keys"], [])
+                    owner.assertEqual(wanted["keys"], [KEY])
                     if pm.race:
                         pm.partners[wanted["partner_id"]] = {"partner_id": wanted["partner_id"], "status": "active"}
                     if wanted["partner_id"] in pm.partners:
@@ -99,7 +103,8 @@ class OnboardingTests(unittest.TestCase):
             "partnerManagerUrl": base, "tokenUrl": base + "/token", "clientId": "commons-services-staff-portal",
             "attempts": 3, "retrySeconds": 0,
             "partners": [{"partner_id": "PARTNER_STAFF_PORTAL", "name": "Staff Portal (file import)",
-                          "org_name": "OpenAgriNet", "description": "Sender of staff portal file imports"}],
+                          "org_name": "OpenAgriNet", "description": "Sender of staff portal file imports",
+                          "keys": [KEY]}],
         }
         self.lines = []
 

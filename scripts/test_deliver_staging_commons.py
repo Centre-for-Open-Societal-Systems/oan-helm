@@ -92,6 +92,14 @@ class DeliverStagingCommons(unittest.TestCase):
         values = (ROOT / 'environments/staging/values/commons-partners.yaml').read_text(encoding='utf-8')
         self.assertIn('partnerId: PARTNER_STAFF_PORTAL', values)
         self.assertIn('https://keycloak.qa.oanstaging.com/realms/staff/', values)
+        # Partner Management onboards no partner without a public key (PM-KEY-400).
+        self.assertIn('keyId: staff-portal-2026-11', values)
+        self.assertIn('-----BEGIN PUBLIC KEY-----', values)
+        self.assertNotIn('PRIVATE KEY', values)
+        # A failed hook Job stays until the next delivery and its log is printed before the script fails.
+        self.assertIn('kubectl logs "job/$release"', script)
+        job = (ROOT / 'addons/commons-partners/templates/job.yaml').read_text(encoding='utf-8')
+        self.assertNotIn('hook-succeeded', job)
 
     def test_superuser_rotation_runs_between_base_and_services_and_never_exposes_the_value(self):
         pipeline = (ROOT / 'ci/jenkins/staging-commons.Jenkinsfile').read_text(encoding='utf-8')
