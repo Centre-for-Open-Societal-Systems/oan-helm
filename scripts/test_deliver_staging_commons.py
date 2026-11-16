@@ -26,6 +26,15 @@ class DeliverStagingCommons(unittest.TestCase):
         self.assertEqual(guard.missing(saved, {**overlay, 'keymanager': {'p12KeystorePass': 'y'}}), [])
         self.assertEqual(guard.missing(None, overlay), [])
 
+    def test_guard_lets_only_retired_keys_drop(self):
+        saved = {'aggregationApi': {'enabled': True, 'virtualService': {'gateway': 'g'}}, 'keymanager': {'p': 'x'}}
+        given = {'aggregation-api': {'enabled': True}}
+        self.assertEqual(guard.missing(saved, given, ['aggregationApi']), ['keymanager.p'])
+        self.assertEqual(guard.missing(saved, given, ['aggregation']), ['aggregationApi.enabled', 'aggregationApi.virtualService.gateway', 'keymanager.p'])
+        retired = guard.retired_keys(ROOT / 'environments/staging/commons-services.retired-keys')
+        self.assertIn('aggregationApi', retired)
+        self.assertIn('commons-services.retired-keys', (ROOT / 'scripts/ci/deliver_staging_commons.sh').read_text(encoding='utf-8'))
+
     def test_delivery_never_reuses_saved_values(self):
         script = (ROOT / 'scripts/ci/deliver_staging_commons.sh').read_text(encoding='utf-8')
         self.assertIn('--reset-values', script)

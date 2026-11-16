@@ -11,7 +11,8 @@
 # 3. What staging runs is recorded in ConfigMap commons-services-delivery (the pin, the sha256 of the values file and
 #    of the secret file, and the commit). If the cluster already runs exactly this, nothing is done; otherwise it is
 #    delivered, so a failed or skipped delivery is caught up by the next build of main, whatever that merge changed.
-# 4. Guard: every key of the release's saved values must be set by the two files, so --reset-values drops nothing.
+# 4. Guard: every key of the release's saved values must be set by the two files, so --reset-values drops nothing,
+#    except keys retired on purpose in environments/staging/commons-services.retired-keys (each with its reason).
 #    The merged values are rendered by helm itself; only key names are printed.
 # 5. A server-side dry run, then helm upgrade --reset-values --atomic --wait: a failed upgrade is rolled back by Helm.
 #    A rollback restores the chart and values only; it cannot undo a database change made by a hook. The record is
@@ -48,7 +49,7 @@ printf '{{ toJson .Values }}\n' > "$work/merged/templates/values.json"
 helm template merged "$work/merged" -f "$values" -f "$secrets" --show-only templates/values.json \
   | grep -v -e '^---' -e '^# Source:' > "$work/given.json"
 helm get values "$release" -n "$namespace" -o json > "$work/saved.json"
-python3 "$root/scripts/ci/commons_values_guard.py" "$work/saved.json" "$work/given.json"
+python3 "$root/scripts/ci/commons_values_guard.py" "$work/saved.json" "$work/given.json"   "$root/environments/staging/commons-services.retired-keys"
 
 flags=(-n "$namespace" --reset-values -f "$values" -f "$secrets")
 helm upgrade "$release" "$root/$archive" "${flags[@]}" --dry-run=server > /dev/null
