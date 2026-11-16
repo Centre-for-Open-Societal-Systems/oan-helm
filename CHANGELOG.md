@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-16
 
+### openg2p-livestock-registry 0.0.0-develop.465 (develop)
+
+- Pin the dev values at oan-helm 3ff2453 (farmer reference setting names) (#250) (Centre-for-Open-Societal-Systems/livestock-registry@93d20e48ca35)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-16
+
 ### openg2p-cropsown-registry 0.0.0-develop.533 (develop)
 
 - Pin the dev values at oan-helm 3ff2453 (farmer reference setting names) (#302) (Centre-for-Open-Societal-Systems/cropsown-regsitry@15e5c2fc940c)
