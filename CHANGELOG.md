@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-16
 
+### openg2p-farmer-registry 0.0.0-develop.872 (develop)
+
+- One Postman collection for the three registries, passing on New Dev (#307) (Centre-for-Open-Societal-Systems/farmer-registry@13c95fa361c1)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-16
+
 ### openg2p-cropsown-registry 0.0.0-develop.534 (develop)
 
 - Run the extension test modules three at a time (#305) (Centre-for-Open-Societal-Systems/cropsown-regsitry@c125bf651181)
