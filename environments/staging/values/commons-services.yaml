@@ -252,10 +252,11 @@ aggregation-api:
   enabled: true
   virtualService:
     gateway: istio-system/staging
-  # The chart default catalog holds New Dev's hosts. Cleared here so a staging chart with the subchart fails to
-  # render (catalog.registries or catalog.existingConfigMap is required) until staging's own catalog is set.
+  # The chart default catalog holds New Dev's hosts. Staging clears it and keeps the catalog ConfigMap its
+  # running Deployment mounts today (aggregation-api-catalog, Farmer only) until its catalog moves into values.
   catalog:
     registries: null
+    existingConfigMap: aggregation-api-catalog
 # The pinned chart (environments/staging/commons-services.chart) predates the oan-aggregation-api subchart (9b8df9f)
 # and still reads aggregationApi. Keep both keys until staging pins a chart with the subchart; then drop this one.
 aggregationApi:
