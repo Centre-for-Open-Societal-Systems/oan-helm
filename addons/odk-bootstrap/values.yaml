@@ -1,0 +1,39 @@
+# ODK Central in Commons (chart odk-central of commons-services).
+central:
+  # In-cluster address of the Central backend (the API the Job calls).
+  url: http://commons-services-odk-central-backend.commons.svc.cluster.local
+  # Public address, written into each token Secret for clients that submit from outside the cluster.
+  publicUrl: ""
+  # Central's database, through the database user Central itself uses (postgres-init writes the Secret).
+  database:
+    host: commons-postgresql
+    name: odkdb
+    user: odkuser
+    passwordSecret:
+      name: odk-db-user
+      key: odk-db-user-password
+
+# The local Central account the Job signs in with. Every run sets it to a fresh random password through Central's own
+# account task (the code behind Central's CLI), signs in, and signs out at the end. The password is never stored or
+# printed, so no one holds a Central admin credential.
+bootstrapAccount: ""
+
+# Per registry: the project (found by name, created when missing), the forms the test app user may submit to (each must
+# be published in that project), and the Secret in this namespace that keeps the app user's token.
+#   - name: farmer
+#     project: Farmer Registry
+#     forms: [farmer_profile]
+#     appUser: OAN test submitter
+#     secretName: odk-test-submitter-farmer
+registries: []
+
+# Central's backend image: the Job runs Central's own account task and Node.js. Keep it on the tag Central runs.
+image: docker.io/openg2p/odk-central-backend:v2025.2.1
+imagePullSecrets: []
+
+attempts: 30
+retrySeconds: 10
+
+resources:
+  requests: {cpu: 50m, memory: 96Mi}
+  limits: {memory: 384Mi}

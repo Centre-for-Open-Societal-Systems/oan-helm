@@ -1,0 +1,119 @@
+{{- if .Values.registries }}
+{{- $registries := list }}
+{{- $secrets := list }}
+{{- range .Values.registries }}
+{{- $forms := required "registries[].forms is required: the test app user is given access to these forms" .forms }}
+{{- $registries = append $registries (dict
+      "name" (required "registries[].name is required" .name)
+      "project" (required "registries[].project is required" .project)
+      "forms" $forms
+      "appUser" (.appUser | default "OAN test submitter")
+      "secretName" (required "registries[].secretName is required" .secretName)) }}
+{{- $secrets = append $secrets .secretName }}
+{{- end }}
+{{- $db := .Values.central.database }}
+# Rights of the bootstrap Job: only the token Secrets it keeps, in this namespace.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: {{ toJson $secrets }}
+    verbs: ["get", "update"]
+  # create cannot be limited by name in Kubernetes RBAC.
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Release.Name }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Release.Name }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: before-hook-creation
+data:
+  bootstrap.json: |
+    {{- dict
+          "centralUrl" (required "central.url is required" .Values.central.url)
+          "publicUrl" (required "central.publicUrl is required: clients submit through it" .Values.central.publicUrl)
+          "bootstrapAccount" (required "bootstrapAccount is required: the local Central account the Job signs in with" .Values.bootstrapAccount)
+          "namespace" .Release.Namespace
+          "attempts" .Values.attempts
+          "retrySeconds" .Values.retrySeconds
+          "registries" $registries | toPrettyJson | nindent 4 }}
+  odk_bootstrap.js: |
+    {{- .Files.Get "files/odk_bootstrap.js" | nindent 4 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    # Kept until the next delivery, so a failed run's log can be read.
+    helm.sh/hook-delete-policy: before-hook-creation
+spec:
+  backoffLimit: 2
+  activeDeadlineSeconds: 900
+  template:
+    spec:
+      restartPolicy: Never
+      serviceAccountName: {{ .Release.Name }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: bootstrap
+          image: {{ required "image is required" .Values.image | quote }}
+          workingDir: /usr/odk
+          command: [node, /bootstrap/odk_bootstrap.js, /bootstrap/bootstrap.json]
+          env:
+            - name: DB_HOST
+              value: {{ required "central.database.host is required" $db.host | quote }}
+            - name: DB_NAME
+              value: {{ required "central.database.name is required" $db.name | quote }}
+            - name: DB_USER
+              value: {{ required "central.database.user is required" $db.user | quote }}
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ required "central.database.passwordSecret.name is required" $db.passwordSecret.name | quote }}
+                  key: {{ required "central.database.passwordSecret.key is required" $db.passwordSecret.key | quote }}
+          volumeMounts:
+            - name: bootstrap
+              mountPath: /bootstrap
+              readOnly: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: bootstrap
+          configMap:
+            name: {{ .Release.Name }}
+{{- end }}
