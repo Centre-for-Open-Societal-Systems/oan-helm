@@ -25,7 +25,13 @@ echo "delivering $release (staging runs: ${running:-no record})"
 
 flags=(-n "$namespace" --reset-values -f "$values")
 helm upgrade --install "$release" "$chart" "${flags[@]}" --dry-run=server > /dev/null
-helm upgrade --install "$release" "$chart" "${flags[@]}" --atomic --wait --timeout "${HELM_TIMEOUT:-10m}"
+if ! helm upgrade --install "$release" "$chart" "${flags[@]}" --atomic --wait --timeout "${HELM_TIMEOUT:-10m}"; then
+  # The hook Job is kept until the next delivery (hook-delete-policy before-hook-creation), so its log is still here.
+  # The onboarding script prints partner ids, HTTP codes and Partner Management error codes only.
+  echo "commons-partners failed; log of job/$release:"
+  kubectl logs "job/$release" -n "$namespace" --all-containers --tail=50 || true
+  exit 1
+fi
 
 kubectl create configmap "$record" -n "$namespace" --from-literal=delivered="$wanted" \
   --from-literal=commit="$(git -C "$root" rev-parse HEAD 2>/dev/null || echo unknown)" --dry-run=client -o yaml \

@@ -5,7 +5,11 @@
       "partner_id" (required "partners[].partnerId is required" .partnerId)
       "name" (required "partners[].name is required" .name)
       "org_name" (.orgName | default "OpenAgriNet")
-      "description" (.description | default "")) }}
+      "description" (.description | default "")
+      "keys" (list (dict
+        "public_key" (required "partners[].publicKey is required: Partner Management onboards no partner without a key" .publicKey)
+        "kid" (required "partners[].keyId is required" .keyId)
+        "algorithm" "RS256"))) }}
 {{- end }}
 {{- $pm := .Values.partnerManager }}
 apiVersion: v1
@@ -15,7 +19,7 @@ metadata:
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "-5"
-    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+    helm.sh/hook-delete-policy: before-hook-creation
 data:
   partners.json: |
     {{- dict "partnerManagerUrl" (required "partnerManager.url is required" $pm.url) "tokenUrl" (required "partnerManager.tokenUrl is required" $pm.tokenUrl) "clientId" (required "partnerManager.clientId is required" $pm.clientId) "attempts" .Values.attempts "retrySeconds" .Values.retrySeconds "partners" $partners | toPrettyJson | nindent 4 }}
@@ -28,7 +32,7 @@ metadata:
   name: {{ .Release.Name }}
   annotations:
     helm.sh/hook: post-install,post-upgrade
-    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+    helm.sh/hook-delete-policy: before-hook-creation
 spec:
   backoffLimit: 2
   activeDeadlineSeconds: 900

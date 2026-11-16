@@ -7,6 +7,19 @@ partners:
     name: Staff Portal (file import)
     orgName: OpenAgriNet
     description: Sender of staff portal file imports (Farmer, Crop, Livestock and DA registries)
+    # The staff portal signs nothing. Its private half was discarded when this key was made (16 Nov 2026), so nobody
+    # can sign as PARTNER_STAFF_PORTAL; Partner Management only needs a key to onboard the partner.
+    keyId: staff-portal-2026-11
+    publicKey: |
+      -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoMVtt9bD0AYZ+cbIwPZ0
+      PpxUgEGlUXO0RKpuR2TQhgTSicSYEdoOwucvnNzZukPXtxzizXzWvoS97V/EifZx
+      rAwDUh8uoxDaVhPAX3lmNkMojq/Qqo+Z5C8MkCR00SUfibf/+Y9wo8iqwUC3iq/+
+      685CNnjweFNUh6K7tnTg6pfPFwJxCgII4uhzDa0ckD637l+kImHiY5B9jg8ZywPs
+      9grxpoW0F6YSwKnIPi+hObeZzr0fKKDoQWBU5jSP3SG8jgpx+TLScY7UNHGA0d9V
+      czgV7I15xTeR0H2GtNbbxb55UUe4ZZTKA4QAKGOyke/2gcOumz38IMb2OL/+NXOR
+      /wIDAQAB
+      -----END PUBLIC KEY-----
 
 partnerManager:
   tokenUrl: https://keycloak.qa.oanstaging.com/realms/staff/protocol/openid-connect/token
