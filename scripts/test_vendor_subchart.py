@@ -48,7 +48,7 @@ class Bump(unittest.TestCase):
     def test_other_dependencies_keep_their_versions(self):
         chart, lock = vendor_subchart.bump(self.chart, self.lock, "oan-aggregation-api", "0.0.0-develop.99")
         for text in (chart, lock):
-            self.assertEqual(vendor_subchart.dependency_version(text, "openg2p-master-data"), "0.0.0-develop.118")
+            self.assertEqual(vendor_subchart.dependency_version(text, "openg2p-master-data"), "0.0.0-develop.121")
 
     def test_a_chart_the_parent_does_not_depend_on_is_refused(self):
         with self.assertRaises(ValueError):
@@ -114,7 +114,7 @@ class Main(unittest.TestCase):
         os.environ.pop("DRY_RUN", None)
 
     def github(self, **kwargs):
-        files = ["openg2p-master-data-0.0.0-develop.118.tgz", "oan-aggregation-api-%s.tgz" % self.current]
+        files = ["openg2p-master-data-0.0.0-develop.121.tgz", "oan-aggregation-api-%s.tgz" % self.current]
         return FakeGitHub(self.chart, self.lock, files, **kwargs)
 
     def run_main(self, github, archive=None):

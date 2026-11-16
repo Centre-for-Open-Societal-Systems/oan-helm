@@ -504,10 +504,11 @@ def main():
             values = read(chart / "values.yaml")
             if chart.name == "openg2p-commons-services":
                 master_data = next(dep for dep in info["dependencies"] if dep["name"] == "openg2p-master-data")
-                assert master_data["version"] == "0.0.0-develop.118"
+                assert master_data["version"] == "0.0.0-develop.121"
                 assert master_data["repository"] == "https://openg2p.github.io/openg2p-helm"
-                for component in ("masterDataAPI", "masterDataUi"):
-                    assert values["master-data"][component]["image"]["tag"] == "0.0.0-develop.118"
+                # The UI follows the chart to develop.121; the API stays on develop.118 until its upgrade is verified.
+                for component, tag in (("masterDataAPI", "0.0.0-develop.118"), ("masterDataUi", "0.0.0-develop.121")):
+                    assert values["master-data"][component]["image"]["tag"] == tag
                     assert re.fullmatch(r"sha256:[0-9a-f]{64}", values["master-data"][component]["image"]["digest"])
                 # The seed image is upstream's develop.118 with the ETH-OAN pack, by digest: a hand-tagged
                 # -oan.<n> build from the fork, or the scheduled build of one OAN develop commit.
