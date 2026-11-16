@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-16
 
+### openg2p-farmer-registry 0.0.0-develop.873 (develop)
+
+- Connector definitions hook pulls with the connector API's pull secrets (#310) (Centre-for-Open-Societal-Systems/farmer-registry@b8ddaf93422e)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-16
+
 ### openg2p-farmer-registry 1.0.0-rc.890 (staging)
 
 - One Postman collection for the three registries, passing on New Dev (#307) (Centre-for-Open-Societal-Systems/farmer-registry@13c95fa361c1)
