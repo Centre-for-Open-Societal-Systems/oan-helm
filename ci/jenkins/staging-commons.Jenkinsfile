@@ -66,6 +66,15 @@ pipeline {
                 }
             }
         }
+        // The OAN staging Helm repository in Rancher (scripts/ci/deliver_staging_rancher_repo.sh).
+        stage('Register OAN Helm repository in Rancher') {
+            when { allOf { branch 'main'; not { changeRequest() } } }
+            steps {
+                withCredentials([file(credentialsId: 'staging-commons-deployer-kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh 'bash scripts/ci/deliver_staging_rancher_repo.sh'
+                }
+            }
+        }
         // The shared dashboard no registry owns (scripts/ci/deliver_staging_oan_dashboards.sh, record oan-dashboards-delivery).
         stage('Deliver oan-dashboards') {
             when { allOf { branch 'main'; not { changeRequest() } } }

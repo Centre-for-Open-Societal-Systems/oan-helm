@@ -1,0 +1,39 @@
+# Staging: let the Commons deployer (ServiceAccount commons/commons-deployer, see commons-deployer-rbac.yaml) keep the
+# one Rancher repository it delivers, oan-staging (../rancher/oan-staging-clusterrepo.yaml).
+#
+# ClusterRepo is cluster-scoped, so this is a ClusterRole. It covers that one object by name for get, update and patch.
+# Create can't be limited by name in Kubernetes, so create is allowed for ClusterRepos; the delivery script only ever
+# applies oan-staging. No other cluster-scoped kind, and no delete.
+#
+# Apply once as the cluster admin on the staging box (safe to re-apply):
+#   sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml apply -f commons-deployer-rancher-repo-rbac.yaml
+# Check:
+#   K="sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml"
+#   $K auth can-i patch clusterrepos.catalog.cattle.io/oan-staging --as=system:serviceaccount:commons:commons-deployer  # yes
+#   $K auth can-i patch clusterrepos.catalog.cattle.io/openg2p --as=system:serviceaccount:commons:commons-deployer      # no
+#   $K auth can-i delete clusterrepos.catalog.cattle.io --as=system:serviceaccount:commons:commons-deployer             # no
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: commons-deployer-rancher-repo
+rules:
+  - apiGroups: [catalog.cattle.io]
+    resources: [clusterrepos]
+    verbs: [create]
+  - apiGroups: [catalog.cattle.io]
+    resources: [clusterrepos]
+    resourceNames: [oan-staging]
+    verbs: [get, update, patch]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: commons-deployer-rancher-repo
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: commons-deployer-rancher-repo
+subjects:
+  - kind: ServiceAccount
+    name: commons-deployer
+    namespace: commons
