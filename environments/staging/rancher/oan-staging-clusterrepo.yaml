@@ -1,0 +1,14 @@
+# Staging: the OAN staging Helm repository in Rancher (Apps > Charts), next to the openg2p repository.
+#
+# It serves repository/staging/ of this repository on main: the promoted registry charts (index.yaml with relative
+# urls). The repository is public, so no credentials are needed. Rancher refreshes it on its own schedule; the charts
+# shown are exactly what the staging promotions have published.
+#
+# Applied by scripts/ci/deliver_staging_rancher_repo.sh (stage "Register OAN Helm repository in Rancher" of
+# ci/jenkins/staging-commons.Jenkinsfile), with the rights in ../rbac/commons-deployer-rancher-repo-rbac.yaml.
+apiVersion: catalog.cattle.io/v1
+kind: ClusterRepo
+metadata:
+  name: oan-staging
+spec:
+  url: https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/staging
