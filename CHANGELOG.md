@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-17
 
+### oan-grievance-service 0.0.1-develop.89 (develop)
+
+- Merge pull request #119 from Centre-for-Open-Societal-Systems/perf/grievance-dev-resource-requests (Centre-for-Open-Societal-Systems/oan_grievance_service@6b17aa28b6ad)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-17
+
 ### oan-leads-api 0.1.0-dev.1
 
 First published version.
