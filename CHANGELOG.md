@@ -8,6 +8,13 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-17
+
+### openg2p-da-registry 0.0.0-develop.117 (develop)
+
+- Merge pull request #75 from yash7473/fix/da-location-names (Centre-for-Open-Societal-Systems/da-registry@61387b620acb)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
 ## 2026-11-16
 
 ### openg2p-farmer-registry 1.0.0-rc.892 (staging)
