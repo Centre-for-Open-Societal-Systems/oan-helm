@@ -21,6 +21,15 @@ pipeline {
         timeout(time: 60, unit: 'MINUTES')
     }
     stages {
+        // Nothing is delivered unless every GitHub check of this commit passed (scripts/ci/require_green_checks.sh).
+        stage('Checks green') {
+            when { allOf { branch 'main'; not { changeRequest() } } }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'oan-helm-fork-token', usernameVariable: 'GH_USER', passwordVariable: 'GH_TOKEN')]) {
+                    sh 'bash scripts/ci/require_green_checks.sh Centre-for-Open-Societal-Systems/oan-helm HEAD'
+                }
+            }
+        }
         stage('Deliver Commons services') {
             when { allOf { branch 'main'; not { changeRequest() } } }
             steps {
