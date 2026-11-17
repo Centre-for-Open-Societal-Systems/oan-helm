@@ -88,7 +88,7 @@ An equivalent CLI upgrade, once those checks are complete, is:
 ```sh
 helm upgrade farmer-registry oan/openg2p-farmer-registry \
   --namespace farmer --version <version> \
-  --reuse-values -f /private/reviewed-changes.yaml \
+  --reset-then-reuse-values -f /private/reviewed-changes.yaml \
   -f environments/dev/values/farmer.yaml --wait --timeout 15m
 ```
 
@@ -96,6 +96,12 @@ Substitute the **actual current** release/namespace from the installed app. This
 command assumes `oan` points to the published Helm repository and that reviewed
 private values have been reconciled with the new schema. Do not add `--install`
 to this existing-release procedure.
+
+Use `--reset-then-reuse-values` (Helm 3.14+), not `--reuse-values`: `--reuse-values`
+also keeps the previous chart's defaults, so a new chart version's images and
+settings are silently dropped (the chart label moves, the pod keeps the old image).
+`--reset-then-reuse-values` takes the new chart's defaults and re-applies only the
+release's saved overrides. Check the rendered image digests after every upgrade.
 
 If an existing dashboard or Consent component belongs to another release, keep
 that owner. Enabling a new registry UI with the same name does not transfer Helm
