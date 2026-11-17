@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.53
+
+<!-- source-commit: 3138291549c0f26021874e37c10b316db1137fc4 version: 0.0.1-develop.53 -->
+Published 2026-11-17. Archive SHA-256 `9d40467f566d17f592931bdd78421a15a6843afed615d483dd85b285cf416c88`.
+
+- Change: Merge pull request #76 from arnavam/chore/develop-chart-version
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_ui@3138291549c0](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/commit/3138291549c0f26021874e37c10b316db1137fc4)
+- Changes since 0.0.1-develop.52: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/compare/1c44b323a577f2ea10a277f7bd3180812dabf3d1...3138291549c0f26021874e37c10b316db1137fc4
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-ui/grievance-ui:0.0.1-develop.53` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-ui-0.0.1-develop.53.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.52
 
 <!-- source-commit: 1c44b323a577f2ea10a277f7bd3180812dabf3d1 version: 0.0.1-develop.52 -->

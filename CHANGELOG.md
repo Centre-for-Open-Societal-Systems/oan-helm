@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-17
 
+### oan-grievance-ui 0.0.1-develop.53 (develop)
+
+- Merge pull request #76 from arnavam/chore/develop-chart-version (Centre-for-Open-Societal-Systems/oan_grievance_ui@3138291549c0)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-17
+
 ### oan-a2c-ui 0.0.1-develop.9 (develop)
 
 - Merge pull request #118 from arnavam/chore/develop-chart-version (Centre-for-Open-Societal-Systems/oan_a2c_ui@cf71c346a9af)
