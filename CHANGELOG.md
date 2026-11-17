@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-17
 
+### openg2p-cropsown-registry 0.0.0-develop.538 (develop)
+
+- Merge pull request #308 from komalchoudharioas/fix/cropsown-dci-template-expanded (Centre-for-Open-Societal-Systems/cropsown-regsitry@7ba115a78cd8)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-17
+
 ### openg2p-livestock-registry 1.0.0-rc.484 (staging)
 
 - Postman: check generated answers against Master Data choice lists (#255) (Centre-for-Open-Societal-Systems/livestock-registry@6c3a0bddbb99)
