@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-17
 
+### openg2p-cropsown-registry 0.0.0-develop.536 (develop)
+
+- One Postman collection for the three registries, passing on New Dev (#306) (Centre-for-Open-Societal-Systems/cropsown-regsitry@7da87f704f10)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-17
+
 ### Retired archives
 
 - oan-a2c-0.1.0-dev.1.tgz
