@@ -183,9 +183,14 @@ After a release, refresh the repository in Rancher (Repositories → ⋮ → Ref
 4. Helm CLI equivalent:
    ```sh
    helm upgrade <release> oan/<chart> -n <namespace> --version <version> \
-     --reuse-values -f /private/reviewed-changes.yaml -f environments/dev/values/<chart>.yaml \
+     --reset-then-reuse-values -f /private/reviewed-changes.yaml -f environments/dev/values/<chart>.yaml \
      --wait --timeout 15m
    ```
+   Use `--reset-then-reuse-values` (Helm 3.14+), not `--reuse-values`. `--reuse-values`
+   also keeps the old chart's defaults, so an image a new chart version brings, such
+   as a bundled subchart's, never reaches the cluster: the chart version changes but
+   the pod restarts on the old image. `--reset-then-reuse-values` starts from the new
+   chart's defaults and re-applies only the release's saved overrides.
 5. Commons Services upgrades are one click in Rancher: every Job and hook is safe
    to repeat, following OpenG2P's initialization standard. Follow
    [docs/commons-upgrades.md](docs/commons-upgrades.md). Releases still on older
