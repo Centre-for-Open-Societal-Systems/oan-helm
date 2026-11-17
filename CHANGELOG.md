@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-17
 
+### openg2p-farmer-registry 0.0.0-develop.885 (develop)
+
+- Staff UI build: read the notification client from the last commit that holds it (#322) (Centre-for-Open-Societal-Systems/farmer-registry@689fb98dbb70)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-17
+
 ### openg2p-livestock-registry 0.0.0-develop.469 (develop)
 
 - ODK: a vet's or AI technician's ID is never sent as their name (#254) (Centre-for-Open-Societal-Systems/livestock-registry@5e57e7a29718)
