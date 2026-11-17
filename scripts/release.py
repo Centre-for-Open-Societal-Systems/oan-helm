@@ -8,6 +8,12 @@ A changed chart gets the next version (1.0.0-dev.16 -> 1.0.0-dev.17, stable
 SHA256SUMS, and gets a CHANGELOG.md entry from the commits that touched it.
 A version already raised by hand in the PR is packaged as it is.
 Published archives are never rewritten.
+
+An archive that must leave repository/ is listed in releases/retired.txt (one file name per
+line, # for comments). The next run deletes it and its entries in index.yaml, SHA256SUMS and
+releases/artifacts.json. Pull requests may not touch repository/, so this is the only way a
+published archive is removed. A name already gone is skipped; the version a chart's Chart.yaml
+still names is refused, because the run would publish it again.
 """
 import argparse
 import datetime
@@ -24,6 +30,7 @@ CHARTS = sorted(ROOT.glob("charts/*/Chart.yaml")) + sorted(ROOT.glob("addons/reg
 PUBLIC = ROOT / "repository"
 ARTIFACTS = ROOT / "releases/artifacts.json"
 CHANGELOG = ROOT / "CHANGELOG.md"
+RETIRED = ROOT / "releases/retired.txt"
 CHANGELOG_MARKER = "<!-- Releases are inserted below this line by scripts/release.py. -->"
 RELEASE_SUBJECT = "chore(release):"
 SEMVER = re.compile(r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?")
@@ -91,8 +98,29 @@ def changes(chart, previous):
     return [(sha, subject) for sha, subject in lines if not subject.startswith(RELEASE_SUBJECT)]
 
 
-def changelog_entry(released, today):
+def today():
+    return datetime.datetime.now(datetime.timezone.utc).date().isoformat()
+
+
+def write_message(released, retired):
+    """The commit message and tags the workflow uses after this run."""
+    parts = [f"{chart.name} {version}" for chart, _, version in released]
+    if retired:
+        parts.append(f"retire {len(retired)} archive{'s' * (len(retired) != 1)}")
+    body = [f"- {chart.name}: {previous or '(new)'} -> {version}" for chart, previous, version in released]
+    body += [f"- retired {name}" for name in retired]
+    out = ROOT / ".build"
+    out.mkdir(exist_ok=True)
+    (out / "release-message.txt").write_text(f"{RELEASE_SUBJECT} {', '.join(parts)}\n\n" + "\n".join(body) + "\n", encoding="utf-8")
+    (out / "release-tags.txt").write_text("".join(f"{chart.name}-{version}\n" for chart, _, version in released), encoding="utf-8")
+
+
+def changelog_entry(released, today, retired=()):
     lines = [f"## {today}", ""]
+    if retired:
+        lines.extend(["### Retired archives", ""])
+        lines.extend(f"- {name}" for name in retired)
+        lines.append("")
     for chart, previous, version in released:
         lines.append(f"### {chart.name} {version}")
         lines.append("")
@@ -121,7 +149,73 @@ def write_current():
     (ROOT / "releases/current.yaml").write_bytes(body.encode("utf-8"))
 
 
+def retired_names():
+    if not RETIRED.exists():
+        return []
+    lines = [line.strip() for line in RETIRED.read_text(encoding="utf-8").splitlines()]
+    names = [line for line in lines if line and not line.startswith("#")]
+    for name in names:
+        assert re.fullmatch(r"[A-Za-z0-9._+-]+\.tgz", name), f"{RETIRED.name}: not an archive file name: {name}"
+    return names
+
+
+def drop_from_index(index, names):
+    """Remove the entries whose archive is in names; every other entry keeps its bytes."""
+    keys, items = [], {}
+    head, entries = [], False
+    for line in index.read_text(encoding="utf-8").splitlines(keepends=True):
+        if re.match(r"^entries:", line):
+            entries = True
+        elif entries and re.match(r"^\S", line):
+            entries = False
+        if entries and re.match(r"^  [A-Za-z0-9._-]+:\s*$", line):
+            keys.append(line)
+            items[line] = []
+            head.append(line)
+        elif entries and re.match(r"^  - ", line):
+            items[keys[-1]].append([line])
+        elif entries and keys and items[keys[-1]]:
+            items[keys[-1]][-1].append(line)
+        else:
+            head.append(line)
+    out = []
+    for line in head:
+        if line not in items:
+            out.append(line)
+            continue
+        kept = [item for item in items[line] if not any(f"    - {name}\n" in item for name in names)]
+        if kept:
+            out.append(line)
+            out.extend(chunk for item in kept for chunk in item)
+    index.write_text("".join(out), encoding="utf-8", newline="\n")
+
+
+def retire(dry_run=False):
+    """Delete the archives listed in releases/retired.txt; return the names that were present."""
+    present = [name for name in retired_names() if (PUBLIC / name).exists()]
+    current = {f"{read(m)['name']}-{read(m)['version']}.tgz" for m in CHARTS}
+    named = sorted(set(present) & current)
+    assert not named, f"{RETIRED.name} lists the version a chart still names, change Chart.yaml first: {named}"
+    if dry_run or not present:
+        return present
+    drop = set(present)
+    for name in present:
+        (PUBLIC / name).unlink()
+    sums = PUBLIC / "SHA256SUMS"
+    sums.write_bytes("".join(line for line in sums.read_text(encoding="utf-8").splitlines(keepends=True)
+                             if line.split()[-1] not in drop).encode("utf-8"))
+    artifacts = json.loads(ARTIFACTS.read_text(encoding="utf-8"))
+    for name in present:
+        artifacts.pop(name, None)
+    ARTIFACTS.write_text(json.dumps(artifacts, indent=2) + "\n", encoding="utf-8", newline="\n")
+    drop_from_index(PUBLIC / "index.yaml", drop)
+    return present
+
+
 def main(dry_run=False):
+    retired = retire(dry_run)
+    for name in retired:
+        print(f"retire {name}")
     artifacts = json.loads(ARTIFACTS.read_text(encoding="utf-8"))
     sealed = len(artifacts)
     released = []
@@ -148,6 +242,9 @@ def main(dry_run=False):
     if not released:
         if len(artifacts) != sealed:
             ARTIFACTS.write_text(json.dumps(artifacts, indent=2) + "\n", encoding="utf-8", newline="\n")
+        if retired:
+            write_changelog(changelog_entry([], today(), retired))
+            write_message([], retired)
         print("No chart source changed since its published version.")
         return released
     archives = []
@@ -163,13 +260,8 @@ def main(dry_run=False):
     (PUBLIC / "SHA256SUMS").write_bytes("".join(f"{digest(p)}  {p.name}\n" for p in sorted(PUBLIC.glob("*.tgz"))).encode("utf-8"))
     ARTIFACTS.write_text(json.dumps(artifacts, indent=2) + "\n", encoding="utf-8", newline="\n")
     write_current()
-    write_changelog(changelog_entry(released, datetime.datetime.now(datetime.timezone.utc).date().isoformat()))
-    summary = ", ".join(f"{chart.name} {version}" for chart, _, version in released)
-    out = ROOT / ".build"
-    out.mkdir(exist_ok=True)
-    (out / "release-message.txt").write_text(f"{RELEASE_SUBJECT} {summary}\n\n" + "\n".join(
-        f"- {chart.name}: {previous or '(new)'} -> {version}" for chart, previous, version in released) + "\n", encoding="utf-8")
-    (out / "release-tags.txt").write_text("".join(f"{chart.name}-{version}\n" for chart, _, version in released), encoding="utf-8")
+    write_changelog(changelog_entry(released, today(), retired))
+    write_message(released, retired)
     return released
 
 
