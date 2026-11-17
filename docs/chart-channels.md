@@ -20,8 +20,11 @@ URL of that folder.
 
 1. A registry pipeline runs `scripts/ci/package_chart.py`, which takes the version from
    `scripts/ci/derive-version.sh`, packages `helm/<chart>` and writes the images of the build into the
-   packaged values. The pipeline deploys this archive, and step 2 publishes the same file. Farmer has
-   its own `ci/deploy/package_chart.py` with the same result.
+   packaged values. The pipeline deploys this archive, and step 2 publishes the same file. The
+   application repositories (the Frappe services and their user interfaces) keep only their constants in
+   `ci/package_chart.py`; the steps are `scripts/ci/app_chart.py`, which that script loads at a pinned
+   commit of this repository (`OAN_HELM_REF`). A change to `app_chart.py` reaches a repository when it
+   moves its pin.
 2. The pipeline runs `scripts/ci/publish_chart.py`, which adds that one archive to `repository/<channel>/`.
    A version that already exists is refused.
 3. `.github/workflows/publish-channels.yaml` runs `scripts/publish_channels.py`: it checks the archive,
