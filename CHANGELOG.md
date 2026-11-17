@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-17
 
+### openg2p-livestock-registry 0.0.0-develop.469 (develop)
+
+- ODK: a vet's or AI technician's ID is never sent as their name (#254) (Centre-for-Open-Societal-Systems/livestock-registry@5e57e7a29718)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-17
+
 ### openg2p-cropsown-registry 0.0.0-develop.538 (develop)
 
 - Merge pull request #308 from komalchoudharioas/fix/cropsown-dci-template-expanded (Centre-for-Open-Societal-Systems/cropsown-regsitry@7ba115a78cd8)
