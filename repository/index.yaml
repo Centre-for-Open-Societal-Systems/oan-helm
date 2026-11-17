@@ -878,6 +878,37 @@ entries:
     urls:
     - oan-grievance-ui-0.1.0-dev.1.tgz
     version: 0.1.0-dev.1
+  oan-leads-api:
+  - annotations:
+      catalog.cattle.io/display-name: OAN Leads API
+      oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/leads-api
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-leads-api
+      oan.org/owner: OpenAgriNet (OAN)
+      org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/leads-api
+    apiVersion: v2
+    appVersion: 0.1.0-develop
+    created: "2026-11-17T05:11:46.542719748Z"
+    description: OAN Leads API for OpenAgriNet (OAN), developed in the OAN leads-api
+      repository; Spring Boot service with an in-chart Redis cache, an optional bridge
+      to the external PostgreSQL/Elasticsearch host and an optional Istio route.
+    digest: 8c0b87974b564bd9dc7a4f72966f64207bd5b4ff062d354ffab4e6e865f78cec
+    home: https://github.com/Centre-for-Open-Societal-Systems/leads-api
+    keywords:
+    - oan
+    - openagrinet
+    - leads
+    - spring-boot
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-leads-api
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/leads-api
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-leads-api-0.1.0-dev.1.tgz
+    version: 0.1.0-dev.1
   oan-logging:
   - annotations:
       oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-logging
@@ -10348,4 +10379,4 @@ entries:
     urls:
     - openg2p-livestock-registry-1.0.0-dev.1.tgz
     version: 1.0.0-dev.1
-generated: "2026-11-16T16:45:26.662057924Z"
+generated: "2026-11-17T05:11:46.54185516Z"

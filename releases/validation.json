@@ -1,6 +1,7 @@
 {
   "helm": "v3.19.0+g3d8990f",
   "chartVersions": {
+    "oan-leads-api": "0.1.0-dev.1",
     "oan-sandbox": "1.0.0-dev.19",
     "openg2p-commons-services": "1.0.0-dev.45",
     "openg2p-cropsown-registry": "1.0.0-dev.23",
@@ -10,6 +11,25 @@
   },
   "clusterAccess": false,
   "charts": {
+    "oan-leads-api": {
+      "lint": "strict passed",
+      "resources": 14,
+      "namespaces": [
+        "verify-a",
+        "verify-b"
+      ],
+      "preservation": "upstream resource identities, selectors and Secret references match baseline",
+      "baselineScope": "new chart in 0.1.0-dev.1: API, Redis cache, ECR pull-secret refresher (hook Job + CronJob) and PDB by default; leads-secrets referenced by envFrom; the chart-owned Secret, external DB bridge, route and HPA are opt-in",
+      "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
+      "defaultImageReferences": [
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/leads-api/leads-api:develop-latest",
+        "alpine/k8s:1.31.1",
+        "amazon/aws-cli:2.36.43",
+        "docker.io/library/redis@sha256:e4ee3e03ce8f75471f40937a7c6b2b0e500390b6812fcdf5cb32c01295ded446"
+      ],
+      "devExample": "examples/dev/oan-leads-api.yaml: strict lint and render passed",
+      "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
+    },
     "oan-sandbox": {
       "lint": "strict passed",
       "resources": 0,
@@ -188,8 +208,8 @@
   },
   "upstreamResolution": "not attempted",
   "offlineResolution": "All chart locks resolved from dependencies bundled with verified source packages",
-  "packages": 184,
-  "currentPackages": 6,
+  "packages": 185,
+  "currentPackages": 7,
   "historicalPackages": 178,
   "unreleasedCharts": [],
   "index": "Relative URLs, SHA-256, HTTP download, exact Helm version selection and repository-based renders verified against loopback server"

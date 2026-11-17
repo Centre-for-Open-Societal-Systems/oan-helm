@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-17
 
+### oan-leads-api 0.1.0-dev.1
+
+First published version.
+
+- feat(leads-api): add the OAN Leads API as a chart (#201) (daeebee)
+
+## 2026-11-17
+
 ### openg2p-da-registry 0.0.0-develop.119 (develop)
 
 - Merge pull request #76 from yash7473/fix/da-home-address-layout (Centre-for-Open-Societal-Systems/da-registry@3ed1d9ed8d49)
