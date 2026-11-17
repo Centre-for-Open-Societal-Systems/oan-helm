@@ -10,6 +10,74 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-17
 
+### Retired archives
+
+- oan-a2c-0.1.0-dev.1.tgz
+- oan-a2c-0.1.0-dev.2.tgz
+- oan-a2c-0.1.0-dev.3.tgz
+- oan-a2c-service-0.1.0-dev.3.tgz
+- oan-a2c-service-0.1.0-dev.4.tgz
+- oan-a2c-ui-0.1.0-dev.1.tgz
+- oan-grievance-service-0.1.0-dev.1.tgz
+- oan-grievance-service-0.1.0-dev.2.tgz
+- oan-grievance-service-0.1.0-dev.3.tgz
+- oan-grievance-service-0.1.0-dev.4.tgz
+- oan-grievance-service-0.1.0-dev.5.tgz
+- oan-grievance-ui-0.1.0-dev.1.tgz
+- oan-apisix-gateway-0.1.0-dev.1.tgz
+- oan-apisix-gateway-0.1.0-dev.2.tgz
+- oan-apisix-gateway-0.1.0-dev.3.tgz
+- oan-apisix-gateway-0.1.0-dev.4.tgz
+- oan-apisix-gateway-0.1.0-dev.5.tgz
+- oan-apisix-gateway-0.1.0-dev.6.tgz
+- oan-apisix-gateway-0.1.0-dev.7.tgz
+- oan-apisix-gateway-0.1.0-dev.8.tgz
+- oan-apisix-gateway-0.1.0-dev.9.tgz
+- oan-apisix-gateway-0.1.0-develop.1.tgz
+- oan-cluster-access-0.1.0-dev.1.tgz
+- oan-cluster-access-0.1.0-develop.1.tgz
+- oan-frappe-common-0.1.0-dev.1.tgz
+- oan-frappe-common-0.1.0-dev.2.tgz
+- oan-frappe-common-0.1.0-develop.1.tgz
+
+### oan-apisix-gateway 0.0.1-develop.1
+
+First published version.
+
+- chore(charts): use 0.0.1-develop.1 for the gateway, cluster-access and frappe-common charts (ebff274)
+- chore(charts): move gateway, cluster-access and frappe-common to the develop version form (8aa2bfe)
+- fix(apisix-gateway): raise the proxy header buffers for Keycloak and IAM cookies (3b38216)
+- feat(apisix-gateway): serve the admin dashboard on a host behind an IP allowlist (46f8824)
+- fix(apisix): send the edge's client port to istio and redirect HTTP to HTTPS (ca5b7ea)
+- feat(apisix): aggregate the APISIX resources into the admin, edit and view roles (89af972)
+- feat(apisix): render the dev edge from the gateway chart (523012e)
+- APISIX Helm chart update to add partner api (e7a06b6)
+- chore(apisix): make api6-gateway the default namespace of the gateway (fda5acc)
+- feat(apisix): create the Admin API credentials Secret with the chart (8a88778)
+- feat(apisix,a2c,grievance): bundle Redis with the gateway and use the Bitnami images (ff81b94)
+- feat(apisix): package the gateway as a chart with a shared Redis (ac37459)
+
+### oan-cluster-access 0.0.1-develop.1
+
+First published version.
+
+- chore(charts): use 0.0.1-develop.1 for the gateway, cluster-access and frappe-common charts (ebff274)
+- chore(charts): move gateway, cluster-access and frappe-common to the develop version form (8aa2bfe)
+- feat(cluster-access): add the CI deploy identity as a chart (5ca5f3c)
+
+### oan-frappe-common 0.0.1-develop.1
+
+First published version.
+
+- chore(charts): use 0.0.1-develop.1 for the gateway, cluster-access and frappe-common charts (ebff274)
+- chore(charts): move gateway, cluster-access and frappe-common to the develop version form (8aa2bfe)
+- feat(frappe-common): create the PostgreSQL password Secret from the chart (efb1c04)
+- feat(frappe-common): use PostgreSQL 16.4.0 in oan-frappe-common (a7293c7)
+- feat(frappe-common): use the Bitnami PostgreSQL subchart in oan-frappe-common (51b781c)
+- feat(a2c,grievance): rename oan-a2c to oan-a2c-service, depend on frappe-service, and bundle ClamAV (cfd3af0)
+
+## 2026-11-17
+
 ### oan-apisix-gateway 0.1.0-develop.1
 
 Previous version: 0.1.0-dev.9.
