@@ -129,7 +129,12 @@ workflow (`.github/workflows/release.yaml` running `scripts/release.py`):
   `github-actions[bot]` and pushes the tag `<chart>-<version>`.
 
 Published archives are immutable: validation fails if an existing `.tgz` changes.
-`python scripts/release.py --dry-run` shows what a merge would release. Version
+Pull requests may not touch `repository/`, so an archive is removed by naming it in
+`releases/retired.txt` (one file name per line). After the merge the release workflow deletes
+it and its entries in `index.yaml`, `SHA256SUMS` and `releases/artifacts.json`, and records it
+in `CHANGELOG.md`. Change `Chart.yaml` in the same PR when the archive is the version a chart
+still names; the release refuses to retire it otherwise.
+`python scripts/release.py --dry-run` shows what a merge would release or retire. Version
 rules (when to choose minor, major or stable) are in [docs/versioning.md](docs/versioning.md).
 
 ## Deploying with Rancher or Helm
