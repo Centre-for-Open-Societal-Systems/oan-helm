@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-17
 
+### openg2p-farmer-registry 0.0.0-develop.876 (develop)
+
+- New Dev dashboards: the sample approvers get Dashboard Viewer (#308) (Centre-for-Open-Societal-Systems/farmer-registry@42fea6f75a75)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-17
+
 ### openg2p-cropsown-registry 0.0.0-develop.536 (develop)
 
 - One Postman collection for the three registries, passing on New Dev (#306) (Centre-for-Open-Societal-Systems/cropsown-regsitry@7da87f704f10)
