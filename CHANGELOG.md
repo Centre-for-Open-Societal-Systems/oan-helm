@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-17
 
+### openg2p-livestock-registry 0.0.0-develop.468 (develop)
+
+- Postman: check generated answers against Master Data choice lists (#255) (Centre-for-Open-Societal-Systems/livestock-registry@6c3a0bddbb99)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-17
+
 ### openg2p-farmer-registry 0.0.0-develop.876 (develop)
 
 - New Dev dashboards: the sample approvers get Dashboard Viewer (#308) (Centre-for-Open-Societal-Systems/farmer-registry@42fea6f75a75)
