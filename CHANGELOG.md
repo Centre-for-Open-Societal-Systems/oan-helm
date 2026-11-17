@@ -10,6 +10,26 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-17
 
+### oan-apisix-gateway 0.1.0-develop.1
+
+Previous version: 0.1.0-dev.9.
+
+- chore(charts): move gateway, cluster-access and frappe-common to the develop version form (8aa2bfe)
+
+### oan-cluster-access 0.1.0-develop.1
+
+Previous version: 0.1.0-dev.1.
+
+- chore(charts): move gateway, cluster-access and frappe-common to the develop version form (8aa2bfe)
+
+### oan-frappe-common 0.1.0-develop.1
+
+Previous version: 0.1.0-dev.2.
+
+- chore(charts): move gateway, cluster-access and frappe-common to the develop version form (8aa2bfe)
+
+## 2026-11-17
+
 ### oan-grievance-ui 0.0.1-develop.53 (develop)
 
 - Merge pull request #76 from arnavam/chore/develop-chart-version (Centre-for-Open-Societal-Systems/oan_grievance_ui@3138291549c0)

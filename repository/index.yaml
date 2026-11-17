@@ -259,6 +259,40 @@ entries:
       oan.org/owner: OpenAgriNet (OAN)
     apiVersion: v2
     appVersion: 3.19.0
+    created: "2026-11-17T08:23:56.15918936Z"
+    dependencies:
+    - name: apisix
+      repository: ""
+      version: 2.18.2
+    - name: redis
+      repository: ""
+      version: 17.15.2
+    description: APISIX gateway and Ingress Controller for OpenAgriNet (OAN); deploys
+      the upstream apisix chart with the OAN gateway defaults. App routes install
+      separately.
+    digest: c9e488c509cbb77289a65bdcbcbba6cc09a9ee89b90f68a22f4bf6beb94925da
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    keywords:
+    - oan
+    - openagrinet
+    - apisix
+    - gateway
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-apisix-gateway
+    sources:
+    - https://github.com/apache/apisix-helm-chart
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-apisix-gateway-0.1.0-develop.1.tgz
+    version: 0.1.0-develop.1
+  - annotations:
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-apisix-gateway
+      oan.org/owner: OpenAgriNet (OAN)
+    apiVersion: v2
+    appVersion: 3.19.0
     created: "2026-11-15T16:08:52.609762338Z"
     dependencies:
     - name: apisix
@@ -591,6 +625,31 @@ entries:
       oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-cluster-access
       oan.org/owner: OpenAgriNet (OAN)
     apiVersion: v2
+    created: "2026-11-17T08:23:56.159424486Z"
+    description: CI deploy identity for an OAN app cluster; a ServiceAccount with
+      the built-in admin role in the OAN service namespaces and read access to the
+      shared database Secret and the APISIX Services.
+    digest: 6ce9d6a75efa205a98ce7c16067f87e7c851643f663fa0303c5d61ff954ab4ef
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    keywords:
+    - oan
+    - openagrinet
+    - rbac
+    - ci
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-cluster-access
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-cluster-access-0.1.0-develop.1.tgz
+    version: 0.1.0-develop.1
+  - annotations:
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-cluster-access
+      oan.org/owner: OpenAgriNet (OAN)
+    apiVersion: v2
     created: "2026-11-14T12:15:20.298370141Z"
     description: CI deploy identity for an OAN app cluster; a ServiceAccount with
       the built-in admin role in the OAN service namespaces and read access to the
@@ -613,6 +672,38 @@ entries:
     - oan-cluster-access-0.1.0-dev.1.tgz
     version: 0.1.0-dev.1
   oan-frappe-common:
+  - annotations:
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-frappe-common
+      oan.org/owner: OpenAgriNet (OAN)
+    apiVersion: v2
+    appVersion: version-16
+    created: "2026-11-17T08:23:56.165140185Z"
+    dependencies:
+    - alias: frappe-common
+      name: frappe-common
+      repository: ""
+      version: 8.0.91-oan.2
+    description: Shared MariaDB and PostgreSQL databases for the OAN Frappe apps;
+      deploys the frappe-common chart.
+    digest: 198a53018311dd68640fc34e846bedd1e20083677ba24b48cdc9422a344b6e70
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    keywords:
+    - oan
+    - openagrinet
+    - frappe
+    - postgresql
+    - mariadb
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-frappe-common
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-service-helm
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-frappe-common-0.1.0-develop.1.tgz
+    version: 0.1.0-develop.1
   - annotations:
       oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-frappe-common
       oan.org/owner: OpenAgriNet (OAN)
@@ -10379,4 +10470,4 @@ entries:
     urls:
     - openg2p-livestock-registry-1.0.0-dev.1.tgz
     version: 1.0.0-dev.1
-generated: "2026-11-17T05:11:46.54185516Z"
+generated: "2026-11-17T08:23:56.14182118Z"
