@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-17
 
+### oan-a2c-service 0.0.1-develop.28 (develop)
+
+- Merge pull request #138 from arnavam/feat/frappe-desk-host (Centre-for-Open-Societal-Systems/oan_a2c@f6bb735f0f0f)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-17
+
 ### openg2p-livestock-registry 0.0.0-develop.468 (develop)
 
 - Postman: check generated answers against Master Data choice lists (#255) (Centre-for-Open-Societal-Systems/livestock-registry@6c3a0bddbb99)

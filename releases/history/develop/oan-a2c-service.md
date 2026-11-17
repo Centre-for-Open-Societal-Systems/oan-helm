@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.28
+
+<!-- source-commit: f6bb735f0f0f93dc24c34fa50b8c35e6dab6f3c0 version: 0.0.1-develop.28 -->
+Published 2026-11-17. Archive SHA-256 `16a82ffbf6797b80a9029a61a93aee1b69c0cb762ff24b0e6d4835443c9c3534`.
+
+- Change: Merge pull request #138 from arnavam/feat/frappe-desk-host
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@f6bb735f0f0f](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/f6bb735f0f0f93dc24c34fa50b8c35e6dab6f3c0)
+- Changes since 0.0.1-develop.27: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/f6bb735f0f0f93dc24c34fa50b8c35e6dab6f3c0...f6bb735f0f0f93dc24c34fa50b8c35e6dab6f3c0
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-service/a2c-service:0.0.1-develop.28` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-service-0.0.1-develop.28.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.27
 
 <!-- source-commit: f6bb735f0f0f93dc24c34fa50b8c35e6dab6f3c0 version: 0.0.1-develop.27 -->
