@@ -41,6 +41,7 @@ APPLICATION_SOURCES = {
     "openg2p-da-registry": [OAN + "da-registry"],
     "openg2p-commons-services": [OAN + "consent-management", OAN + "oan-aggregation-api"],
     "oan-sandbox": [OAN + "sandbox-platform"],
+    "oan-leads-api": [OAN + "leads-api"],
 }
 EXPECTED = set(APPLICATION_SOURCES)
 CHARTS = [m for m in sorted((ROOT / "charts").glob("*/Chart.yaml")) if m.parent.name in EXPECTED]
@@ -556,7 +557,7 @@ def main():
                 check_url_contract(chart, upgraded)
                 assert ("render-only-private-db", "password") in secret_refs(upgraded)
                 assert deployment_env(upgraded, "verify-staff-portal-ui")["MIGRATION_PRESERVES_CUSTOM_SETTING"] == "render-only"
-            components = {"openg2p-commons-services": ["aggregation-api"], "oan-sandbox": []}.get(chart.name, ["dashboardApi", "dashboardUi"])
+            components = {"openg2p-commons-services": ["aggregation-api"], "oan-sandbox": [], "oan-leads-api": []}.get(chart.name, ["dashboardApi", "dashboardUi"])
             # Commons' Aggregation API (the oan-aggregation-api subchart) runs in dev; its Secrets are provisioned in the namespace.
             default_on = {"openg2p-commons-services": {"aggregation-api"}}.get(chart.name, set())
             for component in components:

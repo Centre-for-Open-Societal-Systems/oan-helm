@@ -1,0 +1,26 @@
+apiVersion: v2
+name: oan-leads-api
+description: OAN Leads API for OpenAgriNet (OAN), developed in the OAN leads-api repository;
+  Spring Boot service with an in-chart Redis cache, an optional bridge to the external
+  PostgreSQL/Elasticsearch host and an optional Istio route.
+type: application
+version: 0.1.0-dev.1
+appVersion: 0.1.0-develop
+keywords:
+- oan
+- openagrinet
+- leads
+- spring-boot
+home: https://github.com/Centre-for-Open-Societal-Systems/leads-api
+sources:
+- https://github.com/Centre-for-Open-Societal-Systems/leads-api
+- https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+annotations:
+  catalog.cattle.io/display-name: OAN Leads API
+  oan.org/owner: OpenAgriNet (OAN)
+  oan.org/application-source: https://github.com/Centre-for-Open-Societal-Systems/leads-api
+  oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-leads-api
+  org.opencontainers.image.source: https://github.com/Centre-for-Open-Societal-Systems/leads-api
+maintainers:
+- name: OpenAgriNet (OAN)
+  url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm

@@ -1,0 +1,24 @@
+# OAN Leads API: dev enablement checklist (public values only).
+# Steps, in order:
+#   1. Publish the image from leads-api (Jenkinsfile, develop builds):
+#      379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/leads-api/leads-api:0.1.0-develop.<build>,
+#      and set image.digest below to that build's digest. The node IAM role must be able to
+#      pull from eoan/leads-api/leads-api; the release keeps the pull secret leads-api-ecr fresh.
+#   2. Prepare the PostgreSQL database and Elasticsearch the API uses, and their credentials.
+#   3. Create the secret values file (see the chart README) with secret.create: true, the
+#      credential keys under secret.values and the database endpoints under config, and store
+#      it as the Jenkins secret-file credential `dev-leads-api-secret-values`. Never commit it.
+#   4. helm upgrade --install leads-api charts/oan-leads-api -n leads --create-namespace \
+#        -f environments/dev/values/oan-leads-api.yaml -f <secret values file>
+#   5. kubectl -n leads rollout status deploy/leads-api, then open
+#      https://leads.development.oanstaging.com/swagger-ui/index.html
+
+image:
+  repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/leads-api/leads-api
+  tag: develop-latest
+  digest: ""
+
+virtualService:
+  enabled: true
+  host: leads.development.oanstaging.com
+  gateway: istio-system/development

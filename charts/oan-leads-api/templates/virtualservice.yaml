@@ -1,0 +1,20 @@
+{{- if .Values.virtualService.enabled }}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "oan-leads-api.labels" . | nindent 4 }}
+spec:
+  hosts:
+    - {{ required "virtualService.host is required" .Values.virtualService.host | quote }}
+  gateways:
+    - {{ required "virtualService.gateway is required" .Values.virtualService.gateway | quote }}
+  http:
+    - route:
+        - destination:
+            host: {{ printf "%s.%s.svc.cluster.local" .Release.Name .Release.Namespace }}
+            port:
+              number: {{ .Values.service.port }}
+{{- end }}

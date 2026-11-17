@@ -1,0 +1,85 @@
+# OAN Leads API
+
+OpenAgriNet (OAN) Leads API, developed in the OAN
+[leads-api](https://github.com/Centre-for-Open-Societal-Systems/leads-api) repository:
+a Spring Boot service (port 8080, Swagger at `/swagger-ui/index.html`) backed by
+PostgreSQL, Elasticsearch and a Redis cache, with the A2C initiate webhook.
+
+| Source | GitHub repository |
+| --- | --- |
+| OAN application | [leads-api](https://github.com/Centre-for-Open-Societal-Systems/leads-api) |
+| OAN Helm sources | [oan-helm](https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-leads-api) |
+
+The chart has no OpenG2P dependency and owns no existing release, so installing it
+changes no other chart's resources. It replaces the raw manifests in leads-api
+`terra/prod/k8` (`01`-`04`) with one release.
+
+## What it installs
+
+| Resource | Values key | Default |
+| --- | --- | --- |
+| API Deployment (2 replicas, rolling, TCP probes), Service, ConfigMap, PDB | `image`, `config` | Enabled; `eoan/leads-api/leads-api` (`develop-latest` until a digest is set) |
+| ECR pull secret `leads-api-ecr`: pre-install/pre-upgrade hook Job + CronJob every 8 hours, node IAM role | `ecrPullSecret` | Enabled; the API pods pull with it |
+| Credentials Secret `leads-secrets`, filled from the secret values file | `secret` | Referenced; created by the chart with `secret.create: true` |
+| Redis cache Deployment + Service (`<release>-redis`), no persistence | `redis` | Enabled, no AUTH |
+| `leads-postgres` / `leads-elasticsearch` Services + EndpointSlices to a private DB host | `externalDb` | Disabled |
+| Istio VirtualService on the shared Gateway | `virtualService` | Disabled |
+| HorizontalPodAutoscaler | `autoscaling` | Disabled |
+
+Rate limiting of `/leads/v1/initiate` (a Kong plugin in `terra/prod/k8/06-kong-to-app.yaml`)
+is not part of this chart: apply it on the environment's gateway.
+
+## Delivery
+
+Nothing is created by hand in the namespace:
+
+- **Image pull.** The release writes `leads-api-ecr` itself, before the pods start and
+  every 8 hours after, with the node's IAM role (which needs pull access to
+  `eoan/leads-api/leads-api`). Set `ecrPullSecret.enabled: false` only where another
+  mechanism provides the pull secret, and list it in `imagePullSecrets`.
+- **Credentials.** They arrive with the deploy as a secret values file, stored as a
+  Jenkins secret-file credential (`dev-leads-api-secret-values` for dev), the same way
+  `staging-commons-secret-values` delivers Commons' secrets. The file is passed after the
+  environment values and is never committed:
+
+  ```yaml
+  secret:
+    create: true
+    values:
+      SPRING_DATASOURCE_USERNAME: ...
+      SPRING_DATASOURCE_PASSWORD: ...
+      ELASTICSEARCH_USERNAME: ...
+      ELASTICSEARCH_PASSWORD: ...
+      A2C_WEBHOOK_API_KEY: ...
+      A2C_WEBHOOK_API_SECRET: ...
+      # SPRING_REDIS_PASSWORD: ...   # required with redis.auth.enabled
+  config:
+    SPRING_DATASOURCE_URL: jdbc:postgresql://<host>:5432/<db>
+    ELASTICSEARCH_HOST: <host>
+  # or: externalDb: {enabled: true, ip: <private DB host IP>}
+  ```
+
+  The chart refuses to render with `secret.create: true` when a required key is
+  missing. A changed value rolls the pods (`checksum/secret`). With
+  `secret.create: false` the Secret `secret.name` must be provided by another
+  controller, such as External Secrets.
+
+The release is installed and upgraded from `repository/` (Rancher, or Helm from the
+Jenkins agent with the deployer kubeconfig):
+
+```sh
+helm upgrade --install leads-api oan/oan-leads-api -n leads --create-namespace \
+  -f environments/dev/values/oan-leads-api.yaml -f "$LEADS_SECRET_VALUES"
+```
+
+After install: `kubectl -n leads rollout status deploy/leads-api`, then
+`https://<host>/swagger-ui/index.html` loads and a lead search answers from
+Elasticsearch.
+
+## Upgrading the image
+
+The leads-api Jenkinsfile publishes
+`379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/leads-api/leads-api:0.1.0-develop.<build>`
+and `develop-latest`. Set `image.digest` to the reviewed build's digest (keep the
+`0.1.0-develop.<build>` tag in the comment), `image.pullPolicy: IfNotPresent`, and run
+`helm upgrade`.
