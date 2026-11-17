@@ -141,12 +141,26 @@ class DeliverStagingCommons(unittest.TestCase):
     def test_commons_deliveries_use_their_own_deployer_in_commons_only(self):
         pipeline = (ROOT / 'ci/jenkins/staging-commons.Jenkinsfile').read_text(encoding='utf-8')
         self.assertNotIn('staging-rke2-kubeconfig', pipeline.split('pipeline {', 1)[1])
-        self.assertEqual(pipeline.count("credentialsId: 'staging-commons-deployer-kubeconfig'"), 6)
+        self.assertEqual(pipeline.count("credentialsId: 'staging-commons-deployer-kubeconfig'"), 7)
         rbac = (ROOT / 'environments/staging/rbac/commons-deployer-rbac.yaml').read_text(encoding='utf-8')
         body = '\n'.join(line for line in rbac.splitlines() if not line.startswith('#'))
         self.assertNotIn('ClusterRole', body)
         self.assertEqual(set(re.findall(r'namespace: (\S+)', body)), {'commons'})
         self.assertNotIn('"*"', body)
+
+    def test_the_rancher_repository_right_is_one_clusterrepo_and_no_delete(self):
+        rbac = (ROOT / 'environments/staging/rbac/commons-deployer-rancher-repo-rbac.yaml').read_text(encoding='utf-8')
+        body = '\n'.join(line for line in rbac.splitlines() if not line.startswith('#'))
+        self.assertEqual(set(re.findall(r'resources: \[(.*?)\]', body)), {'clusterrepos'})
+        self.assertEqual(set(re.findall(r'resourceNames: \[(.*?)\]', body)), {'oan-staging'})
+        verbs = re.findall(r'verbs: \[(.*?)\]', body)
+        self.assertEqual(verbs, ['create', 'get, update, patch'])
+        self.assertNotIn('*', body)
+        repo = (ROOT / 'environments/staging/rancher/oan-staging-clusterrepo.yaml').read_text(encoding='utf-8')
+        self.assertIn('name: oan-staging', repo)
+        script = (ROOT / 'scripts/ci/deliver_staging_rancher_repo.sh').read_text(encoding='utf-8')
+        self.assertIn('--dry-run=server', script)
+        self.assertNotIn('delete', script)
 
 
 if __name__ == '__main__':
