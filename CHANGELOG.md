@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-17
 
+### openg2p-commons-services 1.0.0-dev.46
+
+Previous version: 1.0.0-dev.45.
+
+- chore(openg2p-commons-services): bundle oan-aggregation-api 0.0.0-develop.20 (#223) (73546be)
+
+## 2026-11-17
+
 ### oan-a2c-service 0.0.1-develop.28 (develop)
 
 - Merge pull request #138 from arnavam/feat/frappe-desk-host (Centre-for-Open-Societal-Systems/oan_a2c@f6bb735f0f0f)

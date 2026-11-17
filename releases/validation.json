@@ -3,7 +3,7 @@
   "chartVersions": {
     "oan-leads-api": "0.1.0-dev.1",
     "oan-sandbox": "1.0.0-dev.19",
-    "openg2p-commons-services": "1.0.0-dev.45",
+    "openg2p-commons-services": "1.0.0-dev.46",
     "openg2p-cropsown-registry": "1.0.0-dev.23",
     "openg2p-da-registry": "1.0.0-dev.23",
     "openg2p-farmer-registry": "1.0.0-dev.24",
@@ -55,7 +55,7 @@
       "baselineScope": "original 1.0.0-dev.1 resource names/selectors/Secret references; Commons Superset and Certify disabled to match inspected dev configuration",
       "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
       "defaultImageReferences": [
-        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/aggregation-api@sha256:3bd17245a75252bdf497cc1bab22b9e1148d0fedce376e7892a9e551bcefb7b4",
+        "379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-aggregation-api/aggregation-api@sha256:d24d3579f154fd80acda251974cb9a6a3c87c2e516b24c35215218ca89eac961",
         "379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/commons/consent-partner-portal@sha256:26f09120695896ac63de01463b0b9d762f99ee4c335293fcd03cdb5c12538ea4",
         "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api:dev-48e64c249056@sha256:cca3273868b8ed28d193642b346fc3369b450ad7feefd42d02e91e84cb074831",
         "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-ui:dev-48e64c249056@sha256:423f78a0d99b8bd65605848bf72e6d0abf84cb07303fdd6d8cf9fd424c5620c7",
@@ -208,9 +208,9 @@
   },
   "upstreamResolution": "not attempted",
   "offlineResolution": "All chart locks resolved from dependencies bundled with verified source packages",
-  "packages": 164,
+  "packages": 165,
   "currentPackages": 7,
-  "historicalPackages": 157,
+  "historicalPackages": 158,
   "unreleasedCharts": [],
   "index": "Relative URLs, SHA-256, HTTP download, exact Helm version selection and repository-based renders verified against loopback server"
 }
