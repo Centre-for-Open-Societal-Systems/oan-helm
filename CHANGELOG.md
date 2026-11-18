@@ -8,6 +8,14 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-18
+
+### oan-logging 0.1.0-dev.2
+
+Previous version: 0.1.0-dev.1.
+
+- fix(logging): fix OTel exporter names, add k8s attribute promotion, and streamline defaults (4b16151)
+
 ## 2026-11-17
 
 ### openg2p-farmer-registry 0.0.0-develop.885 (develop)
