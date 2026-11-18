@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-18
 
+### openg2p-da-registry 0.0.0-develop.126 (develop)
+
+- Merge pull request #78 from yash7473/feat/da-reports-to-marital (Centre-for-Open-Societal-Systems/da-registry@1ab7e247d74a)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-18
+
 ### oan-a2c-service 0.0.1-develop.29 (develop)
 
 - Merge pull request #139 from arnavam/chore/postman-admin-collection (Centre-for-Open-Societal-Systems/oan_a2c@d6dbabc29d05)
