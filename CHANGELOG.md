@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-18
 
+### oan-a2c-ui 0.0.1-develop.10 (develop)
+
+- Merge pull request #119 from arnavam/fix/kyc-contacts-country-code (Centre-for-Open-Societal-Systems/oan_a2c_ui@6d76843ca728)
+- Images and rollback: [releases/history/develop/oan-a2c-ui.md](releases/history/develop/oan-a2c-ui.md)
+
+## 2026-11-18
+
 ### openg2p-da-registry 0.0.0-develop.123 (develop)
 
 - Merge pull request #77 from yash7473/feat/da-professional-details (Centre-for-Open-Societal-Systems/da-registry@d291007fcb7c)

@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.10
+
+<!-- source-commit: 6d76843ca728f74e893c0c0dc1b88b1ee5879c8d version: 0.0.1-develop.10 -->
+Published 2026-11-18. Archive SHA-256 `98b5b54042cde0c30e475f590da1989643c6e4f869da6bc39c4ecde09e9bab7a`.
+
+- Change: Merge pull request #119 from arnavam/fix/kyc-contacts-country-code
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c_ui@6d76843ca728](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c_ui/commit/6d76843ca728f74e893c0c0dc1b88b1ee5879c8d)
+- Changes since 0.0.1-develop.9: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c_ui/compare/cf71c346a9af897f136dae2c31a6b49bf19ff599...6d76843ca728f74e893c0c0dc1b88b1ee5879c8d
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-ui/a2c-ui:0.0.1-develop.10` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-ui-0.0.1-develop.10.tgz -n a2c-develop --reset-values -f helm/environments/dev/oan-a2c-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.9
 
 <!-- source-commit: cf71c346a9af897f136dae2c31a6b49bf19ff599 version: 0.0.1-develop.9 -->
