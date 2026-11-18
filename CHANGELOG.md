@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-18
 
+### oan-a2c-ui 0.0.1-develop.12 (develop)
+
+- Merge pull request #109 from anteneh1621/fix/hide-administrator-login-option (Centre-for-Open-Societal-Systems/oan_a2c_ui@452c59c696e6)
+- Images and rollback: [releases/history/develop/oan-a2c-ui.md](releases/history/develop/oan-a2c-ui.md)
+
+## 2026-11-18
+
 ### oan-a2c-ui 0.0.1-develop.11 (develop)
 
 - Merge pull request #120 from arnavam/fix/phone-length-per-country (Centre-for-Open-Societal-Systems/oan_a2c_ui@df731fa260e0)

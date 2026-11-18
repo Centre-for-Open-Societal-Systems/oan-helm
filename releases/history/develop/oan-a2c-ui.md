@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.12
+
+<!-- source-commit: 452c59c696e6644190f402d634e5351efb6e7283 version: 0.0.1-develop.12 -->
+Published 2026-11-18. Archive SHA-256 `8cbad3645c6da572ebf31d8d8a75c5fe4bd23b22f6cbd7719d442985c8d62b0f`.
+
+- Change: Merge pull request #109 from anteneh1621/fix/hide-administrator-login-option
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c_ui@452c59c696e6](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c_ui/commit/452c59c696e6644190f402d634e5351efb6e7283)
+- Changes since 0.0.1-develop.11: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c_ui/compare/df731fa260e0ee2421e96fe250d31d18edbcdf57...452c59c696e6644190f402d634e5351efb6e7283
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-ui/a2c-ui:0.0.1-develop.12` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-ui-0.0.1-develop.12.tgz -n a2c-develop --reset-values -f helm/environments/dev/oan-a2c-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.11
 
 <!-- source-commit: df731fa260e0ee2421e96fe250d31d18edbcdf57 version: 0.0.1-develop.11 -->
