@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-18
 
+### openg2p-da-registry 0.0.0-develop.123 (develop)
+
+- Merge pull request #77 from yash7473/feat/da-professional-details (Centre-for-Open-Societal-Systems/da-registry@d291007fcb7c)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-18
+
 ### Retired archives
 
 - oan-logging-0.1.0-dev.1.tgz
