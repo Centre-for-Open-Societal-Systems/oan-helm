@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.11
+
+<!-- source-commit: df731fa260e0ee2421e96fe250d31d18edbcdf57 version: 0.0.1-develop.11 -->
+Published 2026-11-18. Archive SHA-256 `9a3eb5c214928b5a6a8e8f81b71e3581b70f1dbc334ed90791894f9964c7e7ac`.
+
+- Change: Merge pull request #120 from arnavam/fix/phone-length-per-country
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c_ui@df731fa260e0](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c_ui/commit/df731fa260e0ee2421e96fe250d31d18edbcdf57)
+- Changes since 0.0.1-develop.10: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c_ui/compare/6d76843ca728f74e893c0c0dc1b88b1ee5879c8d...df731fa260e0ee2421e96fe250d31d18edbcdf57
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-ui/a2c-ui:0.0.1-develop.11` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-ui-0.0.1-develop.11.tgz -n a2c-develop --reset-values -f helm/environments/dev/oan-a2c-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.10
 
 <!-- source-commit: 6d76843ca728f74e893c0c0dc1b88b1ee5879c8d version: 0.0.1-develop.10 -->
