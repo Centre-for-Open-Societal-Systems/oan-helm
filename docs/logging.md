@@ -48,32 +48,35 @@ set `loki.minio.enabled=false` and `loki.loki.storage.s3.endpoint`, `accessKeyId
 
 ## 3. Install
 
+### For App Clusters (e.g. `oan_dev` forwarding to `openg2p_dev`)
+By default, `loki` and `grafana` are disabled in `values.yaml`. Only the `otel-agent` DaemonSet is installed, preconfigured to forward to `openg2p_dev` (`10.0.1.58:30317`):
+
+```sh
+kubectl create namespace observability
+
+helm upgrade --install oan-logging charts/oan-logging -n observability --create-namespace
+```
+
+If forwarding to another gateway host or port:
+```sh
+helm upgrade --install oan-logging charts/oan-logging -n observability --create-namespace \
+  --set 'otel-agent.alternateConfig.exporters.otlp.endpoint=<gateway-ip>:30317'
+```
+
+### For Standalone / All-In-One Log Store Clusters
+To run the full stack (Loki + MinIO + Grafana + Gateway):
+
 ```sh
 kubectl create namespace observability
 kubectl -n observability create secret generic grafana-admin \
   --from-literal=admin-user=admin --from-literal=admin-password='<password>'
 
 helm upgrade --install oan-logging charts/oan-logging -n observability \
+  --set loki.enabled=true --set grafana.enabled=true --set otel-gateway.enabled=true \
   --set-string loki.minio.rootPassword='<root password>' \
   --set-string 'loki.minio.users[0].accessKey=logs-user' \
   --set-string 'loki.minio.users[0].secretKey=<logs password>' --wait --timeout 10m
 ```
-
-The chart uses `rootUser`/`rootPassword` for Loki's own S3 access, so the root password
-matters most. Both passwords must be set.
-
-Another cluster (an app cluster) installs only the agent. Turn off the rest and point the
-agent at the gateway address of the log cluster:
-
-```sh
-helm upgrade --install oan-logging charts/oan-logging -n observability --create-namespace \
-  --set loki.enabled=false --set otel-gateway.enabled=false --set grafana.enabled=false \
-  --set 'otel-agent.alternateConfig.exporters.otlp_grpc.endpoint=<gateway address>:4317'
-```
-
-Use a network the clusters share, and note that the agent talks to the gateway without
-TLS (`tls.insecure: true`). That is acceptable on a private network, not across the
-internet.
 
 ## 4. See the logs
 
