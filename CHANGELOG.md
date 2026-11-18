@@ -10,6 +10,21 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-18
 
+### Retired archives
+
+- oan-logging-0.1.0-dev.1.tgz
+- oan-logging-0.1.0-dev.2.tgz
+
+### oan-logging 0.0.1-develop.1
+
+First published version.
+
+- chore(logging): align version to 0.0.1-develop.1 and retire 0.1.0 archives (ff94fa2)
+- fix(logging): fix OTel exporter names, add k8s attribute promotion, and streamline defaults (4b16151)
+- feat(logging): package the log pipeline as one chart (61a99e4)
+
+## 2026-11-18
+
 ### oan-logging 0.1.0-dev.2
 
 Previous version: 0.1.0-dev.1.
