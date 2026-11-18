@@ -455,6 +455,90 @@ installs, with its own values; nothing is copied by hand into APISIX.
 A new API: add it to the route generator in sandbox-platform (it regenerates the chart),
 merge, then `helm upgrade` the routes release and switch the API on in the values.
 
+## 8d. Partner gateway: scopes, audience and upstream mTLS
+
+The partner APIs follow one rule: **every change to APISIX comes from Helm**, and **partners
+reach the upstream APIs only through the gateway**. The sandbox
+(`config.gateway.partnerAuth: oauth`, as in `environments/dev/values/sandbox.yaml`)
+writes nothing to APISIX. It writes the apps to Keycloak, and the routes check the tokens.
+
+| Layer | Owner | Check |
+|---|---|---|
+| Route, upstream, plugins, **required scope** | `oan-partner-gateway` chart (sandbox-platform) + `environments/<env>/values/oan-partner-gateway.yaml` | – |
+| App, secret, **granted scopes**, `aud`, IP whitelist, limits | sandbox → Keycloak (client scopes, `scope` claim) | – |
+| Each call | APISIX | signature, `iss`, `exp`, `aud` = `keycloak.audience`, environment role, the route's scope in `scope` (or, during the move, the route id in `oan_routes`), IP, limits, call log |
+| Upstream edge | DevOps (not set up yet) | to require the gateway's client certificate on the partner hosts / paths, so partners cannot call the upstreams directly |
+| Upstream API | its team | its own partner credential (token / signed request) |
+
+Scopes for dev (`config.gateway.scopes` in `environments/dev/values/sandbox.yaml`, the same
+names as the partner gateway chart): `/consent-manager` → `oan:consent-manager-portal`,
+`/consent-manager-partner` → `oan:consent-manager-partner`, `/partner-management-keys` →
+`oan:partner-management-keys`, `/aggregation-layer` → `oan:aggregation-layer`. A new route in
+an existing API needs only a Helm change. A new API needs a new scope in both values files and
+an API product in the sandbox.
+
+### Gateway client certificate (key never in Git)
+
+On an admin workstation, in a directory outside the repository:
+
+```bash
+# CA of the partner gateway (10 years). Keep ca.key offline / in the team's secret store.
+openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes \
+  -keyout ca.key -out ca.crt -subj "/O=OpenAgriNet/CN=OAN partner gateway CA"
+
+# APISIX client certificate (1 year), clientAuth only.
+openssl req -newkey rsa:2048 -sha256 -nodes -keyout gateway.key -out gateway.csr \
+  -subj "/O=OpenAgriNet/CN=oan-partner-gateway-dev"
+printf "basicConstraints=CA:FALSE\nkeyUsage=digitalSignature,keyEncipherment\nextendedKeyUsage=clientAuth\n" > client.ext
+openssl x509 -req -in gateway.csr -CA ca.crt -CAkey ca.key -CAcreateserial \
+  -days 365 -sha256 -extfile client.ext -out gateway.crt
+openssl verify -CAfile ca.crt gateway.crt
+
+# Secret for APISIX (ApisixUpstream tlsSecret), on the gateway cluster.
+kubectl -n api6-gateway create secret tls oan-partner-gateway-upstream-client \
+  --cert=gateway.crt --key=gateway.key
+```
+
+The edge in front of the upstream APIs then has to trust `ca.crt` (public part only) and
+require a client certificate on the partner hosts / paths. That edge configuration is
+DevOps' and is not part of this repository yet.
+
+Rotate the client certificate before it expires: issue a new one, `kubectl create secret ...
+--dry-run=client -o yaml | kubectl apply -f -`, then restart APISIX (or wait for the
+controller to resync). Rotating the CA needs both CAs in `ca.crt` for the overlap.
+
+### Order of the move
+
+1. **Sandbox** with `config.gateway.scopes`, `tokenAudience`, `legacyRouteClaim: true`.
+   App tokens then carry `scope`, `aud` **and** `oan_routes`.
+2. **Resync all apps** (console: Apps & Keys → resync, or any product save). Every Keycloak
+   client gets its scopes and audience. Tokens live five minutes, so ten minutes later every
+   token in use has them.
+3. **`oan-partner-gateway` 0.3.0** with `keycloak.audience` and `legacyRouteIds: true`. Routes
+   admit the scope or the old route id, and require `aud`.
+4. **Upstream mTLS:** the Secret above, `upstreamTls.secretName` in the partner gateway values,
+   `helm upgrade`. Then check that the partner calls through the gateway still answer.
+   Only then make the upstream edge require the certificate.
+5. **End of the move:** `legacyRouteIds: false` (gateway) and
+   `config.gateway.legacyRouteClaim: false` (sandbox). Access is by scope only, and route ids
+   no longer matter.
+
+Rollback: steps 3–5 are values flips (`helm rollback`; undo the edge change). Step 1 is
+compatible with the old gateway, which ignores `scope` and `aud`.
+
+### TO CONFIRM (DevOps / API owners)
+
+- Does any OpenG2P component, staff tool, or job call
+  `consent-manager-partner`, `partner-management-partner-api`, `aggregation` or
+  `consent-manager/consent/v1/partner-portal` on the **public** host? Once the edge conf is
+  on, those calls get 403 and must use the cluster-internal service instead.
+- Who uses the Aggregation Layer host apart from partners (dashboards, staff)? If anyone
+  does, limit the mTLS rule to the partner paths, as for `consent-manager`.
+- The APISIX egress IP(s) for the optional `allow` / `deny` layer.
+- Where `ca.key` is kept, and who rotates the gateway certificate (yearly).
+- Production: separate CA and client certificate per environment. Never share a
+  certificate between UAT and production.
+
 ## 9. Known open items
 
 - **Values to fill:** the UI origins for CORS and socket.io cookies (still the
