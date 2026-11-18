@@ -1,22 +1,15 @@
-# Defaults for the OAN log pipeline. Four upstream charts, vendored in charts/:
-#   otel-agent   one Pod per node reads container stdout, redacts personal data, and
-#                sends the logs to the gateway
-#   otel-gateway receives OTLP from the agents, batches, and writes to Loki
-#   loki         single-binary log store, chunks in an S3-compatible bucket (MinIO)
-#   grafana      Loki is the only data source
-# Install as release `oan-logging` in namespace `observability`. Each fullnameOverride
-# keeps the Service names below stable. See docs/logging.md.
+# Defaults for the OAN log pipeline.
+# By default, loki and grafana are disabled because logs are forwarded to the centralized
+# Loki/Grafana instance running on openg2p_dev (10.0.1.58) over the private VPC.
 #
-# Set at install, not here:
-# - loki.minio.rootPassword, loki.minio.users[0].secretKey: object store credentials
-#   (use --set-string; the chart takes no existing Secret for them)
-# - Secret `grafana-admin` (keys admin-user, admin-password) in the namespace
-# Another cluster (an app cluster) installs only the agent:
-#   --set loki.enabled=false --set otel-gateway.enabled=false --set grafana.enabled=false \
-#   --set 'otel-agent.alternateConfig.exporters.otlp_grpc.endpoint=<gateway address>:4317'
+# otel-agent runs as a DaemonSet to tail /var/log/pods, redact PII, promote K8s attributes,
+# and stream logs directly to openg2p_dev via OTLP gRPC.
+#
+# If an in-cluster gateway is desired for local queueing, set otel-gateway.enabled=true.
+# If a standalone in-cluster log store is desired, set loki.enabled=true and grafana.enabled=true.
 
 loki:
-  enabled: true
+  enabled: false
   fullnameOverride: loki
   # For an object store outside this release, set minio.enabled=false and
   # loki.storage.s3.* (endpoint, accessKeyId, secretAccessKey) instead.
@@ -76,15 +69,13 @@ loki:
     enabled: false
 
 otel-gateway:
-  enabled: true
+  enabled: false
   fullnameOverride: otel-gateway
   mode: deployment
   replicaCount: 1
   image:
-    repository: otel/opentelemetry-collector-k8s
-  # `alternateConfig` replaces the chart's default config. As a subchart, `config` could not
-  # drop the default jaeger, zipkin, prometheus receivers and metrics, traces pipelines
-  # (a null in this file is ignored).
+    repository: otel/opentelemetry-collector-contrib
+  # `alternateConfig` replaces the chart's default config.
   alternateConfig:
     extensions:
       health_check:
@@ -94,15 +85,23 @@ otel-gateway:
         protocols:
           grpc:
             endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
     processors:
-      batch: {}
+      batch:
+        send_batch_size: 1024
+        timeout: 5s
       memory_limiter:
         check_interval: 5s
         limit_percentage: 80
         spike_limit_percentage: 25
     exporters:
       otlphttp/loki:
-        endpoint: http://loki.observability.svc:3100/otlp
+        endpoint: http://10.0.1.58:30318/otlp
+        headers:
+          X-Scope-OrgID: fake
+        tls:
+          insecure: true
     service:
       extensions: [health_check]
       pipelines:
@@ -110,9 +109,11 @@ otel-gateway:
           receivers: [otlp]
           processors: [memory_limiter, batch]
           exporters: [otlphttp/loki]
+        metrics: null
+        traces: null
   ports:
     otlp: {enabled: true}
-    otlp-http: {enabled: false}
+    otlp-http: {enabled: true}
     jaeger-compact: {enabled: false}
     jaeger-thrift: {enabled: false}
     jaeger-grpc: {enabled: false}
@@ -121,56 +122,67 @@ otel-gateway:
   resources:
     requests:
       cpu: 50m
-      memory: 128Mi
+      memory: 64Mi
     limits:
       memory: 256Mi
 
-# One agent per cluster. The redaction rules are ours and untested: check them on
-# realistic log lines.
+# One agent per cluster (DaemonSet). Reads /var/log/pods, scrubs PII, promotes k8s metadata,
+# and streams logs to openg2p_dev (10.0.1.58:30317) or the in-cluster otel-gateway.
 otel-agent:
   enabled: true
   fullnameOverride: otel-agent
   mode: daemonset
   image:
-    repository: otel/opentelemetry-collector-k8s
+    repository: otel/opentelemetry-collector-contrib
   presets:
     logsCollection:
       enabled: true
       includeCollectorLogs: false
     kubernetesAttributes:
       enabled: true
-  # `alternateConfig` replaces the chart's default config, for the reason given at
-  # otel-gateway. The presets above still add the file_log receiver and k8s_attributes.
   alternateConfig:
     extensions:
       health_check:
         endpoint: ${env:MY_POD_IP}:13133
     processors:
-      batch: {}
+      batch:
+        send_batch_size: 1024
+        timeout: 5s
       memory_limiter:
         check_interval: 5s
         limit_percentage: 80
         spike_limit_percentage: 25
-      transform/redact:
+      transform/redact_pii:
         error_mode: ignore
         log_statements:
           - context: log
             statements:
-              - replace_pattern(body, "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}", "[email]")
-              - replace_pattern(body, "\\+?[0-9][0-9 -]{8,14}[0-9]", "[phone]")
-              - 'replace_pattern(body, "(?i)(authorization|bearer|token|password|secret)([\"''=: ]+)[A-Za-z0-9._~+/=-]{8,}", "$1$2[redacted]")'
+              - replace_pattern(body, "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}", "[REDACTED_EMAIL]")
+              - replace_pattern(body, "\\b\\d{12}\\b", "[REDACTED_ID]")
+              - replace_pattern(body, "(?i)(password|passwd|token|secret|authorization|bearer|api[_-]?key)\\s*[=:]\\s*\\S+", "[REDACTED_SECRET]")
+      transform/promote_k8s:
+        error_mode: ignore
+        log_statements:
+          - context: log
+            statements:
+              - set(resource.attributes["k8s.namespace.name"], attributes["k8s.namespace.name"]) where resource.attributes["k8s.namespace.name"] == nil
+              - set(resource.attributes["k8s.pod.name"], attributes["k8s.pod.name"]) where resource.attributes["k8s.pod.name"] == nil
+              - set(resource.attributes["k8s.container.name"], attributes["k8s.container.name"]) where resource.attributes["k8s.container.name"] == nil
+              - set(resource.attributes["service.name"], attributes["k8s.container.name"]) where resource.attributes["service.name"] == nil
     exporters:
-      otlp_grpc:
-        endpoint: otel-gateway.observability.svc:4317
+      otlp:
+        endpoint: 10.0.1.58:30317
         tls:
           insecure: true
     service:
       extensions: [health_check]
       pipelines:
         logs:
-          receivers: [file_log]
-          processors: [memory_limiter, k8s_attributes, transform/redact, batch]
-          exporters: [otlp_grpc]
+          receivers: [filelog]
+          processors: [memory_limiter, k8sattributes, transform/redact_pii, transform/promote_k8s, batch]
+          exporters: [otlp]
+        metrics: null
+        traces: null
   ports:
     jaeger-compact: {enabled: false}
     jaeger-thrift: {enabled: false}
@@ -180,12 +192,12 @@ otel-agent:
   resources:
     requests:
       cpu: 50m
-      memory: 128Mi
+      memory: 64Mi
     limits:
       memory: 256Mi
 
 grafana:
-  enabled: true
+  enabled: false
   fullnameOverride: grafana
   admin:
     existingSecret: grafana-admin
