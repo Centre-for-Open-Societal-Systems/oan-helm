@@ -147,8 +147,13 @@ def gateway_package_build(config, root, env, work):
     return 0
 
 
+def same_commit(a, b):
+    """True if one hex SHA prefixes the other and both have at least 7 characters."""
+    return bool(a and b and len(a) >= 7 and len(b) >= 7 and (a.startswith(b) or b.startswith(a)))
+
+
 def published_commit(env, name, chart):
-    """oan.org/source-commit of the archive already in repository/develop/ of oan-helm, or None."""
+    """oan.org/source-commit of the archive already in repository/develop/ of oan-helm: (commit, None) or (None, error)."""
     request = urllib.request.Request(
         "https://api.github.com/repos/%s/contents/repository/develop/%s" % (OAN_HELM_SLUG, name),
         headers={"Accept": "application/vnd.github.raw", "Authorization": "Bearer " + env.get("GH_TOKEN", "")},
@@ -158,11 +163,10 @@ def published_commit(env, name, chart):
             data = response.read()
         with tarfile.open(fileobj=io.BytesIO(data), mode="r:gz") as archive:
             text = archive.extractfile("%s/Chart.yaml" % chart).read().decode("utf-8")
-    # `as` keeps the parentheses on every Python 3: 'except A, B:' parses only on 3.14.
-    except (OSError, KeyError, tarfile.TarError) as _error:
-        return None
+    except (OSError, KeyError, tarfile.TarError) as error:
+        return None, error
     match = re.search(r"oan\.org/source-commit: *\"?([0-9a-f]{7,40})", text)
-    return match.group(1) if match else None
+    return (match.group(1) if match else None), None
 
 
 def publish_directory(env, output, chart):
@@ -175,7 +179,17 @@ def publish_directory(env, output, chart):
     result = subprocess.run([sys.executable, str(HERE / "publish_chart.py"), str(archives[0])], env=env)
     if result.returncode == ALREADY_PUBLISHED:
         # Build numbers can repeat (job recreated), so a taken version is only fine if it holds this commit.
-        if published_commit(env, archives[0].name, chart) == env["SOURCE_COMMIT"]:
+        outcome = published_commit(env, archives[0].name, chart)
+        if isinstance(outcome, tuple):
+            commit, error = outcome
+        elif isinstance(outcome, Exception):
+            commit, error = None, outcome
+        else:
+            commit, error = outcome, None
+        if error:
+            print("FAIL: could not read the published archive %s: %s" % (archives[0].name, error))
+            return 1
+        if same_commit(commit, env.get("SOURCE_COMMIT")):
             print("%s was published by an earlier run of this commit." % archives[0].name)
             return 0
         print("FAIL: %s is already published for another commit; the chart was not published." % archives[0].name)
