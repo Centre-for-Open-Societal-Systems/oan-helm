@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.29
+
+<!-- source-commit: d6dbabc29d0569bfca27ce164d1ccb8fbabe4dc8 version: 0.0.1-develop.29 -->
+Published 2026-11-18. Archive SHA-256 `9a5f4da8c8751454cda9e4c733accefba696f6e7cd9cca379eabc1acd042e4e5`.
+
+- Change: Merge pull request #139 from arnavam/chore/postman-admin-collection
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@d6dbabc29d05](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/d6dbabc29d0569bfca27ce164d1ccb8fbabe4dc8)
+- Changes since 0.0.1-develop.28: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/f6bb735f0f0f93dc24c34fa50b8c35e6dab6f3c0...d6dbabc29d0569bfca27ce164d1ccb8fbabe4dc8
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-service/a2c-service:0.0.1-develop.29` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-service-0.0.1-develop.29.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.28
 
 <!-- source-commit: f6bb735f0f0f93dc24c34fa50b8c35e6dab6f3c0 version: 0.0.1-develop.28 -->
