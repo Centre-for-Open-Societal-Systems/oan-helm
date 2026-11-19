@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-19
 
+### openg2p-farmer-registry 0.0.0-develop.892 (develop)
+
+- Farmer list: the last name header reads Grandfather's name (#328) (Centre-for-Open-Societal-Systems/farmer-registry@26693c00b583)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-19
+
 ### openg2p-commons-services 1.0.0-dev.48
 
 Previous version: 1.0.0-dev.47.
