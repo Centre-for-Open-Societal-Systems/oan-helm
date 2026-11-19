@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-19
 
+### openg2p-commons-services 1.0.0-dev.49
+
+Previous version: 1.0.0-dev.48.
+
+- Commons: re-run a setup hook only when its inputs changed (#245) (4f31259)
+
+## 2026-11-19
+
 ### openg2p-cropsown-registry 0.0.0-develop.539 (develop)
 
 - Merge pull request #309 from rithikharavi-ai/develop (Centre-for-Open-Societal-Systems/cropsown-regsitry@97e333ef172b)
