@@ -263,6 +263,10 @@ aggregationApi:
   enabled: true
   virtualService:
     gateway: istio-system/staging
+# The Aggregation API's staff search role (chart templates/aggregation-staff-grant.yaml) for the staff
+# test user, so staff search can be checked on staging. Granted by Helm only, never in the console.
+aggregationStaffGrant:
+  users: [nina.patel]
 consentPartnerPortal:
   enabled: true
   virtualService:

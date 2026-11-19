@@ -1,0 +1,84 @@
+{{- /*
+  Give the Aggregation API's staff search role to the users in aggregationStaffGrant.users, after every
+  install and upgrade (files/aggregation-staff-grant.py). The role is created in the realm if it is
+  missing; it is only ever added, and each name must be exactly one existing staff user. Modelled on
+  the registry dashboards' iamSetup.grantUsers. Nothing is rendered while users is empty.
+*/ -}}
+{{- $c := .Values.aggregationStaffGrant -}}
+{{- if and $c.enabled $c.users }}
+{{- $env := (index .Values "aggregation-api" | default dict).env | default dict -}}
+{{- $roles := fromJsonArray ($env.AGGREGATION_LAYER_STAFF_SEARCH_ROLES | default "[]") -}}
+{{- if not (has $c.role $roles) }}
+{{- fail (printf "aggregationStaffGrant.role %q is not one of aggregation-api.env.AGGREGATION_LAYER_STAFF_SEARCH_ROLES" $c.role) }}
+{{- end }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-aggregation-staff-grant
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: aggregation-staff-grant
+data:
+  grant.py: |
+{{ .Files.Get "files/aggregation-staff-grant.py" | indent 4 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-aggregation-staff-grant
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: aggregation-staff-grant
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "35"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 3
+  activeDeadlineSeconds: 900
+  template:
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      {{- with $c.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+        - name: grant
+          image: {{ $c.image | quote }}
+          command: [python, -B, /job/grant.py]
+          env:
+            - { name: KEYCLOAK_URL, value: {{ tpl $c.keycloak.url $ | quote }} }
+            - { name: KEYCLOAK_USER, value: {{ $c.keycloak.user | quote }} }
+            - name: KEYCLOAK_PASSWORD
+              valueFrom: { secretKeyRef: { name: {{ tpl $c.keycloak.existingSecret $ | quote }}, key: {{ $c.keycloak.existingSecretKey | quote }} } }
+            - { name: REALM, value: {{ $c.realm | quote }} }
+            - { name: ROLE, value: {{ $c.role | quote }} }
+            - { name: ROLE_DESCRIPTION, value: {{ $c.roleDescription | quote }} }
+            - { name: USERS, value: {{ join " " $c.users | quote }} }
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - { name: job, mountPath: /job, readOnly: true }
+          resources:
+            requests: {cpu: 10m, memory: 32Mi}
+            limits: {memory: 128Mi}
+      volumes:
+        - name: job
+          configMap:
+            name: {{ .Release.Name }}-aggregation-staff-grant
+            items:
+              - { key: grant.py, path: grant.py }
+{{- end }}

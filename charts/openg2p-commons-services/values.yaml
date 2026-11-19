@@ -1343,6 +1343,25 @@ keycloakPublicClientUrls:
     webOrigins:
     - 'https://{{ tpl (index .Values "openg2p-consent-manager" "global" "consentManagerHostname") $ }}'
 
+# The Aggregation API's staff search role for named staff users (templates/aggregation-staff-grant.yaml).
+# role must be one of aggregation-api.env.AGGREGATION_LAYER_STAFF_SEARCH_ROLES; it is created in realm
+# if missing and added to each user after every install and upgrade. Each name must be exactly one
+# existing staff user. The role is only added: a name removed here keeps its grant until it is taken
+# away in Keycloak. Nothing runs while users is empty.
+aggregationStaffGrant:
+  enabled: true
+  realm: staff
+  role: AGGREGATION_STAFF_VIEWER
+  roleDescription: Search the Aggregation API as staff
+  users: []
+  image: python:3.11.14-slim
+  imagePullSecrets: []
+  keycloak:
+    url: '{{ tpl .Values.global.keycloakInternalUrl $ }}'
+    user: admin
+    existingSecret: '{{ tpl .Values.global.keycloakAdminSecret $ }}'
+    existingSecretKey: admin-password
+
 # Application catalog only: keeps the existing Consent UI/client/roles and grants no users.
 # Enable after the selected IAM trusts the Consent client's staff issuer.
 consentStaffPortalTile:
