@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-19
 
+### oan-a2c-service 0.0.1-develop.30 (develop)
+
+- Merge pull request #140 from arnavam/fix/ci-gateway-deploy-chart-selection (Centre-for-Open-Societal-Systems/oan_a2c@85c856726bda)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-19
+
 ### openg2p-farmer-registry 1.0.0-rc.914 (staging)
 
 - Connector: read a release's pre-rename values under their oan names (#330) (Centre-for-Open-Societal-Systems/farmer-registry@313e412af890)

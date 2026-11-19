@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.30
+
+<!-- source-commit: 85c856726bdaa273cc42e9dbc9d1fc36ef444cd5 version: 0.0.1-develop.30 -->
+Published 2026-11-19. Archive SHA-256 `bdfe2b6bedcbfffe12d267ffcf73623cbfd60f6c4337836c11e4e7ebf921ba43`.
+
+- Change: Merge pull request #140 from arnavam/fix/ci-gateway-deploy-chart-selection
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@85c856726bda](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/85c856726bdaa273cc42e9dbc9d1fc36ef444cd5)
+- Changes since 0.0.1-develop.29: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/d6dbabc29d0569bfca27ce164d1ccb8fbabe4dc8...85c856726bdaa273cc42e9dbc9d1fc36ef444cd5
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-service/a2c-service:0.0.1-develop.30` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-service-0.0.1-develop.30.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.29
 
 <!-- source-commit: d6dbabc29d0569bfca27ce164d1ccb8fbabe4dc8 version: 0.0.1-develop.29 -->
