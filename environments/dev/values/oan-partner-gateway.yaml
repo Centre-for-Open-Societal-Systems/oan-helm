@@ -20,6 +20,29 @@ tls:
 # The sandbox's realm (KEYCLOAK_REALM=partner), as written into tokens.
 keycloak:
   issuer: https://keycloak.development.oanstaging.com/realms/partner
+  # Later (8d): https://keycloak.development.oanstaging.com/realms/partner-sandbox-app, once
+  # that realm exists on dev and the sandbox runs with config.keycloak.apps.realm and every
+  # app was re-synced.
+  # aud every app token must carry. Empty = not checked. Set to oan-partner-gateway (the
+  # sandbox's config.gateway.tokenAudience) once the sandbox writing it is installed and
+  # every app was re-synced (8d, step 3).
+  audience: ""
+
+# Access by OAuth scope (each API's scope, the sandbox's config.gateway.scopes). During the
+# move a route also admits a token whose oan_routes names it. Order (docs/apisix-gateway.md
+# section 8d): 1. sandbox with scopes + audience, 2. resync all apps, 3. this chart 0.3.0
+# with legacyRouteIds: true, 4. upstream mTLS on the edge, 5. legacyRouteIds: false here and
+# config.gateway.legacyRouteClaim: false in the sandbox.
+legacyRouteIds: true
+
+# Client certificate APISIX presents to the upstream hosts (ApisixUpstream tlsSecret), so
+# the edge in front of them can admit only the gateway (docs/apisix-gateway.md 8d).
+# Empty secretName = no client certificate. TO CONFIRM (DevOps): create the Secret
+# oan-partner-gateway-upstream-client (tls.crt, tls.key) in namespace api6-gateway, then
+# set secretName to it (8d, step 4).
+upstreamTls:
+  secretName: ""
+  namespace: api6-gateway
 
 environmentRole: uat
 
