@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-19
 
+### openg2p-farmer-registry 0.0.0-develop.893 (develop)
+
+- Connector: read a release's pre-rename values under their oan names (#330) (Centre-for-Open-Societal-Systems/farmer-registry@313e412af890)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-19
+
 ### openg2p-farmer-registry 1.0.0-rc.912 (staging)
 
 - Farmer list: the last name header reads Grandfather's name (#328) (Centre-for-Open-Societal-Systems/farmer-registry@26693c00b583)
