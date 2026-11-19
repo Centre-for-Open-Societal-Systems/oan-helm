@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-19
 
+### openg2p-farmer-registry 1.0.0-develop.214 (develop)
+
+- Refusals: one message is never counted as two problems (#333) (Centre-for-Open-Societal-Systems/farmer-registry@fffaef50f19a)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-19
+
 ### openg2p-commons-services 1.0.0-dev.49
 
 Previous version: 1.0.0-dev.48.
