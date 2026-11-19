@@ -32,11 +32,11 @@ behaviours, not hand-written exceptions, are what make repeated upgrades safe:
 | --- | --- | --- |
 | `*-pg-init-*`, `postgres-init-master-data` | Regular, expires after 100 s | Skips an existing database and user; re-syncs the password from the kept Secret |
 | `*-kc-init-1-<hash>`, `keycloak-init-1-<hash>` | Regular, expires after 600 s / 1 day | Skips existing realms, clients and roles; a configuration change changes the hash, giving a new Job |
-| `client-secrets-sync-<revision>` | Regular, expires after 600 s | Copies the unchanged client secrets from Keycloak into the same Secrets, then restarts their consumers |
+| `client-secrets-sync-<inputhash8>` | Regular, kept | Named by the hash of its spec and script: it runs only when they change. Copies the client secrets from Keycloak into the same Secrets, then restarts their consumers |
 | `kc-sa-role-<revision>` | Regular, expires after 600 s | Grants the PM service-account role; granting an existing role is a no-op |
 | `master-data-iam-register-<revision>` | Regular, expires after 600 s | Posts the same application, roles and permissions to IAM |
 | `esignet-schema-init-<hash>`, `mock-identity-system-schema-init-<hash>` | Regular, expires after 600 s | Skips when the schema already has tables (see below) |
-| `websub-topics-<revision>` | Regular | Creates missing Kafka topics only |
+| `websub-topics-<inputhash8>` | Regular, kept | Named by the hash of its spec: it runs only when the topics or the image change. Creates missing Kafka topics only |
 | `auditmanager-topic-init` | Pre-upgrade hook | `--create --if-not-exists`; only ever grows partitions |
 | `db-password-sync` | Pre-upgrade hook | Sets the PM role's password to its Secret; no-op when absent |
 | `openg2p-awe-iam-register-<revision>`, `partner-management-iam-register-<revision>` | Post-upgrade hooks | Same registration as Master Data. These subchart versions cannot yet run it as a regular Job. |
@@ -45,6 +45,27 @@ behaviours, not hand-written exceptions, are what make repeated upgrades safe:
 
 Keymanager's database setup and key generation run as init containers guarded by a
 marker on its persistent volume, so they run once.
+
+### Our setup hooks run only when their inputs changed
+
+Our own hooks (`aggregation-staff-client-secret`, `aggregation-staff-grant`, `consent-staff-portal-tile`,
+`iam-bene-portal-api`, `iam-login-provider-issuer-sync`, `keycloak-public-client-urls`, `mock-identities`) are
+stamped (`templates/_hook_stamps.tpl`):
+
+- A hook's inputs are its rendered template: script, environment, image and targets. `aggregation-staff-client-secret`
+  also includes the sha256 of the live client and runtime Secrets, so a deleted or replaced Secret runs it again.
+- The hook's Job renders only when that hash differs from its stamp in the ConfigMap `commons-services-hook-stamps`. Its
+  ConfigMaps and RBAC always render.
+- The last post-upgrade hook, `commons-services-hook-stamps` (weight 100), records the hashes of the hooks that ran.
+  - If any hook fails, it does not run: `--atomic` rolls back, and the next upgrade runs the hook again.
+  - Its account can only get and patch that one ConfigMap.
+- `configmap-change-pod-rollout` runs on every upgrade: it is the check itself.
+- The upstream hooks above are not stamped. Their charts only offer an on/off switch (`geoSeed.enabled`,
+  `iamRegister.enabled`, `identitySeed.enabled`, `topicInit.enabled`, `dbPasswordSync.enabled`), and switching one off
+  means it never runs. `keycloak-init` 1.2.0 has no switch and runs on every upgrade; it is idempotent.
+
+To run hooks whatever their stamps say, set `hookStamps.force: [<hook>]` or `hookStamps.forceAll: true` for one
+upgrade, by a values PR.
 
 ### The MOSIP exception
 
@@ -110,6 +131,9 @@ CHANGELOG mentions a migration. A rollback does not undo migrations.
 
 **Installed Apps** → `commons-services` → ⋮ → **Rollback** to the previous revision.
 Rollback restores manifests only. Restore database changes from the backup.
+
+A rollback runs no post-upgrade hook, so the hook stamps still describe the newer revision. The next upgrade after a
+rollback sets `hookStamps.forceAll: true` once.
 
 ## Known limit: new Keycloak roles or redirects
 

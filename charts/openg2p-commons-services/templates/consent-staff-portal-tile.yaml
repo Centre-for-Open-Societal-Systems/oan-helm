@@ -1,3 +1,4 @@
+{{- define "oan.hookFile.consent-staff-portal-tile" -}}
 {{- $tile := .Values.consentStaffPortalTile }}
 {{- $cm := index .Values "openg2p-consent-manager" }}
 {{- if $tile.enabled }}
@@ -70,3 +71,6 @@ spec:
           configMap:
             name: {{ .Release.Name }}-consent-staff-tile
 {{- end }}
+{{- end -}}
+{{- /* Hook documents render only when their inputs changed (templates/_hook_stamps.tpl). */ -}}
+{{ include "oan.hook.file" (list . "consent-staff-portal-tile") }}

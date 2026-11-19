@@ -1,3 +1,4 @@
+{{- define "oan.hookFile.mock-identities" -}}
 {{- if .Values.mockIdentities.enabled }}
 {{/*
 Test people for the mock identity system, from values.
@@ -120,3 +121,6 @@ spec:
           configMap:
             name: {{ .Release.Name }}-mock-identities
 {{- end }}
+{{- end -}}
+{{- /* Hook documents render only when their inputs changed (templates/_hook_stamps.tpl). */ -}}
+{{ include "oan.hook.file" (list . "mock-identities") }}

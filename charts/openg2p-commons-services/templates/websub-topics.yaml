@@ -1,20 +1,24 @@
-{{- if and .Values.websub.enabled .Values.websubTopicProvisioning.enabled }}
+{{- /* Named by the sha256 of its own spec: unchanged inputs keep the finished Job, so nothing runs again,
+     and a change gets a new name (a Job's spec.template is immutable). No TTL: the finished Job is the record. */ -}}
+{{- define "oan.plainJob.websub-topics" -}}
+{{- $root := index . 0 -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Release.Name }}-websub-topics-{{ .Release.Revision }}
-  namespace: {{ .Release.Namespace }}
+  name: {{ $root.Release.Name }}-websub-topics-{{ index . 1 }}
+  namespace: {{ $root.Release.Namespace }}
   labels:
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ $root.Release.Name }}
+    app.kubernetes.io/managed-by: {{ $root.Release.Service }}
     oan.org/purpose: websub-topic-provisioning
+    oan.org/inputs-hash: {{ index . 1 | quote }}
 spec:
   backoffLimit: 3
   activeDeadlineSeconds: 300
   template:
     metadata:
       labels:
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/instance: {{ $root.Release.Name }}
         oan.org/purpose: websub-topic-provisioning
     spec:
       restartPolicy: OnFailure
@@ -25,7 +29,7 @@ spec:
         fsGroup: 1001
       containers:
         - name: provision
-          image: {{ .Values.websubTopicProvisioning.image | quote }}
+          image: {{ $root.Values.websubTopicProvisioning.image | quote }}
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -40,14 +44,14 @@ spec:
               drop: [ALL]
           env:
             - name: BOOTSTRAP_SERVERS
-              value: {{ required "websubTopicProvisioning.bootstrapServers is required" .Values.websubTopicProvisioning.bootstrapServers | quote }}
+              value: {{ required "websubTopicProvisioning.bootstrapServers is required" $root.Values.websubTopicProvisioning.bootstrapServers | quote }}
             - name: KAFKA_HEAP_OPTS
               value: -Xmx256m -Xms128m
           command: [/bin/bash, -ec]
           args:
             - |
               export PATH="/opt/bitnami/kafka/bin:$PATH"
-              {{- range .Values.websubTopicProvisioning.topics }}
+              {{- range $root.Values.websubTopicProvisioning.topics }}
               topic={{ . | quote }}
               kafka-topics.sh --bootstrap-server "$BOOTSTRAP_SERVERS" --create --if-not-exists \
                 --topic "$topic" --partitions 1 --replication-factor 1 \
@@ -58,4 +62,8 @@ spec:
               kafka-configs.sh --bootstrap-server "$BOOTSTRAP_SERVERS" --entity-type topics \
                 --entity-name "$topic" --alter --add-config retention.ms=-1,retention.bytes=-1
               {{- end }}
+{{- end -}}
+{{- if and .Values.websub.enabled .Values.websubTopicProvisioning.enabled }}
+{{- $hash := include "oan.plainJob.websub-topics" (list . "") | sha256sum | trunc 8 }}
+{{ include "oan.plainJob.websub-topics" (list . $hash) }}
 {{- end }}

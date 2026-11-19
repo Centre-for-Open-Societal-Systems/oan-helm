@@ -27,7 +27,7 @@
         "amazon/aws-cli:2.36.43",
         "docker.io/library/redis@sha256:e4ee3e03ce8f75471f40937a7c6b2b0e500390b6812fcdf5cb32c01295ded446"
       ],
-      "devExample": "examples/dev/oan-leads-api.yaml: strict lint and render passed",
+      "devExample": "examples\\dev\\oan-leads-api.yaml: strict lint and render passed",
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "oan-sandbox": {
@@ -41,12 +41,12 @@
       "baselineScope": "new chart in 1.0.0-dev.6: every workload disabled by default, so the default render has no resources; enabled renders are checked by validate.py",
       "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
       "defaultImageReferences": [],
-      "devExample": "examples/dev/sandbox.yaml: strict lint and render passed",
+      "devExample": "examples\\dev\\sandbox.yaml: strict lint and render passed",
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-commons-services": {
       "lint": "strict passed",
-      "resources": 190,
+      "resources": 196,
       "namespaces": [
         "verify-a",
         "verify-b"
@@ -100,7 +100,7 @@
         "postgres:16-alpine",
         "python:3.11.14-slim"
       ],
-      "devExample": "examples/dev/commons-services.yaml: strict lint and render passed",
+      "devExample": "examples\\dev\\commons-services.yaml: strict lint and render passed",
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-cropsown-registry": {
@@ -129,7 +129,7 @@
         "openg2p/postgres-init:1.2.0",
         "openg2p/postgres-init:develop"
       ],
-      "devExample": "examples/dev/cropsown.yaml: strict lint and render passed",
+      "devExample": "examples\\dev\\cropsown.yaml: strict lint and render passed",
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-da-registry": {
@@ -143,7 +143,7 @@
       "baselineScope": "original 1.0.0-dev.1 resource names/selectors/Secret references; Commons Superset and Certify disabled to match inspected dev configuration",
       "optionalWorkloads": "enabled/disabled, digest, pull Secret, envFrom and missing-image/invalid-digest rejection passed",
       "defaultImageReferences": [],
-      "devExample": "examples/dev/da.yaml: strict lint and render passed",
+      "devExample": "examples\\dev\\da.yaml: strict lint and render passed",
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-farmer-registry": {
@@ -173,7 +173,7 @@
         "openg2p/postgres-init:1.2.0",
         "openg2p/postgres-init:develop"
       ],
-      "devExample": "examples/dev/farmer.yaml: strict lint and render passed",
+      "devExample": "examples\\dev\\farmer.yaml: strict lint and render passed",
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     },
     "openg2p-livestock-registry": {
@@ -202,7 +202,7 @@
         "openg2p/postgres-init:1.2.0",
         "openg2p/postgres-init:develop"
       ],
-      "devExample": "examples/dev/livestock.yaml: strict lint and render passed",
+      "devExample": "examples\\dev\\livestock.yaml: strict lint and render passed",
       "devEndpointMigration": "canonical verified hosts; no legacy environment hosts in workloads, routes or encoded login-provider configuration"
     }
   },
@@ -211,6 +211,8 @@
   "packages": 168,
   "currentPackages": 7,
   "historicalPackages": 161,
-  "unreleasedCharts": [],
+  "unreleasedCharts": [
+    "openg2p-commons-services"
+  ],
   "index": "Relative URLs, SHA-256, HTTP download, exact Helm version selection and repository-based renders verified against loopback server"
 }

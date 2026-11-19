@@ -1,3 +1,4 @@
+{{- define "oan.hookFile.iam-login-provider-issuer-sync" -}}
 {{- /*
   Keep the staff and agent login_providers rows on the Keycloak issuer these values declare.
 
@@ -117,3 +118,6 @@ spec:
             limits: {memory: 128Mi}
 {{- end }}
 {{- end }}
+{{- end -}}
+{{- /* Hook documents render only when their inputs changed (templates/_hook_stamps.tpl). */ -}}
+{{ include "oan.hook.file" (list . "iam-login-provider-issuer-sync") }}

@@ -1331,6 +1331,16 @@ iamLoginProviderIssuerSync:
 # Deployments whose subchart templates take no pod annotations, so rollPodsOnValuesChange cannot reach them:
 # a post-upgrade Job rolls each one when a ConfigMap it reads has changed
 # (templates/configmap-change-pod-rollout.yaml).
+# Our setup hooks re-run on an upgrade only when their inputs changed (templates/_hook_stamps.tpl, G2R-591).
+# force: hooks to run on this upgrade whatever their stamps say; forceAll: run them all (after a manual helm rollback).
+# renderTestStamps: stamps assumed by client-side render tests when there is no live ConfigMap; leave empty.
+hookStamps:
+  enabled: true
+  force: []
+  forceAll: false
+  image: python:3.11.14-slim
+  imagePullSecrets: []
+  renderTestStamps: {}
 configMapChangePodRollout:
   enabled: true
   image: python:3.11.14-slim

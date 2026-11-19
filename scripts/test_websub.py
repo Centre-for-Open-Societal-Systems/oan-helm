@@ -61,8 +61,8 @@ class WebsubContract(unittest.TestCase):
     def test_renderer_keeps_only_reviewed_provisioning_job(self):
         docs=[{'apiVersion':'batch/v1','kind':'Job','metadata':{'name':name,'namespace':ns,
               'labels':{'oan.org/purpose':'websub-topic-provisioning'}},'spec':{}}
-              for name,ns in [('commons-services-websub-topics-22','commons'),
-                              ('commons-services-websub-topics-22','staging'),
+              for name,ns in [('commons-services-websub-topics-0123abcd','commons'),
+                              ('commons-services-websub-topics-0123abcd','staging'),
                               ('bootstrap','commons')]]
         result=subprocess.run([__import__('sys').executable,str(ROOT/'scripts/dev-domain-post-renderer.py'),
             '--skip-initialization-jobs'],input=yaml.safe_dump_all(docs),capture_output=True,text=True)

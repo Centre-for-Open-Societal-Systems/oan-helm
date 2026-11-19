@@ -1,0 +1,136 @@
+{{- /*
+  The stamps of our setup hooks (templates/_hook_stamps.tpl): the ConfigMap that holds them, and the last hook that
+  writes the stamps of the hooks that ran in this revision.
+
+  The ConfigMap is rendered with the data it already has (lookup), so Helm never changes what the writer recorded,
+  and it is kept on uninstall. The writer's account may only get and patch that one ConfigMap.
+*/ -}}
+{{- $s := .Values.hookStamps | default dict -}}
+{{- if $s.enabled }}
+{{- $name := printf "%s-hook-stamps" .Release.Name -}}
+{{- $live := lookup "v1" "ConfigMap" .Release.Namespace $name -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: hook-stamps
+  annotations:
+    helm.sh/resource-policy: keep
+{{- with ($live.data | default dict) }}
+data:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $name }}-writer
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: hook-stamps
+data:
+  write.py: |
+{{ .Files.Get "files/hook-stamps.py" | indent 4 }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: hook-stamps
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: hook-stamps
+rules:
+  - apiGroups: [""]
+    resources: [configmaps]
+    resourceNames: [{{ $name | quote }}]
+    verbs: [get, patch]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: hook-stamps
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ $name }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ $name }}
+    namespace: {{ .Release.Namespace }}
+{{- $stamps := include "oan.hook.dueStamps" . }}
+{{- if ne $stamps "{}" }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: hook-stamps
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "100"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 3
+  activeDeadlineSeconds: 300
+  template:
+    spec:
+      restartPolicy: Never
+      serviceAccountName: {{ $name }}
+      {{- with $s.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+        - name: write
+          image: {{ $s.image | quote }}
+          command: [python, -B, /job/write.py]
+          env:
+            - { name: NAMESPACE, value: {{ .Release.Namespace | quote }} }
+            - { name: CONFIGMAP, value: {{ $name | quote }} }
+            - { name: STAMPS, value: {{ $stamps | quote }} }
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - { name: job, mountPath: /job, readOnly: true }
+          resources:
+            requests: {cpu: 10m, memory: 32Mi}
+            limits: {memory: 128Mi}
+      volumes:
+        - name: job
+          configMap:
+            name: {{ $name }}-writer
+            items:
+              - { key: write.py, path: write.py }
+{{- end }}
+{{- end }}

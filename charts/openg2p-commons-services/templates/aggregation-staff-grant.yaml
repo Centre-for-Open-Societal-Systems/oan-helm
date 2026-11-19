@@ -1,3 +1,4 @@
+{{- define "oan.hookFile.aggregation-staff-grant" -}}
 {{- /*
   Give the Aggregation API's staff search role to the users in aggregationStaffGrant.users, after every
   install and upgrade (files/aggregation-staff-grant.py). The role is created in the realm if it is
@@ -82,3 +83,6 @@ spec:
             items:
               - { key: grant.py, path: grant.py }
 {{- end }}
+{{- end -}}
+{{- /* Hook documents render only when their inputs changed (templates/_hook_stamps.tpl). */ -}}
+{{ include "oan.hook.file" (list . "aggregation-staff-grant") }}
