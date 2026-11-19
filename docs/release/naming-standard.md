@@ -160,14 +160,36 @@ There are no moving tags: no `latest`, `staging`, `develop` or `develop-<n>`. Ch
 
 - **An `rpVersion` bump creates new ECR repositories**, because the platform version is part of the repository name
   of the six platform images. Images built on the previous platform stay in their own repositories.
-- **CI creates a missing repository** before its first push, with scan-on-push and the same lifecycle policy as the
-  existing repositories of that registry. No repository is created by hand.
+- **Repository settings:** every `eoan/` repository has immutable tags, scan on push and AES256 encryption, and
+  carries the tags `owner=<repository>` and `naming=eoan-standard`. Immutable tags enforce the rule below: a tag is never
+  overwritten. The staging promotion only adds a tag to an existing digest, which immutability allows. A rebuild that
+  reuses a tag fails at push.
+- **Who creates them:** from Crop sown, Livestock and DA on, the registry pipeline creates a missing repository just
+  before its first push, with exactly these settings (describe, then create if missing). That is the same step the
+  Farmer pipeline already has, with the settings added. No repository is created by hand. The one exception is the
+  first set for Farmer, created with the Jenkins ECR credential at ASMIT's request on 19 November 2026.
+- **Farmer, the reference set** (created 19 November 2026):
+  - with the platform suffix: `eoan/farmer-registry/{staff-ui,staff-api,partner-api,celery,db-seed,sanity-tests}-1.2.2-rc.625`;
+  - without a suffix: `eoan/farmer-registry/{registry-connector-api,registry-connector-ui,dashboard-ui,dashboard-api}`.
 - **Cleanup:** an old repository is kept until no deployed Helm revision on any cluster references it (`helm get
   manifest` of the deployed revision and of the revisions kept for rollback). It is then removed in a reviewed
   change that lists the repositories and the evidence that nothing references them.
 - **Pull access:** New Dev and staging must be able to pull `eoan/<repository>/*` with the namespace pull Secrets
   and the node roles. See [ecr-pull-access.md](../ecr-pull-access.md): an identity policy scoped to single
   repository ARNs does not cover new repositories.
+
+### Repositories to prune later
+
+These were created outside the standard. Nothing pushes to them any more. They are kept, not deleted, and are
+removed through the cleanup rule above once no deployed revision references them:
+
+| Repository | Why it is outside the standard |
+| --- | --- |
+| `eoan/farmer-registry/dashboard-ui-1.2.2-rc.625`, `eoan/farmer-registry/dashboard-api-1.2.2-rc.625` | platform suffix on images not built on the platform (an early branch build) |
+| `eoan/farmer-registry-dashboard-api` | not under `eoan/<repository>/` |
+| `eoan/oan_*_dashboard` | dashboard source repository names, with underscores, instead of the registry that builds them |
+| `eoan/livestock-registry-dashbaord-api` | typo, and not under `eoan/<repository>/` |
+| `eoan/cropsown-registry-dashboard-api` | not under `eoan/<repository>/` |
 
 ### A version that is already taken
 
