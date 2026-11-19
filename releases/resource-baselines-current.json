@@ -1422,6 +1422,12 @@
         "batch/v1",
         "Job",
         "verify-a",
+        "verify-aggregation-staff-client-secret"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
         "verify-audit-pg-init-audit-manager"
       ],
       [
@@ -1506,7 +1512,7 @@
         "batch/v1",
         "Job",
         "verify-a",
-        "verify-keycloak-init-1-9c31f7f6"
+        "verify-keycloak-init-1-0b7e6b8e"
       ],
       [
         "batch/v1",
@@ -1704,6 +1710,12 @@
         "rbac.authorization.k8s.io/v1",
         "Role",
         "verify-a",
+        "verify-aggregation-staff-client-secret"
+      ],
+      [
+        "rbac.authorization.k8s.io/v1",
+        "Role",
+        "verify-a",
         "verify-client-secrets-sync"
       ],
       [
@@ -1711,6 +1723,12 @@
         "Role",
         "verify-a",
         "verify-configmap-change-pod-rollout"
+      ],
+      [
+        "rbac.authorization.k8s.io/v1",
+        "RoleBinding",
+        "verify-a",
+        "verify-aggregation-staff-client-secret"
       ],
       [
         "rbac.authorization.k8s.io/v1",
@@ -1729,6 +1747,12 @@
         "ConfigMap",
         "verify-a",
         "verify-aggregation-api-catalog"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-aggregation-staff-client-secret"
       ],
       [
         "v1",
@@ -1927,6 +1951,12 @@
         "PersistentVolumeClaim",
         "verify-a",
         "verify-keymanager"
+      ],
+      [
+        "v1",
+        "Secret",
+        "verify-a",
+        "aggregation-layer-staff"
       ],
       [
         "v1",
@@ -2239,6 +2269,12 @@
         "ServiceAccount",
         "verify-a",
         "master-data-postgres-init"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-aggregation-staff-client-secret"
       ],
       [
         "v1",
