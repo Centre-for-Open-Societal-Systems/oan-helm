@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-19
 
+### openg2p-commons-services 1.0.0-dev.47
+
+Previous version: 1.0.0-dev.46.
+
+- feat(commons): grant the Aggregation API's staff search role from values (#233) (3f3471a)
+
+## 2026-11-19
+
 ### openg2p-farmer-registry 0.0.0-develop.887 (develop)
 
 - Same mandatory answers on the web intake and the ODK form (#323) (Centre-for-Open-Societal-Systems/farmer-registry@9ebea1a833c0)
