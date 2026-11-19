@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.96
+
+<!-- source-commit: 68fdbc3949680a1e6a50d386fa336481bbe36e8a version: 0.0.1-develop.96 -->
+Published 2026-11-19. Archive SHA-256 `944b1b277df7cb1a2996beff9669666f343ff779431d43ebedb3e0b93d9b18bd`.
+
+- Change: Merge pull request #128 from arnavam/fix/auth-service-prefix
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@68fdbc394968](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/68fdbc3949680a1e6a50d386fa336481bbe36e8a)
+- Changes since 0.0.1-develop.95: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/61e4e2057a21c14394de47605ab31c27e87c8917...68fdbc3949680a1e6a50d386fa336481bbe36e8a
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-service/grievance-service:0.0.1-develop.96` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-service-0.0.1-develop.96.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.95
 
 <!-- source-commit: 61e4e2057a21c14394de47605ab31c27e87c8917 version: 0.0.1-develop.95 -->

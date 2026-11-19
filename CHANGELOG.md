@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-19
 
+### oan-grievance-service 0.0.1-develop.96 (develop)
+
+- Merge pull request #128 from arnavam/fix/auth-service-prefix (Centre-for-Open-Societal-Systems/oan_grievance_service@68fdbc394968)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-19
+
 ### oan-grievance-service 0.0.1-develop.95 (develop)
 
 - Merge pull request #127 from arnavam/fix/ci-gateway-deploy-chart-selection (Centre-for-Open-Societal-Systems/oan_grievance_service@61e4e2057a21)
