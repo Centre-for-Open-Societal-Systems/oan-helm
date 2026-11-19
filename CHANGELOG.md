@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-19
 
+### openg2p-farmer-registry 0.0.0-develop.888 (develop)
+
+- feat: align intake photo (4:5, 100 KB) and document attachment (2 MB) limits with Fayda/MOSIP standards (#325) (Centre-for-Open-Societal-Systems/farmer-registry@29f98c110066)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-19
+
 ### openg2p-commons-services 1.0.0-dev.47
 
 Previous version: 1.0.0-dev.46.
