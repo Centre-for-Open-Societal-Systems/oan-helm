@@ -4,7 +4,7 @@
   builds main only and runs ci/jenkins/staging-commons.Jenkinsfile (Commons base, then Commons services, on staging).
   Created and updated from this file by ci/jenkins/apply-job.sh; never edited in the Jenkins UI.
   Same source settings as the other multibranch jobs on jenkins.oanstaging.com (GitHub App credential oan-ci-app,
-  branch discovery, scan every 4 hours plus the GitHub App's push events).
+  branch discovery, scan every 4 hours plus the GitHub App's push events). Builds start only by hand (NoTriggerBranchProperty).
 -->
 <org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject>
   <actions/>
@@ -43,8 +43,14 @@
             </jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait>
           </traits>
         </source>
+        <!-- Branch scans still find new commits on main, but never start a build: staging is delivered only when someone
+             presses Build (ASMIT, 19 Nov 2026). New Dev (oan-helm-dev-commons) still builds on every merge. -->
         <strategy class="jenkins.branch.DefaultBranchPropertyStrategy">
-          <properties class="empty-list"/>
+          <properties class="java.util.Arrays$ArrayList">
+            <a class="jenkins.branch.BranchProperty-array">
+              <jenkins.branch.NoTriggerBranchProperty/>
+            </a>
+          </properties>
         </strategy>
       </jenkins.branch.BranchSource>
     </data>
