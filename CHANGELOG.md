@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-19
 
+### openg2p-farmer-registry 1.0.0-rc.914 (staging)
+
+- Connector: read a release's pre-rename values under their oan names (#330) (Centre-for-Open-Societal-Systems/farmer-registry@313e412af890)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-19
+
 ### oan-grievance-service 0.0.1-develop.96 (develop)
 
 - Merge pull request #128 from arnavam/fix/auth-service-prefix (Centre-for-Open-Societal-Systems/oan_grievance_service@68fdbc394968)
