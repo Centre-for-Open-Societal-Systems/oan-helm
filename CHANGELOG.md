@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-19
 
+### openg2p-farmer-registry 0.0.0-develop.890 (develop)
+
+- Helm failure diagnostics: give Helm's error line with secrets masked (#327) (Centre-for-Open-Societal-Systems/farmer-registry@c734815f8be8)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-19
+
 ### openg2p-farmer-registry 0.0.0-develop.888 (develop)
 
 - feat: align intake photo (4:5, 100 KB) and document attachment (2 MB) limits with Fayda/MOSIP standards (#325) (Centre-for-Open-Societal-Systems/farmer-registry@29f98c110066)
