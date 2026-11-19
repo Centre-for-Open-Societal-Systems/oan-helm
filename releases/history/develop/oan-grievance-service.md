@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.95
+
+<!-- source-commit: 61e4e2057a21c14394de47605ab31c27e87c8917 version: 0.0.1-develop.95 -->
+Published 2026-11-19. Archive SHA-256 `cdc2709f6f128c0b193f97eeabc36ce30b76bf43c933bb9515a5d0eafe73d022`.
+
+- Change: Merge pull request #127 from arnavam/fix/ci-gateway-deploy-chart-selection
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@61e4e2057a21](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/61e4e2057a21c14394de47605ab31c27e87c8917)
+- Changes since 0.0.1-develop.89: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/6b17aa28b6ad0c241c015e88f8920ee8cf824beb...61e4e2057a21c14394de47605ab31c27e87c8917
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-service/grievance-service:0.0.1-develop.95` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-service-0.0.1-develop.95.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.89
 
 <!-- source-commit: 6b17aa28b6ad0c241c015e88f8920ee8cf824beb version: 0.0.1-develop.89 -->

@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-19
 
+### oan-grievance-service 0.0.1-develop.95 (develop)
+
+- Merge pull request #127 from arnavam/fix/ci-gateway-deploy-chart-selection (Centre-for-Open-Societal-Systems/oan_grievance_service@61e4e2057a21)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-19
+
 ### openg2p-farmer-registry 0.0.0-develop.893 (develop)
 
 - Connector: read a release's pre-rename values under their oan names (#330) (Centre-for-Open-Societal-Systems/farmer-registry@313e412af890)
