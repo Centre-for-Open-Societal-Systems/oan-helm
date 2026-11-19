@@ -8,6 +8,18 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-19
+
+### oan-farmer-app-gateway 0.0.1-develop.2 (develop)
+
+- Merge pull request #4 from arnavam/chore/develop-chart-version (Centre-for-Open-Societal-Systems/oan_farmer_app_service@0bdcff4a3533)
+- Images and rollback: [releases/history/develop/oan-farmer-app-gateway.md](releases/history/develop/oan-farmer-app-gateway.md)
+
+### oan-farmer-app-service 0.0.1-develop.2 (develop)
+
+- Merge pull request #4 from arnavam/chore/develop-chart-version (Centre-for-Open-Societal-Systems/oan_farmer_app_service@0bdcff4a3533)
+- Images and rollback: [releases/history/develop/oan-farmer-app-service.md](releases/history/develop/oan-farmer-app-service.md)
+
 ## 2026-11-18
 
 ### openg2p-da-registry 0.0.0-develop.126 (develop)
