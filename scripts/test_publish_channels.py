@@ -99,6 +99,13 @@ class PublishChannelsTest(unittest.TestCase):
         current = yaml.safe_load((self.root / "releases/channels-current.yaml").read_text())
         self.assertEqual(current["develop"], {"farmer": "0.0.0-develop.10"})
 
+    def test_a_staging_version_is_newer_than_every_rc_of_the_same_release(self):
+        self.archive("staging", "1.0.0-rc.553")
+        self.archive("staging", "1.0.0-staging.1")
+        publish_channels.main()
+        current = yaml.safe_load((self.root / "releases/channels-current.yaml").read_text())
+        self.assertEqual(current["staging"], {"farmer": "1.0.0-staging.1"})
+
     def test_second_run_changes_nothing(self):
         self.archive("staging", "1.0.0-rc.9")
         publish_channels.main()
@@ -133,6 +140,7 @@ class PublishChartTest(unittest.TestCase):
         for file_name, expected in (
             ("openg2p-farmer-registry-0.0.0-develop.812.tgz", "repository/develop/"),
             ("openg2p-farmer-registry-1.0.2-rc.812.tgz", "repository/staging/"),
+            ("openg2p-farmer-registry-1.0.0-staging.12.tgz", "repository/staging/"),
             ("openg2p-farmer-registry-1.0.2.tgz", "repository/release/"),
         ):
             self.assertEqual(publish_chart.target_path(file_name)[0], expected + file_name)

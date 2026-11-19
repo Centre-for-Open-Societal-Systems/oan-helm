@@ -1,7 +1,10 @@
 import importlib.util
+import os
 from pathlib import Path
 import sys
+import tempfile
 import unittest
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts/ci"))
@@ -55,6 +58,11 @@ class IndexTests(unittest.TestCase):
         self.assertEqual([item["version"] for item in entries], ["0.0.0-develop.10", "0.0.0-develop.9"])
         self.assertEqual(entries[0], {"version": "0.0.0-develop.10", "commit": "bbb", "digest": "d2"})
 
+    def test_versions_are_ordered_as_semver_across_the_naming_change(self):
+        index = INDEX.replace("    version: 0.0.0-develop.9\n  - annotations", "    version: 1.0.0-develop.3\n  - annotations")
+        entries = promote_chart.index_entries(index, "openg2p-farmer")
+        self.assertEqual([item["version"] for item in entries], ["1.0.0-develop.3", "0.0.0-develop.10"])
+
     def test_a_chart_that_is_not_listed_has_no_entries(self):
         self.assertEqual(promote_chart.index_entries(INDEX, "openg2p-da"), [])
 
@@ -98,6 +106,23 @@ class ImageTests(unittest.TestCase):
 
     def test_an_image_outside_ecr_is_not_tagged(self):
         self.assertFalse(promote_chart.add_tag("docker.io/openg2p/other", DIGEST, "staging"))
+
+
+class StagingVersionTests(unittest.TestCase):
+    def test_init_yaml_gives_the_staging_version_and_there_is_no_moving_tag(self):
+        with tempfile.TemporaryDirectory() as folder:
+            Path(folder, "init.yaml").write_text("version: 1.0.0\nrpVersion: 1.2.2-rc.625\n", encoding="utf-8")
+            with mock.patch.dict(os.environ, {"BUILD_NUMBER": "12"}), \
+                    mock.patch.object(sys.modules["package_chart"], "derive_version") as older:
+                self.assertEqual(promote_chart.staging_version(folder), "1.0.0-staging.12")
+            older.assert_not_called()
+        self.assertFalse(hasattr(promote_chart, "MOVING_TAG"))
+
+    def test_a_repository_without_init_yaml_keeps_the_older_version(self):
+        with tempfile.TemporaryDirectory() as folder, \
+                mock.patch.object(sys.modules["package_chart"], "derive_version", return_value="1.0.0-rc.554") as older:
+            self.assertEqual(promote_chart.staging_version(folder), "1.0.0-rc.554")
+        older.assert_called_once_with("staging")
 
 
 if __name__ == "__main__":

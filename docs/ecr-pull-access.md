@@ -65,3 +65,27 @@ configuration are ready. See [component prerequisites](consent-aggregation-prere
 
 The action names and repository scoping follow the
 [AWS ECR policy examples](https://docs.aws.amazon.com/AmazonECR/latest/userguide/repository-policy-examples.html).
+
+## Registry images under `eoan/`
+
+The naming standard moves registry images to `eoan/<repository>/<image>[-<rpVersion>]`
+([naming-standard.md](release/naming-standard.md), section 6), for example
+`eoan/farmer-registry/staff-api-1.2.2-rc.625`. CI creates each repository on its first push, and every
+`rpVersion` bump adds new ones, so pull access must cover the prefix rather than single repository ARNs.
+
+Read on 19 November 2026 (pods on both clusters, `kubectl get pods -A`, image references only):
+
+- New Dev and staging pull registry images only from `openg2p/<repository>/*` (and `openg2p/oan-dashboards`) in
+  account `379220350808`; no `eoan/*` repository is referenced yet.
+- Pull Secrets: `ecr-pull-secret` in `commons`, `farmer`, `crop`, `da-registry`, `reports` and the livestock
+  namespace (`livestock` on New Dev, `live` on staging), plus the per-registry `<registry>-ecr-pull-secret` and
+  `<registry>-dashboard-ecr` Secrets. They hold short-lived ECR tokens of the node role.
+- The Aggregation denial above shows that the New Dev role's identity policy is scoped per repository. Whether it
+  (and the staging role) allows `eoan/*` has **not** been confirmed: the role's policies cannot be listed with the
+  credentials available here.
+
+Before the first registry deploys from `eoan/<repository>/*`, an authorized IAM administrator confirms (or adds)
+pull on `arn:aws:ecr:ap-south-1:379220350808:repository/eoan/*` for the New Dev and staging node roles, with the
+same three actions as [aggregation-pull-policy.json](../examples/aws/aggregation-pull-policy.json). The first
+develop deploy of each registry then proves it: its pods start from the new paths. A path that cannot be pulled
+shows as `ImagePullBackOff` and fails that deploy; check this on New Dev before the first staging promotion.
