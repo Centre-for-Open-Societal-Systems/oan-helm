@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-19
 
+### oan-sandbox 1.0.0-dev.20
+
+Previous version: 1.0.0-dev.19.
+
+- feat(oan-sandbox): gateway scopes, apps realm, prod PM and policy backend settings (#232) (1e6f2d2)
+
+## 2026-11-19
+
 ### oan-a2c-service 0.0.1-develop.30 (develop)
 
 - Merge pull request #140 from arnavam/fix/ci-gateway-deploy-chart-selection (Centre-for-Open-Societal-Systems/oan_a2c@85c856726bda)
