@@ -161,10 +161,67 @@ openg2p-consent-manager:
     istio:
       virtualservice:
         gateway: istio-system/development
+    image:
+      pullPolicy: Always
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-management/consent-manager-api-1.0.2
+      tag: 0.0.0-develop.5@sha256:92f65cf975654b7db70b011e9ab46c9082ef7c2f6104258d11b1cd64d27a688b
   ui:
     istio:
       virtualservice:
         gateway: istio-system/development
+    image:
+      pullPolicy: Always
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-management/consent-manager-ui-1.0.2
+      tag: 0.0.0-develop.5@sha256:793cb754c42ddfebbc2e09f7b28dca326eca455018dd05fd34e042363b8102fb
+  extraApis:
+    - apiAudience: partner
+      authEnabled: 'false'
+      enabled: true
+      hostname: '{{ tpl .Values.global.consentManagerPartnerHostname $ }}'
+      image:
+        pullPolicy: Always
+        registry: ''
+        repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-management/consent-manager-api-1.0.2
+        tag: 0.0.0-develop.5@sha256:92f65cf975654b7db70b011e9ab46c9082ef7c2f6104258d11b1cd64d27a688b
+      istio:
+        enabled: true
+        gateway:
+          enabled: false
+        virtualservice:
+          destination: '{{ .Release.Name }}-cm-partner-api'
+          destinationPort: 80
+          enabled: true
+          gateway: istio-system/development
+          host: '{{ tpl .Values.global.consentManagerPartnerHostname $ }}'
+          prefix: /api/consent-manager-partner/
+          rewriteUri: /
+      nameOverride: cm-partner-api
+      openapiRootPath: /api/consent-manager-partner
+      signingKeyMounted: true
+    - apiAudience: beneficiary
+      authEnabled: 'true'
+      enabled: false
+      hostname: '{{ tpl .Values.global.consentManagerBeneHostname $ }}'
+      istio:
+        enabled: true
+        gateway:
+          enabled: false
+        virtualservice:
+          destination: '{{ .Release.Name }}-cm-bene-api'
+          destinationPort: 80
+          enabled: true
+          gateway: istio-system/development
+          host: '{{ tpl .Values.global.consentManagerBeneHostname $ }}'
+          prefix: /api/consent-manager-bene/
+          rewriteUri: /
+      nameOverride: cm-bene-api
+      openapiRootPath: /api/consent-manager-bene
+      signingKeyMounted: false
+  sanity:
+    image:
+      pullPolicy: Always
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-management/consent-manager-sanity-1.0.2
+      tag: 0.0.0-develop.5@sha256:78d338bbe55aa4049f7ad7d17409c99bdc0eab50b91c007b970258e3d7d5f329
 keymanager:
   istio:
     virtualservice:
@@ -193,3 +250,8 @@ iamBenePortalApi:
 # commons-services chart that has the Job on, Helm keeps the grant instead.
 aggregationStaffGrant:
   users: [admin, nina.patel]
+consentPartnerPortal:
+  enabled: true
+  image:
+    digest: sha256:4e8d7be0391ddb5c9d688bdff994053cf0f6d1e5ef4348727df646fa64ff8116
+    repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-management/consent-manager-partner-portal-1.0.2
