@@ -107,20 +107,33 @@ Development Agent. Commons Services keeps its own chart versions ([versioning.md
 
 ### init.yaml
 
-Each such repository keeps its version in `init.yaml` at its root. It is the only place the version is written by
-hand:
+Each such repository keeps its release version in `init.yaml` at its root, the only place it is written by hand:
 
 ```yaml
 version: 1.0.0           # the release being worked towards: N.N.N, nothing else
-rpVersion: 1.2.2-rc.625  # the OpenG2P registry platform the images are built on
-rpCommit: <40 hex>       # the openg2p-registry commit of that platform's staff-ui image
 ```
 
 `scripts/ci/oan_version.py` reads it with the standard library only (Python 3.7) and refuses anything else: a version
-that is not `N.N.N`, an `rpVersion` that is not SemVer, an `rpCommit` that is not a commit, a field set twice or an
-unknown field. `rpVersion` and `rpCommit` are only present where images are built on the platform. The repository's
-`Chart.yaml` keeps the platform chart version written out; the repository's `scripts/bump-rp-version.sh` changes
-`init.yaml` and `Chart.yaml` together, and a test fails when the two differ.
+that is not `N.N.N`, a field set twice or an unknown field. (It still accepts the optional `rpVersion` and `rpCommit`
+fields, which no repository uses.)
+
+### The platform version (rpVersion)
+
+The OpenG2P registry platform the images are built on is kept where OpenG2P keeps it: the `ARG` default of each
+Dockerfile built on the platform (`ARG BASE_IMAGE_VERSION=1.2.2-rc.625` before
+`FROM openg2p/openg2p-registry-<role>:${BASE_IMAGE_VERSION}`), all with the same value. OpenG2P's farmer-registry does
+the same (`ARG RP_VERSION=<v>` in every Dockerfile, kept equal by `test/test_rp_pin_lockstep.py`). A Dockerfile cannot
+read the version of its `FROM` from another file, and a plain `docker build -f docker/<role>/Dockerfile .` must build
+without arguments, so the version is not in `init.yaml` and no build passes `--build-arg BASE_IMAGE_VERSION`.
+
+- A staff UI rebuilt from source declares the registry-platform **commit** of that version's
+  `openg2p/openg2p-registry-staff-ui` image (its `org.opencontainers.image.revision` label) as its default. CI checks
+  the commit against the label.
+- `Chart.yaml` keeps `appVersion` and the `openg2p-registry` dependency version written out with the same value.
+- The repository's `scripts/bump-rp-version.sh <version>` changes the Dockerfiles, the staff UI commit, `Chart.yaml`
+  and `Chart.lock` together, and a lockstep test fails the build when any copy differs or a build overrides the
+  default.
+- The `-<rpVersion>` of the platform images' ECR repositories (below) is read from the Dockerfiles.
 
 ### Versions
 
