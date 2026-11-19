@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-19
 
+### openg2p-farmer-registry 0.0.0-develop.891 (develop)
+
+- Deploy only commits whose GitHub checks are all green (#304) (Centre-for-Open-Societal-Systems/farmer-registry@7e720e8b8486)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-19
+
 ### openg2p-farmer-registry 0.0.0-develop.890 (develop)
 
 - Helm failure diagnostics: give Helm's error line with secrets masked (#327) (Centre-for-Open-Societal-Systems/farmer-registry@c734815f8be8)
