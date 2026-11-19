@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-19
 
+### openg2p-farmer-registry 1.0.0-develop.216 (develop)
+
+- db-seed: openg2p-data at 97e142e, where every sample person has a source of income (#336) (Centre-for-Open-Societal-Systems/farmer-registry@b4f51e0d0756)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-19
+
 ### openg2p-farmer-registry 1.0.0-develop.215 (develop)
 
 - Connector: the coordinator is the one builder of the connector images (#335) (Centre-for-Open-Societal-Systems/farmer-registry@afd12b7928bc)
