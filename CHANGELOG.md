@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-19
 
+### openg2p-cropsown-registry 0.0.0-develop.539 (develop)
+
+- Merge pull request #309 from rithikharavi-ai/develop (Centre-for-Open-Societal-Systems/cropsown-regsitry@97e333ef172b)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-19
+
 ### openg2p-farmer-registry 1.0.0-develop.213 (develop)
 
 - Name and version Farmer images from init.yaml (#332) (Centre-for-Open-Societal-Systems/farmer-registry@34c1bb3d5539)
