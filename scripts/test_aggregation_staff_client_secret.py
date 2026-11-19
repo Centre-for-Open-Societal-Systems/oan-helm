@@ -112,6 +112,8 @@ class ClientSecretHookTests(unittest.TestCase):
                        "RELEASE": "commons-services", "REVISION": "7", "RUNTIME_SECRET": "aggregation-api-runtime",
                        "RUNTIME_KEY": KEY, "DEPLOYMENT": "commons-services-aggregation-api",
                        "KUBERNETES_API": self.base, "KUBERNETES_TOKEN": "sa", "ATTEMPTS": "5", "DELAY_SECONDS": "0"}
+        if getattr(self, "sync_job", None):
+            environment["SYNC_JOB"] = self.sync_job
         output = io.StringIO()
         with mock.patch.dict(os.environ, environment, clear=False), redirect_stdout(output):
             job.main()
@@ -158,6 +160,24 @@ class ClientSecretHookTests(unittest.TestCase):
             self.run_hook()
         self.assertEqual(self.patches, [])
         self.assertEqual(self.value("aggregation-api-runtime", KEY), "old-hand-made")
+
+    def test_the_sync_job_named_by_its_inputs_is_waited_on_whatever_its_revision(self):
+        # client-secrets-sync is named by the hash of its inputs: unchanged inputs keep the Job of an earlier revision.
+        self.sync_job = "commons-services-client-secrets-sync-6809f1bf"
+        running = {"metadata": {"name": self.sync_job}, "status": {"active": 1}}
+        self.job_states = [[succeeded("commons-services-keycloak-init-7-0b7e6b8e"), running],
+                           [succeeded("commons-services-keycloak-init-7-0b7e6b8e"), succeeded(self.sync_job)]]
+        self.run_hook()
+        self.assertEqual(self.value("aggregation-api-runtime", KEY), "new-rendered")
+
+    def test_a_failed_sync_job_named_by_its_inputs_leaves_the_runtime_secret_alone(self):
+        self.sync_job = "commons-services-client-secrets-sync-6809f1bf"
+        failed = {"metadata": {"name": self.sync_job}, "status": {"conditions": [{"type": "Failed", "status": "True"}]}}
+        self.job_states = [[succeeded("commons-services-keycloak-init-7-0b7e6b8e"), failed,
+                            succeeded("commons-services-client-secrets-sync-7")]]
+        with self.assertRaises(SystemExit):
+            self.run_hook()
+        self.assertEqual(self.patches, [])
 
     def test_an_earlier_revisions_jobs_are_not_waited_on(self):
         self.job_states = [[succeeded("commons-services-keycloak-init-6-aaaaaaaa")]]

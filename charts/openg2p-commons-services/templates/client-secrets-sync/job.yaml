@@ -1,14 +1,18 @@
-{{- if (index .Values "keycloak-init" "enabled") }}
+{{- /* Named by the sha256 of its own spec and its script: unchanged inputs keep the finished Job, so nothing runs again,
+     and a change gets a new name (a Job's spec.template is immutable). No TTL: the finished Job is the record. */ -}}
+{{- define "oan.plainJob.client-secrets-sync" -}}
+{{- $root := index . 0 -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Release.Name }}-client-secrets-sync-{{ .Release.Revision }}
+  name: {{ $root.Release.Name }}-client-secrets-sync-{{ index . 1 }}
+  labels:
+    oan.org/inputs-hash: {{ index . 1 | quote }}
 spec:
   backoffLimit: 3
-  ttlSecondsAfterFinished: 600
   template:
     spec:
-      serviceAccountName: {{ .Release.Name }}-client-secrets-sync
+      serviceAccountName: {{ $root.Release.Name }}-client-secrets-sync
       restartPolicy: OnFailure
       containers:
         - name: sync
@@ -16,16 +20,16 @@ spec:
           command: ["/bin/sh", "-c", "apk add --no-cache curl jq > /dev/null 2>&1 && sh /scripts/sync.sh"]
           env:
             - name: KEYCLOAK_URL
-              value: {{ tpl .Values.global.keycloakInternalUrl . | quote }}
+              value: {{ tpl $root.Values.global.keycloakInternalUrl $root | quote }}
             - name: KEYCLOAK_USER
-              value: {{ index .Values "keycloak-init" "keycloak" "user" | quote }}
+              value: {{ index $root.Values "keycloak-init" "keycloak" "user" | quote }}
             - name: KEYCLOAK_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ tpl (index .Values "keycloak-init" "keycloak" "existingSecret") . }}
-                  key: {{ index .Values "keycloak-init" "keycloak" "existingSecretKey" }}
+                  name: {{ tpl (index $root.Values "keycloak-init" "keycloak" "existingSecret") $root }}
+                  key: {{ index $root.Values "keycloak-init" "keycloak" "existingSecretKey" }}
             - name: NAMESPACE
-              value: {{ .Release.Namespace | quote }}
+              value: {{ $root.Release.Namespace | quote }}
           volumeMounts:
             - name: scripts
               mountPath: /scripts
@@ -33,5 +37,12 @@ spec:
       volumes:
         - name: scripts
           configMap:
-            name: {{ .Release.Name }}-client-secrets-sync
+            name: {{ $root.Release.Name }}-client-secrets-sync
+{{- end -}}
+{{- /* The suffix of this release's client-secrets-sync Job; aggregation-staff-client-secret waits for that Job. */ -}}
+{{- define "oan.clientSecretsSync.suffix" -}}
+{{- printf "%s%s" (include "oan.plainJob.client-secrets-sync" (list . "")) (include (print .Template.BasePath "/client-secrets-sync/configmap.yaml") .) | sha256sum | trunc 8 -}}
+{{- end -}}
+{{- if (index .Values "keycloak-init" "enabled") }}
+{{ include "oan.plainJob.client-secrets-sync" (list . (include "oan.clientSecretsSync.suffix" .)) }}
 {{- end }}

@@ -1452,7 +1452,7 @@
         "batch/v1",
         "Job",
         "verify-a",
-        "verify-client-secrets-sync-1"
+        "verify-client-secrets-sync-1e718587"
       ],
       [
         "batch/v1",
@@ -1578,7 +1578,7 @@
         "batch/v1",
         "Job",
         "verify-a",
-        "verify-websub-topics-1"
+        "verify-websub-topics-960e9777"
       ],
       [
         "monitoring.coreos.com/v1",
@@ -2371,6 +2371,42 @@
         "ServiceAccount",
         "verify-a",
         "verify-websub"
+      ],
+      [
+        "rbac.authorization.k8s.io/v1",
+        "RoleBinding",
+        "verify-a",
+        "verify-hook-stamps"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-hook-stamps"
+      ],
+      [
+        "v1",
+        "ServiceAccount",
+        "verify-a",
+        "verify-hook-stamps"
+      ],
+      [
+        "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-hook-stamps-writer"
+      ],
+      [
+        "batch/v1",
+        "Job",
+        "verify-a",
+        "verify-hook-stamps"
+      ],
+      [
+        "rbac.authorization.k8s.io/v1",
+        "Role",
+        "verify-a",
+        "verify-hook-stamps"
       ]
     ],
     "secretKeyReferences": [

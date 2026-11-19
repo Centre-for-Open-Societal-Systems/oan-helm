@@ -12,7 +12,7 @@ client's own Secret, so the next release renders the same value and Keycloak kee
 runtime Secret changed, the Aggregation API Deployment is restarted. Secret values are never printed.
 
 Input (environment): KEYCLOAK_URL, KEYCLOAK_USER, KEYCLOAK_PASSWORD (master realm, admin-cli); REALM,
-CLIENT_ID; NAMESPACE; RELEASE, REVISION (the Jobs to wait for); RUNTIME_SECRET, RUNTIME_KEY;
+CLIENT_ID; NAMESPACE; RELEASE, REVISION, SYNC_JOB (the Jobs to wait for); RUNTIME_SECRET, RUNTIME_KEY;
 DEPLOYMENT. The pod's service account token is used for the Kubernetes API.
 """
 import base64
@@ -71,11 +71,15 @@ class Kubernetes:
         return self.get(f"/apis/batch/v1/namespaces/{self.namespace}/jobs").get("items", [])
 
 
-def release_jobs(jobs, release, revision):
-    """This release's keycloak-init and client-secrets-sync Jobs, by the names their charts give them."""
+def release_jobs(jobs, release, revision, sync_job=None):
+    """This release's keycloak-init and client-secrets-sync Jobs, by the names their charts give them.
+
+    client-secrets-sync is named by the hash of its inputs (SYNC_JOB), so the Job of an earlier revision is this
+    revision's when nothing it reads changed; without SYNC_JOB the older name <release>-client-secrets-sync-<revision>."""
     names = {job["metadata"]["name"]: job for job in jobs}
     init = [job for name, job in names.items() if name.startswith(f"{release}-keycloak-init-{revision}-")]
-    sync = [job for name, job in names.items() if name == f"{release}-client-secrets-sync-{revision}"]
+    sync_name = sync_job or f"{release}-client-secrets-sync-{revision}"
+    sync = [job for name, job in names.items() if name == sync_name]
     return init, sync
 
 
@@ -89,11 +93,11 @@ def finished(job):
     return None
 
 
-def wait_for_jobs(kube, release, revision, attempts, delay):
-    # Helm creates both Jobs before it runs post hooks. client-secrets-sync deletes itself 600 s after it
-    # finishes, so a missing sync Job has finished; keycloak-init is kept for a day and must be found.
+def wait_for_jobs(kube, release, revision, attempts, delay, sync_job=None):
+    # Helm creates both Jobs before it runs post hooks. A missing sync Job has finished (an older chart deleted it
+    # 600 s after it finished); keycloak-init is kept for a day and must be found.
     for attempt in range(1, attempts + 1):
-        init, sync = release_jobs(kube.jobs(), release, revision)
+        init, sync = release_jobs(kube.jobs(), release, revision, sync_job)
         states = [finished(job) for job in init + sync]
         if init and all(states):
             if "failed" in states:
@@ -145,7 +149,7 @@ def main():
         with open(f"{SA}/token", encoding="utf-8") as handle:
             kube = Kubernetes(api, handle.read().strip(), namespace, ssl.create_default_context(cafile=f"{SA}/ca.crt"))
 
-    wait_for_jobs(kube, release, revision, attempts, delay)
+    wait_for_jobs(kube, release, revision, attempts, delay, os.environ.get("SYNC_JOB") or None)
     base = os.environ["KEYCLOAK_URL"].rstrip("/")
     token = admin_token(base, os.environ["KEYCLOAK_USER"], os.environ["KEYCLOAK_PASSWORD"], attempts, delay)
     value = client_secret(base, token, realm, client_id)

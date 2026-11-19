@@ -67,7 +67,7 @@ def main():
         # Keep only the reviewed, metadata-only WebSub provisioning Job.
         documents=[d for d in documents if d['kind']!='Job' or (
             d['metadata'].get('labels',{}).get('oan.org/purpose')=='websub-topic-provisioning'
-            and re.fullmatch(r'commons-services-websub-topics-\d+',d['metadata']['name'])
+            and re.fullmatch(r'commons-services-websub-topics-[0-9a-f]{8}',d['metadata']['name'])
             and d['metadata'].get('namespace')=='commons')]
     # No logs: Helm consumes stdout as the complete manifest.
     yaml.safe_dump_all(documents,sys.stdout,sort_keys=False,width=100)

@@ -215,7 +215,10 @@ def secret_refs(docs):
 def stable_identities(identities):
     # Upstream includes a settings hash in Keycloak initialization Job names.
     # URL changes intentionally change that hash; stable workload owners do not.
-    return {(api, kind, namespace, re.sub(r"(-keycloak-init-\d+|-schema-init)-[a-f0-9]{8}$", r"\1-<settings-hash>", name) if kind == "Job" else name) for api, kind, namespace, name in identities}
+    # Our plain Jobs named by the hash of their inputs (client-secrets-sync, websub-topics) are stable by role, too.
+    return {(api, kind, namespace, re.sub(r"-(client-secrets-sync|websub-topics)-[a-f0-9]{8}$", r"-\1-<inputs-hash>",
+             re.sub(r"(-keycloak-init-\d+|-schema-init)-[a-f0-9]{8}$", r"\1-<settings-hash>", name)) if kind == "Job" else name)
+            for api, kind, namespace, name in identities}
 
 
 def check_upgrade_safe_jobs(docs):
@@ -229,7 +232,11 @@ def check_upgrade_safe_jobs(docs):
         if annotations.get("helm.sh/hook"):
             assert "before-hook-creation" in annotations.get("helm.sh/hook-delete-policy", ""), meta["name"]
         else:
-            assert "ttlSecondsAfterFinished" in spec or re.search(r"-\d+$", meta["name"]), f"{meta['name']}: plain Job neither expires nor carries the revision"
+            # Expires, carries the revision, or is named by the hash of its inputs and kept: an unchanged upgrade is a
+            # no-op and a changed input is a new Job (templates/client-secrets-sync/job.yaml, websub-topics.yaml).
+            assert "ttlSecondsAfterFinished" in spec or re.search(r"-\d+$", meta["name"]) or (
+                (meta.get("labels") or {}).get("oan.org/inputs-hash") == meta["name"].rsplit("-", 1)[-1]), \
+                f"{meta['name']}: plain Job neither expires, carries the revision, nor is named by its inputs"
         pod = json.dumps(spec["template"]["spec"])
         if "postgres-init.sh" in pod and "mosipid/" in pod:
             assert "skipping (deploy.sh drops the database)" in pod, f"{meta['name']}: MOSIP deploy.sh drops the database; guard it"

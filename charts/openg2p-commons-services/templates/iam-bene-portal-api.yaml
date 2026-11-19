@@ -1,3 +1,4 @@
+{{- define "oan.hookFile.iam-bene-portal-api" -}}
 {{- /*
   IAM beneficiary portal API (iam-bene-portal-api).
 
@@ -229,3 +230,6 @@ spec:
               SQL
 {{- end }}
 {{- end }}
+{{- end -}}
+{{- /* Hook documents render only when their inputs changed (templates/_hook_stamps.tpl). */ -}}
+{{ include "oan.hook.file" (list . "iam-bene-portal-api") }}

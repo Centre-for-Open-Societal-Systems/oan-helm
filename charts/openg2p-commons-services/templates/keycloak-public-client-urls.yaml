@@ -1,3 +1,4 @@
+{{- define "oan.hookFile.keycloak-public-client-urls" -}}
 {{- /*
   Add the declared redirect URIs and web origins to the public Keycloak clients after every upgrade.
 
@@ -92,3 +93,6 @@ spec:
               - { key: reconcile.py, path: reconcile.py }
 {{- end }}
 {{- end }}
+{{- end -}}
+{{- /* Hook documents render only when their inputs changed (templates/_hook_stamps.tpl). */ -}}
+{{ include "oan.hook.file" (list . "keycloak-public-client-urls") }}
