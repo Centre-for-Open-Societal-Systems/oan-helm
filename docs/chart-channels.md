@@ -5,13 +5,20 @@ repository keeps publishing them. Chart source for Commons Services stays here.
 
 | Registry ref | Version | Published to |
 | --- | --- | --- |
-| `develop` | `0.0.0-develop.<n>` | `repository/develop/` |
-| `staging` | `<line>.<next>-rc.<n>` | `repository/staging/` |
+| `develop` | `<version>-develop.<BUILD_NUMBER>` | `repository/develop/` |
+| `staging` | `<version>-staging.<BUILD_NUMBER>` | `repository/staging/` |
 | tag `N.N.N` | `N.N.N` | `repository/release/` |
 
-`<n>` is the commit count of the registry branch. The chart and all images of a commit share one
-version. This follows OpenG2P's policy in `openg2p-packaging`, with one difference: OpenG2P names the
-release line `N.N`, and OAN names it `staging`. See `scripts/ci/derive-version.sh`.
+`<version>` is `version` in the registry's `init.yaml` and `<BUILD_NUMBER>` the Jenkins build number
+(`scripts/ci/oan_version.py`). The chart and all images of a build share that one version, and the images are
+tagged with it. Section 6 of [naming-standard.md](release/naming-standard.md) has the full rule, image paths
+included.
+
+A registry without `init.yaml` keeps the older versions until it adopts the standard: `0.0.0-develop.<n>` on
+develop and `<line>.<next>-rc.<n>` on staging, `<n>` being the commit count of the branch
+(`scripts/ci/derive-version.sh`: OpenG2P's policy from `openg2p-packaging`, with the release line named
+`staging`). `repository/staging/` accepts both forms. Versions are ordered as SemVer, so `1.0.0-staging.1` is
+newer than `1.0.0-rc.553`.
 
 Each folder is its own Helm repository. In Rancher, add one repository per environment with the raw
 URL of that folder.
@@ -26,7 +33,8 @@ URL of that folder.
    commit of this repository (`OAN_HELM_REF`). A change to `app_chart.py` reaches a repository when it
    moves its pin.
 2. The pipeline runs `scripts/ci/publish_chart.py`, which adds that one archive to `repository/<channel>/`.
-   A version that already exists is refused.
+   A published version is never replaced: exit 4 when it was published from the same source commit (a re-run,
+   treated as success), exit 5 when it holds another commit. Exit 5 fails the build: bump `version` in `init.yaml`.
 3. `.github/workflows/publish-channels.yaml` runs `scripts/publish_channels.py`: it checks the archive,
    seals it in `releases/channels.json`, rebuilds `index.yaml` and `SHA256SUMS`, records the version in
    `releases/history/<channel>/<chart>.md`, adds a `CHANGELOG.md` entry and tags `<chart>-<version>`.
@@ -48,12 +56,12 @@ Pipelines describe a version in chart annotations:
 
 Staging is promoted from develop, never rebuilt. A pull request brings develop into `staging`, so the source tree of
 `staging` equals a commit develop already built. `scripts/ci/promote_chart.py` then finds the chart of that tree in
-`repository/develop/`, adds the rc tag and the `staging` alias to the same ECR digests, and packages the chart again with
-the rc version. The annotation `oan.org/promoted-from` names the develop chart. The promotion fails if develop never built
+`repository/develop/`, adds the staging version as a tag to the same ECR digests, and packages the chart again with
+that version. There is no moving `staging` tag. The annotation `oan.org/promoted-from` names the develop chart. The promotion fails if develop never built
 that tree, so anything that must reach staging goes through develop and New Dev first. Environment settings are not part
 of the tree: they are in `environments/staging/values/`.
 
-A release tag does the same from the rc. The `release` branch does not exist yet; it arrives with production.
+A release tag does the same from the staging version. The `release` branch does not exist yet; it arrives with production.
 
 ## Publishing credential
 

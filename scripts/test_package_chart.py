@@ -99,5 +99,34 @@ class LeftoverTests(unittest.TestCase):
             self.assertEqual([path.name for path in chart.iterdir()], ["Chart.yaml"])
 
 
+
+class VersionTests(unittest.TestCase):
+    def test_init_yaml_gives_the_version_and_git_is_not_asked(self):
+        import os
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as folder:
+            Path(folder, "init.yaml").write_text("version: 1.0.0\n", encoding="utf-8")
+            with mock.patch.dict(os.environ, {"BUILD_NUMBER": "57"}), \
+                    mock.patch.object(package_chart, "derive_version") as older:
+                self.assertEqual(package_chart.chart_version("develop", folder), "1.0.0-develop.57")
+            older.assert_not_called()
+
+    def test_without_init_yaml_the_version_comes_from_git(self):
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as folder, \
+                mock.patch.object(package_chart, "derive_version", return_value="0.0.0-develop.900") as older:
+            self.assertEqual(package_chart.chart_version("develop", folder), "0.0.0-develop.900")
+        older.assert_called_once_with("develop")
+
+    def test_every_image_tag_must_be_the_chart_version(self):
+        digest = "@sha256:" + "a" * 64
+        good = [("registry.staffApi.image", "ecr/eoan/farmer-registry/staff-api-1.2.2-rc.625", "1.0.0-develop.57" + digest)]
+        package_chart.check_image_tags(good, "1.0.0-develop.57")
+        bad = good + [("dashboard.image", "ecr/eoan/farmer-registry/dashboard-api", "develop-57" + digest)]
+        with self.assertRaises(ValueError) as raised:
+            package_chart.check_image_tags(bad, "1.0.0-develop.57")
+        self.assertIn("dashboard-api:develop-57", str(raised.exception))
+        self.assertNotIn("staff-api", str(raised.exception))
+
 if __name__ == "__main__":
     unittest.main()

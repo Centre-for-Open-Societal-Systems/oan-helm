@@ -1,4 +1,4 @@
-"""Promote a develop chart to staging: the same images under a release candidate version, nothing rebuilt.
+"""Promote a develop chart to staging: the same images under a staging version, nothing rebuilt.
 
 Run it by a registry Jenkins pipeline in a full checkout of the staging branch, before the deploy:
 
@@ -7,7 +7,12 @@ Run it by a registry Jenkins pipeline in a full checkout of the staging branch, 
 
 The chart is the one in repository/develop/ whose source commit has exactly the source tree of this checkout. If develop
 never built that tree the promotion fails: staging only ever runs what New Dev ran first. Every ECR image of the chart
-gets the rc tag and the moving staging tag on the same digest, and the chart is packaged again with the rc version.
+gets the staging version as a tag on the same digest, and the chart is packaged again with that version.
+
+The staging version is <version>-staging.<BUILD_NUMBER> with version from init.yaml at the root of the checkout
+(oan_version.py), e.g. 1.0.0-staging.12. A repository without init.yaml keeps the older <line>.<next>-rc.<n> of
+derive-version.sh until it adopts the naming standard (docs/release/naming-standard.md). There is no moving tag:
+an image is only ever referenced by its version and digest.
 Dependencies stay as they were vendored. publish_chart.py then adds the archive to repository/staging/.
 
 Needs the aws CLI with credentials for ECR. DRY_RUN=1 tags nothing. Standard library only: it runs on the stock
@@ -28,11 +33,11 @@ import urllib.request
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-from package_chart import annotate, derive_version  # noqa: E402
+from oan_version import semver_key  # noqa: E402
+from package_chart import annotate, chart_version  # noqa: E402
 
 CHART_SOURCE = "https://github.com/Centre-for-Open-Societal-Systems/oan-helm.git"
 CHANNEL = "https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/%s/repository/develop/"
-MOVING_TAG = "staging"
 ECR = re.compile(r"^(?P<host>\d{12}\.dkr\.ecr\.(?P<region>[a-z0-9-]+)\.amazonaws\.com)/(?P<name>.+)$")
 PINNED_TAG = re.compile(r"""^(?P<lead>\s*tag:\s*)["']?(?P<tag>[^"'@\s]+)@(?P<digest>sha256:[0-9a-f]{64})["']?\s*$""")
 REPOSITORY = re.compile(r"""^\s*repository:\s*["']?(?P<repository>[^"'\s]+)["']?\s*$""")
@@ -55,7 +60,7 @@ def index_entries(text, chart):
         if found and entry is not None:
             entry["commit" if found.group(1) else found.group(2)] = found.group(3)
     entries = [item for item in entries if {"version", "commit", "digest"} <= set(item)]
-    return sorted(entries, key=lambda item: int(item["version"].rsplit(".", 1)[1]), reverse=True)
+    return sorted(entries, key=lambda item: semver_key(item["version"]), reverse=True)
 
 
 def channel():
@@ -126,8 +131,13 @@ def download(url, target, digest):
     target.write_bytes(data)
 
 
+def staging_version(root="."):
+    """The version this promotion publishes: from init.yaml when the repository has one."""
+    return chart_version("staging", root)
+
+
 def promote(args):
-    version = derive_version("staging")
+    version = staging_version()
     tree = run(["git", "rev-parse", "HEAD^{tree}"]).strip()
     source = channel()
     index = urllib.request.urlopen(source + "index.yaml", timeout=60).read().decode("utf-8")
@@ -152,10 +162,9 @@ def promote(args):
         if not images:
             raise ValueError("%s %s has no images pinned to a digest" % (args.chart, entry["version"]))
         for repository, _, digest in images:
-            print("%s@%s -> %s, %s" % (repository, digest, version, MOVING_TAG))
+            print("%s@%s -> %s" % (repository, digest, version))
             if os.environ.get("DRY_RUN") != "1":
-                for tag in (version, MOVING_TAG):
-                    add_tag(repository, digest, tag)
+                add_tag(repository, digest, version)
         (chart / "values.yaml").write_text(with_version_tag(values, version), encoding="utf-8")
         metadata = chart / "Chart.yaml"
         text = metadata.read_text(encoding="utf-8")

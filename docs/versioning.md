@@ -1,5 +1,10 @@
 # Chart versioning and release guidelines
 
+This page is about the charts whose source is in this repository (Commons Services and the add-ons). Registry
+charts and their images (Farmer, Crop sown, Livestock, Development Agent) are versioned from `init.yaml` in each
+registry repository: `<version>-develop.<BUILD_NUMBER>`, `<version>-staging.<BUILD_NUMBER>`, `<version>`. See
+[chart-channels.md](chart-channels.md) and section 6 of [naming-standard.md](release/naming-standard.md).
+
 Use **`MAJOR.MINOR.PATCH-prerelease.number`**, for example `1.0.1-dev.1`.
 `1.0.1.dev1` is not the Semantic Versioning form used by these charts.
 

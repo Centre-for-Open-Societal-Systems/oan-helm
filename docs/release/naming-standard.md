@@ -99,3 +99,84 @@ Test partners to remove: `synthetic-connector-*` and `POSTMAN_AGG_INTERNAL_*` (N
 
 Each step: `develop`, then New Dev (deploys on merge), then verified, then the pull request `develop` into
 `staging`.
+
+## 6. Images, charts and versions
+
+This section applies to every repository that builds images for an OAN registry: Farmer, Crop sown, Livestock and
+Development Agent. Commons Services keeps its own chart versions ([versioning.md](../versioning.md)).
+
+### init.yaml
+
+Each such repository keeps its version in `init.yaml` at its root. It is the only place the version is written by
+hand:
+
+```yaml
+version: 1.0.0           # the release being worked towards: N.N.N, nothing else
+rpVersion: 1.2.2-rc.625  # the OpenG2P registry platform the images are built on
+rpCommit: <40 hex>       # the openg2p-registry commit of that platform's staff-ui image
+```
+
+`scripts/ci/oan_version.py` reads it with the standard library only (Python 3.7) and refuses anything else: a version
+that is not `N.N.N`, an `rpVersion` that is not SemVer, an `rpCommit` that is not a commit, a field set twice or an
+unknown field. `rpVersion` and `rpCommit` are only present where images are built on the platform. The repository's
+`Chart.yaml` keeps the platform chart version written out; the repository's `scripts/bump-rp-version.sh` changes
+`init.yaml` and `Chart.yaml` together, and a test fails when the two differ.
+
+### Versions
+
+| Build | Version | Example |
+| --- | --- | --- |
+| `develop` | `<version>-develop.<BUILD_NUMBER>` | `1.0.0-develop.57` |
+| `staging` promotion | `<version>-staging.<BUILD_NUMBER>` | `1.0.0-staging.12` |
+| release | `<version>` | `1.0.0` |
+| any other branch | `<version>-<branch slug>.<BUILD_NUMBER>` | `1.0.0-fix-roster.3`, never published |
+
+`<BUILD_NUMBER>` is the Jenkins build number of that branch's job. The same string is the tag of every image the
+build pushes and the version of the chart it packages, so a chart version names its images. A staging promotion
+builds nothing: `scripts/ci/promote_chart.py` adds the staging version as a tag to the digests develop built and
+packages the chart again under that version ([chart-channels.md](../chart-channels.md)).
+
+Versions sort as SemVer 2.0.0. A `-staging.N` version sorts after every `-rc.N` of the same release, so the older
+staging charts (`1.0.0-rc.553`) stay in `repository/staging/` and the first `1.0.0-staging.1` becomes current.
+
+There are no moving tags: no `latest`, `staging`, `develop` or `develop-<n>`. Charts pin each image as
+`tag: "<version>@sha256:<digest>"`; the digest decides what runs, the tag says where it came from.
+
+### Image paths
+
+```text
+<account>.dkr.ecr.<region>.amazonaws.com/eoan/<repository>/<image>[-<rpVersion>]:<version>
+```
+
+- `<repository>` is the GitHub repository that builds the image: `farmer-registry`, `cropsown-registry`,
+  `livestock-registry`, `da-registry`.
+- `<image>` is the OpenG2P role (`staff-ui`, `staff-api`, `partner-api`, `celery`, `db-seed`, `sanity-tests`) or the
+  OAN component (`dashboard-api`, `dashboard-ui`, `registry-connector`, `registry-connector-ui`).
+- Only the six OpenG2P roles carry `-<rpVersion>`, because only they are built on the platform:
+  `eoan/farmer-registry/staff-api-1.2.2-rc.625:1.0.0-develop.57`, but
+  `eoan/farmer-registry/dashboard-api:1.0.0-develop.57`.
+
+### ECR repositories
+
+- **An `rpVersion` bump creates new ECR repositories**, because the platform version is part of the repository name
+  of the six platform images. Images built on the previous platform stay in their own repositories.
+- **CI creates a missing repository** before its first push, with scan-on-push and the same lifecycle policy as the
+  existing repositories of that registry. No repository is created by hand.
+- **Cleanup:** an old repository is kept until no deployed Helm revision on any cluster references it (`helm get
+  manifest` of the deployed revision and of the revisions kept for rollback). It is then removed in a reviewed
+  change that lists the repositories and the evidence that nothing references them.
+- **Pull access:** New Dev and staging must be able to pull `eoan/<repository>/*` with the namespace pull Secrets
+  and the node roles. See [ecr-pull-access.md](../ecr-pull-access.md): an identity policy scoped to single
+  repository ARNs does not cover new repositories.
+
+### A version that is already taken
+
+A published version is never replaced. `scripts/ci/publish_chart.py` compares the `oan.org/source-commit` of the
+archive with the one already published:
+
+| Exit | Meaning | What to do |
+| --- | --- | --- |
+| 4 | Same commit: a re-run of a build that already published | nothing; pipelines treat it as success |
+| 5 | Another commit, or a commit that cannot be read | **bump `version` in `init.yaml`** and build again; never delete or overwrite the published archive or its image tags |
+
+Exit 5 normally means a job was recreated and its `BUILD_NUMBER` started again from 1.

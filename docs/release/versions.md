@@ -1,5 +1,9 @@
 # Release bill of materials
 
+This is a dated snapshot. Versions and image paths after it follow section 6 of
+[naming-standard.md](naming-standard.md) (`init.yaml`, `<version>-develop.<BUILD_NUMBER>`,
+`<version>-staging.<BUILD_NUMBER>`, images under `eoan/`).
+
 What runs on New Dev and on staging, read on 5 November 2026 between 20:45 and 20:55 UTC.
 
 Source for every table in this document unless a table says otherwise:

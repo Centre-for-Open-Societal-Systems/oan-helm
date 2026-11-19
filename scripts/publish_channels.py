@@ -17,13 +17,17 @@ when an upgrade needs care, oan.org/upgrade-notes.
 import datetime
 import json
 import re
+from pathlib import Path
 import subprocess
+import sys
 import tarfile
 
 import yaml
 
 from release import write_changelog
 from validate import HELM, ROOT, digest
+sys.path.insert(0, str(Path(__file__).resolve().parent / "ci"))
+from oan_version import semver_key  # noqa: E402
 
 PUBLIC = ROOT / "repository"
 SEALS = ROOT / "releases/channels.json"
@@ -32,7 +36,7 @@ CURRENT = ROOT / "releases/channels-current.yaml"
 RAW_URL = "https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository"
 CHANNELS = {
     "develop": re.compile(r"\d+\.\d+\.\d+-develop\.\d+"),
-    "staging": re.compile(r"\d+\.\d+\.\d+-rc\.\d+"),
+    "staging": re.compile(r"\d+\.\d+\.\d+-(?:staging|rc)\.\d+"),
     "release": re.compile(r"\d+\.\d+\.\d+"),
 }
 ENVIRONMENT = {"develop": "dev", "staging": "staging", "release": "production"}
@@ -48,7 +52,8 @@ def archive_file(archive, name):
 
 
 def version_key(version):
-    return [int(part) for part in re.findall(r"\d+", version)]
+    """SemVer order (scripts/ci/oan_version.py): 1.0.0-staging.1 is newer than the older scheme's 1.0.0-rc.553."""
+    return semver_key(version)
 
 
 def check_archive(channel, archive):

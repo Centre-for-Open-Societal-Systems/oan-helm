@@ -13,7 +13,10 @@ tag. The tag should carry the digest, as <tag>@sha256:<digest>. For example:
 
   registry.staffApi.image<TAB>123.dkr.ecr.ap-south-1.amazonaws.com/openg2p/cropsown-registry/staff-api<TAB>...
 
-The version comes from git (derive-version.sh), so a shallow clone is refused. Only the packaged copy changes; nothing
+The version comes from init.yaml at the root of the checkout when the registry has one (oan_version.py:
+<version>-<branch>.<BUILD_NUMBER>), and every image tag must then be that version, so the chart version names its
+images (docs/release/naming-standard.md, section 6). Without init.yaml it comes from git (derive-version.sh), so a
+shallow clone is refused. Only the packaged copy changes; nothing
 is committed back to the registry. The annotations written here feed CHANGELOG.md and the rollback history.
 
 Prints the archive path. Standard library only; runs on the stock Python 3.7 of the Jenkins agents.
@@ -30,6 +33,8 @@ import sys
 import tempfile
 
 HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+from oan_version import FILE as INIT_FILE, current as oan_version  # noqa: E402
 HELM_REPOSITORY = "https://openg2p.github.io/openg2p-helm"
 
 
@@ -120,6 +125,21 @@ def derive_version(branch):
     return re.search(r"(?m)^version=(\S+)$", out).group(1)
 
 
+def chart_version(branch, root="."):
+    """The version of this build: from init.yaml when the repository has one, otherwise from git."""
+    if (Path(root) / INIT_FILE).is_file():
+        return oan_version(root, branch=branch)
+    return derive_version(branch)
+
+
+def check_image_tags(images, version):
+    """Under init.yaml every image of the build is tagged with the chart version."""
+    wrong = ["%s:%s" % (repository, tag.split("@", 1)[0]) for _, repository, tag in images
+             if tag.split("@", 1)[0] != version]
+    if wrong:
+        raise ValueError("image tags must equal the chart version %s: %s" % (version, ", ".join(wrong)))
+
+
 def remove_leftovers(chart):
     """Jenkins workspaces outlive builds: an ignored Chart.lock or downloaded subchart may be from an older chart."""
     lock = chart / "Chart.lock"
@@ -130,8 +150,10 @@ def remove_leftovers(chart):
 
 def package(args):
     source = Path(args.chart)
-    version = args.version or derive_version(args.branch)
+    version = args.version or chart_version(args.branch)
     images = read_images(Path(args.images).read_text(encoding="utf-8"))
+    if (Path(".") / INIT_FILE).is_file():
+        check_image_tags(images, version)
     work = Path(tempfile.mkdtemp(prefix="chart-"))
     output = Path(args.output)
     try:
@@ -168,7 +190,7 @@ def parser():
         result.add_argument("--" + name, required=True)
     result.add_argument("--subject", default="")
     result.add_argument("--branch", default="develop")
-    result.add_argument("--version", help="for tests; pipelines leave this out and the version comes from git")
+    result.add_argument("--version", help="for tests; pipelines leave this out and the version comes from init.yaml or git")
     return result
 
 
