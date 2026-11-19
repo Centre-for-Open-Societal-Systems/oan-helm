@@ -2,7 +2,8 @@ apiVersion: v2
 name: oan-leads-api
 description: OAN Leads API for OpenAgriNet (OAN), developed in the OAN leads-api repository;
   Spring Boot service with an in-chart Redis cache, an optional bridge to the external
-  PostgreSQL/Elasticsearch host and an optional Istio route.
+  PostgreSQL/Elasticsearch host and an optional Istio route; its telephony dependency
+  (FreeSWITCH, event publisher, lead-service) feeds call leads into the API.
 type: application
 version: 0.1.0-dev.1
 appVersion: 0.1.0-develop
@@ -11,10 +12,19 @@ keywords:
 - openagrinet
 - leads
 - spring-boot
+- telephony
+- freeswitch
 home: https://github.com/Centre-for-Open-Societal-Systems/leads-api
 sources:
 - https://github.com/Centre-for-Open-Societal-Systems/leads-api
+- https://github.com/A5HW1NRA7AN/Telephony-Service/tree/freeswitch-kubernetes
 - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+# Telephony is bundled as source in charts/telephony (reviewed in Git, no archive).
+dependencies:
+- name: telephony
+  version: 0.1.0
+  repository: file://charts/telephony
+  condition: telephony.enabled
 annotations:
   catalog.cattle.io/display-name: OAN Leads API
   oan.org/owner: OpenAgriNet (OAN)

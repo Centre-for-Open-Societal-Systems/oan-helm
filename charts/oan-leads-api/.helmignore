@@ -5,3 +5,7 @@ private-values*.yaml
 .env*
 
 values-new-dev.yaml
+
+# The telephony dependency is loaded from its source directory, charts/telephony;
+# helm dependency build/update also writes an archive of it, which is ignored here.
+charts/telephony-*.tgz

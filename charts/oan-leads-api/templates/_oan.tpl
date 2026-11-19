@@ -56,10 +56,26 @@ imagePullSecrets:
 {{- $registry -}}
 {{- end -}}
 
-{{/* Job spec that fetches an ECR token and writes the pull secret. Takes dict root, serviceAccount. */}}
+{{/* Every ECR registry the pull secret covers, space-separated: the API registry, ecrPullSecret.extraRegistries and, with telephony enabled, telephony.registry. */}}
+{{- define "oan-leads-api.ecrRegistries" -}}
+{{- $registries := list (include "oan-leads-api.ecrRegistry" .) -}}
+{{- $extra := .Values.ecrPullSecret.extraRegistries | default list -}}
+{{- if and .Values.telephony.enabled .Values.telephony.registry -}}
+{{- $extra = append $extra .Values.telephony.registry -}}
+{{- end -}}
+{{- range $extra -}}
+{{- if not (contains ".dkr.ecr." .) -}}
+{{- fail (printf "ecrPullSecret: %q is not an ECR registry host (<account>.dkr.ecr.<region>.amazonaws.com)" .) -}}
+{{- end -}}
+{{- $registries = append $registries (trimSuffix "/" .) -}}
+{{- end -}}
+{{- $registries | uniq | join " " -}}
+{{- end -}}
+
+{{/* Job spec that fetches an ECR token per registry and writes one pull secret covering all of them. Takes dict root, serviceAccount. */}}
 {{- define "oan-leads-api.ecrJobSpec" -}}
 {{- $v := .root.Values.ecrPullSecret -}}
-{{- $registry := include "oan-leads-api.ecrRegistry" .root -}}
+{{- $registries := splitList " " (include "oan-leads-api.ecrRegistries" .root) -}}
 backoffLimit: 2
 activeDeadlineSeconds: 300
 template:
@@ -73,7 +89,14 @@ template:
     initContainers:
       - name: get-token
         image: {{ $v.awsCliImage }}
-        command: ["/bin/sh", "-c", "aws ecr get-login-password --region {{ index (splitList "." $registry) 3 }} > /token/ecr"]
+        command:
+          - /bin/sh
+          - -c
+          - |
+            set -eu
+            {{- range $registries }}
+            aws ecr get-login-password --region {{ index (splitList "." .) 3 }} > /token/{{ . }}
+            {{- end }}
         volumeMounts:
           - name: token
             mountPath: /token
@@ -85,12 +108,19 @@ template:
           - -c
           - |
             set -eu
-            kubectl create secret docker-registry {{ $v.name }} \
+            auths=""
+            for registry in {{ join " " $registries }}; do
+              token="$(cat "/token/$registry")"
+              auth="$(printf 'AWS:%s' "$token" | base64 | tr -d '\n')"
+              auths="${auths:+$auths,}\"$registry\":{\"username\":\"AWS\",\"password\":\"$token\",\"auth\":\"$auth\"}"
+            done
+            printf '{"auths":{%s}}' "$auths" > /tmp/config.json
+            kubectl create secret generic {{ $v.name }} \
               --namespace {{ .root.Release.Namespace }} \
-              --docker-server={{ $registry }} \
-              --docker-username=AWS \
-              --docker-password="$(cat /token/ecr)" \
+              --type=kubernetes.io/dockerconfigjson \
+              --from-file=.dockerconfigjson=/tmp/config.json \
               --dry-run=client -o yaml | kubectl apply -f -
+            rm -f /tmp/config.json
         volumeMounts:
           - name: token
             mountPath: /token

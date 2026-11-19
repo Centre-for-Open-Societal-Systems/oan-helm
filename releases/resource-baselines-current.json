@@ -2924,7 +2924,7 @@
   },
   "oan-leads-api": {
     "sourceCommit": "8844e7aca177ef6862055ace83095b7953bc6028",
-    "scope": "new chart in 0.1.0-dev.1: API, Redis cache, ECR pull-secret refresher (hook Job + CronJob) and PDB by default; leads-secrets referenced by envFrom; the chart-owned Secret, external DB bridge, route and HPA are opt-in",
+    "scope": "new chart in 0.1.0-dev.1: API, Redis cache, ECR pull-secret refresher (hook Job + CronJob) and PDB by default; leads-secrets referenced by envFrom; the chart-owned Secret, external DB bridge, route and HPA are opt-in. Telephony dependency added: lead-service, event-publisher, FreeSWITCH (ConfigMap, host network) and the lead_db PostgreSQL (PVC kept on uninstall) by default, reading leads-telephony-secrets; telephony.enabled=false renders the API resources only",
     "resourceIdentities": [
       [
         "apps/v1",
@@ -2937,6 +2937,30 @@
         "Deployment",
         "verify-a",
         "verify-redis"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-telephony-db"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-telephony-event-publisher"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-telephony-freeswitch"
+      ],
+      [
+        "apps/v1",
+        "Deployment",
+        "verify-a",
+        "verify-telephony-lead-service"
       ],
       [
         "batch/v1",
@@ -2988,6 +3012,18 @@
       ],
       [
         "v1",
+        "ConfigMap",
+        "verify-a",
+        "verify-telephony-freeswitch"
+      ],
+      [
+        "v1",
+        "PersistentVolumeClaim",
+        "verify-a",
+        "verify-telephony-db"
+      ],
+      [
+        "v1",
         "Service",
         "verify-a",
         "verify"
@@ -2997,6 +3033,24 @@
         "Service",
         "verify-a",
         "verify-redis"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-telephony-db"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-telephony-event-publisher"
+      ],
+      [
+        "v1",
+        "Service",
+        "verify-a",
+        "verify-telephony-lead-service"
       ],
       [
         "v1",
@@ -3011,7 +3065,20 @@
         "verify-ecr-refresh-init"
       ]
     ],
-    "secretKeyReferences": [],
+    "secretKeyReferences": [
+      [
+        "leads-telephony-secrets",
+        "DB_PASSWORD"
+      ],
+      [
+        "leads-telephony-secrets",
+        "DB_USER"
+      ],
+      [
+        "leads-telephony-secrets",
+        "LEAD_REGISTRY_API_KEY_VALUE"
+      ]
+    ],
     "selectors": {
       "Service/verify": {
         "app.kubernetes.io/instance": "verify",
@@ -3020,6 +3087,21 @@
       "Service/verify-redis": {
         "app.kubernetes.io/instance": "verify",
         "app.kubernetes.io/component": "redis"
+      },
+      "Service/verify-telephony-db": {
+        "app.kubernetes.io/name": "telephony",
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/component": "db"
+      },
+      "Service/verify-telephony-event-publisher": {
+        "app.kubernetes.io/name": "telephony",
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/component": "event-publisher"
+      },
+      "Service/verify-telephony-lead-service": {
+        "app.kubernetes.io/name": "telephony",
+        "app.kubernetes.io/instance": "verify",
+        "app.kubernetes.io/component": "lead-service"
       },
       "Deployment/verify": {
         "matchLabels": {
@@ -3031,6 +3113,34 @@
         "matchLabels": {
           "app.kubernetes.io/instance": "verify",
           "app.kubernetes.io/component": "redis"
+        }
+      },
+      "Deployment/verify-telephony-db": {
+        "matchLabels": {
+          "app.kubernetes.io/name": "telephony",
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/component": "db"
+        }
+      },
+      "Deployment/verify-telephony-event-publisher": {
+        "matchLabels": {
+          "app.kubernetes.io/name": "telephony",
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/component": "event-publisher"
+        }
+      },
+      "Deployment/verify-telephony-freeswitch": {
+        "matchLabels": {
+          "app.kubernetes.io/name": "telephony",
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/component": "freeswitch"
+        }
+      },
+      "Deployment/verify-telephony-lead-service": {
+        "matchLabels": {
+          "app.kubernetes.io/name": "telephony",
+          "app.kubernetes.io/instance": "verify",
+          "app.kubernetes.io/component": "lead-service"
         }
       }
     }

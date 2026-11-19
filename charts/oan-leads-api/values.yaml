@@ -17,11 +17,14 @@ image:
 # ECR pull secret kept by the release itself (same block as addons/oan-dashboards), so
 # the namespace needs no hand-made pull secret. ECR tokens expire after 12 hours:
 # a pre-install/pre-upgrade hook Job writes the Secret before the pods start, and a
-# CronJob refreshes it every 8 hours. Both use the node's IAM role.
+# CronJob refreshes it every 8 hours. Both use the node's IAM role, which needs pull
+# access to every registry listed here. One Secret holds a token per registry.
 ecrPullSecret:
   enabled: true
   name: leads-api-ecr
   registry: ""           # default: the host part of image.repository
+  # Further ECR registry hosts. telephony.registry is added while telephony is enabled.
+  extraRegistries: []
   schedule: "0 */8 * * *"
   awsCliImage: amazon/aws-cli:2.36.43
   kubectlImage: alpine/k8s:1.31.1
@@ -151,3 +154,25 @@ podDisruptionBudget:
 nodeSelector: {}
 tolerations: []
 affinity: {}
+
+# Telephony lead capture (dependency charts/telephony, Telephony-Service branch
+# freeswitch-kubernetes): FreeSWITCH, ESL event publisher and lead-service with its lead_db
+# PostgreSQL. lead-service posts every call lead to this release's API (/leads/v1/initiate),
+# so both install together in the release namespace (leads). All keys and defaults are
+# in charts/telephony/values.yaml; the common ones:
+telephony:
+  enabled: true
+  # The telephony images' registry (ap-northeast-1); added to ecrPullSecret.
+  registry: 379220350808.dkr.ecr.ap-northeast-1.amazonaws.com
+  # The release's ECR pull secret (ecrPullSecret.name) covers the telephony registry too.
+  imagePullSecrets:
+    - name: leads-api-ecr
+  # Keys DB_USER, DB_PASSWORD, ESL_PASSWORD; with create: true, from the secret values file.
+  secret:
+    name: leads-telephony-secrets
+    create: false
+  freeswitch:
+    enabled: true
+    # Public IP of the node FreeSWITCH runs on (SIP trunk side); empty: auto-nat.
+    extIp: ""
+    nodeSelector: {}

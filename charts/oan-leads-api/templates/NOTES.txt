@@ -4,8 +4,17 @@ Secret: {{ .Values.secret.name }} (must exist in {{ .Release.Namespace }})
 {{- if .Values.virtualService.enabled }}
 Route: https://{{ .Values.virtualService.host }}/swagger-ui/index.html
 {{- end }}
+{{- if .Values.telephony.enabled }}
+
+Telephony: {{ .Release.Name }}-telephony-{lead-service,event-publisher{{ if .Values.telephony.freeswitch.enabled }},freeswitch{{ end }}}
+  Secret: {{ .Values.telephony.secret.name }} (DB_USER, DB_PASSWORD, ESL_PASSWORD)
+  Leads posted to: {{ .Values.telephony.leadRegistry.url | default (printf "http://%s.%s.svc.cluster.local:%v/leads/v1/initiate" .Release.Name .Release.Namespace .Values.telephony.leadRegistry.leadsApiPort) }}
+{{- end }}
 
 Check the rollout:
   kubectl -n {{ .Release.Namespace }} rollout status deploy/{{ .Release.Name }}
+{{- if .Values.telephony.enabled }}
+  kubectl -n {{ .Release.Namespace }} rollout status deploy/{{ .Release.Name }}-telephony-lead-service
+{{- end }}
   kubectl -n {{ .Release.Namespace }} port-forward svc/{{ .Release.Name }} 8080:{{ .Values.service.port }}
   open http://localhost:8080/swagger-ui/index.html

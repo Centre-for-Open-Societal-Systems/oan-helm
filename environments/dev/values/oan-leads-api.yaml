@@ -1,10 +1,25 @@
 # Values for the oan-leads-api chart on oan_dev.
-# Release `leads-api`, namespace `leads`. The ECR pull secret (leads-api-ecr) is kept
-# by the release. Credentials and database endpoints come from the secret values file
-# (Jenkins secret-file credential `dev-leads-api-secret-values`), passed after this file;
-# see charts/oan-leads-api/README.md.
+# Release `leads-api`, namespace `leads`: the Leads API and its telephony dependency
+# (lead-service, event-publisher, FreeSWITCH, lead_db). The ECR pull secret
+# (leads-api-ecr) is kept by the release and covers both registries (ap-south-1 for the
+# API, ap-northeast-1 for telephony). Credentials and database endpoints come from the
+# secret values file (Jenkins secret-file credential `dev-leads-api-secret-values`),
+# passed after this file; see charts/oan-leads-api/README.md.
+
+# eoan/leads-api/leads-api has no image yet; until the develop pipeline publishes there,
+# dev runs the newest leads-api image in ap-south-1.
+image:
+  repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/oan/leads-api
+  # staging-ati-7
+  tag: staging-ati-7
+  digest: sha256:e3fba3f392b3add9f9c91ba87528878ff5b8f1c7a8b3e2298c5405a2c1db9121
+  pullPolicy: IfNotPresent
 
 virtualService:
   enabled: true
   host: leads.development.oanstaging.com
   gateway: istio-system/development
+
+# Images: Telephony-Service freeswitch-kubernetes build 23 (freeswitch-*), the chart defaults.
+telephony:
+  enabled: true
