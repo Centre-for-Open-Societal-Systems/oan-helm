@@ -187,3 +187,9 @@ iamBenePortalApi:
   loginProvider:
     seed: false
     defaultRedirectUri: https://bene-portal.development.oanstaging.com
+
+# The Aggregation API's staff search role (chart templates/aggregation-staff-grant.yaml). These are the
+# two users granted it by hand on 21 October (docs/rancher-consent-aggregation-status.md); from the
+# commons-services chart that has the Job on, Helm keeps the grant instead.
+aggregationStaffGrant:
+  users: [admin, nina.patel]
