@@ -2,8 +2,9 @@
 
     init.yaml
         version: 1.0.0           # the release being worked towards
-        rpVersion: 1.2.2-rc.625  # the OpenG2P registry-platform base (only repositories built on one)
-        rpCommit: 0123abc...     # the openg2p-registry commit that rpVersion's staff-ui image was built from
+
+The registry-platform version is not here: as in OpenG2P it is the ARG default of the registry's Dockerfiles
+(docs/release/naming-standard.md, section 6). rpVersion and rpCommit are still accepted as optional fields.
 
 A build is <version>-<branch>.<BUILD_NUMBER>: develop builds 1.0.0-develop.57; a staging promotion gives the same
 digests 1.0.0-staging.12 (promote_chart.py); a release is 1.0.0. That string is the image tag of every image the build
