@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-19
 
+### openg2p-da-registry 0.0.0-develop.130 (develop)
+
+- Pipeline wiring test: the Checks green stage comes before the deploy (#80) (Centre-for-Open-Societal-Systems/da-registry@0d6c6a29fcab)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-19
+
 ### openg2p-farmer-registry 1.0.0-develop.216 (develop)
 
 - db-seed: openg2p-data at 97e142e, where every sample person has a source of income (#336) (Centre-for-Open-Societal-Systems/farmer-registry@b4f51e0d0756)
