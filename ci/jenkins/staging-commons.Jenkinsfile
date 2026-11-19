@@ -1,9 +1,10 @@
-// Commons on staging follows main. Every build of main first runs scripts/ci/deliver_staging_commons_base.sh for the
+// Commons on staging follows main, delivered only when someone presses Build (the job never starts on a merge or a
+// branch scan: ci/jenkins/jobs/oan-helm-staging-commons.xml, NoTriggerBranchProperty). Every build of main first runs scripts/ci/deliver_staging_commons_base.sh for the
 // base release (commons: pinned OpenG2P chart, --reuse-values with the staging overlay, record commons-base-delivery),
 // then scripts/ci/deliver_staging_commons.sh, which
 // compares what staging runs (ConfigMap commons-services-delivery: pinned chart, sha256 of the staging values and of
 // the secret values) with this commit and delivers only when they differ (helm upgrade --reset-values --atomic). A
-// failed delivery is therefore retried by the next build of main. No parameters, no click; pull requests never deliver.
+// failed delivery is therefore retried by the next build of main. No parameters; pull requests never deliver.
 //
 // Jenkins: multibranch job oan-helm-staging-commons on Centre-for-Open-Societal-Systems/oan-helm, branch main only,
 // defined in ci/jenkins/jobs/oan-helm-staging-commons.xml and created or updated by ci/jenkins/apply-job.sh. Credentials: staging-commons-deployer-kubeconfig (environments/staging/rbac/commons-deployer-rbac.yaml) and
