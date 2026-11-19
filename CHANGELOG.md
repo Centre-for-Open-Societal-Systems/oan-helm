@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-19
 
+### openg2p-da-registry 0.0.0-develop.131 (develop)
+
+- Reporting views for the DA register: da_rpt_da and da_rpt_da_qualification (#81) (Centre-for-Open-Societal-Systems/da-registry@81651c21e347)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-19
+
 ### openg2p-da-registry 0.0.0-develop.130 (develop)
 
 - Pipeline wiring test: the Checks green stage comes before the deploy (#80) (Centre-for-Open-Societal-Systems/da-registry@0d6c6a29fcab)

@@ -2,6 +2,31 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.0-develop.131
+
+<!-- source-commit: 81651c21e3478f23c07cc83e1e33eaef5a71a747 version: 0.0.0-develop.131 -->
+Published 2026-11-19. Archive SHA-256 `2778c23a16650a30accbf3a5a8eda80c0d40c49f0d69039e571c1fbbd96d722c`.
+
+- Change: Reporting views for the DA register: da_rpt_da and da_rpt_da_qualification (#81)
+- Source: [Centre-for-Open-Societal-Systems/da-registry@81651c21e347](https://github.com/Centre-for-Open-Societal-Systems/da-registry/commit/81651c21e3478f23c07cc83e1e33eaef5a71a747)
+- Changes since 0.0.0-develop.130: https://github.com/Centre-for-Open-Societal-Systems/da-registry/compare/0d6c6a29fcabe84bd03da8286f3490c59e7684d3...81651c21e3478f23c07cc83e1e33eaef5a71a747
+
+| Values path | Image |
+| --- | --- |
+| `registry.staffApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/da-registry/staff-api:81651c21e347@sha256:b0ebd9859dbf260a7d6a9a2b3772c208464ff1fa4690d4174579bc42b5378375` |
+| `registry.partnerApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/da-registry/partner-api:81651c21e347@sha256:e472496113e23f170e03536537831036732f2fa18f2e2eab83e4494936a6bea0` |
+| `registry.celeryWorker.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/da-registry/celery:81651c21e347@sha256:cb16286df40b92c8caa917bdf2f6b28f928ffd7b9adeb2157c83264f95a80715` |
+| `registry.celeryBeat.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/da-registry/celery:81651c21e347@sha256:cb16286df40b92c8caa917bdf2f6b28f928ffd7b9adeb2157c83264f95a80715` |
+| `registry.dbSeed.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/da-registry/db-seed:81651c21e347@sha256:0c0c92a6b616925127e5c329debf3d790c8e4578e1d3a6f7299796c332b8743d` |
+| `registry.sanity.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/da-registry/sanity-tests:81651c21e347@sha256:2e1794d1ceaa579310d8ef2fcfcc66d18b7d8bd817ea8e47ce3970bac5eb9487` |
+| `registry.staffUi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/da-registry/staff-ui:81651c21e347@sha256:4907bc45e1216721ce296bfe92dd1eba7ae70b4aefa8fa4c59679c2774be2d49` |
+
+Return to this version:
+
+```sh
+helm upgrade da-registry https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/openg2p-da-registry-0.0.0-develop.131.tgz -n da-registry --reset-values -f environments/dev/values/da.yaml --wait --timeout 15m
+```
+
 ## 0.0.0-develop.130
 
 <!-- source-commit: 0d6c6a29fcabe84bd03da8286f3490c59e7684d3 version: 0.0.0-develop.130 -->
