@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-19
 
+### openg2p-commons-services 1.0.0-dev.48
+
+Previous version: 1.0.0-dev.47.
+
+- feat(commons): the aggregation staff client from Helm, and staging's full catalog (#237) (ef1fb0d)
+
+## 2026-11-19
+
 ### openg2p-farmer-registry 0.0.0-develop.891 (develop)
 
 - Deploy only commits whose GitHub checks are all green (#304) (Centre-for-Open-Societal-Systems/farmer-registry@7e720e8b8486)
