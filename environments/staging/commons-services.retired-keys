@@ -2,5 +2,7 @@
 # lets --reset-values drop a listed key and every key under it; any other unset saved key still fails the delivery.
 # One key per line, with the change that retired it.
 
-# (none at present; aggregationApi stays set while staging pins a chart from before the subchart, see
-# values/commons-services.yaml)
+# The registry catalog moved into values (all three registries); the Farmer-only aggregation-api-catalog
+# ConfigMap is no longer mounted, and the null that cleared the chart default is replaced by the catalog.
+aggregation-api.catalog.existingConfigMap
+aggregation-api.catalog.registries

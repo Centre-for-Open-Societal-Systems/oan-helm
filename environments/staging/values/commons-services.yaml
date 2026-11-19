@@ -252,11 +252,194 @@ aggregation-api:
   enabled: true
   virtualService:
     gateway: istio-system/staging
-  # The chart default catalog holds New Dev's hosts. Staging clears it and keeps the catalog ConfigMap its
-  # running Deployment mounts today (aggregation-api-catalog, Farmer only) until its catalog moves into values.
+  # Staging's registry catalog: the chart default with the qa partner hosts and Livestock in namespace live,
+  # the same scopes and field allowlists as New Dev. It replaces the Farmer-only aggregation-api-catalog
+  # ConfigMap, which is left in place (nothing reads it once the pods roll).
   catalog:
-    registries: null
-    existingConfigMap: aggregation-api-catalog
+    registries:
+      FARMER_REGISTRY:
+        name: Farmer Registry
+        partner_api:
+          base_url: https://partner-farmer.qa.oanstaging.com
+          receiver_id: farmer-registry
+        staff_api:
+          base_url: http://farmer-registry-staff-portal-api.farmer.svc.cluster.local
+          registers:
+          - Farmer
+        binding:
+          audience: agg-layer-farmer
+          controller_id: farmer-registry
+          allowed_purposes:
+          - loan_origination
+          - subsidy_verification
+        search:
+          reg_type: Farmer
+          reg_record_type: spdci-extensions-dci:FarmerRecord
+          id_type: UIN
+          match:
+            path: farmer_personal_details.member_identifier[]
+            strip_prefixes:
+            - FAN-
+        registers:
+          FARMER:
+            name: Farmer
+            functional_record_id: farmer_personal_details.member_identifier[].identifier_value
+            last_approved_at: farmer_personal_details.last_updated
+        scopes:
+          farmer_personal_details:
+            register: FARMER
+            fields:
+            - member_identifier[].identifier_value
+            - demographic_info.name.given_name
+            - demographic_info.name.second_name
+            - demographic_info.name.surname
+            - demographic_info.phone_number
+            - demographic_info.sex
+            - demographic_info.birth_date
+            - marital_status
+            - education_level
+            - registration_date
+          family_details:
+            table: HOUSEHOLD
+            name: Household
+            parent: FARMER
+            internal_record_id: group_identifier[].identifier_value
+            fields:
+            - '*'
+          farm_details:
+            table: FARM
+            name: Farm
+            parent: FARMER
+            fields:
+            - '*'
+      LIVESTOCK_REGISTRY:
+        name: Livestock Registry
+        partner_api:
+          base_url: https://partner-livestock.qa.oanstaging.com
+          receiver_id: livestock-registry
+        staff_api:
+          base_url: http://livestock-registry-staff-portal-api.live.svc.cluster.local
+          registers:
+          - Farmer
+          - Livestock
+        binding:
+          audience: agg-layer-livestock
+          controller_id: livestock-registry
+          allowed_purposes:
+          - loan_origination
+          - subsidy_verification
+        search:
+          reg_type: Livestock
+          reg_record_type: spdci-extensions-dci:LivestockRecord
+          id_type: UIN
+          match:
+            path: livestock_details.farmer_info.member_identifier[]
+            strip_prefixes:
+            - FAN-
+        registers:
+          LIVESTOCK:
+            name: Livestock holding
+            functional_record_id: livestock_details.record_identifier[].identifier_value
+            record_status: livestock_details.status
+        scopes:
+          livestock_details:
+            register: LIVESTOCK
+            fields:
+            - record_identifier[].identifier_value
+            - oan_id
+            - status
+            - total_animals
+            - registration_date
+            - farmer_info.demographic_info.name.given_name
+            - farmer_info.demographic_info.name.surname
+            - farmer_info.phone_number
+            - place
+          animal_details:
+            table: ANIMAL
+            name: Animal
+            parent: LIVESTOCK
+            fields:
+            - '*'
+          health_event_details:
+            table: HEALTH_EVENT
+            name: Health event
+            parent: LIVESTOCK
+            fields:
+            - '*'
+          vaccination_details:
+            table: VACCINATION
+            name: Vaccination
+            parent: LIVESTOCK
+            fields:
+            - '*'
+          vital_event_details:
+            table: VITAL_EVENT
+            name: Vital event
+            parent: LIVESTOCK
+            fields:
+            - '*'
+          breeding_details:
+            table: BREEDING
+            name: Breeding
+            parent: LIVESTOCK
+            fields:
+            - '*'
+      CROPSOWN_REGISTRY:
+        name: Crop Sown Registry
+        partner_api:
+          base_url: https://partner-crop.qa.oanstaging.com
+          receiver_id: cropsown-registry
+        staff_api:
+          base_url: http://cropsown-registry-staff-portal-api.crop.svc.cluster.local
+          registers:
+          - CropSown
+        binding:
+          audience: agg-layer-cropsown
+          controller_id: cropsown-registry
+          allowed_purposes:
+          - loan_origination
+          - subsidy_verification
+        search:
+          reg_type: CropSown
+          reg_record_type: spdci-extensions-dci:CropSownRecord
+          id_type: UIN
+          match:
+            path: crop_sown_details.farmer_info.member_identifier[]
+            strip_prefixes:
+            - FAN-
+        registers:
+          CROP_SOWN:
+            name: Crop sown
+            functional_record_id: crop_sown_details.record_identifier[].identifier_value
+        scopes:
+          crop_sown_details:
+            register: CROP_SOWN
+            fields:
+            - '*'
+          farm_details:
+            table: FARM
+            name: Farm
+            parent: CROP_SOWN
+            fields:
+            - '*'
+          crop_production_details:
+            table: CROP_PRODUCTION
+            name: Crop production
+            parent: CROP_SOWN
+            fields:
+            - '*'
+          infestation_details:
+            table: INFESTATION
+            name: Infestation
+            parent: CROP_SOWN
+            fields:
+            - '*'
+          cluster_details:
+            table: CLUSTER
+            name: Cluster
+            parent: CROP_SOWN
+            fields:
+            - '*'
 # The pinned chart (environments/staging/commons-services.chart) predates the oan-aggregation-api subchart (9b8df9f)
 # and still reads aggregationApi. Keep both keys until staging pins a chart with the subchart; then drop this one.
 aggregationApi:

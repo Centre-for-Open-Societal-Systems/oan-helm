@@ -929,6 +929,15 @@ keycloak-init:
       - clientId: da-services-backend
         name: DA Services backend
         redirectUris: []
+      # The Aggregation API reads each registry's staff API with client credentials
+      # (aggregation-api.env AGGREGATION_LAYER_STAFF_API_CLIENT_ID). Confidential, with a
+      # service account. Where the client already exists (New Dev, made by hand in
+      # October) keycloak-init sets its secret to the Secret it renders, so
+      # aggregationStaffClientSecret copies the final secret into the API's runtime
+      # Secret in the same release.
+      - clientId: aggregation-layer-staff
+        name: Aggregation API staff reader
+        redirectUris: []
       users:
       - username: admin
         email: admin@your.domain.com
@@ -955,6 +964,16 @@ keycloak-init:
           - Data Editor
           - Intake Officer
           - Integration Manager
+      # The aggregation-layer-staff service account reads each registry's records
+      # through its staff API (view only). Added to what it holds; nothing is removed.
+      - username: service-account-aggregation-layer-staff
+        clientRoleMappings:
+          farmer-registry-staff-portal:
+          - Data Supervisor
+          cropsown-registry-staff-portal:
+          - Data Supervisor
+          livestock-registry-staff-portal:
+          - Data Supervisor
 # OAN Aggregation API: the oan-aggregation-api subchart (charts/oan-aggregation-api-<version>.tgz), bundled by
 # the oan-aggregation-api Jenkins pipeline through a pull request. Its image (tag@digest) is the one in that
 # archive, so no image is set here; set aggregation-api.image only to pin another. Names, selector and
@@ -1342,6 +1361,24 @@ keycloakPublicClientUrls:
     - 'https://{{ tpl (index .Values "openg2p-consent-manager" "global" "consentManagerHostname") $ }}/*'
     webOrigins:
     - 'https://{{ tpl (index .Values "openg2p-consent-manager" "global" "consentManagerHostname") $ }}'
+
+# The aggregation-layer-staff client secret for the Aggregation API (templates/aggregation-staff-client-secret.yaml).
+# After keycloak-init and client-secrets-sync of each release, Keycloak's secret for this client is written into
+# aggregation-api.runtimeSecret under runtimeKey and into the client's own Secret; the Deployment is restarted when
+# it changed. The client must be a confidential client of keycloak-init.realms.
+aggregationStaffClientSecret:
+  enabled: true
+  realm: staff
+  clientId: aggregation-layer-staff
+  runtimeKey: AGGREGATION_LAYER_STAFF_API_CLIENT_SECRET
+  deployment: '{{ .Release.Name }}-aggregation-api'
+  image: python:3.11.14-slim
+  imagePullSecrets: []
+  keycloak:
+    url: '{{ tpl .Values.global.keycloakInternalUrl $ }}'
+    user: admin
+    existingSecret: '{{ tpl .Values.global.keycloakAdminSecret $ }}'
+    existingSecretKey: admin-password
 
 # The Aggregation API's staff search role for named staff users (templates/aggregation-staff-grant.yaml).
 # role must be one of aggregation-api.env.AGGREGATION_LAYER_STAFF_SEARCH_ROLES; it is created in realm
