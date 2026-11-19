@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-19
 
+### openg2p-farmer-registry 0.0.0-develop.887 (develop)
+
+- Same mandatory answers on the web intake and the ODK form (#323) (Centre-for-Open-Societal-Systems/farmer-registry@9ebea1a833c0)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-19
+
 ### oan-farmer-app-gateway 0.0.1-develop.2 (develop)
 
 - Merge pull request #4 from arnavam/chore/develop-chart-version (Centre-for-Open-Societal-Systems/oan_farmer_app_service@0bdcff4a3533)
