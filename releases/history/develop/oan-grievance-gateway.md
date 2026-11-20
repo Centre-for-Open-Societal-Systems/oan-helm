@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.101
+
+<!-- source-commit: a08caa29ce905ba57a66a72210fea020b33fc573 version: 0.0.1-develop.101 -->
+Published 2026-11-20. Archive SHA-256 `924aef314cbd341b1985641e296b191b17465ad42bd053a459a5c040301a9cdd`.
+
+- Change: Merge pull request #133 from arnavam/fix/gateway-deploy-every-build
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@a08caa29ce90](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/a08caa29ce905ba57a66a72210fea020b33fc573)
+- Changes since 0.0.1-develop.87: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/5afb43d83bc80418bcc841fee101cd9ec7aaa0df...a08caa29ce905ba57a66a72210fea020b33fc573
+
+Return to this version:
+
+```sh
+helm upgrade grievance-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-gateway-0.0.1-develop.101.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.87
 
 <!-- source-commit: 5afb43d83bc80418bcc841fee101cd9ec7aaa0df version: 0.0.1-develop.87 -->
