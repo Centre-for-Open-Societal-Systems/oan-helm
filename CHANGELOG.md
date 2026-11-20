@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### openg2p-livestock-registry 1.0.0-develop.229 (develop)
+
+- New Dev Livestock dashboard: sample approvers get Dashboard Viewer (dashboard pin at oan-helm 18f5bca) (#262) (Centre-for-Open-Societal-Systems/livestock-registry@6ab83b200bd7)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-20
+
 ### openg2p-farmer-registry 1.0.0-develop.218 (develop)
 
 - Head of household in the members tables reads Yes or No (#338) (Centre-for-Open-Societal-Systems/farmer-registry@5fe1f67867b9)
