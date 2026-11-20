@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### openg2p-livestock-registry 1.0.0-develop.230 (develop)
+
+- fix(deploy): pin the dev values that use the Garage host (#263) (Centre-for-Open-Societal-Systems/livestock-registry@906d8588bb43)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-20
+
 ### openg2p-cropsown-registry 1.0.0-develop.311 (develop)
 
 - fix(deploy): sign object links for the Garage host on New Dev (#316) (Centre-for-Open-Societal-Systems/cropsown-regsitry@d1083caba15a)
