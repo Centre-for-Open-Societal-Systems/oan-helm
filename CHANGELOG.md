@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### oan-a2c-service 0.0.1-develop.33 (develop)
+
+- Merge pull request #143 from arnavam/fix/farmer-otp-skip-registry-lookup (Centre-for-Open-Societal-Systems/oan_a2c@6c0ae5a6a5db)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-20
+
 ### oan-grievance-gateway 0.0.1-develop.101 (develop)
 
 - Merge pull request #133 from arnavam/fix/gateway-deploy-every-build (Centre-for-Open-Societal-Systems/oan_grievance_service@a08caa29ce90)
