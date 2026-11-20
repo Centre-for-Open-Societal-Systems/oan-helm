@@ -82,6 +82,8 @@ master-data:
         enabled: true
 odk-central:
   s3ServerUrl: http://commons-garage:3900
+  # Garage's init Job creates bucket odk-central; the subchart default odk-central-blobs does not exist.
+  s3BucketName: odk-central
   odk-central-enketo:
     initContainers:
     - name: wait-for-garage
@@ -119,7 +121,8 @@ openg2p-iam-service:
   global:
     keycloakApplicationUrl: https://keycloak.development.oanstaging.com
     registryApplicationUrl: https://farmer-registry.development.oanstaging.com
-    minioApplicationUrl: https://minio-console.development.oanstaging.com
+    # Garage has no console (commons-base 2.3.4): an empty URL hides the tile.
+    minioApplicationUrl: ''
     supersetApplicationUrl: ''
     iamStaffUiApplicationUrl: https://iam-staff-ui.development.oanstaging.com
     masterDataApplicationUrl: https://master-data-ui.development.oanstaging.com
