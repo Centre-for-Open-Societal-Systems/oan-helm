@@ -8,6 +8,13 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-20
+
+### oan-da-app-ui 0.0.1-develop.59 (develop)
+
+- Merge pull request #79 from rajujha-ptn/da_agent_responsive-19Nov2026 (Centre-for-Open-Societal-Systems/oan_da_app_ui@77b769158ad1)
+- Images and rollback: [releases/history/develop/oan-da-app-ui.md](releases/history/develop/oan-da-app-ui.md)
+
 ## 2026-11-19
 
 ### openg2p-cropsown-registry 0.0.0-develop.540 (develop)
