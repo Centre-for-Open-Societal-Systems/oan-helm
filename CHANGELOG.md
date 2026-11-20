@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### oan-a2c-service 0.0.1-develop.32 (develop)
+
+- Merge pull request #142 from arnavam/fix/clean-phone-validation-error (Centre-for-Open-Societal-Systems/oan_a2c@684e4db8ffb6)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-20
+
 ### openg2p-cropsown-registry 1.0.0-develop.309 (develop)
 
 - Crop sown: decimal fields keep their decimals (0.5 ha is no longer saved as 1) (#313) (Centre-for-Open-Societal-Systems/cropsown-regsitry@e3e0908c809b)

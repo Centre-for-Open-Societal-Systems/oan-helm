@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.32
+
+<!-- source-commit: 684e4db8ffb6500d3af7dc026e35a94094658c9d version: 0.0.1-develop.32 -->
+Published 2026-11-20. Archive SHA-256 `72650550e53d1cb902884657a84c9ac1c1b1f6fd682eace3e8646a8e11e5114a`.
+
+- Change: Merge pull request #142 from arnavam/fix/clean-phone-validation-error
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@684e4db8ffb6](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/684e4db8ffb6500d3af7dc026e35a94094658c9d)
+- Changes since 0.0.1-develop.30: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/85c856726bdaa273cc42e9dbc9d1fc36ef444cd5...684e4db8ffb6500d3af7dc026e35a94094658c9d
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-service/a2c-service:0.0.1-develop.32` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-service-0.0.1-develop.32.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.30
 
 <!-- source-commit: 85c856726bdaa273cc42e9dbc9d1fc36ef444cd5 version: 0.0.1-develop.30 -->
