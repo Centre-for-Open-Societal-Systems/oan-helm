@@ -153,6 +153,21 @@ Run only the namespaces that exist in this cluster (`develop` for grievance, `a2
 for A2C). The create-site job logs in as `postgres` and creates one database and one
 database user per site.
 
+Services that are not Frappe sites use the same PostgreSQL through
+[addons/frappe-common-databases](../addons/frappe-common-databases): one release in the
+service's namespace (with the copied Secret) creates each database and a login role that owns it,
+with the name and password read from the service's own Secret. The Leads API and telephony
+(`leads_db`, `lead_db` in namespace `leads`) use it:
+
+```sh
+# after the leads-api release, which creates leads-api-secrets and leads-telephony-secrets
+helm upgrade --install leads-databases addons/frappe-common-databases -n leads \
+  -f environments/dev/values/frappe-common-databases-leads.yaml --wait --wait-for-jobs
+```
+
+Add `leads` to the Secret copy loop above when the Leads API runs in this cluster. The
+Leads API pods restart until their database exists, then connect.
+
 PostgreSQL on NFS is what OpenG2P runs on its dev cluster. It is slower than a local disk
 and depends on the NFS server staying up; production moves it to a host install.
 

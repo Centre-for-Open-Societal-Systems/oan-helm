@@ -1,0 +1,36 @@
+# Application databases on the shared oan-frappe-common PostgreSQL (docs/external-db-and-nfs.md).
+# Install one release in each application namespace, after the application release that creates its Secrets.
+# Every run is idempotent: a missing role or database is created, an existing role gets the password from its
+# Secret again, an existing database is kept as it is (never dropped, never re-owned).
+
+postgres:
+  # The Service of release oan-frappe-common-db in namespace frappe-common, in the same cluster.
+  host: oan-frappe-common-db-postgresql-subchart.frappe-common.svc.cluster.local
+  port: 5432
+  adminUser: postgres
+  # The superuser password: a copy of Secret oan-frappe-common-db (key `password`) in this release's namespace;
+  # a Pod cannot read a Secret from another namespace. See docs/external-db-and-nfs.md section 4.
+  adminSecret:
+    name: oan-frappe-common-db
+    key: password
+
+# One entry per database:
+#   - name: leads_db                 database name
+#     secret: leads-api-secrets      Secret in this namespace holding the application's login
+#     userKey: SPRING_DATASOURCE_USERNAME
+#     passwordKey: SPRING_DATASOURCE_PASSWORD
+# The role is created with LOGIN only (no superuser, createdb or createrole) and owns the database; CONNECT is
+# revoked from PUBLIC, so other applications' roles on the same server cannot open it.
+databases: []
+
+image:
+  # The image of addons/commons-postgres-superuser-rotation (psql 16, bash).
+  repository: docker.io/openg2p/postgresql
+  digest: sha256:65b6faa9f30de7dc89f63f055a3dd3e4ba0334172ee95c8badf49da0d08ef1c0
+
+# The Job waits this long for the Secrets and the database before it fails.
+activeDeadlineSeconds: 600
+
+resources:
+  requests: {cpu: 25m, memory: 32Mi}
+  limits: {memory: 128Mi}

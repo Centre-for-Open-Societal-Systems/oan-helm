@@ -4,6 +4,16 @@
 # (Jenkins secret-file credential `dev-leads-api-secret-values`), passed after this file;
 # see charts/oan-leads-api/README.md.
 
+# Both databases are on the shared oan-frappe-common PostgreSQL of this cluster (release oan-frappe-common-db,
+# namespace frappe-common; docs/external-db-and-nfs.md), each with its own login role. They are created by
+# addons/frappe-common-databases with environments/dev/values/frappe-common-databases-leads.yaml.
+config:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://oan-frappe-common-db-postgresql-subchart.frappe-common.svc.cluster.local:5432/leads_db
+
+telephony:
+  leadService:
+    dbUrl: jdbc:postgresql://oan-frappe-common-db-postgresql-subchart.frappe-common.svc.cluster.local:5432/lead_db
+
 virtualService:
   enabled: true
   host: leads.development.oanstaging.com

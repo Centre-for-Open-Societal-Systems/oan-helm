@@ -1,0 +1,9 @@
+apiVersion: v2
+name: frappe-common-databases
+description: >-
+  Creates application databases and their login roles on the shared oan-frappe-common PostgreSQL, for services
+  that are not Frappe sites (Frappe's create-site job makes its own). Each role's name and password are read from
+  the application's own Secret, so the database and the application always agree.
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

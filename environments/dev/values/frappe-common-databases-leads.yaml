@@ -1,0 +1,19 @@
+# Values for addons/frappe-common-databases on oan_dev: the Leads API and telephony databases on the shared
+# oan-frappe-common PostgreSQL. Release `leads-databases`, namespace `leads`, installed after the leads-api release
+# (which creates both Secrets from its secret values file). Needs the copy of Secret oan-frappe-common-db in `leads`
+# (docs/external-db-and-nfs.md section 4).
+#
+#   helm upgrade --install leads-databases addons/frappe-common-databases -n leads \
+#     -f environments/dev/values/frappe-common-databases-leads.yaml --wait --wait-for-jobs
+
+databases:
+  # Leads API (config.SPRING_DATASOURCE_URL in oan-leads-api.yaml). Secret of the leads-api chart, release leads-api.
+  - name: leads_db
+    secret: leads-api-secrets
+    userKey: SPRING_DATASOURCE_USERNAME
+    passwordKey: SPRING_DATASOURCE_PASSWORD
+  # Telephony lead-service (telephony.leadService.dbUrl in oan-leads-api.yaml).
+  - name: lead_db
+    secret: leads-telephony-secrets
+    userKey: DB_USER
+    passwordKey: DB_PASSWORD
