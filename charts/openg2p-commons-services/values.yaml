@@ -69,6 +69,7 @@ global:
   postgresqlSecretKey: postgres-password
   mailInstallationName: commons-mail
   minioInstallationName: commons-minio
+  garageInstallationName: commons-garage
   sysAdminEmail: admin@openg2p.sandbox.org
   redisInstallationName: commons-redis
   redisAuthInstallationName: commons-redis-auth
@@ -1447,3 +1448,36 @@ mockIdentities:
     - {individualId: '100000000002', pin: '2222', name: Almaz Desta Bekele, nameAmharic: አልማዝ ደስታ በቀለ, gender: FEMALE, birthDate: '1992-09-23'}
     - {individualId: '100000000003', pin: '2222', name: Dawit Mekonnen Hailu, nameAmharic: ዳዊት መኮንን ሀይሉ, gender: MALE, birthDate: '1979-01-30'}
     - {individualId: '100000000004', pin: '2222', name: Hana Tesfaye Girma, nameAmharic: ሀና ተስፋዬ ግርማ, gender: FEMALE, birthDate: '1996-06-08'}
+
+# Commons object store on Garage (OpenG2P commons-base 2.3.4 and later). Off by default: environments still on MinIO
+# keep their s3ServerUrl and wait-for-minio settings. An environment that moves sets enabled and overrides the
+# endpoints in its own values.
+objectStore:
+  enabled: false
+  service: commons-garage
+  port: 3900
+  # Public S3 route to Garage (the base chart's own route needs a gateway New Dev does not have).
+  route:
+    enabled: false
+    hosts: []
+    gateway: ""
+  # Copies Secret commons-minio (the Garage keys) into the registry namespaces after every install and upgrade.
+  credentialsSync:
+    enabled: false
+    image: docker.io/alpine:3.20
+    namespaces: []
+  # Service commons-minio:9000 -> Garage:3900, for workloads that still address the MinIO name and port (the base chart
+  # drops the MinIO Service when MinIO is off). The credentials Secret keeps the name commons-minio.
+  compatService:
+    enabled: false
+  # One-off copy of a MinIO backup folder on the node into Garage, verified by object counts and sha256.
+  restore:
+    enabled: false
+    hostPath: /var/lib/oan-aggregation-development/garage-migration-20261120
+    # Has mc (MinIO client); already on the node.
+    image: docker.io/openg2p/minio:2023.12.23-debian-11-r2
+    kubectlImage: bitnami/kubectl:latest
+    garagePod: commons-garage-0
+    serviceAccount: commons-garage-init
+    # Buckets the base chart's init Job does not create.
+    buckets: a2c-webhook

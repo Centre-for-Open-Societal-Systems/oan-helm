@@ -43,6 +43,8 @@ master-data:
   # Load the ETH-OAN pack on every upgrade (an unchanged pack creates nothing;
   # a new or changed list is published at once: development only).
   geoSeed:
+    objectStore:
+      endpoint: http://commons-garage:3900
     enabled: true
     publishInitial: true
     autoPublish: true
@@ -73,9 +75,26 @@ master-data:
     # only: no public host. It serves only geography an administrator has marked
     # public in Master Data, at its published versions.
     catalogue:
+      # Boundary GeoJSON lives in the Commons object store (Garage; see objectStore at the end of this file).
+      boundaryStore:
+        endpoint: http://commons-garage:3900
       public:
         enabled: true
 odk-central:
+  s3ServerUrl: http://commons-garage:3900
+  odk-central-enketo:
+    initContainers:
+    - name: wait-for-garage
+      image: busybox:1.36
+      imagePullPolicy: IfNotPresent
+      command:
+      - sh
+      - -c
+      - "until nc -zv commons-garage 3900; do
+  echo \"Waiting for Garage...\"
+  sleep 2
+done
+"
   backend:
     envVars:
       OIDC_ISSUER_URL: https://keycloak.development.oanstaging.com/realms/staff
@@ -164,6 +183,8 @@ openg2p-consent-manager:
     consentManagerBeneHostname: ''
   consentManagerApi:
     envVars:
+      # A2C reads OTPs from bucket a2c-webhook in the Commons object store (Garage).
+      CONSENT_MANAGER_OTP_PUBLISH_ENDPOINT_URL: http://commons-garage.commons.svc.cluster.local:3900
       CONSENT_MANAGER_AWE_CALLBACK_URL: http://{{ .Release.Name }}-cm-api.{{ .Release.Namespace }}.svc.cluster.local/consent/v1/awe/webhooks/decision
     istio:
       virtualservice:
@@ -262,3 +283,21 @@ consentPartnerPortal:
   image:
     digest: sha256:4e8d7be0391ddb5c9d688bdff994053cf0f6d1e5ef4348727df646fa64ff8116
     repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-management/consent-manager-partner-portal-1.0.2
+# Commons object store: Garage replaced MinIO (base chart 2.3.4, environments/dev/commons-base.chart). The public S3 host
+# keeps its old name, so registries and presigned URLs are unchanged; it now routes to Garage.
+objectStore:
+  enabled: true
+  route:
+    enabled: true
+    hosts:
+    - minio-farmer.development.oanstaging.com
+    gateway: istio-system/development
+  credentialsSync:
+    enabled: true
+    namespaces: [farmer, crop, livestock, da-registry]
+  # One-off MinIO to Garage copy for the 20 Nov 2026 cutover. Switch off (and delete the finished Job) after sign-off.
+  # Services that still address the old name (ODK's wait-for-minio, Crop's partner API) keep working.
+  compatService:
+    enabled: true
+  restore:
+    enabled: true

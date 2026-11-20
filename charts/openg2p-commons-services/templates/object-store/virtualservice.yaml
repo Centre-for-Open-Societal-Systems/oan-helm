@@ -1,0 +1,31 @@
+{{- /* Public S3 route to Garage. New Dev keeps the host it always had (minio-farmer.<domain>), so presigned URLs and the
+     registries' minioHost need no change in the cutover; the base chart's own Garage route uses a gateway New Dev lacks. */ -}}
+{{- $o := .Values.objectStore | default dict }}
+{{- if and $o.enabled $o.route.enabled }}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Release.Name }}-object-store-api
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: object-store
+spec:
+  hosts:
+  {{- range $o.route.hosts }}
+  - {{ tpl . $ | quote }}
+  {{- end }}
+  gateways:
+  - {{ $o.route.gateway | quote }}
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: {{ tpl (index $o.route.hosts 0) $ | quote }}
+          x-forwarded-proto: https
+    route:
+    - destination:
+        host: {{ $o.service }}
+        port:
+          number: {{ $o.port }}
+{{- end }}
