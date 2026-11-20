@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### openg2p-cropsown-registry 1.0.0-develop.307 (develop)
+
+- Name and version Crop sown images from init.yaml; every eoan repository immutable (#311) (Centre-for-Open-Societal-Systems/cropsown-regsitry@17c191385f50)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-20
+
 ### openg2p-livestock-registry 1.0.0-develop.226 (develop)
 
 - staff-ui: read @openg2p/notification from the last commit that has it (#259) (Centre-for-Open-Societal-Systems/livestock-registry@4101ce0bb566)
