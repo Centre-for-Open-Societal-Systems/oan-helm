@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### openg2p-cropsown-registry 1.0.0-develop.311 (develop)
+
+- fix(deploy): sign object links for the Garage host on New Dev (#316) (Centre-for-Open-Societal-Systems/cropsown-regsitry@d1083caba15a)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-20
+
 ### oan-da-app-ui 0.0.1-develop.61 (develop)
 
 - Merge pull request #82 from rajujha-ptn/daAgent_responsive-20Nov2026 (Centre-for-Open-Societal-Systems/oan_da_app_ui@8f217d96e9a5)
