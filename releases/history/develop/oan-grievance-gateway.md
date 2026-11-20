@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.102
+
+<!-- source-commit: 67fbee832f12851e3ca38ce3bd6fcef11bcb335d version: 0.0.1-develop.102 -->
+Published 2026-11-20. Archive SHA-256 `bc0529ffa41042a1b022c9d0cefc54663bcb90c68b53a27658471a77860a3cf6`.
+
+- Change: Merge pull request #124 from dhruvbhatt701/feature/STG-514-sensitive-urgent-flags
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@67fbee832f12](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/67fbee832f12851e3ca38ce3bd6fcef11bcb335d)
+- Changes since 0.0.1-develop.101: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/a08caa29ce905ba57a66a72210fea020b33fc573...67fbee832f12851e3ca38ce3bd6fcef11bcb335d
+
+Return to this version:
+
+```sh
+helm upgrade grievance-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-gateway-0.0.1-develop.102.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.101
 
 <!-- source-commit: a08caa29ce905ba57a66a72210fea020b33fc573 version: 0.0.1-develop.101 -->

@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### oan-grievance-gateway 0.0.1-develop.102 (develop)
+
+- Merge pull request #124 from dhruvbhatt701/feature/STG-514-sensitive-urgent-flags (Centre-for-Open-Societal-Systems/oan_grievance_service@67fbee832f12)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.102 (develop)
+
+- Merge pull request #124 from dhruvbhatt701/feature/STG-514-sensitive-urgent-flags (Centre-for-Open-Societal-Systems/oan_grievance_service@67fbee832f12)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-20
+
 ### oan-a2c-service 0.0.1-develop.33 (develop)
 
 - Merge pull request #143 from arnavam/fix/farmer-otp-skip-registry-lookup (Centre-for-Open-Societal-Systems/oan_a2c@6c0ae5a6a5db)
