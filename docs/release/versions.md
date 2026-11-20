@@ -160,7 +160,7 @@ Commons has two Helm releases per environment, both in the namespace `commons`:
 
 | Release | Chart | New Dev revision | Staging revision |
 | --- | --- | --- | --- |
-| `commons` (base: PostgreSQL, Keycloak, Kafka, Redis, MinIO) | `openg2p-commons-base-2.3.3` | 4 | 9 |
+| `commons` (base: PostgreSQL, Keycloak, Kafka, Redis, MinIO; Garage from 2.3.4) | `openg2p-commons-base-2.3.3` (pin for 2.3.4 in `environments/dev/commons-base.chart`, not yet applied) | 4 | 9 |
 | `commons-services` | New Dev `openg2p-commons-services-1.0.0-dev.35`, staging `1.0.0-dev.41` (application version 2.3.4-rc.247) | 40 | 20 |
 
 Source: live reading `helm list -A` (revisions and versions on 12 Nov 2026); the image lists of both environments were compared line by line.
