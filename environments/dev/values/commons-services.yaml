@@ -68,6 +68,13 @@ master-data:
     istio:
       virtualservice:
         gateway: istio-system/development
+    # Public catalogue (read-only GET /public/...): the registry dashboards read
+    # the map boundaries and location units from it (MASTER_DATA_URL). In-cluster
+    # only: no public host. It serves only geography an administrator has marked
+    # public in Master Data, at its published versions.
+    catalogue:
+      public:
+        enabled: true
 odk-central:
   backend:
     envVars:
