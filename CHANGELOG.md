@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### openg2p-farmer-registry 1.0.0-develop.217 (develop)
+
+- Farmer dashboard reads Master Data for the map and location filters (#337) (Centre-for-Open-Societal-Systems/farmer-registry@27f43ca20c3e)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-20
+
 ### openg2p-livestock-registry 1.0.0-develop.228 (develop)
 
 - Livestock ODK: AI technician name question in form v9, and a v8 answer used as the name only when it is one (#261) (Centre-for-Open-Societal-Systems/livestock-registry@d5c133bebbb4)
