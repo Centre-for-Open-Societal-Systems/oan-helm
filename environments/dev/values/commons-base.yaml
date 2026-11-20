@@ -1,0 +1,30 @@
+# New Dev overlay for the openg2p-commons-base release `commons` (chart pin: environments/dev/commons-base.chart).
+# The release is upgraded by hand, once per version, with --reuse-values and this file on top.
+#
+# 2.3.4 replaces MinIO with Garage as the Commons object store. Its init Job writes the Garage keys into Secret
+# commons-minio (the name is kept) and creates the buckets documents, templates, import-files, export-files,
+# openg2p-geo, odk-central and default. The public S3 host (minio-farmer.development.oanstaging.com) is routed to
+# Garage by the commons-services chart, because the base chart's own Garage route uses a gateway New Dev lacks.
+global:
+  # Only used for the base chart's own Garage route (gateway "internal", which New Dev does not have), so it carries
+  # no traffic. The real route is in commons-services.
+  garageHostname: garage.development.oanstaging.com
+minio:
+  enabled: false
+garage:
+  enabled: true
+  garage:
+    replicationFactor: "1"
+    s3:
+      api:
+        region: us-east-1
+  persistence:
+    enabled: true
+    data:
+      size: 16Gi
+    meta:
+      size: 1Gi
+  deployment:
+    replicaCount: 1
+novu:
+  enabled: false
