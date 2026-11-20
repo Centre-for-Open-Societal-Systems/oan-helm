@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### oan-da-services 0.0.10-develop.66 (develop)
+
+- Merge pull request #94 from pushkar-srivastava-oan/feat/grievance-fe-bearer-proxy (Centre-for-Open-Societal-Systems/oan_da_app_services@211ad5ed4873)
+- Images and rollback: [releases/history/develop/oan-da-services.md](releases/history/develop/oan-da-services.md)
+
+### oan-da-services-gateway 0.0.10-develop.66 (develop)
+
+- Merge pull request #94 from pushkar-srivastava-oan/feat/grievance-fe-bearer-proxy (Centre-for-Open-Societal-Systems/oan_da_app_services@211ad5ed4873)
+- Images and rollback: [releases/history/develop/oan-da-services-gateway.md](releases/history/develop/oan-da-services-gateway.md)
+
+## 2026-11-20
+
 ### openg2p-commons-services 1.0.0-dev.50
 
 Previous version: 1.0.0-dev.49.
