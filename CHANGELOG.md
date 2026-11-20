@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### openg2p-cropsown-registry 1.0.0-develop.308 (develop)
+
+- New Dev connector pinned to the eoan images of develop build 307; dashboard UI hold lifted (#312) (Centre-for-Open-Societal-Systems/cropsown-regsitry@25285742bd35)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-20
+
 ### oan-grievance-service 0.0.1-develop.100 (develop)
 
 - Merge pull request #132 from arnavam/fix/dev-forcecreate-stop-workloads (Centre-for-Open-Societal-Systems/oan_grievance_service@a962e29b911c)
