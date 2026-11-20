@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### openg2p-livestock-registry 1.0.0-develop.228 (develop)
+
+- Livestock ODK: AI technician name question in form v9, and a v8 answer used as the name only when it is one (#261) (Centre-for-Open-Societal-Systems/livestock-registry@d5c133bebbb4)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-20
+
 ### openg2p-cropsown-registry 1.0.0-develop.308 (develop)
 
 - New Dev connector pinned to the eoan images of develop build 307; dashboard UI hold lifted (#312) (Centre-for-Open-Societal-Systems/cropsown-regsitry@25285742bd35)
