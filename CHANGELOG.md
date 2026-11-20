@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### openg2p-da-registry 1.0.0-develop.86 (develop)
+
+- Name and version DA images from init.yaml; every eoan repository immutable (#82) (Centre-for-Open-Societal-Systems/da-registry@c161f2db1699)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-20
+
 ### openg2p-cropsown-registry 1.0.0-develop.307 (develop)
 
 - Name and version Crop sown images from init.yaml; every eoan repository immutable (#311) (Centre-for-Open-Societal-Systems/cropsown-regsitry@17c191385f50)
