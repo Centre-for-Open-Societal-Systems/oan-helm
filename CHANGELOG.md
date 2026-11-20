@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### openg2p-farmer-registry 1.0.0-develop.218 (develop)
+
+- Head of household in the members tables reads Yes or No (#338) (Centre-for-Open-Societal-Systems/farmer-registry@5fe1f67867b9)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-20
+
 ### openg2p-cropsown-registry 1.0.0-develop.310 (develop)
 
 - Multi-select lists say how many items are chosen, not SelectedCount (#314) (Centre-for-Open-Societal-Systems/cropsown-regsitry@17d10e2c6e25)
