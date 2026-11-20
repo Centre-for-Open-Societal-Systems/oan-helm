@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### openg2p-cropsown-registry 1.0.0-develop.309 (develop)
+
+- Crop sown: decimal fields keep their decimals (0.5 ha is no longer saved as 1) (#313) (Centre-for-Open-Societal-Systems/cropsown-regsitry@e3e0908c809b)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-20
+
 ### openg2p-da-registry 1.0.0-develop.87 (develop)
 
 - DA intake: a required field the form leaves out is refused on Next (#83) (Centre-for-Open-Societal-Systems/da-registry@6fba7b111ff9)

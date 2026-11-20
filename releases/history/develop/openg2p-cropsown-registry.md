@@ -2,6 +2,33 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 1.0.0-develop.309
+
+<!-- source-commit: e3e0908c809b766e6f1facf836db9eb330513f2f version: 1.0.0-develop.309 -->
+Published 2026-11-20. Archive SHA-256 `d178f8b6321fcf0a7a364d6ee135357d2a2bfbe5c0526065a099e5d3de127cae`.
+
+- Change: Crop sown: decimal fields keep their decimals (0.5 ha is no longer saved as 1) (#313)
+- Source: [Centre-for-Open-Societal-Systems/cropsown-regsitry@e3e0908c809b](https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry/commit/e3e0908c809b766e6f1facf836db9eb330513f2f)
+- Changes since 1.0.0-develop.308: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry/compare/25285742bd35aa8b143efa8b88ec622da3e803ac...e3e0908c809b766e6f1facf836db9eb330513f2f
+
+| Values path | Image |
+| --- | --- |
+| `registry.staffApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/cropsown-registry/staff-api-1.2.2-rc.614:1.0.0-develop.309@sha256:a8575a874bc6a8a2957eb5b1601edb6f58dc1bee5b102874ddce58ff292db699` |
+| `registry.partnerApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/cropsown-registry/partner-api-1.2.2-rc.614:1.0.0-develop.309@sha256:167c98e4b476bfd5ff82de12ad3dd050acdc8f5d8b057fbdf6516c448aa23d9f` |
+| `registry.celeryWorker.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/cropsown-registry/celery-1.2.2-rc.614:1.0.0-develop.309@sha256:c1d46b7f190a95f81ba915fcc9a8385e3649cdf16cc96ce48513a5717294a20b` |
+| `registry.celeryBeat.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/cropsown-registry/celery-1.2.2-rc.614:1.0.0-develop.309@sha256:c1d46b7f190a95f81ba915fcc9a8385e3649cdf16cc96ce48513a5717294a20b` |
+| `registry.dbSeed.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/cropsown-registry/db-seed-1.2.2-rc.614:1.0.0-develop.309@sha256:74a7b159c5c2b9f2f187689b2232cd1a3443d3c9d8f439c567cf8b91d696002d` |
+| `registry.staffUi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/cropsown-registry/staff-ui-1.2.2-rc.614:1.0.0-develop.309@sha256:eaea324f5cf529c6d8065b4c86c6e92d34f30f0834d2051f00bcfca5a7e95328` |
+| `registry.sanity.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/cropsown-registry/sanity-tests-1.2.2-rc.614:1.0.0-develop.309@sha256:d74dae9eb3ff52bddf48553dee7fe1525e0b087a3dbbedd0a7551dc7a99ed2e3` |
+| `dashboardApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/cropsown-registry/dashboard-api:1.0.0-develop.309@sha256:9820b8f45682d45422892881d2f7a21dc4fc6c22f386bc8ca09642228d4c55ae` |
+| `dashboardUi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/cropsown-registry/dashboard-ui:1.0.0-develop.309@sha256:f7f2501cfa26cd3de7d126869e96324ed62f107c6847501a6fc8b366c9bd7e37` |
+
+Return to this version:
+
+```sh
+helm upgrade cropsown-registry https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/openg2p-cropsown-registry-1.0.0-develop.309.tgz -n crop --reset-values -f environments/dev/values/cropsown.yaml --wait --timeout 15m
+```
+
 ## 1.0.0-develop.308
 
 <!-- source-commit: 25285742bd35aa8b143efa8b88ec622da3e803ac version: 1.0.0-develop.308 -->
