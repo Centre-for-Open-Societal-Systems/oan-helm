@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### oan-da-services 0.0.10-develop.64 (develop)
+
+- Merge pull request #93 from Nikky-05/chore/remove-leave-flow (Centre-for-Open-Societal-Systems/oan_da_app_services@d1b2d002fc20)
+- Images and rollback: [releases/history/develop/oan-da-services.md](releases/history/develop/oan-da-services.md)
+
+### oan-da-services-gateway 0.0.10-develop.64 (develop)
+
+- Merge pull request #93 from Nikky-05/chore/remove-leave-flow (Centre-for-Open-Societal-Systems/oan_da_app_services@d1b2d002fc20)
+- Images and rollback: [releases/history/develop/oan-da-services-gateway.md](releases/history/develop/oan-da-services-gateway.md)
+
+## 2026-11-20
+
 ### openg2p-farmer-registry 1.0.0-develop.219 (develop)
 
 - feat: expose farmer lands in DCI search response and reference scope (#339) (Centre-for-Open-Societal-Systems/farmer-registry@f0fa3b6f3512)
