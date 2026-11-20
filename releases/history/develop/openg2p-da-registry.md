@@ -2,6 +2,31 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 1.0.0-develop.87
+
+<!-- source-commit: 6fba7b111ff9cd7c2805906ce00ca65c8cd63385 version: 1.0.0-develop.87 -->
+Published 2026-11-20. Archive SHA-256 `8ce4beb8723f60487b393daa3b66ca84197bbe58ef997cfa407b552bca0dba47`.
+
+- Change: DA intake: a required field the form leaves out is refused on Next (#83)
+- Source: [Centre-for-Open-Societal-Systems/da-registry@6fba7b111ff9](https://github.com/Centre-for-Open-Societal-Systems/da-registry/commit/6fba7b111ff9cd7c2805906ce00ca65c8cd63385)
+- Changes since 1.0.0-develop.86: https://github.com/Centre-for-Open-Societal-Systems/da-registry/compare/c161f2db1699c3656d017e57eae2e8594e072866...6fba7b111ff9cd7c2805906ce00ca65c8cd63385
+
+| Values path | Image |
+| --- | --- |
+| `registry.staffApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/da-registry/staff-api-1.2.2-rc.614:1.0.0-develop.87@sha256:2c36c9a5b68e00313840a723b03c90dfecfa67d03c86da1d7db8f0b63ebd04b2` |
+| `registry.partnerApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/da-registry/partner-api-1.2.2-rc.614:1.0.0-develop.87@sha256:dd929f6b3312d06d2c73e732cde679014b6b43cd115710cd5821fe5faa31dcbe` |
+| `registry.celeryWorker.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/da-registry/celery-1.2.2-rc.614:1.0.0-develop.87@sha256:1d5bb73fb0db2f71affd778c0ffc185f8d7f06418b7e861d6a57841864bdb073` |
+| `registry.celeryBeat.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/da-registry/celery-1.2.2-rc.614:1.0.0-develop.87@sha256:1d5bb73fb0db2f71affd778c0ffc185f8d7f06418b7e861d6a57841864bdb073` |
+| `registry.dbSeed.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/da-registry/db-seed-1.2.2-rc.614:1.0.0-develop.87@sha256:927fc50fdfdf23b68a88ee90a485af26dd74e74260e00af50d7f3c7729f08847` |
+| `registry.sanity.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/da-registry/sanity-tests-1.2.2-rc.614:1.0.0-develop.87@sha256:c0f44a715e73208223d94371faa33472deb619c8b9bc8a559dd5c1bb1d35a66e` |
+| `registry.staffUi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/da-registry/staff-ui-1.2.2-rc.614:1.0.0-develop.87@sha256:b0ce9c31dbc0b3c552bc16b2dfac22c20a8987bc655b3edab4c91c30b1298f66` |
+
+Return to this version:
+
+```sh
+helm upgrade da-registry https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/openg2p-da-registry-1.0.0-develop.87.tgz -n da-registry --reset-values -f environments/dev/values/da.yaml --wait --timeout 15m
+```
+
 ## 1.0.0-develop.86
 
 <!-- source-commit: c161f2db1699c3656d017e57eae2e8594e072866 version: 1.0.0-develop.86 -->

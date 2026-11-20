@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### openg2p-da-registry 1.0.0-develop.87 (develop)
+
+- DA intake: a required field the form leaves out is refused on Next (#83) (Centre-for-Open-Societal-Systems/da-registry@6fba7b111ff9)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-20
+
 ### openg2p-farmer-registry 1.0.0-develop.217 (develop)
 
 - Farmer dashboard reads Master Data for the map and location filters (#337) (Centre-for-Open-Societal-Systems/farmer-registry@27f43ca20c3e)
