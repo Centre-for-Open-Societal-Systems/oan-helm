@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### openg2p-farmer-registry 1.0.0-develop.219 (develop)
+
+- feat: expose farmer lands in DCI search response and reference scope (#339) (Centre-for-Open-Societal-Systems/farmer-registry@f0fa3b6f3512)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-20
+
 ### openg2p-livestock-registry 1.0.0-develop.229 (develop)
 
 - New Dev Livestock dashboard: sample approvers get Dashboard Viewer (dashboard pin at oan-helm 18f5bca) (#262) (Centre-for-Open-Societal-Systems/livestock-registry@6ab83b200bd7)
