@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### openg2p-commons-services 1.0.0-dev.50
+
+Previous version: 1.0.0-dev.49.
+
+- New Dev: Commons services on Garage (route, credentials sync, restore) (b13adff)
+
+## 2026-11-20
+
 ### oan-da-services 0.0.10-develop.64 (develop)
 
 - Merge pull request #93 from Nikky-05/chore/remove-leave-flow (Centre-for-Open-Societal-Systems/oan_da_app_services@d1b2d002fc20)
