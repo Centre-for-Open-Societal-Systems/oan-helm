@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### openg2p-cropsown-registry 1.0.0-develop.310 (develop)
+
+- Multi-select lists say how many items are chosen, not SelectedCount (#314) (Centre-for-Open-Societal-Systems/cropsown-regsitry@17d10e2c6e25)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-20
+
 ### oan-grievance-gateway 0.0.1-develop.102 (develop)
 
 - Merge pull request #124 from dhruvbhatt701/feature/STG-514-sensitive-urgent-flags (Centre-for-Open-Societal-Systems/oan_grievance_service@67fbee832f12)

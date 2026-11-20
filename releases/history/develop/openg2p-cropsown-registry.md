@@ -2,6 +2,33 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 1.0.0-develop.310
+
+<!-- source-commit: 17d10e2c6e25fb3a22d9cfa2754a5789ec36af6f version: 1.0.0-develop.310 -->
+Published 2026-11-20. Archive SHA-256 `d0745019f3a1ea6a57e5a51f6aef17ef912a32c5cbeca87bc666ab506efaf5b6`.
+
+- Change: Multi-select lists say how many items are chosen, not SelectedCount (#314)
+- Source: [Centre-for-Open-Societal-Systems/cropsown-regsitry@17d10e2c6e25](https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry/commit/17d10e2c6e25fb3a22d9cfa2754a5789ec36af6f)
+- Changes since 1.0.0-develop.309: https://github.com/Centre-for-Open-Societal-Systems/cropsown-regsitry/compare/e3e0908c809b766e6f1facf836db9eb330513f2f...17d10e2c6e25fb3a22d9cfa2754a5789ec36af6f
+
+| Values path | Image |
+| --- | --- |
+| `registry.staffApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/cropsown-registry/staff-api-1.2.2-rc.614:1.0.0-develop.310@sha256:80c0ec5b2d59966897473b7d23b4739232feab3ab9ac6cee525c61dc676319a0` |
+| `registry.partnerApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/cropsown-registry/partner-api-1.2.2-rc.614:1.0.0-develop.310@sha256:75efb8b60a632eda068e752b6669c1824154d34dba8a82674851018dbc05171d` |
+| `registry.celeryWorker.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/cropsown-registry/celery-1.2.2-rc.614:1.0.0-develop.310@sha256:70df324b510021226516feb4ef63196c188231248be6de5be0ed74cd959218be` |
+| `registry.celeryBeat.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/cropsown-registry/celery-1.2.2-rc.614:1.0.0-develop.310@sha256:70df324b510021226516feb4ef63196c188231248be6de5be0ed74cd959218be` |
+| `registry.dbSeed.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/cropsown-registry/db-seed-1.2.2-rc.614:1.0.0-develop.310@sha256:dc459f6939cae64a6adcd6853cca8e94515d62580204af17993ef50c106cbb1a` |
+| `registry.staffUi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/cropsown-registry/staff-ui-1.2.2-rc.614:1.0.0-develop.310@sha256:a137685eda3f301f69646736b73c1dfe195b2d97fb31cbe8ab72c07542b89b97` |
+| `registry.sanity.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/cropsown-registry/sanity-tests-1.2.2-rc.614:1.0.0-develop.310@sha256:91b03c0cab5dce6ab6276ecec9c89b89b5198b998cb34b6d270134f7cabd8de5` |
+| `dashboardApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/cropsown-registry/dashboard-api:1.0.0-develop.310@sha256:d4d6b34f724aee2e07c9237c89739bd7f03ea6578eaf0c447bfd74be986380d9` |
+| `dashboardUi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/cropsown-registry/dashboard-ui:1.0.0-develop.310@sha256:9628fb15c44077c5a0157b175e1ec030f15cfa94bfd64ef6d692cd7de6361ca9` |
+
+Return to this version:
+
+```sh
+helm upgrade cropsown-registry https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/openg2p-cropsown-registry-1.0.0-develop.310.tgz -n crop --reset-values -f environments/dev/values/cropsown.yaml --wait --timeout 15m
+```
+
 ## 1.0.0-develop.309
 
 <!-- source-commit: e3e0908c809b766e6f1facf836db9eb330513f2f version: 1.0.0-develop.309 -->
