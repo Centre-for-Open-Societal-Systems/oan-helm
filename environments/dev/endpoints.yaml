@@ -15,6 +15,7 @@ publicHosts:
   partnerManagementApi: partner-management-partner-api.development.oanstaging.com
   odk: odk-central.development.oanstaging.com
   minio: minio-farmer.development.oanstaging.com
+  garage: garage.development.oanstaging.com
   minioConsole: minio-console.development.oanstaging.com
   audit: auditmanager.development.oanstaging.com
   esignet: esignet.development.oanstaging.com
@@ -180,6 +181,12 @@ verifiedRoutes:
   name: minio-farmer-development
   hosts:
   - minio-farmer.development.oanstaging.com
+  gateways:
+  - istio-system/development
+- namespace: commons
+  name: commons-garage-api
+  hosts:
+  - garage.development.oanstaging.com
   gateways:
   - istio-system/development
 - namespace: commons

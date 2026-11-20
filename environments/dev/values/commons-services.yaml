@@ -81,7 +81,9 @@ master-data:
       public:
         enabled: true
 odk-central:
-  s3ServerUrl: http://commons-garage:3900
+  # ODK answers a download of an uploaded blob with a 307 to a URL presigned for this host, so it must be the
+  # public Garage host that browsers and ODK Collect reach (as for the registries), not commons-garage:3900.
+  s3ServerUrl: https://garage.development.oanstaging.com
   # Garage's init Job creates bucket odk-central; the subchart default odk-central-blobs does not exist.
   s3BucketName: odk-central
   odk-central-enketo:
