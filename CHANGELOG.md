@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### oan-da-app-ui 0.0.1-develop.61 (develop)
+
+- Merge pull request #82 from rajujha-ptn/daAgent_responsive-20Nov2026 (Centre-for-Open-Societal-Systems/oan_da_app_ui@8f217d96e9a5)
+- Images and rollback: [releases/history/develop/oan-da-app-ui.md](releases/history/develop/oan-da-app-ui.md)
+
+## 2026-11-20
+
 ### oan-da-services 0.0.10-develop.66 (develop)
 
 - Merge pull request #94 from pushkar-srivastava-oan/feat/grievance-fe-bearer-proxy (Centre-for-Open-Societal-Systems/oan_da_app_services@211ad5ed4873)
