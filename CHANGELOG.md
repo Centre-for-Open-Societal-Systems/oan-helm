@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-20
 
+### oan-grievance-service 0.0.1-develop.100 (develop)
+
+- Merge pull request #132 from arnavam/fix/dev-forcecreate-stop-workloads (Centre-for-Open-Societal-Systems/oan_grievance_service@a962e29b911c)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+### openg2p-livestock-registry 1.0.0-develop.227 (develop)
+
+- New Dev connector and dashboard UI on the eoan names of develop build 226 (#260) (Centre-for-Open-Societal-Systems/livestock-registry@0742c0e5dde3)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-20
+
 ### openg2p-da-registry 1.0.0-develop.86 (develop)
 
 - Name and version DA images from init.yaml; every eoan repository immutable (#82) (Centre-for-Open-Societal-Systems/da-registry@c161f2db1699)
