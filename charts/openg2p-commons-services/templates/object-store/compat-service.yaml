@@ -1,0 +1,21 @@
+{{- /* Keeps the MinIO name and port working after MinIO is removed: commons-minio:9000 reaches Garage's S3 API (3900). */ -}}
+{{- $o := .Values.objectStore | default dict }}
+{{- if and $o.enabled $o.compatService.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ tpl .Values.global.minioInstallationName $ }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: object-store-compat
+spec:
+  type: ClusterIP
+  ports:
+  - name: s3-api
+    port: 9000
+    targetPort: 3900
+  selector:
+    app.kubernetes.io/name: garage
+    app.kubernetes.io/instance: commons
+{{- end }}

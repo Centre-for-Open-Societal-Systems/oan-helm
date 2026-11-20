@@ -29,7 +29,9 @@ class DevMasterDataCatalogue(unittest.TestCase):
         self.assertNotIn('baseUrl', public)
 
     def test_approval_and_boundary_settings_stay_the_chart_defaults(self):
-        self.assertEqual(set(self.catalogue), {'public'})
+        # The one change: the boundary store is Garage (the Commons object store) instead of MinIO's default endpoint.
+        self.assertEqual(set(self.catalogue), {'public', 'boundaryStore'})
+        self.assertEqual(self.catalogue['boundaryStore'], {'endpoint': 'http://commons-garage:3900'})
 
 
 if __name__ == '__main__':

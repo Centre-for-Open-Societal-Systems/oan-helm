@@ -1,0 +1,107 @@
+{{- /* One-off copy of a MinIO backup into Garage (the MinIO to Garage cutover). Off by default.
+     The backup is a folder on the node: buckets/<bucket>/..., manifest-counts.txt ("<bucket> <objects> <bytes>") and
+     manifest-sha256.txt ("<sha256>  ./<bucket>/<key>"). The Job creates and grants missing buckets, mirrors them,
+     then compares object counts and the sha256 of every object read back from Garage; any difference fails the Job.
+     The name carries the sha256 of the inputs: unchanged inputs keep the finished Job (nothing runs again), and
+     turning it off later leaves it as the record. */ -}}
+{{- $o := .Values.objectStore | default dict }}
+{{- $r := $o.restore | default dict }}
+{{- if and $o.enabled $r.enabled }}
+{{- $hash := printf "%s|%s|%s" $r.hostPath $r.image $r.buckets | sha256sum | trunc 8 }}
+{{- $name := printf "%s-garage-restore-%s" .Release.Name $hash }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $name }}
+data:
+  restore.sh: |
+    set -eu
+    cd /backup
+    ENDPOINT={{ printf "http://%s:%v" $o.service $o.port }}
+    mc alias set garage "$ENDPOINT" "$KEY_ID" "$KEY_SECRET" > /dev/null
+    for b in $(ls buckets); do
+      mc mb --ignore-existing "garage/$b" > /dev/null
+      mc mirror --overwrite --quiet "buckets/$b" "garage/$b"
+    done
+    fail=0
+    while read -r b count bytes; do
+      live=$(mc ls -r "garage/$b" | wc -l)
+      if [ "$live" != "$count" ]; then echo "COUNT MISMATCH $b: backup $count, garage $live"; fail=1; else echo "count ok $b $count"; fi
+    done < manifest-counts.txt
+    bad=0
+    while read -r sum path; do
+      path=${path#./}
+      got=$(mc cat "garage/$path" | sha256sum | cut -d' ' -f1)
+      [ "$got" = "$sum" ] || { echo "SHA MISMATCH $path"; bad=$((bad+1)); }
+    done < manifest-sha256.txt
+    [ "$bad" = 0 ] || fail=1
+    [ "$fail" = 0 ] && echo "restore verified: counts and sha256 match the backup" || { echo "restore FAILED verification"; exit 1; }
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $name }}
+  labels:
+    app.kubernetes.io/component: garage-restore
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      serviceAccountName: {{ $r.serviceAccount }}
+      restartPolicy: Never
+      initContainers:
+      - name: ensure-buckets
+        # Buckets the base chart's init Job does not create (a2c-webhook belongs to A2C). Same image and account the
+        # base chart's own Garage init Job uses.
+        image: {{ $r.kubectlImage | quote }}
+        env:
+        - name: BUCKETS
+          value: {{ $r.buckets | quote }}
+        - name: KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: commons-minio
+              key: root-user
+        command:
+        - sh
+        - -c
+        - |
+          set -e
+          KX="kubectl exec -n {{ .Release.Namespace }} {{ $r.garagePod }} --"
+          for b in $BUCKETS; do
+            $KX ./garage bucket create "$b" || true
+            $KX ./garage bucket allow --read --write --owner "$b" --key "$KEY_ID"
+          done
+      containers:
+      - name: restore
+        securityContext:
+          runAsUser: 0
+        image: {{ $r.image | quote }}
+        command: ["/bin/sh", "/scripts/restore.sh"]
+        env:
+        - name: KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: commons-minio
+              key: root-user
+        - name: KEY_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: commons-minio
+              key: root-password
+        volumeMounts:
+        - name: scripts
+          mountPath: /scripts
+          readOnly: true
+        - name: backup
+          mountPath: /backup
+          readOnly: true
+      volumes:
+      - name: scripts
+        configMap:
+          name: {{ $name }}
+      - name: backup
+        hostPath:
+          path: {{ $r.hostPath | quote }}
+          type: Directory
+{{- end }}
