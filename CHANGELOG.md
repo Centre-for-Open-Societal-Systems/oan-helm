@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-21
 
+### oan-da-services 0.0.10-develop.68 (develop)
+
+- Merge pull request #96 from VSV-Coders/feat/api_verify (Centre-for-Open-Societal-Systems/oan_da_app_services@025353a63db3)
+- Images and rollback: [releases/history/develop/oan-da-services.md](releases/history/develop/oan-da-services.md)
+
+### oan-da-services-gateway 0.0.10-develop.68 (develop)
+
+- Merge pull request #96 from VSV-Coders/feat/api_verify (Centre-for-Open-Societal-Systems/oan_da_app_services@025353a63db3)
+- Images and rollback: [releases/history/develop/oan-da-services-gateway.md](releases/history/develop/oan-da-services-gateway.md)
+
+## 2026-11-21
+
 ### openg2p-farmer-registry 1.0.0-develop.221 (develop)
 
 - fix(deploy): pin the Garage host over saved per-workload MinIO endpoints (#341) (Centre-for-Open-Societal-Systems/farmer-registry@560efa1f7902)
