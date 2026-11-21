@@ -8,6 +8,18 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-21
+
+### oan-grievance-gateway 0.0.1-develop.103 (develop)
+
+- Merge pull request #135 from dhruvbhatt701/feature/STG-514-sensitive-urgent-grievance-flags (Centre-for-Open-Societal-Systems/oan_grievance_service@0d1700986273)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.103 (develop)
+
+- Merge pull request #135 from dhruvbhatt701/feature/STG-514-sensitive-urgent-grievance-flags (Centre-for-Open-Societal-Systems/oan_grievance_service@0d1700986273)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
 ## 2026-11-20
 
 ### openg2p-livestock-registry 1.0.0-develop.230 (develop)
