@@ -35,7 +35,8 @@ adminDashboard:
 # catch-all route that sends every host APISIX has no route of its own for (registries, keycloak, ...) to
 # `upstream`, normally the OpenG2P istio ingress. Off by default; set per environment
 # (environments/<env>/values/oan-apisix-gateway.yaml). The certificate Secret `tlsSecretName` is created
-# outside this chart, in the release namespace.
+# outside this chart, in the release namespace. Leave `upstream.host` empty for the certificate alone, with
+# no catch-all (QA).
 edge:
   enabled: false
   # Apex of the wildcard: the certificate and the catch-all cover `domain` and `*.domain`.

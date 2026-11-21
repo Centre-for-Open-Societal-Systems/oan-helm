@@ -3,11 +3,13 @@ APISIX as the edge of a whole domain (development): the wildcard certificate, th
 host APISIX has no route of its own for (the OpenG2P istio ingress), and the catch-all route to it. Off by
 default. App and UI charts keep their own ApisixRoutes; the catch-all has the lowest priority, so any route
 they declare for the same host and path wins. See docs/apisix-gateway.md, "Dev: APISIX as the edge".
+Without edge.upstream.host only the wildcard certificate renders: no catch-all, so a host without a route of
+its own gets APISIX's 404 (QA, where no OpenG2P server sits behind APISIX).
 */ -}}
 {{- if .Values.edge.enabled }}
 {{- $domain := required "edge.domain is required when edge.enabled" .Values.edge.domain }}
 {{- $secret := required "edge.tlsSecretName is required when edge.enabled" .Values.edge.tlsSecretName }}
-{{- $host := required "edge.upstream.host is required when edge.enabled" .Values.edge.upstream.host }}
+{{- $host := .Values.edge.upstream.host }}
 apiVersion: apisix.apache.org/v2
 kind: ApisixTls
 metadata:
@@ -20,6 +22,7 @@ spec:
   secret:
     name: {{ $secret }}
     namespace: {{ .Release.Namespace }}
+{{- if $host }}
 ---
 apiVersion: apisix.apache.org/v2
 kind: ApisixUpstream
@@ -101,4 +104,5 @@ spec:
             # Not http_to_https: it would put the container port (9443) in the Location.
             ret_code: 301
             uri: "https://$host$request_uri"
+{{- end }}
 {{- end }}
