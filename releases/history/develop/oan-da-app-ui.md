@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.63
+
+<!-- source-commit: b99685ec85af878dbc9e5978fd9f6dc09e67741a version: 0.0.1-develop.63 -->
+Published 2026-11-21. Archive SHA-256 `01675c733e8968fee520ea3885277743d062a3a92cc807fc455bdc8a83cd1eb7`.
+
+- Change: Merge pull request #83 from Nikky-05/fix/me-missing-scope
+- Source: [Centre-for-Open-Societal-Systems/oan_da_app_ui@b99685ec85af](https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_ui/commit/b99685ec85af878dbc9e5978fd9f6dc09e67741a)
+- Changes since 0.0.1-develop.61: https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_ui/compare/8f217d96e9a5121dc3574569a958cb6490631392...b99685ec85af878dbc9e5978fd9f6dc09e67741a
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-da-app-ui/da-app-ui:0.0.1-develop.63` |
+
+Return to this version:
+
+```sh
+helm upgrade da-app-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-da-app-ui-0.0.1-develop.63.tgz -n da-app --reset-values -f helm/environments/dev/oan-da-app-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.61
 
 <!-- source-commit: 8f217d96e9a5121dc3574569a958cb6490631392 version: 0.0.1-develop.61 -->

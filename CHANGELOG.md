@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-21
 
+### oan-da-app-ui 0.0.1-develop.63 (develop)
+
+- Merge pull request #83 from Nikky-05/fix/me-missing-scope (Centre-for-Open-Societal-Systems/oan_da_app_ui@b99685ec85af)
+- Images and rollback: [releases/history/develop/oan-da-app-ui.md](releases/history/develop/oan-da-app-ui.md)
+
+## 2026-11-21
+
 ### oan-apisix-gateway 0.0.1-develop.2
 
 Previous version: 0.0.1-develop.1.
