@@ -1,0 +1,43 @@
+# Values for the oan-namespace-guard chart on QA. Release `oan-namespace-guard`, namespace `kube-system`, installed
+# first: every other release goes into one of these namespaces.
+#
+#   helm -n kube-system upgrade --install oan-namespace-guard oan-helm/oan-namespace-guard \
+#     -f environments/qa/values/oan-namespace-guard.yaml
+#
+# A namespace that already exists (api6-gateway, created for the certificate) is adopted only with Helm's
+# ownership metadata on it:
+#   kubectl label namespace api6-gateway app.kubernetes.io/managed-by=Helm --overwrite
+#   kubectl annotate namespace api6-gateway meta.helm.sh/release-name=oan-namespace-guard \
+#     meta.helm.sh/release-namespace=kube-system --overwrite
+
+# Prometheus (rancher-monitoring) scrapes every namespace.
+alwaysAllowFrom:
+  - cattle-monitoring-system
+
+namespaces:
+  # The edge: clients reach APISIX from outside. privileged: it binds the node's ports 80 and 443 (hostPort).
+  api6-gateway:
+    openIngress: true
+    podSecurity: privileged
+
+  # The log agent (oan-logging) reads /var/log/pods through hostPath. It only sends.
+  observability:
+    podSecurity: privileged
+
+  # Shared PostgreSQL: only the Frappe services.
+  frappe-common:
+    allowFrom: [a2c, grievance, da-app, farmer-app]
+
+  # The services, deployed by Jenkins: only APISIX routes to them.
+  a2c:
+    allowFrom: [api6-gateway]
+  grievance:
+    allowFrom: [api6-gateway]
+  da-app:
+    allowFrom: [api6-gateway]
+  farmer-app:
+    allowFrom: [api6-gateway]
+  leads:
+    allowFrom: [api6-gateway]
+  sandbox:
+    allowFrom: [api6-gateway]
