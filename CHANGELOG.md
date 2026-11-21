@@ -10,6 +10,20 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-21
 
+### oan-apisix-gateway 0.0.1-develop.2
+
+Previous version: 0.0.1-develop.1.
+
+- feat(apisix): the edge wildcard certificate without a catch-all (bd7c52e)
+
+### oan-namespace-guard 0.0.1-develop.1
+
+First published version.
+
+- feat(namespace-guard): namespaces with Pod Security labels and default-deny NetworkPolicies (736540f)
+
+## 2026-11-21
+
 ### oan-grievance-gateway 0.0.1-develop.104 (develop)
 
 - Merge pull request #134 from arnavam/feat/shared-openapi-generator (Centre-for-Open-Societal-Systems/oan_grievance_service@511c3e23ce24)

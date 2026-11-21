@@ -57,6 +57,40 @@ entries:
       oan.org/owner: OpenAgriNet (OAN)
     apiVersion: v2
     appVersion: 3.19.0
+    created: "2026-11-21T12:37:01.986122454Z"
+    dependencies:
+    - name: apisix
+      repository: ""
+      version: 2.18.2
+    - name: redis
+      repository: ""
+      version: 17.15.2
+    description: APISIX gateway and Ingress Controller for OpenAgriNet (OAN); deploys
+      the upstream apisix chart with the OAN gateway defaults. App routes install
+      separately.
+    digest: 6108f679b71577f6ef6b18078ba2f735db7eb4cde487c50716b92817551185b5
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    keywords:
+    - oan
+    - openagrinet
+    - apisix
+    - gateway
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-apisix-gateway
+    sources:
+    - https://github.com/apache/apisix-helm-chart
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-apisix-gateway-0.0.1-develop.2.tgz
+    version: 0.0.1-develop.2
+  - annotations:
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-apisix-gateway
+      oan.org/owner: OpenAgriNet (OAN)
+    apiVersion: v2
+    appVersion: 3.19.0
     created: "2026-11-17T08:35:37.441814907Z"
     dependencies:
     - name: apisix
@@ -251,6 +285,32 @@ entries:
     type: application
     urls:
     - oan-logging-0.0.1-develop.1.tgz
+    version: 0.0.1-develop.1
+  oan-namespace-guard:
+  - annotations:
+      oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-namespace-guard
+      oan.org/owner: OpenAgriNet (OAN)
+    apiVersion: v2
+    created: "2026-11-21T12:37:01.98629363Z"
+    description: The namespaces of an OAN cluster with Pod Security Admission labels
+      and default-deny ingress NetworkPolicies that admit only the namespaces each
+      one needs.
+    digest: becca3fc2ca83473a9c86b9e914a080986fb4104debc7df75bdb938ce06a9b73
+    home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    keywords:
+    - oan
+    - openagrinet
+    - networkpolicy
+    - pod-security
+    maintainers:
+    - name: OpenAgriNet (OAN)
+      url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    name: oan-namespace-guard
+    sources:
+    - https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+    type: application
+    urls:
+    - oan-namespace-guard-0.0.1-develop.1.tgz
     version: 0.0.1-develop.1
   oan-sandbox:
   - annotations:
@@ -10267,4 +10327,4 @@ entries:
     urls:
     - openg2p-livestock-registry-1.0.0-dev.1.tgz
     version: 1.0.0-dev.1
-generated: "2026-11-20T12:46:50.919182167Z"
+generated: "2026-11-21T12:37:01.972426941Z"
