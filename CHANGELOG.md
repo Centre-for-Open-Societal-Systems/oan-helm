@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-21
 
+### openg2p-farmer-registry 1.0.0-develop.221 (develop)
+
+- fix(deploy): pin the Garage host over saved per-workload MinIO endpoints (#341) (Centre-for-Open-Societal-Systems/farmer-registry@560efa1f7902)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-21
+
 ### oan-grievance-gateway 0.0.1-develop.103 (develop)
 
 - Merge pull request #135 from dhruvbhatt701/feature/STG-514-sensitive-urgent-grievance-flags (Centre-for-Open-Societal-Systems/oan_grievance_service@0d1700986273)
