@@ -1,0 +1,20 @@
+apiVersion: v2
+name: oan-namespace-guard
+description: The namespaces of an OAN cluster with Pod Security Admission labels and default-deny ingress
+  NetworkPolicies that admit only the namespaces each one needs.
+type: application
+version: 0.0.1-develop.1
+keywords:
+- oan
+- openagrinet
+- networkpolicy
+- pod-security
+home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+sources:
+- https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+maintainers:
+- name: OpenAgriNet (OAN)
+  url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+annotations:
+  oan.org/owner: OpenAgriNet (OAN)
+  oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-namespace-guard

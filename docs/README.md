@@ -19,6 +19,7 @@ and deployed, and [CONTRIBUTING.md](../CONTRIBUTING.md) for the pull-request rul
 | [service-catalog.md](service-catalog.md) | Every OAN service, its chart, values key and source |
 | [service-onboarding.md](service-onboarding.md) | Adding or enabling a service in dev without new DNS, Nginx or certificates |
 | [dev-urls.md](dev-urls.md) | Development wildcard URLs and the legacy-URL migration |
+| [qa-cluster.md](qa-cluster.md) | The QA cluster's cluster-level releases: namespaces, APISIX, shared PostgreSQL, Jenkins deployer, log agent |
 | [request-flow.md](request-flow.md) | Request path, load balancing, logging and Rancher in one picture |
 | [existing-architecture-diagram.md](existing-architecture-diagram.md) | Production-like AWS deployment architecture |
 | [logging.md](logging.md) | OpenTelemetry, Loki and Grafana |

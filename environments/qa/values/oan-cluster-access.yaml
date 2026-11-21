@@ -1,0 +1,17 @@
+# Values for the oan-cluster-access chart on QA: the ServiceAccount Jenkins deploys the OAN services with.
+# Release `oan-cluster-access`, namespace `a2c`. See docs/cluster-access.md.
+#
+# Kubernetes writes its token into Secret jenkins-qa-deployer-token; cluster/write-kubeconfig.sh in
+# oan-service-helm turns it into the kubeconfig Jenkins keeps as the Secret file credential `oan-qa-kubeconfig`.
+
+serviceAccount:
+  name: jenkins-qa-deployer
+
+deployNamespaces:
+- a2c
+- grievance
+# DA services, DA UI (oan_da_app_services, oan_da_app_ui) and the farmer app gateway (oan_farmer_app_service).
+- da-app
+- farmer-app
+- leads
+- sandbox

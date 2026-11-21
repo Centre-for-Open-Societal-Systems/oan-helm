@@ -1,0 +1,11 @@
+# Values for the oan-frappe-common chart on QA. Release `oan-frappe-common-db`, namespace `frappe-common`;
+# frappe.dbHost in the app values is derived from that release name. The chart generates the password into
+# Secret oan-frappe-common-db, which the Jenkins deployer may read (oan-cluster-access.yaml).
+# See docs/external-db-and-nfs.md.
+
+frappe-common:
+  postgresql-subchart:
+    primary:
+      persistence:
+        # Named, so the volume does not move if the default StorageClass changes.
+        storageClass: nfs-csi

@@ -1,0 +1,35 @@
+# Values for the oan-apisix-gateway chart on QA (qa.oanstaging.com): one RKE2 node, APISIX and its Ingress
+# Controller in namespace `api6-gateway`, the app routes installed from their own repositories. Install as
+# release `apisix`: the chart's Services are named after it, and the route charts refer to those names.
+#
+#   kubectl apply -f environments/qa/manifests/apisix-etcd.yaml
+#   helm -n api6-gateway upgrade --install apisix oan-helm/oan-apisix-gateway \
+#     -f environments/qa/values/oan-apisix-gateway.yaml
+#
+# APISIX binds the node's ports 80 and 443 (hostPort) and is the only edge: no nginx and no istio on the node.
+# The certificate is the wildcard for qa.oanstaging.com and *.qa.oanstaging.com in Secret oan-qa-wildcard-tls,
+# issued on the node over DNS-01 before this install. QA has no OpenG2P server behind APISIX, so there is no
+# catch-all: a host without a route of its own gets a 404.
+apisix:
+  # The in-cluster single-member etcd of environments/qa/manifests/apisix-etcd.yaml; the built-in one does not
+  # render next to the bundled Redis.
+  etcd:
+    enabled: false
+  externalEtcd:
+    host:
+      - http://apisix-etcd.api6-gateway.svc.cluster.local:2379
+    # No authentication on this etcd: it is a single member inside the cluster, reachable only from it.
+    user: ""
+
+# https://apisix-dashboard.qa.oanstaging.com/ui/, private addresses only: the VPC, WireGuard and in-cluster.
+adminDashboard:
+  enabled: true
+  host: apisix-dashboard.qa.oanstaging.com
+  allowlist:
+  - 10.0.0.0/8
+
+# The wildcard certificate only (no edge.upstream.host, so no catch-all).
+edge:
+  enabled: true
+  domain: qa.oanstaging.com
+  tlsSecretName: oan-qa-wildcard-tls

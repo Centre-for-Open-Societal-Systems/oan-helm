@@ -1,0 +1,14 @@
+# Values for the oan-logging chart on QA: the node log agent only (the chart's default). It tails /var/log/pods,
+# redacts PII and ships over OTLP to the central OTel gateway, which writes to the central Loki read by the
+# central Grafana. No Loki, MinIO or Grafana on the QA cluster. See docs/logging.md.
+#
+#   helm upgrade --install oan-logging oan-helm/oan-logging -n observability --create-namespace \
+#     -f environments/qa/values/oan-logging.yaml
+
+otel-agent:
+  alternateConfig:
+    exporters:
+      otlp:
+        # REQUIRED: <host>:<port> of the central OTel gateway, reachable from the QA node over the private
+        # network (oan_dev ships to openg2p_dev, 10.0.1.58:30317).
+        endpoint: ""
