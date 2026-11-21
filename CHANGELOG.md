@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-21
 
+### oan-grievance-gateway 0.0.1-develop.104 (develop)
+
+- Merge pull request #134 from arnavam/feat/shared-openapi-generator (Centre-for-Open-Societal-Systems/oan_grievance_service@511c3e23ce24)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.104 (develop)
+
+- Merge pull request #134 from arnavam/feat/shared-openapi-generator (Centre-for-Open-Societal-Systems/oan_grievance_service@511c3e23ce24)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-21
+
 ### oan-da-services 0.0.10-develop.68 (develop)
 
 - Merge pull request #96 from VSV-Coders/feat/api_verify (Centre-for-Open-Societal-Systems/oan_da_app_services@025353a63db3)

@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.104
+
+<!-- source-commit: 511c3e23ce24471656e8ac79f49449403c73eeb0 version: 0.0.1-develop.104 -->
+Published 2026-11-21. Archive SHA-256 `4c6cedea5bc0ff1388c7267ae4e504cc220962d1366adbdb6d3f08470319af1b`.
+
+- Change: Merge pull request #134 from arnavam/feat/shared-openapi-generator
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@511c3e23ce24](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/511c3e23ce24471656e8ac79f49449403c73eeb0)
+- Changes since 0.0.1-develop.103: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/0d170098627340875985337151a4f3fdff07b8a8...511c3e23ce24471656e8ac79f49449403c73eeb0
+
+Return to this version:
+
+```sh
+helm upgrade grievance-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-gateway-0.0.1-develop.104.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.103
 
 <!-- source-commit: 0d170098627340875985337151a4f3fdff07b8a8 version: 0.0.1-develop.103 -->
