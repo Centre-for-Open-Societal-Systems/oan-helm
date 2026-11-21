@@ -1,0 +1,14 @@
+{{- range $name, $ns := .Values.namespaces }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ $name }}
+  annotations:
+    # Uninstalling this chart must never delete a namespace and everything in it.
+    helm.sh/resource-policy: keep
+  labels:
+    pod-security.kubernetes.io/enforce: {{ $ns.podSecurity | default $.Values.podSecurity.enforce }}
+    pod-security.kubernetes.io/warn: {{ $.Values.podSecurity.warn }}
+    pod-security.kubernetes.io/audit: {{ $.Values.podSecurity.warn }}
+{{- end }}

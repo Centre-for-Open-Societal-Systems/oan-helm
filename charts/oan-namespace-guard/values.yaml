@@ -1,0 +1,19 @@
+# Defaults for the OAN namespace guard. Install once per cluster as release `oan-namespace-guard` in
+# `kube-system`, before anything else; the environment values (environments/<env>/values/oan-namespace-guard.yaml)
+# list the namespaces. The Namespaces are kept when the release is uninstalled.
+
+# Pod Security Admission levels for every namespace below, unless it sets its own `podSecurity`.
+# baseline blocks privileged pods, host namespaces, hostPath and hostPort; restricted is only warned about.
+podSecurity:
+  enforce: baseline
+  warn: restricted
+
+# Namespaces every guarded namespace accepts traffic from, e.g. the Prometheus namespace.
+alwaysAllowFrom: []
+
+# <name>:
+#   podSecurity: <level>      # optional, overrides podSecurity.enforce
+#   openIngress: true         # no NetworkPolicy: anything may connect (the edge)
+#   allowFrom: [<namespace>]  # otherwise only its own pods, alwaysAllowFrom and these
+# Egress is not restricted: the services call external APIs and resolve DNS.
+namespaces: {}
