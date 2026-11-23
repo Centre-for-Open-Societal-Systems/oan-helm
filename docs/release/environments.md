@@ -209,6 +209,13 @@ Every build of `main` runs, in job `oan-helm-dev-commons`:
 New Dev's Commons base release (`commons`) and `oan-dashboards` stay out of the job: they have no New Dev values in
 git.
 
+**New Dev follows the newest commons-services release by itself.** The release workflow's step
+`scripts/ci/pin_dev_chart.py` writes the released chart into `environments/dev/commons-services.chart` in the same
+release commit, so a chart change reaches New Dev with no second pull request. The pin only moves forward, only for
+the `1.0.0-dev.<n>` series, and only to a chart whose archive is in `repository/` and `repository/SHA256SUMS`.
+Staging is not moved: it is promoted by hand, after New Dev is verified. A change that must not reach New Dev yet
+should not be merged to `main`.
+
 Creating the job, once, on New Dev and in Jenkins (the same steps as staging):
 
 1. As the cluster admin on the New Dev box, apply `environments/dev/rbac/commons-deployer-rbac.yaml`. The file says

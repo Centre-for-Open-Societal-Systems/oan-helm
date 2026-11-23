@@ -41,17 +41,25 @@ jobs:
           python -m unittest discover -s scripts -p 'test_*.py'
           python scripts/validate.py --package
           python scripts/validate_registry_addons.py --package
+      - name: Point New Dev at the released Commons services chart
+        # New Dev follows environments/dev/commons-services.chart. Moving it here, in the
+        # release commit, replaces the second pull request that only edited that file.
+        # It moves forward only, and only to a chart whose archive is in repository/ and
+        # SHA256SUMS. Staging is promoted by hand.
+        run: python scripts/ci/pin_dev_chart.py
       - name: Commit and tag the release
         run: |
-          if [[ ! -s .build/release-message.txt ]] && git diff --quiet -- releases/artifacts.json; then
+          if [[ ! -s .build/release-message.txt ]] && git diff --quiet -- releases/artifacts.json environments/dev/commons-services.chart; then
             echo "Nothing to release."
             exit 0
           fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -A CHANGELOG.md charts addons repository releases
+          git add -A CHANGELOG.md charts addons repository releases environments/dev/commons-services.chart
           if [[ -s .build/release-message.txt ]]; then
             git commit -q -F .build/release-message.txt
+          elif ! git diff --cached --quiet -- environments/dev/commons-services.chart; then
+            git commit -q -m "chore(release): point New Dev at commons-services $(tr -d '[:space:]' < environments/dev/commons-services.chart)"
           else
             git commit -q -m 'chore(release): seal archives published before source fingerprints'
           fi
