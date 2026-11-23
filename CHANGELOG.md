@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-23
 
+### openg2p-farmer-registry 1.0.0-develop.223 (develop)
+
+- Merge pull request #343 from simretyibeltal-commits/test/seed-and-consent (Centre-for-Open-Societal-Systems/farmer-registry@8ac3e8fc9074)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-23
+
 ### openg2p-farmer-registry 1.0.0-develop.222 (develop)
 
 - Merge pull request #342 from simretyibeltal-commits/test/metadata-consistency (Centre-for-Open-Societal-Systems/farmer-registry@dabb3e2aad65)
