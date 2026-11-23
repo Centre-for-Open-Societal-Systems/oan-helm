@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-23
 
+### openg2p-farmer-registry 1.0.0-develop.224 (develop)
+
+- Merge pull request #344 from simretyibeltal-commits/test/search-text-and-awe-policy (Centre-for-Open-Societal-Systems/farmer-registry@69312021cf40)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-23
+
 ### oan-a2c-service 0.0.1-develop.34 (develop)
 
 - Merge pull request #143 from arnavam/fix/farmer-otp-skip-registry-lookup (Centre-for-Open-Societal-Systems/oan_a2c@6c0ae5a6a5db)
