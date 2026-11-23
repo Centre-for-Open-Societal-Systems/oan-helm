@@ -10,6 +10,15 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-23
 
+### openg2p-commons-services 1.0.0-dev.51
+
+Previous version: 1.0.0-dev.50.
+
+- fix(commons-services): point consent OTP publish at Garage and add OA… (#258) (4aeba37)
+- fix(commons): seed Master Data code lists from the current openg2p-data develop build (#259) (5e76d12)
+
+## 2026-11-23
+
 ### oan-da-app-ui 0.0.1-develop.64 (develop)
 
 - Merge pull request #84 from VSV-Coders/develop (Centre-for-Open-Societal-Systems/oan_da_app_ui@1f54e9acfd89)
