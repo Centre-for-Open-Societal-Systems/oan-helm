@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.65
+
+<!-- source-commit: 955e20fdab1d01322aac1cf349fe4ee3bdf50b3e version: 0.0.1-develop.65 -->
+Published 2026-11-23. Archive SHA-256 `81f8f1eb95dfd5bf82512ce5910b62cec59986315334c5cbd8da84f521137323`.
+
+- Change: Merge pull request #86 from rajujha-ptn/fix_woredas_runtime_error-23Nov2026
+- Source: [Centre-for-Open-Societal-Systems/oan_da_app_ui@955e20fdab1d](https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_ui/commit/955e20fdab1d01322aac1cf349fe4ee3bdf50b3e)
+- Changes since 0.0.1-develop.64: https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_ui/compare/1f54e9acfd8984937f7b83c2580568202d4b55f8...955e20fdab1d01322aac1cf349fe4ee3bdf50b3e
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-da-app-ui/da-app-ui:0.0.1-develop.65` |
+
+Return to this version:
+
+```sh
+helm upgrade da-app-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-da-app-ui-0.0.1-develop.65.tgz -n da-app --reset-values -f helm/environments/dev/oan-da-app-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.64
 
 <!-- source-commit: 1f54e9acfd8984937f7b83c2580568202d4b55f8 version: 0.0.1-develop.64 -->

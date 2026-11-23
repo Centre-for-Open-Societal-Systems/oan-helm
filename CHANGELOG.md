@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-23
 
+### oan-da-app-ui 0.0.1-develop.65 (develop)
+
+- Merge pull request #86 from rajujha-ptn/fix_woredas_runtime_error-23Nov2026 (Centre-for-Open-Societal-Systems/oan_da_app_ui@955e20fdab1d)
+- Images and rollback: [releases/history/develop/oan-da-app-ui.md](releases/history/develop/oan-da-app-ui.md)
+
+## 2026-11-23
+
 ### openg2p-farmer-registry 1.0.0-develop.224 (develop)
 
 - Merge pull request #344 from simretyibeltal-commits/test/search-text-and-awe-policy (Centre-for-Open-Societal-Systems/farmer-registry@69312021cf40)
