@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.14
+
+<!-- source-commit: 3cc5a92ae49c5f8f56b2321ec016bc6bbc599ab0 version: 0.0.1-develop.14 -->
+Published 2026-11-23. Archive SHA-256 `97d34376aad7dbb16ec16ad7cb90fd466f5b1f15e554d76f9a95f46fd994db58`.
+
+- Change: Merge pull request #122 from arnavam/fix/credit-info-duplicate-product-names
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c_ui@3cc5a92ae49c](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c_ui/commit/3cc5a92ae49c5f8f56b2321ec016bc6bbc599ab0)
+- Changes since 0.0.1-develop.12: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c_ui/compare/452c59c696e6644190f402d634e5351efb6e7283...3cc5a92ae49c5f8f56b2321ec016bc6bbc599ab0
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-ui/a2c-ui:0.0.1-develop.14` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-ui-0.0.1-develop.14.tgz -n a2c-develop --reset-values -f helm/environments/dev/oan-a2c-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.12
 
 <!-- source-commit: 452c59c696e6644190f402d634e5351efb6e7283 version: 0.0.1-develop.12 -->
