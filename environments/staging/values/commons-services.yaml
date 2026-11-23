@@ -62,8 +62,9 @@ master-data:
   # lists and sample people, published at once. It ran on 11 Nov 2026 (commons-services
   # revision 19: 1 published version, 21,037 units). geo is false again so later upgrades
   # only upsert code lists and samples; the archive database stays as the record.
-  # The image is the seed build with CROP_DISEASE (release record 1.0.0-dev.39); staging
-  # pinned it while staging ran chart 1.0.0-dev.35, whose default seed image is older.
+  # The image is the openg2p-data develop build 1.0.0-develop.67 (release record 1.0.0-dev.51):
+  # DA_POSITION with all six positions, DA_MARITAL_STATUS and DA_RELATIONSHIP. Staging pins it
+  # because its chart (1.0.0-dev.49) has an older default seed image.
   geoSeed:
     enabled: true
     publishInitial: true
@@ -71,8 +72,8 @@ master-data:
     # Repository as well as tag: the release's saved values still name the old GHCR build,
     # which has no image with this digest.
     image:
-      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/master-data-db-seed
-      tag: f929965ce2a9-mds-e569a59b@sha256:27520bf4706809a30a8aacdc5372e22310c81972dd04ba9d12a68d281c8b068a
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/openg2p-data/master-data-db-seed
+      tag: 1.0.0-develop.67@sha256:6b19f317d26577a5bfab8ca42a269f61f7734ad34baaff0644709c89f19596a8
     load:
       geo: false
       codelists: true
