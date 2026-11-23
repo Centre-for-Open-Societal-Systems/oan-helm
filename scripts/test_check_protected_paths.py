@@ -140,6 +140,23 @@ class ProtectedPathsTest(unittest.TestCase):
         after = self.commit('oan-seed-pinner', {'releases/1.0.0-dev.51.yaml': 'chartVersion: 1.0.0-dev.51\nx: 1\n'})
         self.assertEqual(self.run_check('--range', f'{before}..{after}'), 1)
 
+    def test_seed_pinner_record_must_match_its_name_and_come_after_the_others(self):
+        before = self.seed_base()
+        values = {'charts/openg2p-commons-services/values.yaml': self.seed_values(self.NEW)}
+        nl = chr(10)
+        cases = {
+            'wrong first line': {'releases/1.0.0-dev.52.yaml': 'chartVersion: 1.0.0-dev.99' + nl},
+            'not a chartVersion': {'releases/1.0.0-dev.52.yaml': 'x: 1' + nl},
+            'not after the newest': {'releases/1.0.0-dev.40.yaml': 'chartVersion: 1.0.0-dev.40' + nl},
+            'two records': {'releases/1.0.0-dev.52.yaml': 'chartVersion: 1.0.0-dev.52' + nl,
+                            'releases/1.0.0-dev.53.yaml': 'chartVersion: 1.0.0-dev.53' + nl},
+        }
+        for name, record in cases.items():
+            with self.subTest(case=name):
+                after = self.commit('oan-seed-pinner', {**values, **record})
+                self.assertEqual(self.run_check('--range', f'{before}..{after}'), 1)
+                self.git('reset', '-q', '--hard', before)
+
     def test_other_authors_are_not_limited_to_the_seed_lines(self):
         before = self.seed_base()
         after = self.commit('Human', {'charts/openg2p-commons-services/values.yaml': self.seed_values(self.OLD, 'x: 1\n')})

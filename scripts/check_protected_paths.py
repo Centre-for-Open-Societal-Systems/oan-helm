@@ -58,9 +58,12 @@ def check_pull_request(base):
 def seed_pinner_errors(sha):
     """What a commit by the seed pinner may change: the two seed lines and one new release record."""
     errors = []
+    records = 0
     for change in git("diff-tree", "--no-commit-id", "--name-status", "-r", sha).splitlines():
         status, path = change.split("\t")[0], change.split("\t")[-1]
         if status == "A" and SEED_RECORD.fullmatch(path):
+            records += 1
+            errors += seed_record_errors(sha, path, records)
             continue
         if status == "M" and path == SEED_VALUES:
             diff = git("diff-tree", "--no-commit-id", "-p", "-U0", "-r", sha, "--", SEED_VALUES).splitlines()
@@ -71,6 +74,26 @@ def seed_pinner_errors(sha):
             continue
         errors.append(f"{sha[:12]} by {SEED_PINNER} changed {path} ({status}); it may only move the seed "
                       f"pin in {SEED_VALUES} and add a releases/1.0.0-dev.<n>.yaml record")
+    return errors
+
+
+def seed_record_errors(sha, path, count):
+    """A record added by the seed pinner: one per commit, numbered after every existing record, and
+    its chartVersion is its own file name."""
+    n = int(re.fullmatch(r"releases/1\.0\.0-dev\.(\d+)\.yaml", path).group(1))
+    errors = []
+    if count > 1:
+        errors.append(f"{sha[:12]} by {SEED_PINNER} added more than one release record")
+    text = git("show", f"{sha}:{path}")
+    first = text.splitlines()[0].strip() if text.strip() else ""
+    if first != f"chartVersion: 1.0.0-dev.{n}":
+        errors.append(f"{sha[:12]} {path}: the first line must be 'chartVersion: 1.0.0-dev.{n}', not {first!r}")
+    existing = [int(m.group(1)) for m in
+                (re.fullmatch(r"1\.0\.0-dev\.(\d+)\.yaml", f.rsplit("/", 1)[-1])
+                 for f in git("ls-tree", "--name-only", f"{sha}~1", "releases/").splitlines()) if m]
+    if existing and n <= max(existing):
+        errors.append(f"{sha[:12]} {path}: a new record must be numbered after the newest existing one "
+                      f"(1.0.0-dev.{max(existing)})")
     return errors
 
 
