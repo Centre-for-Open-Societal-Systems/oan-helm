@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-23
 
+### oan-grievance-gateway 0.0.1-develop.105 (develop)
+
+- Merge pull request #137 from arnavam/feat/position-assignments (Centre-for-Open-Societal-Systems/oan_grievance_service@029eae42ce2b)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.105 (develop)
+
+- Merge pull request #137 from arnavam/feat/position-assignments (Centre-for-Open-Societal-Systems/oan_grievance_service@029eae42ce2b)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-23
+
 ### openg2p-farmer-registry 1.0.0-develop.223 (develop)
 
 - Merge pull request #343 from simretyibeltal-commits/test/seed-and-consent (Centre-for-Open-Societal-Systems/farmer-registry@8ac3e8fc9074)

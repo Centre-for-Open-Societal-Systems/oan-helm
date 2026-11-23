@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.105
+
+<!-- source-commit: 029eae42ce2b06e5dab516bf35eefb7d6c0a12d5 version: 0.0.1-develop.105 -->
+Published 2026-11-23. Archive SHA-256 `de90fc4ae8b86891ef0b78df6235f9f112140eeabd25948ece14192a5894c2fd`.
+
+- Change: Merge pull request #137 from arnavam/feat/position-assignments
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@029eae42ce2b](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/029eae42ce2b06e5dab516bf35eefb7d6c0a12d5)
+- Changes since 0.0.1-develop.104: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/511c3e23ce24471656e8ac79f49449403c73eeb0...029eae42ce2b06e5dab516bf35eefb7d6c0a12d5
+
+Return to this version:
+
+```sh
+helm upgrade grievance-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-gateway-0.0.1-develop.105.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.104
 
 <!-- source-commit: 511c3e23ce24471656e8ac79f49449403c73eeb0 version: 0.0.1-develop.104 -->
