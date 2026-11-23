@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-23
 
+### openg2p-commons-services 1.0.0-dev.52
+
+Previous version: 1.0.0-dev.51.
+
+- chore(commons): seed Master Data code lists from openg2p-data build 1.0.0-develop.70 (#263) (c7e61c5)
+
+## 2026-11-23
+
 ### oan-a2c-ui 0.0.1-develop.14 (develop)
 
 - Merge pull request #122 from arnavam/fix/credit-info-duplicate-product-names (Centre-for-Open-Societal-Systems/oan_a2c_ui@3cc5a92ae49c)
