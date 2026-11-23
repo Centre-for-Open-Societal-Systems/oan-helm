@@ -73,4 +73,11 @@ new archives to channel folders.
 `main` has no ruleset yet, so this is checked after the push, not blocked before it. Add a ruleset when the App
 is configured.
 
+The openg2p-data develop build uses the same credential for one more write: it moves the Master Data seed image pin.
+Its commits carry the name `oan-seed-pinner` (`SEED_PINNER` in `scripts/check_protected_paths.py`). On `main` that name
+may only change the `repository:` and `tag:` lines of `master-data.geoSeed.image` in
+`charts/openg2p-commons-services/values.yaml` (a tag of the form `N.N.N-develop.N@sha256:<digest>` for the
+`eoan/openg2p-data/master-data-db-seed` repository) and add a `releases/1.0.0-dev.<n>.yaml` record. Any other change
+under that name fails the push check, the commit has no green checks, and the New Dev delivery does not run from it.
+
 The flat `repository/` folder stays as it is until no cluster or pin reads it.
