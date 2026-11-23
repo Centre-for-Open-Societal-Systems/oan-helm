@@ -188,8 +188,12 @@ openg2p-consent-manager:
     consentManagerBeneHostname: ''
   consentManagerApi:
     envVars:
-      # A2C reads OTPs from bucket a2c-webhook in the Commons object store (Garage).
-      CONSENT_MANAGER_OTP_PUBLISH_ENDPOINT_URL: http://commons-garage.commons.svc.cluster.local:3900
+      # OTP test copy goes to bucket a2c-webhook on AWS S3 (ap-south-1). An empty endpoint URL
+      # means AWS.
+      # Keys: Secret consent-manager-otp-dev (minio-access-key and minio-secret-key hold the
+      # AWS IAM user's keys). See docs/consent-otp-delivery.md before changing this.
+      CONSENT_MANAGER_OTP_PUBLISH_ENDPOINT_URL: ''
+      CONSENT_MANAGER_OTP_PUBLISH_REGION: ap-south-1
       CONSENT_MANAGER_AWE_CALLBACK_URL: http://{{ .Release.Name }}-cm-api.{{ .Release.Namespace }}.svc.cluster.local/consent/v1/awe/webhooks/decision
     istio:
       virtualservice:
