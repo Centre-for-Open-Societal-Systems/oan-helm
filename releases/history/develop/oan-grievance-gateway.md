@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.106
+
+<!-- source-commit: c9aee7c3f26aa19d4c04824136ba65c1bbc140ff version: 0.0.1-develop.106 -->
+Published 2026-11-23. Archive SHA-256 `b68c00388ac8b16b26bc11fa5d1c8492178fcac9ce3de0ad16042827193ae701`.
+
+- Change: Merge pull request #138 from arnavam/feat/sla-rule-levels
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@c9aee7c3f26a](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/c9aee7c3f26aa19d4c04824136ba65c1bbc140ff)
+- Changes since 0.0.1-develop.105: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/029eae42ce2b06e5dab516bf35eefb7d6c0a12d5...c9aee7c3f26aa19d4c04824136ba65c1bbc140ff
+
+Return to this version:
+
+```sh
+helm upgrade grievance-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-gateway-0.0.1-develop.106.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.105
 
 <!-- source-commit: 029eae42ce2b06e5dab516bf35eefb7d6c0a12d5 version: 0.0.1-develop.105 -->
