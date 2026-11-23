@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.34
+
+<!-- source-commit: 6c0ae5a6a5db08ebec8ea558806e9e8d1492891f version: 0.0.1-develop.34 -->
+Published 2026-11-23. Archive SHA-256 `9fd8e6955588e7c548c33214e37a024a4911034655bbf9b794c496ead33fc5c1`.
+
+- Change: Merge pull request #143 from arnavam/fix/farmer-otp-skip-registry-lookup
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@6c0ae5a6a5db](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/6c0ae5a6a5db08ebec8ea558806e9e8d1492891f)
+- Changes since 0.0.1-develop.33: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/6c0ae5a6a5db08ebec8ea558806e9e8d1492891f...6c0ae5a6a5db08ebec8ea558806e9e8d1492891f
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-service/a2c-service:0.0.1-develop.34` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-service-0.0.1-develop.34.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.33
 
 <!-- source-commit: 6c0ae5a6a5db08ebec8ea558806e9e8d1492891f version: 0.0.1-develop.33 -->
