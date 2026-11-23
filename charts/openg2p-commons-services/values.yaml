@@ -770,13 +770,23 @@ openg2p-consent-manager:
       CONSENT_MANAGER_AWE_CALLBACK_URL: http://{{ .Release.Name }}-cm-api.{{ .Release.Namespace
         }}.svc.cluster.local/consent/v1/awe/webhooks/decision
       CONSENT_MANAGER_OTP_LOG_CODES: 'false'
-      # A2C reads OTPs for FIN holders from this bucket in dev.
+      # ── Where the OTP goes: switch these two on or off per environment ──
+      # 1) Garage bucket (test harness): each issued OTP is written as JSON under
+      #    otp/ in the bucket below; A2C reads OTPs for FIN holders from there.
+      #    Set to 'false' to stop writing to Garage.
       CONSENT_MANAGER_OTP_PUBLISH_ENABLED: 'true'
       CONSENT_MANAGER_OTP_PUBLISH_BUCKET: a2c-webhook
-      CONSENT_MANAGER_OTP_PUBLISH_ENDPOINT_URL: http://commons-minio.commons.svc.cluster.local:9000
+      CONSENT_MANAGER_OTP_PUBLISH_ENDPOINT_URL: http://commons-garage.commons.svc.cluster.local:3900
       CONSENT_MANAGER_OTP_PUBLISH_ID_TYPE: FIN
       CONSENT_MANAGER_OTP_PUBLISH_PREFIX: otp/
       CONSENT_MANAGER_OTP_PUBLISH_REGION: us-east-1
+      # 2) SMS through the OAN Messaging Service. Set ENABLED to 'true' and fill
+      #    BASE_URL (https, no path); the token comes from the secret below. When SMS
+      #    is ready the code is sent by SMS INSTEAD of being written to Garage, even
+      #    if OTP_PUBLISH_ENABLED is 'true'. A code that cannot be sent is refused.
+      CONSENT_MANAGER_OAN_DELIVERY_ENABLED: 'false'
+      CONSENT_MANAGER_OAN_BASE_URL: ''
+      CONSENT_MANAGER_OAN_PHONE_RESOLVER: map
       CONSENT_MANAGER_PARTNER_AUTH_ISSUER: 'https://keycloak.{{ .Values.global.baseDomain }}/realms/partner'
       CONSENT_MANAGER_PARTNER_AUTH_JWKS_URL: http://commons-keycloak.commons.svc.cluster.local/realms/partner/protocol/openid-connect/certs
       CONSENT_MANAGER_PARTNER_AUTH_ROLES: '["PARTNER_OPERATOR","PARTNER_ADMIN"]'
@@ -793,6 +803,21 @@ openg2p-consent-manager:
         secretKeyRef:
           name: consent-manager-otp-dev
           key: otp-salt
+      # OAN SMS. Both are optional: the pod starts without them while SMS stays off.
+      # Token: the OAN caller credential issued by the OAN operator, in Secret
+      # `oan-caller-dpi-consent` key `token` (same name as the OAN test setup).
+      CONSENT_MANAGER_OAN_TOKEN:
+        secretKeyRef:
+          name: oan-caller-dpi-consent
+          key: token
+          optional: true
+      # Dev/staging test numbers, JSON {"<FIN>": "<phone>"}. A Secret because phone
+      # numbers are personal data; key `oan-phone-map` in `consent-manager-otp-dev`.
+      CONSENT_MANAGER_OAN_OTP_PHONE_MAP:
+        secretKeyRef:
+          name: consent-manager-otp-dev
+          key: oan-phone-map
+          optional: true
     signingKeyMounted: true
     # The repository already names its registry.
     image:

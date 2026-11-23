@@ -45,6 +45,7 @@ and deployed, and [CONTRIBUTING.md](../CONTRIBUTING.md) for the pull-request rul
 | [consent-partner-portal.md](consent-partner-portal.md) | The optional Consent Partner Portal workload |
 | [consent-candidate-build.md](consent-candidate-build.md) | Published OAN Consent candidate images |
 | [consent-aggregation-local-check.md](consent-aggregation-local-check.md) | Local check of a Consent and Aggregation image pair |
+| [consent-otp-delivery.md](consent-otp-delivery.md) | Where the consent OTP goes (Garage bucket or OAN SMS), how to switch it and check it |
 | [ecr-pull-access.md](ecr-pull-access.md) | Letting New Dev pull the Aggregation image |
 | [partner-session-cookie-guard.md](partner-session-cookie-guard.md) | Partner Management session cookie guard in dev |
 | [websub-new-dev.md](websub-new-dev.md) | Kafka-backed WebSub in New Dev |
