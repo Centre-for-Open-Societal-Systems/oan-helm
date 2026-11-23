@@ -8,6 +8,13 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-23
+
+### openg2p-farmer-registry 1.0.0-develop.222 (develop)
+
+- Merge pull request #342 from simretyibeltal-commits/test/metadata-consistency (Centre-for-Open-Societal-Systems/farmer-registry@dabb3e2aad65)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
 ## 2026-11-21
 
 ### oan-da-services 0.0.10-develop.69 (develop)
