@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-23
 
+### oan-da-app-ui 0.0.1-develop.64 (develop)
+
+- Merge pull request #84 from VSV-Coders/develop (Centre-for-Open-Societal-Systems/oan_da_app_ui@1f54e9acfd89)
+- Images and rollback: [releases/history/develop/oan-da-app-ui.md](releases/history/develop/oan-da-app-ui.md)
+
+## 2026-11-23
+
 ### oan-grievance-gateway 0.0.1-develop.106 (develop)
 
 - Merge pull request #138 from arnavam/feat/sla-rule-levels (Centre-for-Open-Societal-Systems/oan_grievance_service@c9aee7c3f26a)
