@@ -518,11 +518,11 @@ def main():
                 for component, tag in (("masterDataAPI", "0.0.0-develop.118"), ("masterDataUi", "0.0.0-develop.121")):
                     assert values["master-data"][component]["image"]["tag"] == tag
                     assert re.fullmatch(r"sha256:[0-9a-f]{64}", values["master-data"][component]["image"]["digest"])
-                # The seed image is upstream's develop.118 with the ETH-OAN pack, by digest: a hand-tagged
-                # -oan.<n> build from the fork, or the scheduled build of one OAN develop commit.
+                # The seed image is the openg2p-data develop build (Jenkins: <version>-develop.<build>, on
+                # upstream's develop.118 base) with the ETH-OAN pack, by digest.
                 seed = values["master-data"]["geoSeed"]["image"]
-                assert seed["repository"] == "379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/master-data-db-seed"
-                assert re.fullmatch(r"[0-9a-f]{12}-mds-[0-9a-f]{8}@sha256:[0-9a-f]{64}", seed["tag"])
+                assert seed["repository"] == "379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/openg2p-data/master-data-db-seed"
+                assert re.fullmatch(r"\d+\.\d+\.\d+-develop\.\d+@sha256:[0-9a-f]{64}", seed["tag"])
                 assert values["master-data"]["geoSeed"]["countryPack"] == "ETH-OAN"
                 assert values["master-data"]["geoSeed"]["enabled"] is False
                 assert info["annotations"]["oan.org/promotion-ready"] == "true"

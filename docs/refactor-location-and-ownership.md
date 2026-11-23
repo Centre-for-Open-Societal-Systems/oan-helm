@@ -26,12 +26,12 @@ ETH-OAN with agriculture is the intended configuration; existing data must not b
 replaced by a demo seed.
 
 Upstream's develop.118 seed image carries only ETH and XKM, so `geoSeed.image` pins
-`379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/master-data-db-seed` (built by the openg2p-data Jenkins pipeline) by digest: the
+`379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/openg2p-data/master-data-db-seed` (built by the openg2p-data Jenkins pipeline) by digest: the
 upstream image, by digest, with `/openg2p-data` replaced by the OAN openg2p-data
-fork at the commit recorded in `releases/1.0.0-dev.11.yaml`. Its loader, scripts
-and packages are upstream's, byte for byte. The fork builds it from
-`docker/master-data-db-seed/Dockerfile` when a `master-data-db-seed/<tag>` tag is
-pushed. ETH-OAN passes the pack's `validate_pack.py`, and seeding it into an empty
+at the commit the build records in its `org.opencontainers.image.revision` label. Its loader, scripts
+and packages are upstream's, byte for byte. Every `develop` build of openg2p-data
+publishes `<version>-develop.<build>` and deploys nothing; moving the pin to a newer
+build is a change to this chart (the tag and digest are in the build's `dist/image.json`). ETH-OAN passes the pack's `validate_pack.py`, and seeding it into an empty
 Master Data develop.118 database published 21,037 units and 74 lists as version 1;
 a second run changed nothing. Moving the API to another build means a seed image on
 that build's base digest. Crop's historic lookup SQL, the input for that
