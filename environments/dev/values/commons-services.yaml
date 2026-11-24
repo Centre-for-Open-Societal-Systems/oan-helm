@@ -194,6 +194,11 @@ openg2p-consent-manager:
       # AWS IAM user's keys). See docs/consent-otp-delivery.md before changing this.
       CONSENT_MANAGER_OTP_PUBLISH_ENDPOINT_URL: ''
       CONSENT_MANAGER_OTP_PUBLISH_REGION: ap-south-1
+      # The consent OTP is sent by SMS straight to the 8028 gateway; the bucket copy above is
+      # then not written (a sent code is not also published). Secret consent-sms8028 holds the
+      # credentials; the test number is in Secret consent-manager-otp-dev, key oan-phone-map.
+      # Switch to 'false' to fall back to the bucket copy.
+      CONSENT_MANAGER_SMS8028_ENABLED: 'true'
       CONSENT_MANAGER_AWE_CALLBACK_URL: http://{{ .Release.Name }}-cm-api.{{ .Release.Namespace }}.svc.cluster.local/consent/v1/awe/webhooks/decision
     istio:
       virtualservice:

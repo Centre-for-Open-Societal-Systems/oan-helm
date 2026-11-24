@@ -1,4 +1,4 @@
-# Consent Manager OTP delivery (AWS bucket, Garage bucket and OAN SMS)
+# Consent Manager OTP delivery (AWS bucket, Garage bucket, OAN SMS and 8028 SMS)
 
 Where the consent OTP goes, how to switch it, and what has to exist outside Git for each
 choice. Applies to `openg2p-commons-services` (`openg2p-consent-manager.consentManagerApi`).
@@ -52,6 +52,52 @@ Set it to `'false'` when moving to SMS so the configuration says what happens.
 
 A code that cannot be sent by SMS is refused to the caller (422 no phone, 502 refused, 503
 unavailable, 500 misconfigured). The bucket copy never refuses: it only logs a warning.
+
+## SMS straight to the 8028 gateway
+
+A second SMS transport for the consent OTP, with no OAN Messaging Service in between
+(consent-management PR #17). Everything is set through this chart; nothing is set on the
+cluster by hand.
+
+| What | Where |
+|---|---|
+| Switch | `CONSENT_MANAGER_SMS8028_ENABLED` (`'false'` in the chart, `'true'` in `environments/dev/values/commons-services.yaml`) |
+| Gateway URL | `CONSENT_MANAGER_SMS8028_BASE_URL`, default `https://8028.et:3400/sms-api/v1` |
+| Client secret, client certificate and key | Secret **`consent-sms8028`**, keys `client-secret`, `client.crt`, `client.key` (all optional references: the pod starts without them and 8028 delivery stays off) |
+| Test number | Secret `consent-manager-otp-dev`, key `oan-phone-map`: JSON `{"<FIN>": "09XXXXXXXX"}` (personal data, so a Secret) |
+
+It applies to both Consent Manager API deployments (`cm-api` and `cm-partner-api`, which is the
+one that raises requests). Never enable it together with `OAN_DELIVERY_ENABLED`: the code would
+be sent twice, so the Consent Manager refuses that combination.
+
+### Behaviour (from the 8028 Integration Guide v1.1)
+
+- One `POST /sms/send-sms` per code, with mutual TLS (the certificate 8028 registered for us,
+  by CN and SHA-256 fingerprint) **and** the client secret in the body. HTTP 201 means queued,
+  not delivered; 8028 sends status callbacks to the one URL registered with it, so this path
+  confirms "queued" and the handset, not delivery.
+- 8028 has no idempotency key. A request that may have reached it is **never repeated**: a
+  timeout after the write, any 5xx or an unreadable answer is not retried (503
+  `otp_delivery_unavailable`, and it counts against the resend budgets). Only "nothing was
+  sent" (connection refused, DNS, TLS handshake) is retried. HTTP 401 means the secret is wrong
+  or the certificate is not registered.
+- When it is on and complete, the code is sent by SMS instead of being written to the bucket.
+  When it is on but the Secret is missing or incomplete, the Consent Manager does not send by
+  SMS and falls back to the bucket copy while `OTP_PUBLISH_ENABLED` is `'true'`.
+- Outbound TCP 3400 to `8028.et` must be allowed, and 8028 must accept the environment's egress
+  IP (New Dev: `13.201.58.55`).
+
+### Creating the Secret (once, not in Git)
+
+From the files 8028 supplied (never paste them into a chat, a ticket or Git):
+
+```
+kubectl -n commons create secret generic consent-sms8028   --from-literal=client-secret="$(cat <file holding the client secret>)"   --from-file=client.crt=<client certificate PEM>   --from-file=client.key=<client private key PEM>
+```
+
+The certificate and key are loaded from memory at the first send and are never written to the
+image. After 8028 issues a new certificate, register it with them first, then replace the
+Secret and restart `cm-api` and `cm-partner-api`.
 
 ## New Dev: the AWS bucket
 

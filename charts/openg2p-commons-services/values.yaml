@@ -787,6 +787,13 @@ openg2p-consent-manager:
       CONSENT_MANAGER_OAN_DELIVERY_ENABLED: 'false'
       CONSENT_MANAGER_OAN_BASE_URL: ''
       CONSENT_MANAGER_OAN_PHONE_RESOLVER: map
+      # 3) SMS straight to the 8028 gateway (no OAN Messaging Service). Set ENABLED to 'true'
+      #    with the Secret below in place. Never together with OAN_DELIVERY_ENABLED: the code
+      #    would be sent twice, so the Consent Manager refuses that combination. Like 2), the
+      #    code is sent by SMS INSTEAD of being written to Garage, and a code that cannot be
+      #    sent is refused.
+      CONSENT_MANAGER_SMS8028_ENABLED: 'false'
+      CONSENT_MANAGER_SMS8028_BASE_URL: https://8028.et:3400/sms-api/v1
       CONSENT_MANAGER_PARTNER_AUTH_ISSUER: 'https://keycloak.{{ .Values.global.baseDomain }}/realms/partner'
       CONSENT_MANAGER_PARTNER_AUTH_JWKS_URL: http://commons-keycloak.commons.svc.cluster.local/realms/partner/protocol/openid-connect/certs
       CONSENT_MANAGER_PARTNER_AUTH_ROLES: '["PARTNER_OPERATOR","PARTNER_ADMIN"]'
@@ -817,6 +824,25 @@ openg2p-consent-manager:
         secretKeyRef:
           name: consent-manager-otp-dev
           key: oan-phone-map
+          optional: true
+      # 8028 credentials, all from one Secret `consent-sms8028` that is not kept in git
+      # (docs/consent-otp-delivery.md says how it is created): the client secret 8028 gave us,
+      # and the client certificate and key 8028 registered for us (PEM). Optional: the pod
+      # starts without them while 8028 delivery stays off.
+      CONSENT_MANAGER_SMS8028_CLIENT_SECRET:
+        secretKeyRef:
+          name: consent-sms8028
+          key: client-secret
+          optional: true
+      CONSENT_MANAGER_SMS8028_CLIENT_CERT_PEM:
+        secretKeyRef:
+          name: consent-sms8028
+          key: client.crt
+          optional: true
+      CONSENT_MANAGER_SMS8028_CLIENT_KEY_PEM:
+        secretKeyRef:
+          name: consent-sms8028
+          key: client.key
           optional: true
     signingKeyMounted: true
     # The repository already names its registry.
