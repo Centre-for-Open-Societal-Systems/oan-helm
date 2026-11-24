@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.10-develop.72
+
+<!-- source-commit: abdc2dd3dfac27619c3309b1ddda70aae88bd51e version: 0.0.10-develop.72 -->
+Published 2026-11-24. Archive SHA-256 `e997dfd79f14847c2b9e864f90dfeb8ad31de35c0f6ede386e99dd7d98849814`.
+
+- Change: Merge pull request #100 from pushkar-srivastava-oan/DA-407-central-dashboard-visit-programme-kp-is-for-leadership-and-woreda-views
+- Source: [Centre-for-Open-Societal-Systems/oan_da_app_services@abdc2dd3dfac](https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/commit/abdc2dd3dfac27619c3309b1ddda70aae88bd51e)
+- Changes since 0.0.10-develop.69: https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/compare/656985bf0c40a2dfcc1038be6b89e38e5bbd2989...abdc2dd3dfac27619c3309b1ddda70aae88bd51e
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-da-services/da-services:0.0.10-develop.72` |
+
+Return to this version:
+
+```sh
+helm upgrade da-services https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-da-services-0.0.10-develop.72.tgz -n da-app --reset-values -f helm/environments/dev/oan-da-services.yaml --wait --timeout 15m
+```
+
 ## 0.0.10-develop.69
 
 <!-- source-commit: 656985bf0c40a2dfcc1038be6b89e38e5bbd2989 version: 0.0.10-develop.69 -->

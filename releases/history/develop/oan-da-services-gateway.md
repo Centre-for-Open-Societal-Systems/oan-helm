@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.10-develop.72
+
+<!-- source-commit: abdc2dd3dfac27619c3309b1ddda70aae88bd51e version: 0.0.10-develop.72 -->
+Published 2026-11-24. Archive SHA-256 `6dc8ff90d6b9e6ce12f875bc7ec90bf665b2807d104a56ca45c3e9f9b91b9a6e`.
+
+- Change: Merge pull request #100 from pushkar-srivastava-oan/DA-407-central-dashboard-visit-programme-kp-is-for-leadership-and-woreda-views
+- Source: [Centre-for-Open-Societal-Systems/oan_da_app_services@abdc2dd3dfac](https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/commit/abdc2dd3dfac27619c3309b1ddda70aae88bd51e)
+- Changes since 0.0.10-develop.69: https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/compare/656985bf0c40a2dfcc1038be6b89e38e5bbd2989...abdc2dd3dfac27619c3309b1ddda70aae88bd51e
+
+Return to this version:
+
+```sh
+helm upgrade da-services-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-da-services-gateway-0.0.10-develop.72.tgz -n da-app --reset-values -f helm/environments/dev/oan-da-services-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.10-develop.69
 
 <!-- source-commit: 656985bf0c40a2dfcc1038be6b89e38e5bbd2989 version: 0.0.10-develop.69 -->

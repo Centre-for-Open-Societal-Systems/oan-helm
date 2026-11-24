@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-24
 
+### oan-da-services 0.0.10-develop.72 (develop)
+
+- Merge pull request #100 from pushkar-srivastava-oan/DA-407-central-dashboard-visit-programme-kp-is-for-leadership-and-woreda-views (Centre-for-Open-Societal-Systems/oan_da_app_services@abdc2dd3dfac)
+- Images and rollback: [releases/history/develop/oan-da-services.md](releases/history/develop/oan-da-services.md)
+
+### oan-da-services-gateway 0.0.10-develop.72 (develop)
+
+- Merge pull request #100 from pushkar-srivastava-oan/DA-407-central-dashboard-visit-programme-kp-is-for-leadership-and-woreda-views (Centre-for-Open-Societal-Systems/oan_da_app_services@abdc2dd3dfac)
+- Images and rollback: [releases/history/develop/oan-da-services-gateway.md](releases/history/develop/oan-da-services-gateway.md)
+
+## 2026-11-24
+
 ### oan-grievance-ui 0.0.1-develop.62 (develop)
 
 - Merge pull request #89 from apoorvanengineer-cpu/feature/officer-category-coverage (Centre-for-Open-Societal-Systems/oan_grievance_ui@6e0e0e83fafd)
