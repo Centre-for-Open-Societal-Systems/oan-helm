@@ -1,4 +1,4 @@
-# New Dev: the deployer of the leads-api release (leads-api + telephony subchart, namespace leads), used only by the
+# Leads cluster (node 10.0.1.131): the deployer of the leads-api release (leads-api + telephony subchart, namespace leads), used only by the
 # leads-api Jenkinsfile stage 'Deploy (Helm → leads namespace)' (Centre-for-Open-Societal-Systems/leads-api,
 # ci/deploy-leads-helm.sh) through the Jenkins kubeconfig credential dev-leads-deployer-kubeconfig. Modelled on
 # commons-deployer-rbac.yaml. Rights in leads only, and only on the object kinds the release owns: no cluster-scoped
@@ -14,7 +14,7 @@
 # The Namespace is created here, because the deployer has no cluster-scoped rights (the Helm stage does not use
 # --create-namespace).
 #
-# Apply once as the cluster admin on the New Dev box (safe to re-apply):
+# Apply once as the cluster admin on the leads node 10.0.1.131 (safe to re-apply; RKE2 paths, else use that cluster's admin kubeconfig):
 #   sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml apply -f leads-deployer-rbac.yaml
 # Check:
 #   K="sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml"
@@ -22,11 +22,11 @@
 #   $K auth can-i list secrets -n commons --as=system:serviceaccount:leads:leads-deployer         # no
 #   $K auth can-i create clusterroles --as=system:serviceaccount:leads:leads-deployer             # no
 # Then build the kubeconfig and upload it as Jenkins credential dev-leads-deployer-kubeconfig (Secret file); the token
-# is written to a 0600 file and never printed. The API server address is the New Dev node's private address, the one
-# the oan-ci-deploy agent already reaches. Delete the file after the upload:
+# is written to a 0600 file and never printed. The API server address is the leads node's private address (10.0.1.131), which
+# the oan-ci-deploy agent must reach on port 6443. Delete the file after the upload:
 #   umask 077; T=$($K -n leads get secret leads-deployer-token -o jsonpath='{.data.token}' | base64 -d)
 #   CA=$(sudo grep certificate-authority-data /etc/rancher/rke2/rke2.yaml | awk '{print $2}')
-#   printf 'apiVersion: v1\nkind: Config\nclusters:\n- name: new-dev\n  cluster:\n    server: https://10.0.1.58:6443\n    certificate-authority-data: %s\nusers:\n- name: leads-deployer\n  user:\n    token: %s\ncontexts:\n- name: leads-deployer\n  context: {cluster: new-dev, user: leads-deployer, namespace: leads}\ncurrent-context: leads-deployer\n' "$CA" "$T" > ~/leads-deployer.kubeconfig; unset T
+#   printf 'apiVersion: v1\nkind: Config\nclusters:\n- name: leads-dev\n  cluster:\n    server: https://10.0.1.131:6443\n    certificate-authority-data: %s\nusers:\n- name: leads-deployer\n  user:\n    token: %s\ncontexts:\n- name: leads-deployer\n  context: {cluster: leads-dev, user: leads-deployer, namespace: leads}\ncurrent-context: leads-deployer\n' "$CA" "$T" > ~/leads-deployer.kubeconfig; unset T
 apiVersion: v1
 kind: Namespace
 metadata:
