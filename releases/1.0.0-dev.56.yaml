@@ -1,0 +1,18 @@
+chartVersion: 1.0.0-dev.56
+status: commons-services release record
+versionPolicy: Immutable after publication; component images retain independent versions.
+note: Only the Master Data seed image changed since the previous record; opened by the openg2p-data develop build. The other entries of earlier manifests still apply.
+charts:
+- name: openg2p-commons-services
+  release: commons-services
+  namespace: commons
+  masterDataImageVersion: 0.0.0-develop.118
+  masterDataSeedImage:
+    repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/openg2p-data/master-data-db-seed
+    tag: 1.0.0-develop.74
+    digest: sha256:29b638b5f2eb639875a6eed9f4b9db7b9743f07e21584cc82695c447470b5df4
+    base: openg2p/master-data-db-seed:0.0.0-develop.118@sha256:cfa91c1bcc1798a8a82454073ac5454c8099041511bf6d0c7380b492232d809f
+    dataRepository: https://github.com/Centre-for-Open-Societal-Systems/openg2p-data
+    dataCommit: 4c7f91e86aa2
+    countryPack: ETH-OAN
+    note: Built and pushed to ECR by the openg2p-data Jenkins pipeline (https://jenkins.oanstaging.com/job/Gen2-Package/job/openg2p-data/job/develop/74/) from openg2p-data develop 4c7f91e86aa2 on Master Data service e569a59b
