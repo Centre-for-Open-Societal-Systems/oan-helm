@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-24
 
+### oan-frappe-common 0.0.1-develop.2
+
+Previous version: 0.0.1-develop.1.
+
+- feat(frappe-common): create databases for non-Frappe apps in oan-frappe-common (f607bf4)
+
+## 2026-11-24
+
 ### openg2p-da-registry 1.0.0-develop.88 (develop)
 
 - DA dev: object links for the Garage host, staff UI image CSP checked on every deploy (G2R-614) (#84) (Centre-for-Open-Societal-Systems/da-registry@91c10fcf21b7)
