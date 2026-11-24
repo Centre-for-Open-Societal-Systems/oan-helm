@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-24
 
+### oan-grievance-gateway 0.0.1-develop.108 (develop)
+
+- fix(ci): fetch develop so the staging promote can read the chart's source trees (#142) (Centre-for-Open-Societal-Systems/oan_grievance_service@b1e82d09eb25)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.108 (develop)
+
+- fix(ci): fetch develop so the staging promote can read the chart's source trees (#142) (Centre-for-Open-Societal-Systems/oan_grievance_service@b1e82d09eb25)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-24
+
 ### oan-a2c-service 0.0.1-develop.37 (develop)
 
 - fix(ci): fetch develop so the staging promote can read the chart's source trees (#147) (Centre-for-Open-Societal-Systems/oan_a2c@07f48e3f891b)

@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.108
+
+<!-- source-commit: b1e82d09eb253e7b0e0bfbc4966f0b15964b1ced version: 0.0.1-develop.108 -->
+Published 2026-11-24. Archive SHA-256 `436dd972d1b4848f8f0670ee27e79654f153a5bbbe0fb7b0595021a17543cd59`.
+
+- Change: fix(ci): fetch develop so the staging promote can read the chart's source trees (#142)
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@b1e82d09eb25](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/b1e82d09eb253e7b0e0bfbc4966f0b15964b1ced)
+- Changes since 0.0.1-develop.106: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/c9aee7c3f26aa19d4c04824136ba65c1bbc140ff...b1e82d09eb253e7b0e0bfbc4966f0b15964b1ced
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-service/grievance-service:0.0.1-develop.108` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-service-0.0.1-develop.108.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.106
 
 <!-- source-commit: c9aee7c3f26aa19d4c04824136ba65c1bbc140ff version: 0.0.1-develop.106 -->
