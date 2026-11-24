@@ -32,7 +32,8 @@ config, a dict:
     gateway (optional)  {"chart", "source" (directory of the routes chart), "release_name", "values_overlay"}
 
 version needs BRANCH_NAME (develop) and BUILD_NUMBER. package needs IMAGE_REPOSITORY (registry/repository, no tag),
-IMAGE_TAG, SOURCE_COMMIT, BRANCH_NAME and COMMIT_SUBJECT. publish needs GH_TOKEN with push access to oan-helm.
+IMAGE_TAG, SOURCE_COMMIT, BRANCH_NAME and COMMIT_SUBJECT; IMAGE_DIGEST (sha256:...) is optional and pins
+the image by digest, which the promote action needs. publish needs GH_TOKEN with push access to oan-helm.
 DRY_RUN=1 publishes nothing. Standard library only; helm must be on the PATH for package.
 
 Exit codes: 0 done (or already published by an earlier run of this commit), 1 failure, 3 no credential.
@@ -144,7 +145,12 @@ def package_build(config, root, env, work):
         version,
         annotations(config, env, config["release_name"], config["values_overlay"]),
         root / "built-chart",
-        image=(config["image_path"], env["IMAGE_REPOSITORY"], env["IMAGE_TAG"]),
+        # With IMAGE_DIGEST the chart pins <tag>@<digest>, which promote_chart.py needs to tag the same image for staging.
+        image=(
+            config["image_path"],
+            env["IMAGE_REPOSITORY"],
+            env["IMAGE_TAG"] + ("@" + env["IMAGE_DIGEST"] if env.get("IMAGE_DIGEST") else ""),
+        ),
     )
     return 0
 
