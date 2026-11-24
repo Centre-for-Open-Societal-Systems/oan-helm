@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-24
 
+### openg2p-commons-services 1.0.0-dev.56
+
+Previous version: 1.0.0-dev.55.
+
+- Consent Manager: configure SMS straight to 8028 from the chart (#266) (1f4ea82)
+
+## 2026-11-24
+
 ### oan-grievance-gateway 0.0.1-develop.109 (develop)
 
 - feat(helm): add the staff login option, with the agent's provider (#145) (Centre-for-Open-Societal-Systems/oan_grievance_service@e0e06dccb56d)
