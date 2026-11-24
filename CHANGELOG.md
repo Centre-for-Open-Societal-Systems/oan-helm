@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-24
 
+### oan-a2c-service 0.0.1-develop.38 (develop)
+
+- chore(helm): frappe-service 8.0.91-oan.4 (#150) (Centre-for-Open-Societal-Systems/oan_a2c@e574129738de)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-24
+
 ### oan-grievance-gateway 0.0.1-staging.14 (staging)
 
 - Merge pull request #151 from arnavam/resync/staging-into-develop (Centre-for-Open-Societal-Systems/oan_grievance_service@f4b2bda4b44a)
