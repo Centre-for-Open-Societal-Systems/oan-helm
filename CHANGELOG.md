@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-24
 
+### openg2p-cropsown-registry 1.0.0-develop.312 (develop)
+
+- Bring the crop registry's CI to the Farmer standard, CI now runs every test (#318) (Centre-for-Open-Societal-Systems/cropsown-regsitry@b81218bf3135)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-24
+
 ### openg2p-commons-services 1.0.0-dev.55
 
 Previous version: 1.0.0-dev.54.
