@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.110
+
+<!-- source-commit: 91e5db4e6de5762c30a1c970e88efd386363bf8a version: 0.0.1-develop.110 -->
+Published 2026-11-24. Archive SHA-256 `d8adf40486885c04095a0bf2549eb3518c824c0859e22c2632db08c977b651af`.
+
+- Change: fix(STG-516): devtest bug fixes for SLA, deferral, attachments and officer pickers (#130)
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@91e5db4e6de5](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/91e5db4e6de5762c30a1c970e88efd386363bf8a)
+- Changes since 0.0.1-develop.109: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/e0e06dccb56d11dd9cc861b76306b5da2c808fb6...91e5db4e6de5762c30a1c970e88efd386363bf8a
+
+Return to this version:
+
+```sh
+helm upgrade grievance-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-gateway-0.0.1-develop.110.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.109
 
 <!-- source-commit: e0e06dccb56d11dd9cc861b76306b5da2c808fb6 version: 0.0.1-develop.109 -->

@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-24
 
+### oan-grievance-gateway 0.0.1-develop.110 (develop)
+
+- fix(STG-516): devtest bug fixes for SLA, deferral, attachments and officer pickers (#130) (Centre-for-Open-Societal-Systems/oan_grievance_service@91e5db4e6de5)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.110 (develop)
+
+- fix(STG-516): devtest bug fixes for SLA, deferral, attachments and officer pickers (#130) (Centre-for-Open-Societal-Systems/oan_grievance_service@91e5db4e6de5)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-24
+
 ### openg2p-commons-services 1.0.0-dev.56
 
 Previous version: 1.0.0-dev.55.
