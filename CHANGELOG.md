@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-24
 
+### oan-grievance-gateway 0.0.1-develop.114 (develop)
+
+- Merge pull request #151 from arnavam/resync/staging-into-develop (Centre-for-Open-Societal-Systems/oan_grievance_service@f4b2bda4b44a)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.114 (develop)
+
+- Merge pull request #151 from arnavam/resync/staging-into-develop (Centre-for-Open-Societal-Systems/oan_grievance_service@f4b2bda4b44a)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-24
+
 ### oan-grievance-gateway 0.0.1-develop.113 (develop)
 
 - Merge pull request #148 from arnavam/ci/promote-staging-workflow (Centre-for-Open-Societal-Systems/oan_grievance_service@a4a551b714ce)
