@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.115
+
+<!-- source-commit: 673d96c61f039a708175b6b8fb2daaab7ac57e5e version: 0.0.1-develop.115 -->
+Published 2026-11-24. Archive SHA-256 `26189c075502a5918e9369bc73a7b4b20cffcf88e767e63f310fdc7532e089ea`.
+
+- Change: Merge pull request #153 from arnavam/feat/grievance-admin-role
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@673d96c61f03](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/673d96c61f039a708175b6b8fb2daaab7ac57e5e)
+- Changes since 0.0.1-develop.114: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/f4b2bda4b44a3a4e012d74b94fa8cc09c238ea93...673d96c61f039a708175b6b8fb2daaab7ac57e5e
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-service/grievance-service:0.0.1-develop.115` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-service-0.0.1-develop.115.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.114
 
 <!-- source-commit: f4b2bda4b44a3a4e012d74b94fa8cc09c238ea93 version: 0.0.1-develop.114 -->
