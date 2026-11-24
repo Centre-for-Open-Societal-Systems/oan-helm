@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-24
 
+### oan-grievance-ui 0.0.1-develop.62 (develop)
+
+- Merge pull request #89 from apoorvanengineer-cpu/feature/officer-category-coverage (Centre-for-Open-Societal-Systems/oan_grievance_ui@6e0e0e83fafd)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-24
+
 ### oan-a2c-service 0.0.1-develop.40 (develop)
 
 - Merge pull request #154 from arnavam/fix/qa-desk-public (Centre-for-Open-Societal-Systems/oan_a2c@92de0785cb70)

@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.62
+
+<!-- source-commit: 6e0e0e83fafdcf990692eb5767706de075127b95 version: 0.0.1-develop.62 -->
+Published 2026-11-24. Archive SHA-256 `a394b2209c84d64bea134d11077737652a90a4a1ca85d6764169fbc7f280d87b`.
+
+- Change: Merge pull request #89 from apoorvanengineer-cpu/feature/officer-category-coverage
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_ui@6e0e0e83fafd](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/commit/6e0e0e83fafdcf990692eb5767706de075127b95)
+- Changes since 0.0.1-develop.61: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/compare/3797c2b33aa89cf1efee58e06d0298b48625cc6b...6e0e0e83fafdcf990692eb5767706de075127b95
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-ui/grievance-ui:0.0.1-develop.62` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-ui-0.0.1-develop.62.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.61
 
 <!-- source-commit: 3797c2b33aa89cf1efee58e06d0298b48625cc6b version: 0.0.1-develop.61 -->
