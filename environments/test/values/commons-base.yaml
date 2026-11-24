@@ -1,0 +1,16 @@
+# OpenG2P's openg2p-commons-base (release `commons`, pin ../commons-base.chart), unmodified, in each organisation's
+# namespace on registry-test: agrix (the Exchange), farmer, crop and livestock (the departments). install.sh sets
+# global.baseDomain to the organisation's domain (<org>.test.oanstaging.com). Garage is the object store.
+# As OpenG2P's Exchange install: no Novu and no Kafka UI (Kafka itself stays on). The departments follow it here: the
+# registries send no notifications on registry-test, and four Commons share one 61 GB node.
+novu:
+  enabled: false
+kafkaUi:
+  enabled: false
+# Keycloak: no memory limit in the chart (only a 1Gi request), so the JVM sized its heap from the 63 GB node
+# (MaxRAMPercentage=70) and each of the four Keycloaks grew to ~7 GB. Chart comment: observed use ~922Mi.
+# Do not set JAVA_OPTS_APPEND (it overwrites the chart JGroups DNS discovery). The limit makes the JVM size from 3Gi.
+keycloak:
+  resources:
+    limits:
+      memory: 3Gi
