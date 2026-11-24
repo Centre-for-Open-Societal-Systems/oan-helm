@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.116
+
+<!-- source-commit: 27f48ae8e6bd394d40777aeda7b468584cf13b5a version: 0.0.1-develop.116 -->
+Published 2026-11-24. Archive SHA-256 `47dbf050bfd5c5289b097cd2da11a9b69ae8ccf6334c9fda20a986f327a6529c`.
+
+- Change: Merge pull request #154 from arnavam/fix/qa-desk-public
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@27f48ae8e6bd](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/27f48ae8e6bd394d40777aeda7b468584cf13b5a)
+- Changes since 0.0.1-develop.115: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/673d96c61f039a708175b6b8fb2daaab7ac57e5e...27f48ae8e6bd394d40777aeda7b468584cf13b5a
+
+Return to this version:
+
+```sh
+helm upgrade grievance-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-gateway-0.0.1-develop.116.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.115
 
 <!-- source-commit: 673d96c61f039a708175b6b8fb2daaab7ac57e5e version: 0.0.1-develop.115 -->
