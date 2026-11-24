@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-24
 
+### oan-a2c-gateway 0.0.1-develop.39 (develop)
+
+- Merge staging into develop (keep develop's tree) (#152) (Centre-for-Open-Societal-Systems/oan_a2c@032ebd39577b)
+- Images and rollback: [releases/history/develop/oan-a2c-gateway.md](releases/history/develop/oan-a2c-gateway.md)
+
+### oan-a2c-service 0.0.1-develop.39 (develop)
+
+- Merge staging into develop (keep develop's tree) (#152) (Centre-for-Open-Societal-Systems/oan_a2c@032ebd39577b)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-24
+
 ### oan-a2c-service 0.0.1-develop.38 (develop)
 
 - chore(helm): frappe-service 8.0.91-oan.4 (#150) (Centre-for-Open-Societal-Systems/oan_a2c@e574129738de)

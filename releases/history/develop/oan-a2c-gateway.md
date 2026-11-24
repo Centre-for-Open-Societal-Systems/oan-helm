@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.39
+
+<!-- source-commit: 032ebd39577b3942637a44d1879064f6d68ce495 version: 0.0.1-develop.39 -->
+Published 2026-11-24. Archive SHA-256 `4c7e95157d021c5e14118d4d27542711d300ba265fb7280aa4bb920d80d44ecd`.
+
+- Change: Merge staging into develop (keep develop's tree) (#152)
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@032ebd39577b](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/032ebd39577b3942637a44d1879064f6d68ce495)
+- Changes since 0.0.1-develop.27: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/f6bb735f0f0f93dc24c34fa50b8c35e6dab6f3c0...032ebd39577b3942637a44d1879064f6d68ce495
+
+Return to this version:
+
+```sh
+helm upgrade a2c-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-gateway-0.0.1-develop.39.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.27
 
 <!-- source-commit: f6bb735f0f0f93dc24c34fa50b8c35e6dab6f3c0 version: 0.0.1-develop.27 -->

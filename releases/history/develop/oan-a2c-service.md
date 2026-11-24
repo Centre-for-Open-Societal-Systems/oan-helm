@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.39
+
+<!-- source-commit: 032ebd39577b3942637a44d1879064f6d68ce495 version: 0.0.1-develop.39 -->
+Published 2026-11-24. Archive SHA-256 `de7e6e45e2236e2943076a1e47bb2f29b7cbbd104ee3dd76ffcc3d250a375b8a`.
+
+- Change: Merge staging into develop (keep develop's tree) (#152)
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@032ebd39577b](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/032ebd39577b3942637a44d1879064f6d68ce495)
+- Changes since 0.0.1-develop.38: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/e574129738de6d4200ad2edfde12d567a2f40b48...032ebd39577b3942637a44d1879064f6d68ce495
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-service/a2c-service:0.0.1-develop.39` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-service-0.0.1-develop.39.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.38
 
 <!-- source-commit: e574129738de6d4200ad2edfde12d567a2f40b48 version: 0.0.1-develop.38 -->
