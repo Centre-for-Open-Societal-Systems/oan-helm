@@ -10,6 +10,15 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-24
 
+### openg2p-commons-services 1.0.0-dev.54
+
+Previous version: 1.0.0-dev.53.
+
+- chore(commons): seed Master Data code lists from openg2p-data build 1.0.0-develop.73 (76d10fe)
+- chore(commons): seed Master Data code lists from openg2p-data build 1.0.0-develop.72 (8f3cadc)
+
+## 2026-11-24
+
 ### openg2p-commons-services 1.0.0-dev.53
 
 Previous version: 1.0.0-dev.52.
