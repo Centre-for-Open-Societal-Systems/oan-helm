@@ -8,6 +8,14 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-24
+
+### openg2p-commons-services 1.0.0-dev.53
+
+Previous version: 1.0.0-dev.52.
+
+- chore(commons): seed Master Data code lists from openg2p-data build 1.0.0-develop.71 (59e53f2)
+
 ## 2026-11-23
 
 ### openg2p-farmer-registry 1.0.0-develop.227 (develop)
