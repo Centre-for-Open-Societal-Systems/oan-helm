@@ -1,0 +1,25 @@
+apiVersion: v2
+name: oan-frappe-service
+description: The shared Frappe application chart (gunicorn, workers, scheduler, jobs) used by the OAN
+  Frappe services; deploys the frappe-service chart.
+type: application
+version: 0.0.1-develop.1
+appVersion: version-16
+keywords:
+- oan
+- openagrinet
+- frappe
+home: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+sources:
+- https://github.com/Centre-for-Open-Societal-Systems/oan-service-helm
+- https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+maintainers:
+- name: OpenAgriNet (OAN)
+  url: https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+dependencies:
+- name: frappe-service
+  alias: frappe-service
+  version: 8.0.91-oan.4
+annotations:
+  oan.org/owner: OpenAgriNet (OAN)
+  oan.org/chart-source: https://github.com/Centre-for-Open-Societal-Systems/oan-helm/tree/main/charts/oan-frappe-service

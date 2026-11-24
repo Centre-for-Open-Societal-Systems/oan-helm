@@ -1,0 +1,5 @@
+# Defaults for the shared OAN Frappe application chart. Everything sits under `frappe-service`,
+# the values of the frappe-service chart this one depends on (oan-service-helm). An application
+# chart such as oan-grievance-service or oan-a2c-service sets these for its own site; this chart
+# adds no defaults of its own.
+frappe-service: {}
