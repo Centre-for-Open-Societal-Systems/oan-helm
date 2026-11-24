@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-24
 
+### openg2p-da-registry 1.0.0-develop.88 (develop)
+
+- DA dev: object links for the Garage host, staff UI image CSP checked on every deploy (G2R-614) (#84) (Centre-for-Open-Societal-Systems/da-registry@91c10fcf21b7)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-24
+
 ### oan-grievance-ui 0.0.1-develop.61 (develop)
 
 - feat(admin): add an SLA Rules tab, and drop SLA settings from the category cards (#82) (Centre-for-Open-Societal-Systems/oan_grievance_ui@3797c2b33aa8)

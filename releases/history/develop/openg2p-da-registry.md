@@ -2,6 +2,31 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 1.0.0-develop.88
+
+<!-- source-commit: 91c10fcf21b7bcfe0b930c1a8d393b2afd2542c8 version: 1.0.0-develop.88 -->
+Published 2026-11-24. Archive SHA-256 `2837a87a339ba4d48b3b1484f787c95b936a386f27e25ddfc198636667e26bdd`.
+
+- Change: DA dev: object links for the Garage host, staff UI image CSP checked on every deploy (G2R-614) (#84)
+- Source: [Centre-for-Open-Societal-Systems/da-registry@91c10fcf21b7](https://github.com/Centre-for-Open-Societal-Systems/da-registry/commit/91c10fcf21b7bcfe0b930c1a8d393b2afd2542c8)
+- Changes since 1.0.0-develop.87: https://github.com/Centre-for-Open-Societal-Systems/da-registry/compare/6fba7b111ff9cd7c2805906ce00ca65c8cd63385...91c10fcf21b7bcfe0b930c1a8d393b2afd2542c8
+
+| Values path | Image |
+| --- | --- |
+| `registry.staffApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/da-registry/staff-api-1.2.2-rc.614:1.0.0-develop.88@sha256:11819cc0e2d132a29a71394e8122dcc24062f5a75a0355862af67b37d5e1eb89` |
+| `registry.partnerApi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/da-registry/partner-api-1.2.2-rc.614:1.0.0-develop.88@sha256:e2f3d3a90cdef331fc44f5789b70b9fa8652d8a2a9e43d7c0152a0b084a915c6` |
+| `registry.celeryWorker.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/da-registry/celery-1.2.2-rc.614:1.0.0-develop.88@sha256:5aa586d02b7362e412fccf47d85fb79eb7b6afeb4f04693c4dca56ff0050b7f5` |
+| `registry.celeryBeat.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/da-registry/celery-1.2.2-rc.614:1.0.0-develop.88@sha256:5aa586d02b7362e412fccf47d85fb79eb7b6afeb4f04693c4dca56ff0050b7f5` |
+| `registry.dbSeed.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/da-registry/db-seed-1.2.2-rc.614:1.0.0-develop.88@sha256:69da69f50b5174bb9a3774003db4e2ffcc6c7abb33e457580cfbb42210c91772` |
+| `registry.sanity.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/da-registry/sanity-tests-1.2.2-rc.614:1.0.0-develop.88@sha256:7b1bf36da96f7ef6b263ce74345ae84acae091780820386fafbee1106476f269` |
+| `registry.staffUi.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/da-registry/staff-ui-1.2.2-rc.614:1.0.0-develop.88@sha256:bb01666fba0c991b0055d4cc7218d786dd1db4d6ad953b538181c652474e10a7` |
+
+Return to this version:
+
+```sh
+helm upgrade da-registry https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/openg2p-da-registry-1.0.0-develop.88.tgz -n da-registry --reset-values -f environments/dev/values/da.yaml --wait --timeout 15m
+```
+
 ## 1.0.0-develop.87
 
 <!-- source-commit: 6fba7b111ff9cd7c2805906ce00ca65c8cd63385 version: 1.0.0-develop.87 -->
