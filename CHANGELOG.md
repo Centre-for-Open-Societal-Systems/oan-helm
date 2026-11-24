@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-24
 
+### oan-grievance-ui 0.0.1-develop.60 (develop)
+
+- fix(ci): fetch develop so the staging promote can read the chart's source trees (#86) (Centre-for-Open-Societal-Systems/oan_grievance_ui@1e491eefd2c9)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-24
+
 ### oan-grievance-gateway 0.0.1-develop.108 (develop)
 
 - fix(ci): fetch develop so the staging promote can read the chart's source trees (#142) (Centre-for-Open-Societal-Systems/oan_grievance_service@b1e82d09eb25)

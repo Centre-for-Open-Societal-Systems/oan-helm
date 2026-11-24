@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.60
+
+<!-- source-commit: 1e491eefd2c978f1f2883e9af4b82d4dc9aca490 version: 0.0.1-develop.60 -->
+Published 2026-11-24. Archive SHA-256 `520a8c4a4d07aaa84bc53c42a77f635f4d7328257691403a4c939f4df8a55de2`.
+
+- Change: fix(ci): fetch develop so the staging promote can read the chart's source trees (#86)
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_ui@1e491eefd2c9](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/commit/1e491eefd2c978f1f2883e9af4b82d4dc9aca490)
+- Changes since 0.0.1-develop.53: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/compare/3138291549c0f26021874e37c10b316db1137fc4...1e491eefd2c978f1f2883e9af4b82d4dc9aca490
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-ui/grievance-ui:0.0.1-develop.60` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-ui-0.0.1-develop.60.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.53
 
 <!-- source-commit: 3138291549c0f26021874e37c10b316db1137fc4 version: 0.0.1-develop.53 -->
