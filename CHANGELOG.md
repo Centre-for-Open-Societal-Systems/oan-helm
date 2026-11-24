@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-24
 
+### oan-grievance-ui 0.0.1-develop.61 (develop)
+
+- feat(admin): add an SLA Rules tab, and drop SLA settings from the category cards (#82) (Centre-for-Open-Societal-Systems/oan_grievance_ui@3797c2b33aa8)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-24
+
 ### oan-grievance-gateway 0.0.1-develop.112 (develop)
 
 - Merge pull request #139 from arnavam/feat/retire-sla-configuration (Centre-for-Open-Societal-Systems/oan_grievance_service@e1687d274673)

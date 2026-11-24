@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.61
+
+<!-- source-commit: 3797c2b33aa89cf1efee58e06d0298b48625cc6b version: 0.0.1-develop.61 -->
+Published 2026-11-24. Archive SHA-256 `340a2f2b611be652fca44dabd2b4ab87ff96f9c49e884c1676bc2831bae20bae`.
+
+- Change: feat(admin): add an SLA Rules tab, and drop SLA settings from the category cards (#82)
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_ui@3797c2b33aa8](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/commit/3797c2b33aa89cf1efee58e06d0298b48625cc6b)
+- Changes since 0.0.1-develop.60: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/compare/1e491eefd2c978f1f2883e9af4b82d4dc9aca490...3797c2b33aa89cf1efee58e06d0298b48625cc6b
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-ui/grievance-ui:0.0.1-develop.61` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-ui-0.0.1-develop.61.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.60
 
 <!-- source-commit: 1e491eefd2c978f1f2883e9af4b82d4dc9aca490 version: 0.0.1-develop.60 -->
