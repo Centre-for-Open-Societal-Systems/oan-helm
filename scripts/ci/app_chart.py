@@ -9,6 +9,9 @@ file at a pinned commit of oan-helm and calls main(config, root):
                                        <version of the app>-develop.<BUILD_NUMBER>, e.g. 0.0.1-develop.57 (develop only)
     package_chart.py package           writes built-chart/<chart>-<version>.tgz
     package_chart.py publish           adds that archive to repository/develop/ of oan-helm
+    package_chart.py promote           staging only, needs a "promote" entry in config: the develop chart built from this source
+                                       tree, its images also tagged <init.yaml version>-staging.<BUILD_NUMBER> (promote_chart.py);
+                                       writes built-chart/<chart>-<version>.tgz
     package_chart.py gateway-package   writes built-gateway-chart/<gateway chart>-<version>.tgz, the routes chart
     package_chart.py gateway-publish   adds that archive to repository/develop/ of oan-helm
 
@@ -24,6 +27,8 @@ config, a dict:
     image_path          values path of the image block that gets the build's repository and tag, e.g. frappe.image
     version             {"file": path in the repository, "pattern": regex with one group "N.N.N"}
                         or {"fixed": "N.N.N"}
+    promote (optional)  {"release_name", "release_namespace", "values_overlay"} of the staging release; adds the promote
+                        action, and version then prints the staging version on the staging branch
     gateway (optional)  {"chart", "source" (directory of the routes chart), "release_name", "values_overlay"}
 
 version needs BRANCH_NAME (develop) and BUILD_NUMBER. package needs IMAGE_REPOSITORY (registry/repository, no tag),
@@ -33,6 +38,7 @@ DRY_RUN=1 publishes nothing. Standard library only; helm must be on the PATH for
 Exit codes: 0 done (or already published by an earlier run of this commit), 1 failure, 3 no credential.
 """
 
+import argparse
 import importlib.util
 import io
 import os
@@ -54,6 +60,14 @@ def load_generic():
     """package_chart.py next to this file: set_image and annotate. Loaded by path, because the repository's own
     ci/package_chart.py has the same module name."""
     spec = importlib.util.spec_from_file_location("oan_package_chart", HERE / "package_chart.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def load_promote():
+    """promote_chart.py next to this file, loaded by path for the same reason as load_generic."""
+    spec = importlib.util.spec_from_file_location("oan_promote_chart", HERE / "promote_chart.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
@@ -110,7 +124,10 @@ def package_directory(root, work, name, source, version, notes, output, image=No
 
 
 def version_build(config, root, env, work):
-    print(chart_version(config, root, env))
+    if "promote" in config and env["BRANCH_NAME"] == "staging":
+        print(load_promote().staging_version(root))
+    else:
+        print(chart_version(config, root, env))
     return 0
 
 
@@ -128,6 +145,23 @@ def package_build(config, root, env, work):
         annotations(config, env, config["release_name"], config["values_overlay"]),
         root / "built-chart",
         image=(config["image_path"], env["IMAGE_REPOSITORY"], env["IMAGE_TAG"]),
+    )
+    return 0
+
+
+def promote_build(config, root, env, work):
+    promotion = config["promote"]
+    os.chdir(str(root))  # promote_chart.py reads init.yaml and the git tree of the current directory
+    print(
+        load_promote().promote(
+            argparse.Namespace(
+                chart=config["chart"],
+                release=promotion["release_name"],
+                namespace=promotion["release_namespace"],
+                overlay=promotion["values_overlay"],
+                output=str(root / "built-chart"),
+            )
+        )
     )
     return 0
 
@@ -210,6 +244,8 @@ def main(config, root, argv=None, env=None):
     env = dict(os.environ if env is None else env)
     root = Path(root)
     actions = {"version": version_build, "package": package_build, "publish": publish_build}
+    if "promote" in config:
+        actions["promote"] = promote_build
     if "gateway" in config:
         actions.update({"gateway-package": gateway_package_build, "gateway-publish": gateway_publish_build})
     if len(argv) != 1 or argv[0] not in actions:
