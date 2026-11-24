@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-24
 
+### oan-grievance-gateway 0.0.1-develop.109 (develop)
+
+- feat(helm): add the staff login option, with the agent's provider (#145) (Centre-for-Open-Societal-Systems/oan_grievance_service@e0e06dccb56d)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.109 (develop)
+
+- feat(helm): add the staff login option, with the agent's provider (#145) (Centre-for-Open-Societal-Systems/oan_grievance_service@e0e06dccb56d)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-24
+
 ### openg2p-cropsown-registry 1.0.0-develop.312 (develop)
 
 - Bring the crop registry's CI to the Farmer standard, CI now runs every test (#318) (Centre-for-Open-Societal-Systems/cropsown-regsitry@b81218bf3135)

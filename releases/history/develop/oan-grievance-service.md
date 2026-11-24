@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.109
+
+<!-- source-commit: e0e06dccb56d11dd9cc861b76306b5da2c808fb6 version: 0.0.1-develop.109 -->
+Published 2026-11-24. Archive SHA-256 `d7962ea4c6a32898da416756a7c693e47464e887955393359e3aae57784df8e1`.
+
+- Change: feat(helm): add the staff login option, with the agent's provider (#145)
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@e0e06dccb56d](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/e0e06dccb56d11dd9cc861b76306b5da2c808fb6)
+- Changes since 0.0.1-develop.108: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/b1e82d09eb253e7b0e0bfbc4966f0b15964b1ced...e0e06dccb56d11dd9cc861b76306b5da2c808fb6
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-service/grievance-service:0.0.1-develop.109` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-service-0.0.1-develop.109.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.108
 
 <!-- source-commit: b1e82d09eb253e7b0e0bfbc4966f0b15964b1ced version: 0.0.1-develop.108 -->
