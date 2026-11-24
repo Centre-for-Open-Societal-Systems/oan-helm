@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.111
+
+<!-- source-commit: 0bbae7676cc5024397a97576d51a09a84b13001f version: 0.0.1-develop.111 -->
+Published 2026-11-24. Archive SHA-256 `9692b9df7e3ce024f4025f643c655a8287350a39a1a6eb1b7bdc5616c259647d`.
+
+- Change: fix(helm): drop CAP_CHOWN and disable privilege escalation for PodSecurity baseline (#146)
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@0bbae7676cc5](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/0bbae7676cc5024397a97576d51a09a84b13001f)
+- Changes since 0.0.1-develop.110: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/91e5db4e6de5762c30a1c970e88efd386363bf8a...0bbae7676cc5024397a97576d51a09a84b13001f
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-service/grievance-service:0.0.1-develop.111` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-service-0.0.1-develop.111.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.110
 
 <!-- source-commit: 91e5db4e6de5762c30a1c970e88efd386363bf8a version: 0.0.1-develop.110 -->
