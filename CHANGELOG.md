@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-24
 
+### oan-a2c-gateway 0.0.1-staging.3 (staging)
+
+- Merge pull request #153 from Centre-for-Open-Societal-Systems/develop (Centre-for-Open-Societal-Systems/oan_a2c@4ea6aa415823)
+- Images and rollback: [releases/history/staging/oan-a2c-gateway.md](releases/history/staging/oan-a2c-gateway.md)
+
+### oan-a2c-service 0.0.1-staging.3 (staging)
+
+- Merge pull request #153 from Centre-for-Open-Societal-Systems/develop (Centre-for-Open-Societal-Systems/oan_a2c@4ea6aa415823)
+- Images and rollback: [releases/history/staging/oan-a2c-service.md](releases/history/staging/oan-a2c-service.md)
+
+## 2026-11-24
+
 ### oan-a2c-gateway 0.0.1-develop.39 (develop)
 
 - Merge staging into develop (keep develop's tree) (#152) (Centre-for-Open-Societal-Systems/oan_a2c@032ebd39577b)
