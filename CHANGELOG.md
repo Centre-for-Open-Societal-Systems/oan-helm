@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-24
 
+### openg2p-commons-services 1.0.0-dev.55
+
+Previous version: 1.0.0-dev.54.
+
+- chore(commons): seed Master Data code lists from openg2p-data build 1.0.0-develop.74 (50c9a73)
+
+## 2026-11-24
+
 ### oan-grievance-ui 0.0.1-develop.60 (develop)
 
 - fix(ci): fetch develop so the staging promote can read the chart's source trees (#86) (Centre-for-Open-Societal-Systems/oan_grievance_ui@1e491eefd2c9)
