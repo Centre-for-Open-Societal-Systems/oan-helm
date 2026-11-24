@@ -87,5 +87,81 @@ class ProtectedPathsTest(unittest.TestCase):
         self.assertEqual(self.run_check('--range', f'{before}..{after}'), 1)
 
 
+    # --- the seed pinner (openg2p-data develop build) ---
+    SEED_REPO = '379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/openg2p-data/master-data-db-seed'
+    OLD = '1.0.0-develop.67@sha256:' + 'a' * 64
+    NEW = '1.0.0-develop.70@sha256:' + 'b' * 64
+
+    def seed_values(self, tag, extra=''):
+        return (f"master-data:\n  geoSeed:\n    image:\n      repository: {self.SEED_REPO}\n"
+                f"      tag: {tag}\n    enabled: false\n{extra}")
+
+    def seed_base(self):
+        self.commit('Human', {'charts/openg2p-commons-services/values.yaml': self.seed_values(self.OLD),
+                              'releases/1.0.0-dev.51.yaml': 'chartVersion: 1.0.0-dev.51\n'})
+        return self.git('rev-parse', 'HEAD')
+
+    def test_seed_pinner_may_move_the_pin_and_add_a_record(self):
+        before = self.seed_base()
+        after = self.commit('oan-seed-pinner', {
+            'charts/openg2p-commons-services/values.yaml': self.seed_values(self.NEW),
+            'releases/1.0.0-dev.52.yaml': 'chartVersion: 1.0.0-dev.52\n'})
+        self.assertEqual(self.run_check('--range', f'{before}..{after}'), 0)
+
+    def test_seed_pinner_may_not_change_other_lines_of_the_values(self):
+        before = self.seed_base()
+        after = self.commit('oan-seed-pinner', {
+            'charts/openg2p-commons-services/values.yaml': self.seed_values(self.NEW).replace('enabled: false', 'enabled: true')})
+        self.assertEqual(self.run_check('--range', f'{before}..{after}'), 1)
+
+    def test_seed_pinner_may_not_pin_another_repository(self):
+        before = self.seed_base()
+        bad = self.seed_values(self.NEW).replace('/eoan/openg2p-data/master-data-db-seed', '/evil/image')
+        after = self.commit('oan-seed-pinner', {'charts/openg2p-commons-services/values.yaml': bad})
+        self.assertEqual(self.run_check('--range', f'{before}..{after}'), 1)
+
+    def test_seed_pinner_may_not_pin_a_floating_tag(self):
+        before = self.seed_base()
+        after = self.commit('oan-seed-pinner', {'charts/openg2p-commons-services/values.yaml': self.seed_values('latest')})
+        self.assertEqual(self.run_check('--range', f'{before}..{after}'), 1)
+
+    def test_seed_pinner_may_not_touch_any_other_file(self):
+        before = self.seed_base()
+        for files in ({'charts/x/values.yaml': 'a: 1\n'}, {'environments/dev/values/commons-services.yaml': 'a: 1\n'},
+                      {'repository/develop/x-0.0.0-develop.5.tgz': 'archive'}, {'CHANGELOG.md': 'x\n'},
+                      {'.github/workflows/release.yaml': 'x\n'}, {'scripts/ci/deliver_dev_commons.sh': 'x\n'}):
+            with self.subTest(files=list(files)):
+                after = self.commit('oan-seed-pinner', files)
+                self.assertEqual(self.run_check('--range', f'{before}..{after}'), 1)
+                self.git('reset', '-q', '--hard', before)
+
+    def test_seed_pinner_may_not_rewrite_an_existing_record(self):
+        before = self.seed_base()
+        after = self.commit('oan-seed-pinner', {'releases/1.0.0-dev.51.yaml': 'chartVersion: 1.0.0-dev.51\nx: 1\n'})
+        self.assertEqual(self.run_check('--range', f'{before}..{after}'), 1)
+
+    def test_seed_pinner_record_must_match_its_name_and_come_after_the_others(self):
+        before = self.seed_base()
+        values = {'charts/openg2p-commons-services/values.yaml': self.seed_values(self.NEW)}
+        nl = chr(10)
+        cases = {
+            'wrong first line': {'releases/1.0.0-dev.52.yaml': 'chartVersion: 1.0.0-dev.99' + nl},
+            'not a chartVersion': {'releases/1.0.0-dev.52.yaml': 'x: 1' + nl},
+            'not after the newest': {'releases/1.0.0-dev.40.yaml': 'chartVersion: 1.0.0-dev.40' + nl},
+            'two records': {'releases/1.0.0-dev.52.yaml': 'chartVersion: 1.0.0-dev.52' + nl,
+                            'releases/1.0.0-dev.53.yaml': 'chartVersion: 1.0.0-dev.53' + nl},
+        }
+        for name, record in cases.items():
+            with self.subTest(case=name):
+                after = self.commit('oan-seed-pinner', {**values, **record})
+                self.assertEqual(self.run_check('--range', f'{before}..{after}'), 1)
+                self.git('reset', '-q', '--hard', before)
+
+    def test_other_authors_are_not_limited_to_the_seed_lines(self):
+        before = self.seed_base()
+        after = self.commit('Human', {'charts/openg2p-commons-services/values.yaml': self.seed_values(self.OLD, 'x: 1\n')})
+        self.assertEqual(self.run_check('--range', f'{before}..{after}'), 0)
+
+
 if __name__ == '__main__':
     unittest.main()
