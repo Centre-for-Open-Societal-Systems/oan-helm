@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.112
+
+<!-- source-commit: e1687d2746733a1b4f1562e973871de9602d7b1a version: 0.0.1-develop.112 -->
+Published 2026-11-24. Archive SHA-256 `19a7cfbd5d7b49523dd19d18876bec0ac8eb96b883e6db10cddd3f1a75f3508c`.
+
+- Change: Merge pull request #139 from arnavam/feat/retire-sla-configuration
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@e1687d274673](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/e1687d2746733a1b4f1562e973871de9602d7b1a)
+- Changes since 0.0.1-develop.111: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/0bbae7676cc5024397a97576d51a09a84b13001f...e1687d2746733a1b4f1562e973871de9602d7b1a
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-service/grievance-service:0.0.1-develop.112` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-service-0.0.1-develop.112.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.111
 
 <!-- source-commit: 0bbae7676cc5024397a97576d51a09a84b13001f version: 0.0.1-develop.111 -->

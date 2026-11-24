@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-24
 
+### oan-grievance-gateway 0.0.1-develop.112 (develop)
+
+- Merge pull request #139 from arnavam/feat/retire-sla-configuration (Centre-for-Open-Societal-Systems/oan_grievance_service@e1687d274673)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.112 (develop)
+
+- Merge pull request #139 from arnavam/feat/retire-sla-configuration (Centre-for-Open-Societal-Systems/oan_grievance_service@e1687d274673)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-24
+
 ### oan-grievance-gateway 0.0.1-develop.111 (develop)
 
 - fix(helm): drop CAP_CHOWN and disable privilege escalation for PodSecurity baseline (#146) (Centre-for-Open-Societal-Systems/oan_grievance_service@0bbae7676cc5)
