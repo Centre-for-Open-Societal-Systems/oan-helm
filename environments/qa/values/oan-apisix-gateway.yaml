@@ -28,8 +28,12 @@ adminDashboard:
   allowlist:
   - 10.0.0.0/8
 
-# The wildcard certificate only (no edge.upstream.host, so no catch-all).
+# APISIX is the edge of qa.oanstaging.com: the wildcard certificate, the OAN hosts it routes itself, and the
+# OpenG2P istio ingress (openg2p_qa, NodePort 30080) for every other host.
 edge:
   enabled: true
   domain: qa.oanstaging.com
   tlsSecretName: oan-qa-wildcard-tls
+  upstream:
+    host: 10.0.1.212
+    port: 30080
