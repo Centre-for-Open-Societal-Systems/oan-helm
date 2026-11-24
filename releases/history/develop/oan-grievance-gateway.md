@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.113
+
+<!-- source-commit: a4a551b714ceebe1ba7901aef380e0889df86cbc version: 0.0.1-develop.113 -->
+Published 2026-11-24. Archive SHA-256 `b3686474a3ce0c242b3b9bd4e2732bd65926a93529f15f98ee2c12c747eb9f20`.
+
+- Change: Merge pull request #148 from arnavam/ci/promote-staging-workflow
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@a4a551b714ce](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/a4a551b714ceebe1ba7901aef380e0889df86cbc)
+- Changes since 0.0.1-develop.112: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/e1687d2746733a1b4f1562e973871de9602d7b1a...a4a551b714ceebe1ba7901aef380e0889df86cbc
+
+Return to this version:
+
+```sh
+helm upgrade grievance-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-gateway-0.0.1-develop.113.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.112
 
 <!-- source-commit: e1687d2746733a1b4f1562e973871de9602d7b1a version: 0.0.1-develop.112 -->
