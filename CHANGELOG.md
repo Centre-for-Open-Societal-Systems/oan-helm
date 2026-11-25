@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### oan-grievance-ui 0.0.1-develop.64 (develop)
+
+- Merge pull request #92 from arnavam/resync/staging-into-develop (Centre-for-Open-Societal-Systems/oan_grievance_ui@b6f5a923acc5)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-25
+
 ### oan-grievance-ui 0.0.1-develop.63 (develop)
 
 - ci: use oan-helm's app_chart for the chart steps and register promote (#91) (Centre-for-Open-Societal-Systems/oan_grievance_ui@a0f5e1c445e2)
