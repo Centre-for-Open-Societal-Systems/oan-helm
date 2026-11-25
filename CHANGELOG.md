@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### openg2p-farmer-registry 1.0.0-staging.59 (staging)
+
+- fix: weight household address, not size, for duplicate detection (#349) (Centre-for-Open-Societal-Systems/farmer-registry@0136c449a9d3)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-25
+
 ### openg2p-farmer-registry 1.0.0-develop.229 (develop)
 
 - fix: weight household address, not size, for duplicate detection (#349) (Centre-for-Open-Societal-Systems/farmer-registry@0136c449a9d3)
