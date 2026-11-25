@@ -205,16 +205,16 @@ openg2p-consent-manager:
         gateway: istio-system/development
     image:
       pullPolicy: Always
-      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-management/consent-manager-api-1.0.2
-      tag: 0.0.0-develop.7@sha256:87fda6df8a2597d670b9a13ac48b46b9112b50b72b25f24b4eb6ff17e705fd7e
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-manager/consent-manager-api
+      tag: 1.1.0-develop.1@sha256:12fe280e3faed5dc497f0ffcaad747ea73b7b16593e009693b6034c87431d075
   ui:
     istio:
       virtualservice:
         gateway: istio-system/development
     image:
       pullPolicy: Always
-      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-management/consent-manager-ui-1.0.2
-      tag: 0.0.0-develop.7@sha256:496b23ccbdafcc6667cc891c36af45006fd6ccb5ded5cd2af03faaf39f77f50b
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-manager/consent-manager-ui
+      tag: 1.1.0-develop.1@sha256:e8b4415628c36e2fe872296c840ab73fc7c911ab1fe5eb73314b934edc39e101
   extraApis:
     - apiAudience: partner
       authEnabled: 'false'
@@ -223,8 +223,8 @@ openg2p-consent-manager:
       image:
         pullPolicy: Always
         registry: ''
-        repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-management/consent-manager-api-1.0.2
-        tag: 0.0.0-develop.7@sha256:87fda6df8a2597d670b9a13ac48b46b9112b50b72b25f24b4eb6ff17e705fd7e
+        repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-manager/consent-manager-api
+        tag: 1.1.0-develop.1@sha256:12fe280e3faed5dc497f0ffcaad747ea73b7b16593e009693b6034c87431d075
       istio:
         enabled: true
         gateway:
@@ -262,8 +262,8 @@ openg2p-consent-manager:
   sanity:
     image:
       pullPolicy: Always
-      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-management/consent-manager-sanity-1.0.2
-      tag: 0.0.0-develop.7@sha256:abb3307a1e15bbb53fe8328a3724eda6b2644663b5fe0cabf21be982a15970d7
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-manager/consent-manager-sanity
+      tag: 1.1.0-develop.1@sha256:16f3ac3f098ffaae538a8698386cfe690fc9aeb2746f587edcca36ef3c6b6870
 keymanager:
   istio:
     virtualservice:
