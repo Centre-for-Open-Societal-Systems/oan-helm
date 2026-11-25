@@ -53,7 +53,7 @@ Pin `--version` to the chart versions you tested instead of `--devel` once they 
 |---|---|---|---|
 | `api6-gateway` | APISIX, its etcd and Redis | anywhere (the edge) | `privileged`: hostPort 80/443 |
 | `observability` | the oan-logging agent | its own pods and Prometheus | `privileged`: hostPath `/var/log/pods` |
-| `frappe-common` | the shared PostgreSQL | a2c, grievance, da-app, farmer-app | `baseline` |
+| `frappe-common` | the shared PostgreSQL | a2c, grievance, da-app, farmer-app, sandbox | `baseline` |
 | `a2c`, `grievance`, `da-app`, `farmer-app`, `leads`, `sandbox` | the services (Jenkins) | APISIX | `baseline` |
 
 Every guarded namespace also accepts its own pods and `cattle-monitoring-system`. Egress is open.
