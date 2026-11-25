@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.119
+
+<!-- source-commit: 028ee11d5945417ebccbb9341a05e19b13675c82 version: 0.0.1-develop.119 -->
+Published 2026-11-25. Archive SHA-256 `9efbe8cd20877835b98b2e64cfc7f87c5d519ae3df2c0569fb4798ee2120d2b9`.
+
+- Change: Merge pull request #157 from arnavam/feat/helm-clamav
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@028ee11d5945](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/028ee11d5945417ebccbb9341a05e19b13675c82)
+- Changes since 0.0.1-develop.118: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/a4360c79413b3d2220f4d17ea910b6a1ce22d1b6...028ee11d5945417ebccbb9341a05e19b13675c82
+
+Return to this version:
+
+```sh
+helm upgrade grievance-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-gateway-0.0.1-develop.119.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.118
 
 <!-- source-commit: a4360c79413b3d2220f4d17ea910b6a1ce22d1b6 version: 0.0.1-develop.118 -->

@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### oan-grievance-gateway 0.0.1-develop.119 (develop)
+
+- Merge pull request #157 from arnavam/feat/helm-clamav (Centre-for-Open-Societal-Systems/oan_grievance_service@028ee11d5945)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.119 (develop)
+
+- Merge pull request #157 from arnavam/feat/helm-clamav (Centre-for-Open-Societal-Systems/oan_grievance_service@028ee11d5945)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-25
+
 ### openg2p-livestock-registry 1.0.0-develop.234 (develop)
 
 - Merge pull request #267 from simretyibeltal-commits/docs/deployment-release-changelog (Centre-for-Open-Societal-Systems/livestock-registry@7be7a46f8745)
