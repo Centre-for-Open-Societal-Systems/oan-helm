@@ -10,7 +10,7 @@ global:
   keycloakExternalIssuerUrl: https://keycloak.qa.oanstaging.com/realms/staff
   masterDataTokenUrl: https://keycloak.qa.oanstaging.com/realms/staff/protocol/openid-connect/token
   postgresqlHost: commons-postgresql.commons.svc.cluster.local
-  minioHost: minio-farmer.qa.oanstaging.com
+  minioHost: garage.qa.oanstaging.com
   minioSecure: true
   iamServiceUrl: http://commons-services-iam-staff-portal-api.commons.svc.cluster.local
   masterDataApiUrl: http://commons-services-master-data-api.commons.svc.cluster.local
@@ -66,7 +66,7 @@ registry:
       VERIFY_SERVICE_URL: https://livestock-registry.qa.oanstaging.com/v1/verify
       # Location map: OpenStreetMap tiles (img) and the pin's elevation lookup
       # (connect). A per-directive value replaces the whole list.
-      CSP_SRC_IMG: 'self blob: data: https://minio-farmer.qa.oanstaging.com https://tile.openstreetmap.org'
+      CSP_SRC_IMG: 'self blob: data: https://garage.qa.oanstaging.com https://tile.openstreetmap.org'
       CSP_SRC_CONNECT: 'self https://api.open-meteo.com'
       MASTERDATA_BACKEND_API_URL: http://commons-services-master-data-api.commons.svc.cluster.local
       PARTNER_INGEST_URL: https://partner-livestock.qa.oanstaging.com/partner/ingest_data?data_model=dcivc
