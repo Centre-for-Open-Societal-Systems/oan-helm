@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.118
+
+<!-- source-commit: a4360c79413b3d2220f4d17ea910b6a1ce22d1b6 version: 0.0.1-develop.118 -->
+Published 2026-11-25. Archive SHA-256 `0d7fd928d752c5e2b103bf84beb2774ec37418a29231f4e6a09515c7190d7bc5`.
+
+- Change: Merge pull request #156 from arnavam/feat/ivr-credential-secret
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@a4360c79413b](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/a4360c79413b3d2220f4d17ea910b6a1ce22d1b6)
+- Changes since 0.0.1-develop.117: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/115d0566d4a1f7472c775ff12485a9da15aaeb51...a4360c79413b3d2220f4d17ea910b6a1ce22d1b6
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-service/grievance-service:0.0.1-develop.118` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-service-0.0.1-develop.118.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.117
 
 <!-- source-commit: 115d0566d4a1f7472c775ff12485a9da15aaeb51 version: 0.0.1-develop.117 -->

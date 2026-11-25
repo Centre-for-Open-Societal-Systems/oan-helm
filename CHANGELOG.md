@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### oan-grievance-gateway 0.0.1-develop.118 (develop)
+
+- Merge pull request #156 from arnavam/feat/ivr-credential-secret (Centre-for-Open-Societal-Systems/oan_grievance_service@a4360c79413b)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.118 (develop)
+
+- Merge pull request #156 from arnavam/feat/ivr-credential-secret (Centre-for-Open-Societal-Systems/oan_grievance_service@a4360c79413b)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-25
+
 ### oan-apisix-gateway 0.0.1-develop.3
 
 Previous version: 0.0.1-develop.2.
