@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### oan-a2c-ui 0.0.1-staging.4 (staging)
+
+- Merge pull request #125 from arnavam/ci/use-app-chart (Centre-for-Open-Societal-Systems/oan_a2c_ui@7f935642ed64)
+- Images and rollback: [releases/history/staging/oan-a2c-ui.md](releases/history/staging/oan-a2c-ui.md)
+
+## 2026-11-25
+
 ### oan-grievance-gateway 0.0.1-develop.117 (develop)
 
 - Merge pull request #152 from arnavam/feat/sla-rule-clusters (Centre-for-Open-Societal-Systems/oan_grievance_service@115d0566d4a1)
