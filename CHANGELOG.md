@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### openg2p-cropsown-registry 1.0.0-develop.314 (develop)
+
+- Bringing the Crop registry's CI and tests up to the production standard, and five new guard tests (#319) (Centre-for-Open-Societal-Systems/cropsown-regsitry@0c6026713a70)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-25
+
 ### oan-identitygovernance-service 0.0.0-develop.3 (develop)
 
 - Merge pull request #4 from arnavam/fix/ci-chart-convention (Centre-for-Open-Societal-Systems/oan_identitygovernance_service@ebaf08d2e0a7)
