@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.43
+
+<!-- source-commit: 74cecbb6026d74c312f4d4917eca536071b7e8b6 version: 0.0.1-develop.43 -->
+Published 2026-11-25. Archive SHA-256 `33930b8c009842689de036afefa57d0eb34b41646062f82d333278b22a810156`.
+
+- Change: Merge pull request #158 from arnavam/fix/qa-staging-seed-enabled
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@74cecbb6026d](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/74cecbb6026d74c312f4d4917eca536071b7e8b6)
+- Changes since 0.0.1-develop.42: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/4876b470b7f6561e5f2b6ab79701932163621d09...74cecbb6026d74c312f4d4917eca536071b7e8b6
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-service/a2c-service:0.0.1-develop.43` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-service-0.0.1-develop.43.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.42
 
 <!-- source-commit: 4876b470b7f6561e5f2b6ab79701932163621d09 version: 0.0.1-develop.42 -->

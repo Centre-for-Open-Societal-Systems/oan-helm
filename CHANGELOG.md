@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### oan-a2c-service 0.0.1-develop.43 (develop)
+
+- Merge pull request #158 from arnavam/fix/qa-staging-seed-enabled (Centre-for-Open-Societal-Systems/oan_a2c@74cecbb6026d)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-25
+
 ### openg2p-farmer-registry 1.0.0-develop.230 (develop)
 
 - Merge pull request #351 from asmitonweb/ci/farmer-staging-scm-poll (Centre-for-Open-Societal-Systems/farmer-registry@c3862b131710)
