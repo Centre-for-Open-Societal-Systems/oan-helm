@@ -1,0 +1,48 @@
+# Staging: let the Commons deployer (ServiceAccount commons/commons-deployer, see commons-deployer-rbac.yaml) upgrade the
+# base release now that it contains Garage (commons-base 2.3.4).
+#
+# The Garage subchart owns one cluster-scoped ClusterRole and ClusterRoleBinding (it manages its own custom resource
+# definitions): manage-crds-commons-commons and allow-crds-for-commons-commons, named after release commons in namespace
+# commons. Helm reads every object it owns before an upgrade, so without this the base stage of the Jenkins job stops at
+#   clusterroles.rbac.authorization.k8s.io "manage-crds-commons-commons" is forbidden: User
+#   "system:serviceaccount:commons:commons-deployer" cannot get resource "clusterroles" ... at the cluster scope
+# and Helm's automatic rollback fails the same way. An upgrade with an unchanged manifest sends no write for these two
+# objects, so this is read access only: get, on those two objects by name. No list, no create, no update, no patch, no
+# delete, no other cluster-scoped kind. If a later chart version changes either object, Helm would need to write it, and
+# Kubernetes would refuse that write too (a ServiceAccount cannot grant itself rights it lacks); that upgrade would
+# then be done by the cluster admin, as the 2.3.4 upgrade was.
+#
+# Apply once as the cluster admin on the staging box (safe to re-apply):
+#   sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml apply -f commons-deployer-garage-rbac.yaml
+# Check:
+#   K="sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml"
+#   $K auth can-i get clusterroles/manage-crds-commons-commons --as=system:serviceaccount:commons:commons-deployer          # yes
+#   $K auth can-i get clusterrolebindings/allow-crds-for-commons-commons --as=system:serviceaccount:commons:commons-deployer # yes
+#   $K auth can-i patch clusterroles/manage-crds-commons-commons --as=system:serviceaccount:commons:commons-deployer        # no
+#   $K auth can-i get clusterroles/cluster-admin --as=system:serviceaccount:commons:commons-deployer                         # no
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: commons-deployer-garage
+rules:
+  - apiGroups: [rbac.authorization.k8s.io]
+    resources: [clusterroles]
+    resourceNames: [manage-crds-commons-commons]
+    verbs: [get]
+  - apiGroups: [rbac.authorization.k8s.io]
+    resources: [clusterrolebindings]
+    resourceNames: [allow-crds-for-commons-commons]
+    verbs: [get]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: commons-deployer-garage
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: commons-deployer-garage
+subjects:
+  - kind: ServiceAccount
+    name: commons-deployer
+    namespace: commons
