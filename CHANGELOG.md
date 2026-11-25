@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### openg2p-cropsown-registry 1.0.0-develop.315 (develop)
+
+- ci(crop): ruff lint and pytest coverage in validate.sh; ci/README.md (#320) (Centre-for-Open-Societal-Systems/cropsown-regsitry@188366fcf4d7)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-25
+
 ### oan-grievance-gateway 0.0.1-develop.118 (develop)
 
 - Merge pull request #156 from arnavam/feat/ivr-credential-secret (Centre-for-Open-Societal-Systems/oan_grievance_service@a4360c79413b)
