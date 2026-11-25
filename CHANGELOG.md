@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### openg2p-farmer-registry 1.0.0-develop.229 (develop)
+
+- fix: weight household address, not size, for duplicate detection (#349) (Centre-for-Open-Societal-Systems/farmer-registry@0136c449a9d3)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-25
+
 ### oan-da-services 0.0.10-develop.73 (develop)
 
 - Merge pull request #102 from Nikky-05/fix/farmer-details-geo-links (Centre-for-Open-Societal-Systems/oan_da_app_services@73094cd7d887)
