@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-staging.6
+
+<!-- source-commit: 1d2250caad74908ee08b3f6dc689e71eb7aa93ce version: 0.0.1-staging.6 -->
+Published 2026-11-25. Archive SHA-256 `0c2466238283694573c0310791022cfb8865cbcd8bed58a4e0eb5d93fd3db496`.
+
+- Change: Merge pull request #157 from Centre-for-Open-Societal-Systems/develop
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@1d2250caad74](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/1d2250caad74908ee08b3f6dc689e71eb7aa93ce)
+- Changes since 0.0.1-staging.4: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/f53c54d4a911c1c437eaaef15184599b23afa517...1d2250caad74908ee08b3f6dc689e71eb7aa93ce
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-service/a2c-service:0.0.1-staging.6` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/staging/oan-a2c-service-0.0.1-staging.6.tgz -n a2c --reset-values -f helm/environments/staging/oan-a2c-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-staging.4
 
 <!-- source-commit: f53c54d4a911c1c437eaaef15184599b23afa517 version: 0.0.1-staging.4 -->

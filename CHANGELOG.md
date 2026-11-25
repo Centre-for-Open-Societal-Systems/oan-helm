@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### oan-a2c-gateway 0.0.1-staging.6 (staging)
+
+- Merge pull request #157 from Centre-for-Open-Societal-Systems/develop (Centre-for-Open-Societal-Systems/oan_a2c@1d2250caad74)
+- Images and rollback: [releases/history/staging/oan-a2c-gateway.md](releases/history/staging/oan-a2c-gateway.md)
+
+### oan-a2c-service 0.0.1-staging.6 (staging)
+
+- Merge pull request #157 from Centre-for-Open-Societal-Systems/develop (Centre-for-Open-Societal-Systems/oan_a2c@1d2250caad74)
+- Images and rollback: [releases/history/staging/oan-a2c-service.md](releases/history/staging/oan-a2c-service.md)
+
+## 2026-11-25
+
 ### oan-grievance-gateway 0.0.1-develop.119 (develop)
 
 - Merge pull request #157 from arnavam/feat/helm-clamav (Centre-for-Open-Societal-Systems/oan_grievance_service@028ee11d5945)
