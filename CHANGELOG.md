@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### openg2p-cropsown-registry 1.0.0-develop.316 (develop)
+
+- docs(crop): deployment (#321) (Centre-for-Open-Societal-Systems/cropsown-regsitry@ea1fcb7c2a4e)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-25
+
 ### openg2p-da-registry 1.0.0-develop.91 (develop)
 
 - Merge pull request #87 from simretyibeltal-commits/ci/coverage-and-lint (Centre-for-Open-Societal-Systems/da-registry@490f2e20f673)
