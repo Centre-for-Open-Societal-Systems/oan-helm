@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### oan-a2c-service 0.0.1-develop.41 (develop)
+
+- Merge pull request #156 from arnavam/fix/qa-staging-seed-enabled (Centre-for-Open-Societal-Systems/oan_a2c@0904bffac279)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-25
+
 ### openg2p-da-registry 1.0.0-develop.90 (develop)
 
 - Merge pull request #86 from simretyibeltal-commits/test/guard-tests (Centre-for-Open-Societal-Systems/da-registry@4db8e7dafe98)
