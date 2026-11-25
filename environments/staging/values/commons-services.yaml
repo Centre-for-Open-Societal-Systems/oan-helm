@@ -66,6 +66,9 @@ master-data:
   # DA_POSITION with all six positions, DA_MARITAL_STATUS and DA_RELATIONSHIP. Staging pins it
   # because its chart (1.0.0-dev.49) has an older default seed image.
   geoSeed:
+    # Boundary GeoJSON lives in the Commons object store, now Garage (commons-base 2.3.4): in-cluster Service.
+    objectStore:
+      endpoint: http://commons-garage:3900
     enabled: true
     publishInitial: true
     autoPublish: true
@@ -87,10 +90,31 @@ master-data:
         gateway: istio-system/staging
   masterDataAPI:
     hostname: master-data.qa.oanstaging.com
+    catalogue:
+      boundaryStore:
+        endpoint: http://commons-garage:3900
     istio:
       virtualservice:
         gateway: istio-system/staging
 odk-central:
+  # ODK answers a download of an uploaded blob with a 307 to a URL presigned for this host, so it must be the
+  # public Garage host that browsers and ODK Collect reach (as for the registries), not commons-garage:3900.
+  s3ServerUrl: https://garage.qa.oanstaging.com
+  # Garage's init Job creates bucket odk-central; the subchart default odk-central-blobs does not exist.
+  s3BucketName: odk-central
+  odk-central-enketo:
+    initContainers:
+    - name: wait-for-garage
+      image: busybox:1.36
+      imagePullPolicy: IfNotPresent
+      command:
+      - sh
+      - -c
+      - |
+        until nc -zv commons-garage 3900; do
+          echo "Waiting for Garage..."
+          sleep 2
+        done
   backend:
     envVars:
       OIDC_ISSUER_URL: https://keycloak.qa.oanstaging.com/realms/staff
