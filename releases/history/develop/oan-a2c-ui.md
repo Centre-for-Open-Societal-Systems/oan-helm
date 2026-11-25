@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.16
+
+<!-- source-commit: 7f935642ed64896df6a95634c1758babd60f0275 version: 0.0.1-develop.16 -->
+Published 2026-11-25. Archive SHA-256 `068c423f034049fb3e5bc53fe64c53a3243f752ed1ae4f5fa1363e3d21494dbd`.
+
+- Change: Merge pull request #125 from arnavam/ci/use-app-chart
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c_ui@7f935642ed64](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c_ui/commit/7f935642ed64896df6a95634c1758babd60f0275)
+- Changes since 0.0.1-develop.15: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c_ui/compare/a70bd81914989d8f7172757dedf458cf754e9505...7f935642ed64896df6a95634c1758babd60f0275
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-ui/a2c-ui:0.0.1-develop.16@sha256:88d80ad0cc5209600ec203c17cdeef3863cc97d28b697c7a60121447291b2a41` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-ui-0.0.1-develop.16.tgz -n a2c-develop --reset-values -f helm/environments/dev/oan-a2c-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.15
 
 <!-- source-commit: a70bd81914989d8f7172757dedf458cf754e9505 version: 0.0.1-develop.15 -->
