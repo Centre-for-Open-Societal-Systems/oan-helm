@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### openg2p-livestock-registry 1.0.0-develop.233 (develop)
+
+- Merge pull request #266 from simretyibeltal-commits/ci/coverage-and-lint (Centre-for-Open-Societal-Systems/livestock-registry@36c9cffa6aae)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-25
+
 ### openg2p-cropsown-registry 1.0.0-develop.316 (develop)
 
 - docs(crop): deployment (#321) (Centre-for-Open-Societal-Systems/cropsown-regsitry@ea1fcb7c2a4e)
