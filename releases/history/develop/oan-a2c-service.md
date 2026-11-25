@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.42
+
+<!-- source-commit: 4876b470b7f6561e5f2b6ab79701932163621d09 version: 0.0.1-develop.42 -->
+Published 2026-11-25. Archive SHA-256 `4cb0371dfc2fce4b1c98091208a0e77946452b1e4c447ea4882b9f8ff12c1744`.
+
+- Change: Merge pull request #115 from anteneh1621/fix/team-invitation-email
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@4876b470b7f6](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/4876b470b7f6561e5f2b6ab79701932163621d09)
+- Changes since 0.0.1-develop.41: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/0904bffac2796d5f915fdc6787f34f3c2ea82a5c...4876b470b7f6561e5f2b6ab79701932163621d09
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-service/a2c-service:0.0.1-develop.42` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-service-0.0.1-develop.42.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.41
 
 <!-- source-commit: 0904bffac2796d5f915fdc6787f34f3c2ea82a5c version: 0.0.1-develop.41 -->

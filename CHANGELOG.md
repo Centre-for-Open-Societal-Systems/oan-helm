@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### oan-a2c-service 0.0.1-develop.42 (develop)
+
+- Merge pull request #115 from anteneh1621/fix/team-invitation-email (Centre-for-Open-Societal-Systems/oan_a2c@4876b470b7f6)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-25
+
 ### oan-identitygovernance-gateway 0.0.0-develop.7 (develop)
 
 - Merge pull request #7 from arnavam/feat/roles-live-from-keycloak (Centre-for-Open-Societal-Systems/oan_identitygovernance_service@9822f754df19)
