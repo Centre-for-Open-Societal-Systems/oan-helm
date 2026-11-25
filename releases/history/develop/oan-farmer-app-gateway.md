@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.5
+
+<!-- source-commit: 794b5f1333704d245d38573e83fa0ad2535022e0 version: 0.0.1-develop.5 -->
+Published 2026-11-25. Archive SHA-256 `51d275da1e3cdc15bc0de4cbe9f54e08e8e19a663ea517043b59c19ad44d7ee0`.
+
+- Change: Merge pull request #8 from arnavam/ci/staging-qa-pipeline
+- Source: [Centre-for-Open-Societal-Systems/oan_farmer_app_service@794b5f133370](https://github.com/Centre-for-Open-Societal-Systems/oan_farmer_app_service/commit/794b5f1333704d245d38573e83fa0ad2535022e0)
+- Changes since 0.0.1-develop.2: https://github.com/Centre-for-Open-Societal-Systems/oan_farmer_app_service/compare/0bdcff4a353354d017b89ab22601d36e8ec2d52b...794b5f1333704d245d38573e83fa0ad2535022e0
+
+Return to this version:
+
+```sh
+helm upgrade farmer-app-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-farmer-app-gateway-0.0.1-develop.5.tgz -n farmer-app --reset-values -f helm/environments/dev/oan-farmer-app-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.2
 
 <!-- source-commit: 0bdcff4a353354d017b89ab22601d36e8ec2d52b version: 0.0.1-develop.2 -->

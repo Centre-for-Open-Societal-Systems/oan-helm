@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### oan-farmer-app-gateway 0.0.1-develop.5 (develop)
+
+- Merge pull request #8 from arnavam/ci/staging-qa-pipeline (Centre-for-Open-Societal-Systems/oan_farmer_app_service@794b5f133370)
+- Images and rollback: [releases/history/develop/oan-farmer-app-gateway.md](releases/history/develop/oan-farmer-app-gateway.md)
+
+### oan-farmer-app-service 0.0.1-develop.5 (develop)
+
+- Merge pull request #8 from arnavam/ci/staging-qa-pipeline (Centre-for-Open-Societal-Systems/oan_farmer_app_service@794b5f133370)
+- Images and rollback: [releases/history/develop/oan-farmer-app-service.md](releases/history/develop/oan-farmer-app-service.md)
+
+## 2026-11-25
+
 ### openg2p-livestock-registry 1.0.0-develop.232 (develop)
 
 - Merge pull request #265 from simretyibeltal-commits/test/guard-tests (Centre-for-Open-Societal-Systems/livestock-registry@abbea8883c93)
