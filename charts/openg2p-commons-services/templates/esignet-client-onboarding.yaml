@@ -1,0 +1,194 @@
+{{- define "oan.hookFile.esignet-client-onboarding" -}}
+{{- /*
+  Register the IAM beneficiary portal API as an OIDC client of this release's eSignet.
+
+  The portal signs in beneficiaries through eSignet with private_key_jwt. Before the login_providers row
+  (iamBenePortalApi.loginProvider.seed) can work, two things must exist: the signing key, and a client_detail
+  row in eSignet's database that carries the key's public JWK and the portal's callback URL. This post-install/
+  post-upgrade Job, ahead of the seed Job, does both:
+
+    1. keygen (init container, files/esignet-client-key.py): creates the Secret loginProvider.privateKeySecret
+       with a new RSA key when it is missing (never replaces one), and writes the public JWK;
+    2. register (psql): upserts the esignet.client_detail row by id, so a changed redirect URI, claim list or
+       key reaches eSignet. A row for another client is never touched.
+
+  The key Secret is kept on uninstall, like the database rows. Rotating the key is deleting the Secret and
+  upgrading: the JWK and the seed Job's private key both follow it.
+*/ -}}
+{{- $c := .Values.iamBenePortalApi -}}
+{{- $e := $c.esignetClient -}}
+{{- $lp := $c.loginProvider -}}
+{{- if and $c.enabled $e.enabled $lp.clientId $lp.privateKeySecret.name }}
+{{- $keySecret := $lp.privateKeySecret.name -}}
+{{- $clientId := $lp.clientId -}}
+{{- $host := required "iamBenePortalApi.virtualService.host is required for esignetClient" $c.virtualService.host -}}
+{{- $callback := $lp.oauthCallbackUrl | default (printf "https://%s/auth/callback" $host) -}}
+{{- $uiOrigin := tpl $lp.defaultRedirectUri $ -}}
+{{- $logo := $e.logoUri | default (ternary (printf "%s/favicon.ico" (trimSuffix "/" $uiOrigin)) "" (ne $uiOrigin "")) -}}
+{{- $name := printf "%s-esignet-client-onboarding" .Release.Name -}}
+{{- $labels := dict "app.kubernetes.io/name" .Chart.Name "app.kubernetes.io/instance" .Release.Name "app.kubernetes.io/component" "esignet-client-onboarding" -}}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- toYaml $labels | nindent 4 }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- toYaml $labels | nindent 4 }}
+rules:
+  # create cannot be limited by name; get and patch only reach the one key Secret.
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["create"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: [{{ $keySecret | quote }}]
+    verbs: ["get", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- toYaml $labels | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ $name }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ $name }}
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- toYaml $labels | nindent 4 }}
+data:
+  key.py: |
+{{ .Files.Get "files/esignet-client-key.py" | indent 4 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- toYaml $labels | nindent 4 }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-10"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+    {{- /* sha256 of the live key Secret (never its value): deleting or replacing it runs this hook again (templates/_hook_stamps.tpl). */}}
+    oan.org/secret-sha256: {{ toJson ((lookup "v1" "Secret" .Release.Namespace $keySecret).data | default dict) | sha256sum | quote }}
+spec:
+  backoffLimit: 20
+  activeDeadlineSeconds: 1500
+  template:
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: {{ $name }}
+      {{- with $e.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+      initContainers:
+        - name: keygen
+          image: {{ $e.keygenImage | quote }}
+          command: [python, -B, /job/key.py]
+          env:
+            - { name: NAMESPACE, value: {{ .Release.Namespace | quote }} }
+            - { name: SECRET, value: {{ $keySecret | quote }} }
+            - { name: KEY, value: {{ $lp.privateKeySecret.key | quote }} }
+            - { name: CLIENT_ID, value: {{ $clientId | quote }} }
+            - { name: OUT, value: /work/jwk.json }
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - { name: job, mountPath: /job, readOnly: true }
+            - { name: work, mountPath: /work }
+          resources:
+            requests: {cpu: 10m, memory: 32Mi}
+            limits: {memory: 128Mi}
+      containers:
+        - name: register
+          image: {{ $e.dbJobImage | quote }}
+          command: ["sh", "-c"]
+          env:
+            - { name: DB_HOST, value: {{ tpl $e.db.hostname $ | quote }} }
+            - { name: DB_PORT, value: {{ $e.db.port | quote }} }
+            - { name: DB_NAME, value: {{ $e.db.name | quote }} }
+            - { name: DB_SCHEMA, value: {{ $e.db.schema | quote }} }
+            - { name: DB_USER, value: {{ $e.db.username | quote }} }
+            - name: PGPASSWORD
+              valueFrom: { secretKeyRef: { name: {{ $e.db.passwordSecret.name | quote }}, key: {{ $e.db.passwordSecret.key | quote }} } }
+            - { name: CLIENT_ID, value: {{ $clientId | quote }} }
+            - { name: CLIENT_NAME, value: {{ dict "@none" $e.name "eng" $e.name | toJson | quote }} }
+            - { name: RP_ID, value: {{ $e.rpId | quote }} }
+            - { name: LOGO_URI, value: {{ $logo | quote }} }
+            - { name: REDIRECT_URIS, value: {{ list $callback | toJson | quote }} }
+            - { name: CLAIMS, value: {{ $e.claims | toJson | quote }} }
+            - { name: ACR_VALUES, value: {{ $e.acrValues | toJson | quote }} }
+            - { name: GRANT_TYPES, value: {{ list "authorization_code" | toJson | quote }} }
+            - { name: AUTH_METHODS, value: {{ list $lp.tokenEndpointAuthMethod | toJson | quote }} }
+          args:
+            - |
+              set -eu
+              PSQL="psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -v ON_ERROR_STOP=1"
+              until [ "$($PSQL -tAc "SELECT to_regclass('$DB_SCHEMA.client_detail') IS NOT NULL")" = "t" ]; do
+                echo "waiting for $DB_SCHEMA.client_detail (created by eSignet's schema-init Job)"; sleep 5
+              done
+              $PSQL -v id="$CLIENT_ID" -v name="$CLIENT_NAME" -v rp="$RP_ID" -v logo="$LOGO_URI" \
+                -v redirects="$REDIRECT_URIS" -v claims="$CLAIMS" -v acr="$ACR_VALUES" \
+                -v grants="$GRANT_TYPES" -v methods="$AUTH_METHODS" -v jwk="$(cat /work/jwk.json)" <<'SQL'
+              INSERT INTO esignet.client_detail
+                (id, name, rp_id, logo_uri, redirect_uris, claims, acr_values, public_key, grant_types, auth_methods, status, cr_dtimes)
+              VALUES
+                (:'id', :'name', :'rp', :'logo', :'redirects', :'claims', :'acr', :'jwk', :'grants', :'methods', 'ACTIVE', now() AT TIME ZONE 'utc')
+              ON CONFLICT (id) DO UPDATE SET
+                name = EXCLUDED.name, rp_id = EXCLUDED.rp_id, logo_uri = EXCLUDED.logo_uri,
+                redirect_uris = EXCLUDED.redirect_uris, claims = EXCLUDED.claims, acr_values = EXCLUDED.acr_values,
+                public_key = EXCLUDED.public_key, grant_types = EXCLUDED.grant_types, auth_methods = EXCLUDED.auth_methods,
+                status = 'ACTIVE', upd_dtimes = now() AT TIME ZONE 'utc';
+              SQL
+              echo "client $CLIENT_ID registered in eSignet"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - { name: work, mountPath: /work, readOnly: true }
+          resources:
+            requests: {cpu: 10m, memory: 32Mi}
+            limits: {memory: 128Mi}
+      volumes:
+        - name: job
+          configMap:
+            name: {{ $name }}
+            items:
+              - { key: key.py, path: key.py }
+        - name: work
+          emptyDir: {}
+{{- end }}
+{{- end -}}
+{{- /* Hook documents render only when their inputs changed (templates/_hook_stamps.tpl). */ -}}
+{{ include "oan.hook.file" (list . "esignet-client-onboarding") }}

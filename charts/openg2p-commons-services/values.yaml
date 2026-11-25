@@ -1326,6 +1326,31 @@ iamBenePortalApi:
   cookieSecure: true
   cookieMaxAge: 1800
   corsAllowOrigins: []
+  # Registers this portal as an OIDC client of the release's eSignet (templates/esignet-client-onboarding.yaml):
+  # creates Secret loginProvider.privateKeySecret with a new RSA key when missing, and upserts the
+  # esignet.client_detail row (id loginProvider.clientId) with the key's public JWK and the portal's callback
+  # URL, ahead of the loginProvider seed Job. On by default, but it renders only when loginProvider.clientId
+  # and privateKeySecret.name are both set, so an environment without an eSignet client is unaffected.
+  esignetClient:
+    enabled: true
+    name: OAN Beneficiary Portal
+    rpId: oan
+    # Empty: <loginProvider.defaultRedirectUri>/favicon.ico.
+    logoUri: ''
+    claims: [name, given_name, family_name, gender, birthdate, phone_number, email, individual_id, address, picture]
+    acrValues: ['mosip:idp:acr:static-code']
+    keygenImage: python:3.11.14-slim
+    dbJobImage: postgres:16-alpine
+    imagePullSecrets: []
+    db:
+      hostname: '{{ tpl .Values.global.postgresqlHost $ }}'
+      port: 5432
+      name: mosip_esignet
+      schema: esignet
+      username: esignetuser
+      passwordSecret:
+        name: esignet-db-user
+        key: esignet-db-user-password
   loginProvider:
     seed: false
     # Must not collide with the staff (1) and agent (10) rows in the shared table.

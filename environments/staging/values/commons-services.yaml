@@ -456,8 +456,11 @@ consentPartnerPortal:
   virtualService:
     gateway: istio-system/staging
 
-# IAM beneficiary portal API, as on New Dev. Login provider seeding stays off until a
-# Fayda/eSignet client and signing key exist.
+# IAM beneficiary portal API, as on New Dev, with the same eSignet login provider row as dev
+# (login_providers id 11, client oan-iam-bene). esignetClient creates Secret iam-bene-esignet-key (key
+# private_key, PEM) and registers the client in this eSignet (redirect
+# https://bene-iam.qa.oanstaging.com/auth/callback, the key's public JWK, private_key_jwt) on every
+# install and upgrade, ahead of the seed Job. Turn seed on once an upgrade with esignetClient has run.
 iamBenePortalApi:
   enabled: true
   virtualService:
@@ -466,6 +469,19 @@ iamBenePortalApi:
     gateway: istio-system/staging
   loginProvider:
     seed: false
+    id: 11
+    providerName: e-Signet
+    description: Sign in with e-Signet
+    clientId: oan-iam-bene
+    privateKeySecret:
+      name: iam-bene-esignet-key
+      key: private_key
+    issuer: https://esignet.qa.oanstaging.com
+    serverMetadataUrl: https://esignet.qa.oanstaging.com/v1/esignet/oidc/.well-known/openid-configuration
+    adapterName: esignet
+    scope: openid profile
+    enablePkce: true
+    extraAuthorizeParams: '{"claims":{"userinfo":{"individual_id":{"essential":true},"name":{"essential":false},"address":{"essential":false},"picture":{"essential":false}},"id_token":{}},"acr_values":"mosip:idp:acr:static-code"}'
     defaultRedirectUri: https://bene-portal.qa.oanstaging.com
 
 # Staff-realm public clients answer only on the qa hosts. prune: true replaces each listed
