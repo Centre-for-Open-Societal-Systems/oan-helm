@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### openg2p-livestock-registry 1.0.0-develop.232 (develop)
+
+- Merge pull request #265 from simretyibeltal-commits/test/guard-tests (Centre-for-Open-Societal-Systems/livestock-registry@abbea8883c93)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-25
+
 ### oan-a2c-ui 0.0.1-staging.4 (staging)
 
 - Merge pull request #125 from arnavam/ci/use-app-chart (Centre-for-Open-Societal-Systems/oan_a2c_ui@7f935642ed64)
