@@ -460,7 +460,7 @@ consentPartnerPortal:
 # (login_providers id 11, client oan-iam-bene). esignetClient creates Secret iam-bene-esignet-key (key
 # private_key, PEM) and registers the client in this eSignet (redirect
 # https://bene-iam.qa.oanstaging.com/auth/callback, the key's public JWK, private_key_jwt) on every
-# install and upgrade, ahead of the seed Job. Turn seed on once an upgrade with esignetClient has run.
+# install and upgrade, ahead of the seed Job, which writes the login row (seed on since the client was registered).
 iamBenePortalApi:
   enabled: true
   virtualService:
@@ -468,7 +468,7 @@ iamBenePortalApi:
     host: bene-iam.qa.oanstaging.com
     gateway: istio-system/staging
   loginProvider:
-    seed: false
+    seed: true
     id: 11
     providerName: e-Signet
     description: Sign in with e-Signet
