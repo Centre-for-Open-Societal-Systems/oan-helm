@@ -10,6 +10,20 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### oan-frappe-service 0.0.1-develop.1
+
+First published version.
+
+- feat(frappe-service): add oan-frappe-service, the shared Frappe application chart (e9d0bac)
+
+### openg2p-commons-services 1.0.0-dev.57
+
+Previous version: 1.0.0-dev.56.
+
+- feat(commons-services): register the beneficiary portal as an eSignet client (#276) (84e14e0)
+
+## 2026-11-25
+
 ### oan-farmer-app-gateway 0.0.1-develop.5 (develop)
 
 - Merge pull request #8 from arnavam/ci/staging-qa-pipeline (Centre-for-Open-Societal-Systems/oan_farmer_app_service@794b5f133370)
