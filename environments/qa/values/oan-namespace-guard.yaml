@@ -24,9 +24,9 @@ namespaces:
   observability:
     podSecurity: privileged
 
-  # Shared PostgreSQL: only the Frappe services.
+  # Shared PostgreSQL: the Frappe services, and the sandbox API (database sandbox_db_oan).
   frappe-common:
-    allowFrom: [a2c, grievance, da-app, farmer-app]
+    allowFrom: [a2c, grievance, da-app, farmer-app, sandbox]
 
   # The services, deployed by Jenkins: only APISIX routes to them.
   a2c:
