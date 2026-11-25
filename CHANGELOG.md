@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### oan-grievance-ui 0.0.1-staging.7 (staging)
+
+- Merge pull request #92 from arnavam/resync/staging-into-develop (Centre-for-Open-Societal-Systems/oan_grievance_ui@b6f5a923acc5)
+- Images and rollback: [releases/history/staging/oan-grievance-ui.md](releases/history/staging/oan-grievance-ui.md)
+
+## 2026-11-25
+
 ### oan-grievance-ui 0.0.1-develop.64 (develop)
 
 - Merge pull request #92 from arnavam/resync/staging-into-develop (Centre-for-Open-Societal-Systems/oan_grievance_ui@b6f5a923acc5)
