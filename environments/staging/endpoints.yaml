@@ -1,6 +1,9 @@
 # Staging counterpart of environments/dev/endpoints.yaml: the public hosts and the routes that serve them.
 # verifiedRoutes is read from the live cluster (read-only); re-read it after a host or route change.
 checkedAt: 2026-11-12T19:02:00Z  # read-only check: every public host below has a route; HTTPS answered (APIs 404 on /)
+# 25 Nov 2026, 21:43 UTC: the Garage host and route (garage below) were added after a read-only check of the live
+# cluster: VirtualService commons-services-object-store-api on istio-system/staging; HTTPS answers 403 (S3 needs a
+# signature). The other entries were not re-read then.
 server: 52.66.116.220  # staging: confirm (single-node RKE2 box today)
 publicHosts:
   keycloak: keycloak.qa.oanstaging.com
@@ -18,6 +21,7 @@ publicHosts:
   odk: odk-central.qa.oanstaging.com
   kafkaUi: kafka.qa.oanstaging.com
   minio: minio-farmer.qa.oanstaging.com
+  garage: garage.qa.oanstaging.com
   minioConsole: minio-console.qa.oanstaging.com
   audit: auditmanager.qa.oanstaging.com
   esignet: esignet.qa.oanstaging.com
@@ -71,6 +75,12 @@ verifiedRoutes:
   name: commons-minio-api
   hosts:
   - minio-farmer.qa.oanstaging.com
+  gateways:
+  - istio-system/staging
+- namespace: commons
+  name: commons-services-object-store-api
+  hosts:
+  - garage.qa.oanstaging.com
   gateways:
   - istio-system/staging
 - namespace: commons
