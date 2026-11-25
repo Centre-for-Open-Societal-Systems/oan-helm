@@ -10,6 +10,23 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### openg2p-da-registry 1.0.0-develop.89 (develop)
+
+- Merge pull request #85 from simretyibeltal-commits/ci/validate-runs-all-tests (Centre-for-Open-Societal-Systems/da-registry@41a30cd0157a)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+### oan-grievance-gateway 0.0.1-staging.15 (staging)
+
+- Merge pull request #155 from Centre-for-Open-Societal-Systems/develop (Centre-for-Open-Societal-Systems/oan_grievance_service@711b081ebd71)
+- Images and rollback: [releases/history/staging/oan-grievance-gateway.md](releases/history/staging/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-staging.15 (staging)
+
+- Merge pull request #155 from Centre-for-Open-Societal-Systems/develop (Centre-for-Open-Societal-Systems/oan_grievance_service@711b081ebd71)
+- Images and rollback: [releases/history/staging/oan-grievance-service.md](releases/history/staging/oan-grievance-service.md)
+
+## 2026-11-25
+
 ### oan-a2c-gateway 0.0.1-staging.4 (staging)
 
 - Merge pull request #155 from Centre-for-Open-Societal-Systems/develop (Centre-for-Open-Societal-Systems/oan_a2c@f53c54d4a911)

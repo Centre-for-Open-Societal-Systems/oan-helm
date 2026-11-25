@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-staging.15
+
+<!-- source-commit: 711b081ebd710a9b868b9f07a1e96f16c89c5178 version: 0.0.1-staging.15 -->
+Published 2026-11-25. Archive SHA-256 `f0610d4e0fc2ce7a765bc4cd65dbb75cfb224f198084d1c91a32f1c1b5c56b72`.
+
+- Change: Merge pull request #155 from Centre-for-Open-Societal-Systems/develop
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@711b081ebd71](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/711b081ebd710a9b868b9f07a1e96f16c89c5178)
+- Changes since 0.0.1-staging.14: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/f4b2bda4b44a3a4e012d74b94fa8cc09c238ea93...711b081ebd710a9b868b9f07a1e96f16c89c5178
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-service/grievance-service:0.0.1-staging.15` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/staging/oan-grievance-service-0.0.1-staging.15.tgz -n grievance --reset-values -f helm/environments/staging/oan-grievance-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-staging.14
 
 <!-- source-commit: f4b2bda4b44a3a4e012d74b94fa8cc09c238ea93 version: 0.0.1-staging.14 -->
