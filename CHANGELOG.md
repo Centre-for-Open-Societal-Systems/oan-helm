@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### openg2p-livestock-registry 1.0.0-develop.234 (develop)
+
+- Merge pull request #267 from simretyibeltal-commits/docs/deployment-release-changelog (Centre-for-Open-Societal-Systems/livestock-registry@7be7a46f8745)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
+## 2026-11-25
+
 ### openg2p-da-registry 1.0.0-develop.92 (develop)
 
 - Merge pull request #88 from simretyibeltal-commits/docs/deployment-release-changelog (Centre-for-Open-Societal-Systems/da-registry@929b7fedb1d3)
