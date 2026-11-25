@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.0-develop.6
+
+<!-- source-commit: 9a75c8460136bc3a9453b48f27a1acd84115513e version: 0.0.0-develop.6 -->
+Published 2026-11-25. Archive SHA-256 `cac0f4d78daf9685453e4c8dde0398eda1ed193d65b6ad3dd133891746880041`.
+
+- Change: Merge pull request #5 from arnavam/feat/apisix-gateway
+- Source: [Centre-for-Open-Societal-Systems/oan_identitygovernance_service@9a75c8460136](https://github.com/Centre-for-Open-Societal-Systems/oan_identitygovernance_service/commit/9a75c8460136bc3a9453b48f27a1acd84115513e)
+- Changes since 0.0.0-develop.5: https://github.com/Centre-for-Open-Societal-Systems/oan_identitygovernance_service/compare/9a75c8460136bc3a9453b48f27a1acd84115513e...9a75c8460136bc3a9453b48f27a1acd84115513e
+
+Return to this version:
+
+```sh
+helm upgrade identitygovernance-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-identitygovernance-gateway-0.0.0-develop.6.tgz -n identitygovernance --reset-values -f helm/environments/dev/oan-identitygovernance-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.0-develop.5
 
 <!-- source-commit: 9a75c8460136bc3a9453b48f27a1acd84115513e version: 0.0.0-develop.5 -->

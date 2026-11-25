@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### oan-identitygovernance-gateway 0.0.0-develop.6 (develop)
+
+- Merge pull request #5 from arnavam/feat/apisix-gateway (Centre-for-Open-Societal-Systems/oan_identitygovernance_service@9a75c8460136)
+- Images and rollback: [releases/history/develop/oan-identitygovernance-gateway.md](releases/history/develop/oan-identitygovernance-gateway.md)
+
+### oan-identitygovernance-service 0.0.0-develop.6 (develop)
+
+- Merge pull request #5 from arnavam/feat/apisix-gateway (Centre-for-Open-Societal-Systems/oan_identitygovernance_service@9a75c8460136)
+- Images and rollback: [releases/history/develop/oan-identitygovernance-service.md](releases/history/develop/oan-identitygovernance-service.md)
+
+## 2026-11-25
+
 ### oan-identitygovernance-gateway 0.0.0-develop.5 (develop)
 
 - Merge pull request #5 from arnavam/feat/apisix-gateway (Centre-for-Open-Societal-Systems/oan_identitygovernance_service@9a75c8460136)
