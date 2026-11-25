@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### openg2p-farmer-registry 1.0.0-develop.228 (develop)
+
+- fix: trim surrounding whitespace from Fayda IDs (#348) (Centre-for-Open-Societal-Systems/farmer-registry@46e57cd0cf67)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-25
+
 ### oan-da-app-ui 0.0.1-develop.67 (develop)
 
 - Merge pull request #89 from meghamishra0708/dev-megha (Centre-for-Open-Societal-Systems/oan_da_app_ui@7e5e87bb954f)
