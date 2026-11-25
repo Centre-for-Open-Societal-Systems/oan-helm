@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### oan-apisix-gateway 0.0.1-develop.3
+
+Previous version: 0.0.1-develop.2.
+
+- feat(apisix-gateway): generate IVR vendor key and copy grievance IVR Frappe token (#279) (664507a)
+
+## 2026-11-25
+
 ### openg2p-cropsown-registry 1.0.0-develop.314 (develop)
 
 - Bringing the Crop registry's CI and tests up to the production standard, and five new guard tests (#319) (Centre-for-Open-Societal-Systems/cropsown-regsitry@0c6026713a70)
