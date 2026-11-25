@@ -21,9 +21,24 @@ metadata:
   labels: {{- include "oanmsg.labels" . | nindent 4 }}
   annotations: {{- include "oanmsg.hook" (dict "phase" "pre-install,pre-upgrade" "weight" -30) | nindent 4 }}
 rules:
+  # get only the Secrets these hooks manage (never the namespace's other Secrets); create cannot be name-scoped.
   - apiGroups: [""]
     resources: [secrets]
-    verbs: [get, create]
+    verbs: [get]
+    resourceNames:
+      - oan-messaging-database
+      - oan-messaging-core
+      - oan-messaging-sms8028
+      - oan-messaging-sms8028-client-tls
+      - oan-messaging-8028-callback
+      - oan-messaging-8028-callback-ca
+      - oan-messaging-receipts-server-tls
+      - oan-messaging-fake8028
+      - {{ .Values.callers.reader.secret }}
+      - {{ .Values.callers.sender.secret }}
+  - apiGroups: [""]
+    resources: [secrets]
+    verbs: [create]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
