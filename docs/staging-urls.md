@@ -28,6 +28,7 @@ Anything marked `# staging: confirm` is not yet decided (see [Open points](#open
 | partnerManagementApi | `https://partner-management-partner-api.qa.oanstaging.com` |
 | odk | `https://odk-central.qa.oanstaging.com` |
 | minio | `https://minio-farmer.qa.oanstaging.com` |
+| garage | `https://garage.qa.oanstaging.com` |
 | minioConsole | `https://minio-console.qa.oanstaging.com` |
 | audit | `https://auditmanager.qa.oanstaging.com` |
 | esignet | `https://esignet.qa.oanstaging.com` |
