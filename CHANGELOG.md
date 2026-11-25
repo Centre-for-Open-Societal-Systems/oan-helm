@@ -8,6 +8,13 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-25
+
+### openg2p-livestock-registry 1.0.0-develop.231 (develop)
+
+- Merge pull request #264 from simretyibeltal-commits/ci/validate-runs-all-tests (Centre-for-Open-Societal-Systems/livestock-registry@fc9d205a4099)
+- Images and rollback: [releases/history/develop/openg2p-livestock-registry.md](releases/history/develop/openg2p-livestock-registry.md)
+
 ## 2026-11-24
 
 ### oan-da-services 0.0.10-develop.72 (develop)
