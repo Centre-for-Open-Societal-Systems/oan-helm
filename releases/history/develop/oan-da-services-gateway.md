@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.10-develop.73
+
+<!-- source-commit: 73094cd7d8873983a9da71e9d2e1a6081b268666 version: 0.0.10-develop.73 -->
+Published 2026-11-25. Archive SHA-256 `5433750abf8c87d4abe32df75ef6e9d1557afdc1dce202228e2b69cb34857f8f`.
+
+- Change: Merge pull request #102 from Nikky-05/fix/farmer-details-geo-links
+- Source: [Centre-for-Open-Societal-Systems/oan_da_app_services@73094cd7d887](https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/commit/73094cd7d8873983a9da71e9d2e1a6081b268666)
+- Changes since 0.0.10-develop.72: https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/compare/abdc2dd3dfac27619c3309b1ddda70aae88bd51e...73094cd7d8873983a9da71e9d2e1a6081b268666
+
+Return to this version:
+
+```sh
+helm upgrade da-services-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-da-services-gateway-0.0.10-develop.73.tgz -n da-app --reset-values -f helm/environments/dev/oan-da-services-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.10-develop.72
 
 <!-- source-commit: abdc2dd3dfac27619c3309b1ddda70aae88bd51e version: 0.0.10-develop.72 -->

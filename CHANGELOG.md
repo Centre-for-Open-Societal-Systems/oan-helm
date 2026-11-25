@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### oan-da-services 0.0.10-develop.73 (develop)
+
+- Merge pull request #102 from Nikky-05/fix/farmer-details-geo-links (Centre-for-Open-Societal-Systems/oan_da_app_services@73094cd7d887)
+- Images and rollback: [releases/history/develop/oan-da-services.md](releases/history/develop/oan-da-services.md)
+
+### oan-da-services-gateway 0.0.10-develop.73 (develop)
+
+- Merge pull request #102 from Nikky-05/fix/farmer-details-geo-links (Centre-for-Open-Societal-Systems/oan_da_app_services@73094cd7d887)
+- Images and rollback: [releases/history/develop/oan-da-services-gateway.md](releases/history/develop/oan-da-services-gateway.md)
+
+## 2026-11-25
+
 ### openg2p-farmer-registry 1.0.0-develop.228 (develop)
 
 - fix: trim surrounding whitespace from Fayda IDs (#348) (Centre-for-Open-Societal-Systems/farmer-registry@46e57cd0cf67)

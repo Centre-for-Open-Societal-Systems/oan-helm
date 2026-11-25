@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.10-develop.73
+
+<!-- source-commit: 73094cd7d8873983a9da71e9d2e1a6081b268666 version: 0.0.10-develop.73 -->
+Published 2026-11-25. Archive SHA-256 `ea13948f7711563529327e39bfe0cb20314a91bd4bcd2cd94b1e17cc8e921c45`.
+
+- Change: Merge pull request #102 from Nikky-05/fix/farmer-details-geo-links
+- Source: [Centre-for-Open-Societal-Systems/oan_da_app_services@73094cd7d887](https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/commit/73094cd7d8873983a9da71e9d2e1a6081b268666)
+- Changes since 0.0.10-develop.72: https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/compare/abdc2dd3dfac27619c3309b1ddda70aae88bd51e...73094cd7d8873983a9da71e9d2e1a6081b268666
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-da-services/da-services:0.0.10-develop.73` |
+
+Return to this version:
+
+```sh
+helm upgrade da-services https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-da-services-0.0.10-develop.73.tgz -n da-app --reset-values -f helm/environments/dev/oan-da-services.yaml --wait --timeout 15m
+```
+
 ## 0.0.10-develop.72
 
 <!-- source-commit: abdc2dd3dfac27619c3309b1ddda70aae88bd51e version: 0.0.10-develop.72 -->
