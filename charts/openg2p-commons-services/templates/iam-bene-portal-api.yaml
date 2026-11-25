@@ -193,6 +193,8 @@ spec:
               until [ "$($PSQL -tAc "SELECT to_regclass('public.login_providers') IS NOT NULL")" = "t" ]; do
                 echo "waiting for login_providers table (created by the API on start)"; sleep 5
               done
+              {{- /* The IAM APIs create this enum without private_key_jwt (dev has it added by hand); a value added by an ALTER TYPE cannot be used in the same transaction, so it is its own statement. */}}
+              $PSQL -c "ALTER TYPE tokenendpointauthmethod ADD VALUE IF NOT EXISTS 'private_key_jwt'"
               $PSQL -v id="$LP_ID" -v name="$LP_NAME" -v descr="$LP_DESCRIPTION" -v cid="$LP_CLIENT_ID" \
                 -v method="$LP_AUTH_METHOD" -v issuer="$LP_ISSUER" -v meta="$LP_METADATA_URL" -v adapter="$LP_ADAPTER" \
                 -v jwtaud="$LP_JWT_AUD" -v scope="$LP_SCOPE" -v pkce="$LP_PKCE" -v extra="$LP_EXTRA" \
@@ -202,13 +204,13 @@ spec:
                 id, provider_name, description, client_id, client_private_key,
                 token_endpoint_auth_method, server_metadata_url, adapter_name, jwt_assertion_aud,
                 scope, enable_pkce, extra_authorize_params, issuer, audiences,
-                oauth_callback_url, default_redirect_uri, created_at, updated_at
+                oauth_callback_url, default_redirect_uri, created_at, updated_at, active
               ) VALUES (
                 :id, :'name', :'descr', :'cid',
                 CASE WHEN :'pk' = '' THEN NULL ELSE convert_to(:'pk', 'UTF8') END,
                 :'method'::tokenendpointauthmethod, NULLIF(:'meta', ''), NULLIF(:'adapter', ''), NULLIF(:'jwtaud', ''),
                 :'scope', :'pkce'::boolean, NULLIF(:'extra', ''), :'issuer', NULLIF(:'aud', ''),
-                :'callback', :'redirect', now(), now()
+                :'callback', :'redirect', now(), now(), true
               )
               ON CONFLICT (id) DO UPDATE SET
                 provider_name = EXCLUDED.provider_name,
