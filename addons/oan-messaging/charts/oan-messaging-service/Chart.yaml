@@ -1,0 +1,14 @@
+apiVersion: v2
+name: oan-messaging-service
+description: >-
+  DRAFT (MSG-08H) Helm chart for the standalone OAN Messaging Service (Python, FastAPI,
+  external PostgreSQL). Not deployable until MSG-08 provides the runtime image and the
+  worker, cleanup and receipt-ingress entrypoints; see docs/deployment/helm.md.
+type: application
+version: 0.1.0-draft.2
+appVersion: "0.1.0"
+kubeVersion: ">=1.25.0-0"
+keywords: [oan, messaging, sms, telegram]
+annotations:
+  oan.coss/status: draft-not-deployable
+  oan.coss/contract: "3.0.0"

@@ -1,0 +1,26 @@
+{{- if or .Values.api.enabled .Values.worker.enabled .Values.workerTelegram.enabled .Values.receipts.enabled .Values.cleanup.enabled }}
+{{- $policyNames := dict "maxOtpTtl" "MAX_OTP_TTL" "maxExpiryHorizon" "MAX_EXPIRY_HORIZON" "dedupWindow" "DEDUP_WINDOW" "receiptWindow" "RECEIPT_WINDOW" "receiptEvidenceRetention" "RECEIPT_EVIDENCE_RETENTION" "purgeSweepInterval" "PURGE_SWEEP_INTERVAL" "workerLease" "WORKER_LEASE" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "oan.fullname" . }}-config
+  labels:
+    {{- include "oan.labels" (dict "root" . "component" "config") | nindent 4 }}
+data:
+  # Non-secret settings only. Credentials and keys come from existing Secrets.
+  OAN_MSG_CONTENT_KEY_CURRENT: {{ required "config.contentKeyCurrent is required" .Values.config.contentKeyCurrent | quote }}
+  OAN_MSG_FINGERPRINT_KEY_CURRENT: {{ required "config.fingerprintKeyCurrent is required" .Values.config.fingerprintKeyCurrent | quote }}
+  OAN_MSG_MAX_BODY_BYTES: {{ .Values.config.maxBodyBytes | int | quote }}
+  OAN_MSG_BROADCAST_ENABLED: {{ .Values.config.broadcastEnabled | ternary "true" "false" | quote }}
+  OAN_MSG_BROADCAST_MAX_WAIT_SECONDS: {{ .Values.config.broadcastMaxWaitSeconds | int | quote }}
+  OAN_MSG_SMS_RATE_PER_SECOND: {{ .Values.config.smsRatePerSecond | int | quote }}
+  OAN_MSG_SMS_OTP_RESERVE: {{ .Values.config.smsOtpReserve | int | quote }}
+  OAN_MSG_SMS_BATCH_MAX_RECIPIENTS: {{ .Values.config.smsBatchMaxRecipients | int | quote }}
+  OAN_MSG_STATS_REFRESH_SECONDS: {{ .Values.config.statsRefreshSeconds | int | quote }}
+  {{- with .Values.config.sms8028BaseUrl }}
+  OAN_MSG_SMS8028_BASE_URL: {{ . | quote }}
+  {{- end }}
+  {{- range $k, $val := .Values.config.policy }}
+  OAN_MSG_POLICY_{{ get $policyNames $k }}_SECONDS: {{ $val | int | quote }}
+  {{- end }}
+{{- end }}

@@ -1,0 +1,72 @@
+{{- if .Values.statsRefresh.enabled }}
+{{- $c := dict "root" . "component" "stats" }}
+{{- include "oan.requireCommand" (dict "cmd" .Values.statsRefresh.command "name" "statsRefresh") }}
+# Statistics refresh: one `stats-refresh` run per schedule rebuilds the snapshot behind
+# GET /api/v1/charts. A run that finds another in progress skips (database lock).
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "oan.componentName" $c }}
+  labels:
+    {{- include "oan.labels" $c | nindent 4 }}
+spec:
+  schedule: {{ .Values.statsRefresh.schedule | quote }}
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 300
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    metadata:
+      labels:
+        {{- include "oan.labels" $c | nindent 8 }}
+    spec:
+      backoffLimit: 0
+      activeDeadlineSeconds: {{ .Values.statsRefresh.activeDeadlineSeconds }}
+      ttlSecondsAfterFinished: 3600
+      template:
+        metadata:
+          labels:
+            {{- include "oan.labels" $c | nindent 12 }}
+        spec:
+          restartPolicy: Never
+          serviceAccountName: {{ include "oan.serviceAccountName" . }}
+          automountServiceAccountToken: false
+          enableServiceLinks: false
+          securityContext:
+            {{- include "oan.podSecurityContext" . | nindent 12 }}
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          containers:
+            - name: stats-refresh
+              image: {{ include "oan.image" . }}
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              {{- with .Values.image.workingDir }}
+              workingDir: {{ . }}
+              {{- end }}
+              command:
+                {{- toYaml .Values.statsRefresh.command | nindent 16 }}
+              envFrom:
+                {{- include "oan.envFromConfig" . | nindent 16 }}
+              env:
+                {{- include "oan.storageEnv" (dict "root" . "pool" .Values.statsRefresh.pool) | nindent 16 }}
+              resources:
+                {{- toYaml .Values.statsRefresh.resources | nindent 16 }}
+              securityContext:
+                {{- include "oan.containerSecurityContext" . | nindent 16 }}
+              volumeMounts:
+                - name: tmp
+                  mountPath: /tmp
+          volumes:
+            - name: tmp
+              emptyDir: {sizeLimit: 64Mi}
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+{{- end }}

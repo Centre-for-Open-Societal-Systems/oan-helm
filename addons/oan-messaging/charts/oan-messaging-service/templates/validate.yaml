@@ -1,0 +1,142 @@
+{{- /* Render-time guards. This template emits nothing; it fails rendering on unsafe or
+incoherent values. */ -}}
+{{- $v := .Values -}}
+{{- $policyNames := dict "maxOtpTtl" "MAX_OTP_TTL" "maxExpiryHorizon" "MAX_EXPIRY_HORIZON" "dedupWindow" "DEDUP_WINDOW" "receiptWindow" "RECEIPT_WINDOW" "receiptEvidenceRetention" "RECEIPT_EVIDENCE_RETENTION" "purgeSweepInterval" "PURGE_SWEEP_INTERVAL" "workerLease" "WORKER_LEASE" -}}
+{{- range $k, $val := $v.config.policy -}}
+{{- if not (hasKey $policyNames $k) -}}
+{{- fail (printf "config.policy.%s is not a ServicePolicy field" $k) -}}
+{{- end -}}
+{{- if not (or (kindIs "float64" $val) (kindIs "int64" $val) (kindIs "int" $val)) -}}
+{{- fail (printf "config.policy.%s must be a number of seconds" $k) -}}
+{{- end -}}
+{{- if le (float64 $val) 0.0 -}}
+{{- fail (printf "config.policy.%s must be positive" $k) -}}
+{{- end -}}
+{{- end -}}
+
+{{- if $v.worker.enabled -}}
+{{- $lease := int (default 120 $v.config.policy.workerLease) -}}
+{{- if lt (int $v.worker.terminationGracePeriodSeconds) $lease -}}
+{{- fail (printf "worker.terminationGracePeriodSeconds (%v) must be >= the worker lease (%v s)" $v.worker.terminationGracePeriodSeconds $lease) -}}
+{{- end -}}
+{{- $_ := required "secrets.sms8028.existingSecret is required when the worker is enabled" $v.secrets.sms8028.existingSecret -}}
+{{- $_ := required "secrets.sms8028.tlsSecret is required when the worker is enabled" $v.secrets.sms8028.tlsSecret -}}
+{{- range $bot, $key := $v.secrets.telegram.bots -}}
+{{- if not (regexMatch "^[a-z0-9][a-z0-9_-]{0,63}$" $bot) -}}
+{{- fail (printf "secrets.telegram.bots: invalid bot key %q (must match ^[a-z0-9][a-z0-9_-]{0,63}$)" $bot) -}}
+{{- end -}}
+{{- end -}}
+{{- range $v.worker.channels -}}
+{{- if not (has . (list "sms" "telegram")) -}}
+{{- fail (printf "worker.channels: unknown channel %q (sms or telegram)" .) -}}
+{{- end -}}
+{{- end -}}
+{{- if not $v.worker.channels -}}
+{{- fail "worker.channels needs at least one channel" -}}
+{{- end -}}
+{{- if and (has "telegram" $v.worker.channels) (not $v.secrets.telegram.bots) -}}
+{{- fail "worker.channels includes telegram but secrets.telegram.bots is empty" -}}
+{{- end -}}
+{{- if and $v.secrets.telegram.bots (not $v.secrets.telegram.existingSecret) -}}
+{{- fail "secrets.telegram.existingSecret is required when secrets.telegram.bots is set" -}}
+{{- end -}}
+{{- end -}}
+
+{{- if not (kindIs "bool" (default false $v.workerTelegram.broadcastEnabled)) -}}
+{{- fail "workerTelegram.broadcastEnabled must be true or false" -}}
+{{- end -}}
+{{- if and $v.workerTelegram.broadcastEnabled (not $v.workerTelegram.enabled) -}}
+{{- fail "workerTelegram.broadcastEnabled needs workerTelegram.enabled (nothing would send the broadcasts)" -}}
+{{- end -}}
+
+{{- if $v.workerTelegram.enabled -}}
+{{- $wt := $v.workerTelegram -}}
+{{- $lease := int (default 120 $v.config.policy.workerLease) -}}
+{{- if lt (int $wt.terminationGracePeriodSeconds) $lease -}}
+{{- fail (printf "workerTelegram.terminationGracePeriodSeconds (%v) must be >= the worker lease (%v s)" $wt.terminationGracePeriodSeconds $lease) -}}
+{{- end -}}
+{{- if not $v.secrets.telegram.bots -}}
+{{- fail "workerTelegram.enabled needs secrets.telegram.bots" -}}
+{{- end -}}
+{{- $_ := required "secrets.telegram.existingSecret is required when workerTelegram is enabled" $v.secrets.telegram.existingSecret -}}
+{{- range $bot, $key := $v.secrets.telegram.bots -}}
+{{- if not (regexMatch "^[a-z0-9][a-z0-9_-]{0,63}$" $bot) -}}
+{{- fail (printf "secrets.telegram.bots: invalid bot key %q (must match ^[a-z0-9][a-z0-9_-]{0,63}$)" $bot) -}}
+{{- end -}}
+{{- end -}}
+{{- if and $v.worker.enabled (has "telegram" $v.worker.channels) -}}
+{{- fail "workerTelegram is enabled: keep worker.channels at [sms] so only one Deployment sends Telegram" -}}
+{{- end -}}
+{{- include "oan.requireInt" (dict "v" $wt.ratePerSecond "name" "workerTelegram.ratePerSecond" "min" 1) -}}
+{{- if gt (int $wt.ratePerSecond) 30 -}}
+{{- fail (printf "workerTelegram.ratePerSecond (%v) must be at most 30 (Telegram's limit per bot)" $wt.ratePerSecond) -}}
+{{- end -}}
+{{- include "oan.requireInt" (dict "v" $wt.otpReserve "name" "workerTelegram.otpReserve" "min" 0) -}}
+{{- if ge (int $wt.otpReserve) (int $wt.ratePerSecond) -}}
+{{- fail "workerTelegram.otpReserve must be below workerTelegram.ratePerSecond" -}}
+{{- end -}}
+{{- with $wt.apiBaseUrl -}}
+{{- if not (regexMatch "^https://[A-Za-z0-9.-]+(:[0-9]+)?/?$" .) -}}
+{{- fail "workerTelegram.apiBaseUrl must be an https origin with no path or credentials" -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{- if $v.receipts.enabled -}}
+{{- $_ := required "secrets.receipts.serverTlsSecret is required when receipts are enabled" $v.secrets.receipts.serverTlsSecret -}}
+{{- if and (not $v.secrets.receipts.pinnedCertKeys) (not $v.secrets.receipts.clientCaKeys) -}}
+{{- fail "secrets.receipts needs 8028's callback CA (clientCaSecret, clientCaKeys) or at least one pinned 8028 certificate (pinnedCertsSecret, pinnedCertKeys)" -}}
+{{- end -}}
+{{- if $v.secrets.receipts.pinnedCertKeys -}}
+{{- $_ := required "secrets.receipts.pinnedCertsSecret is required when pinnedCertKeys are set" $v.secrets.receipts.pinnedCertsSecret -}}
+{{- end -}}
+{{- if $v.secrets.receipts.clientCaKeys -}}
+{{- $_ := required "secrets.receipts.clientCaSecret is required when clientCaKeys are set" $v.secrets.receipts.clientCaSecret -}}
+{{- end -}}
+{{- $_ := required "secrets.receipts.callbackSecret.existingSecret is required when receipts are enabled" $v.secrets.receipts.callbackSecret.existingSecret -}}
+{{- $_ := required "secrets.receipts.callbackSecret.key is required when receipts are enabled" $v.secrets.receipts.callbackSecret.key -}}
+{{- if not (hasPrefix "/" (toString $v.receipts.path)) -}}
+{{- fail "receipts.path must start with /" -}}
+{{- end -}}
+{{- range $name, $_ := $v.receipts.service.annotations -}}
+{{- if or (contains "ssl-cert" $name) (contains "ssl-ports" $name) (contains "ssl-negotiation-policy" $name) (contains "backend-protocol" $name) -}}
+{{- fail (printf "receipts.service.annotations.%s would make the load balancer terminate or re-encrypt TLS; the receipt ingress requires L4 TCP pass-through so the process sees the 8028 client certificate" $name) -}}
+{{- end -}}
+{{- end -}}
+{{- if not (has $v.receipts.service.type (list "LoadBalancer" "NodePort" "ClusterIP")) -}}
+{{- fail "receipts.service.type must be LoadBalancer, NodePort or ClusterIP" -}}
+{{- end -}}
+{{- end -}}
+
+{{- if and $v.cleanup.enabled (not (has $v.cleanup.mode (list "cronjob" "deployment"))) -}}
+{{- fail "cleanup.mode must be cronjob or deployment" -}}
+{{- end -}}
+
+{{- include "oan.validateConnectionInputs" . -}}
+
+{{- if $v.migration.enabled -}}
+{{- $mode := $v.migration.network.mode -}}
+{{- if not (has $mode (list "hook" "preprovisioned" "unrestricted")) -}}
+{{- fail "migration.network.mode must be hook, preprovisioned or unrestricted" -}}
+{{- end -}}
+{{- if eq $mode "hook" -}}
+{{- if not $v.networkPolicy.enabled -}}
+{{- fail "migration.network.mode=hook requires networkPolicy.enabled=true" -}}
+{{- end -}}
+{{- if not $v.networkPolicy.egress.postgres.cidrs -}}
+{{- fail "migration.network.mode=hook requires networkPolicy.egress.postgres.cidrs (the PostgreSQL destination of the migration hook)" -}}
+{{- end -}}
+{{- end -}}
+{{- if and (eq $mode "preprovisioned") (not $v.migration.network.preprovisionedPolicy) -}}
+{{- fail "migration.network.mode=preprovisioned requires migration.network.preprovisionedPolicy (the operator-managed policy that lets the migration pod reach PostgreSQL)" -}}
+{{- end -}}
+{{- if and (eq $mode "unrestricted") $v.networkPolicy.enabled $v.networkPolicy.egress.enabled -}}
+{{- fail "migration.network.mode=unrestricted contradicts networkPolicy.egress.enabled=true: the chart's own egress policy does not exist yet on install and is the previous one on upgrade; use hook or preprovisioned" -}}
+{{- end -}}
+{{- end -}}
+{{- if gt (int $v.database.connectionBudget) 0 -}}
+{{- $rollout := int (include "oan.connectionRollout" .) -}}
+{{- if gt $rollout (int $v.database.connectionBudget) -}}
+{{- fail (printf "estimated PostgreSQL connections during an upgrade/rollout (%d; steady state %d) exceed database.connectionBudget (%d). These are estimates from configured pool limits, not enforced maxima; see docs/deployment/helm.md" $rollout (int (include "oan.connectionSteady" .)) (int $v.database.connectionBudget)) -}}
+{{- end -}}
+{{- end -}}

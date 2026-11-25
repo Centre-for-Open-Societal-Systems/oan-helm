@@ -52,7 +52,8 @@ Connectors use `connector-farmer-registry.development.oanstaging.com`,
 `connector-cropsown-registry.development.oanstaging.com` and
 `connector-livestock-registry.development.oanstaging.com`. The shared dashboard is
 `oan-dashboard.development.oanstaging.com`; Kafka UI is
-`kafka.development.oanstaging.com`. Preserve their existing access restrictions.
+`kafka.development.oanstaging.com`; the OAN Messaging staff console is
+`messaging.development.oanstaging.com` (staff portal tile, three named users). Preserve their existing access restrictions.
 
 The environment has one wildcard DNS record and certificate, Nginx forwards to
 Istio, and public VirtualServices use `istio-system/development`. Rancher and

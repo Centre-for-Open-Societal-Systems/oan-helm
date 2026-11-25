@@ -1,0 +1,138 @@
+{{- if .Values.worker.enabled }}
+{{- $c := dict "root" . "component" "worker" }}
+{{- include "oan.requireCommand" (dict "cmd" .Values.worker.command "name" "worker") }}
+{{- $s := .Values.secrets }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "oan.componentName" $c }}
+  labels:
+    {{- include "oan.labels" $c | nindent 4 }}
+spec:
+  replicas: {{ .Values.worker.replicas }}
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      {{- include "oan.selectorLabels" $c | nindent 6 }}
+  strategy:
+    # Workers coordinate through PostgreSQL leases and advisory locks, so old and new
+    # pods may overlap safely; stopping pods must finish or release in-flight claims.
+    type: RollingUpdate
+    rollingUpdate: {maxUnavailable: 1, maxSurge: {{ .Values.worker.rollout.maxSurge }}}
+  template:
+    metadata:
+      labels:
+        {{- include "oan.labels" $c | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "oan.serviceAccountName" . }}
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      # >= worker lease (checked at render time): an in-flight provider call must be
+      # able to finish and record its outcome after SIGTERM.
+      terminationGracePeriodSeconds: {{ .Values.worker.terminationGracePeriodSeconds }}
+      securityContext:
+        {{- include "oan.podSecurityContextWithKeys" . | nindent 8 }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- include "oan.tlsSnapshotInit" (dict "root" . "ca" (ne $s.sms8028.caKey "")) | nindent 8 }}
+      containers:
+        - name: worker
+          image: {{ include "oan.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.image.workingDir }}
+          workingDir: {{ . }}
+          {{- end }}
+          command:
+            {{- toYaml .Values.worker.command | nindent 12 }}
+          envFrom:
+            {{- include "oan.envFromConfig" . | nindent 12 }}
+          env:
+            {{- include "oan.storageEnv" (dict "root" . "pool" .Values.worker.pool) | nindent 12 }}
+            # 8028 adapter (oan_messaging.adapters.sms8028.Sms8028Settings.from_environ)
+            - name: OAN_MSG_SMS8028_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $s.sms8028.existingSecret }}
+                  key: {{ $s.sms8028.clientSecretKey }}
+            - name: OAN_MSG_SMS8028_CLIENT_CERT
+              value: /run/oan-msg/tls/current/tls.crt
+            - name: OAN_MSG_SMS8028_CLIENT_KEY
+              value: /run/oan-msg/tls/current/tls.key
+            {{- if $s.sms8028.caKey }}
+            - name: OAN_MSG_SMS8028_CA_CERT
+              value: /run/oan-msg/tls/current/ca.crt
+            {{- end }}
+            {{- /* Tokens only when this worker sends Telegram (SMS-only workers get none). */}}
+            {{- if has "telegram" .Values.worker.channels }}
+            {{- range $bot, $key := $s.telegram.bots }}
+            # Telegram bot "{{ $bot }}" (TelegramBotRegistry.from_environ)
+            - name: OAN_MSG_TELEGRAM_BOT_TOKEN__{{ $bot | upper }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $s.telegram.existingSecret }}
+                  key: {{ $key }}
+            {{- end }}
+            {{- end }}
+            - name: OAN_MSG_WORKER_CHANNELS
+              value: {{ join "," .Values.worker.channels | quote }}
+            - name: OAN_MSG_WORKER_HEARTBEAT_FILE
+              value: /tmp/oan-msg-worker.alive
+            {{- with .Values.worker.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- with .Values.worker.probes.readiness }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.worker.probes.liveness }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.worker.resources | nindent 12 }}
+          securityContext:
+            {{- include "oan.containerSecurityContext" . | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: tls-snapshot
+              mountPath: /run/oan-msg/tls
+              readOnly: true
+      volumes:
+        - name: tmp
+          emptyDir: {sizeLimit: 64Mi}
+        # 8028 client certificate + key (+ CA), mounted ONLY into the init container.
+        - name: tls-source
+          secret:
+            secretName: {{ $s.sms8028.tlsSecret }}
+            defaultMode: 0440
+            items:
+              - {key: tls.crt, path: tls.crt}
+              - {key: tls.key, path: tls.key}
+              {{- if $s.sms8028.caKey }}
+              - {key: {{ $s.sms8028.caKey }}, path: ca.crt}
+              {{- end }}
+        # 0600 snapshot owned by the pod uid; memory-backed, never on node disk.
+        - name: tls-snapshot
+          emptyDir: {medium: Memory, sizeLimit: 1Mi}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

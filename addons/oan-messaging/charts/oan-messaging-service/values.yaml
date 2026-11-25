@@ -1,0 +1,390 @@
+# OAN Messaging Service: Helm chart (draft for review).
+#
+# The worker, receipt ingress, cleanup and status check are off by default and refuse to
+# render without a command. values-pilot.yaml turns them on with the real runtime
+# commands. See docs/deployment/helm.md.
+#
+# Every value below is a placeholder for a dev environment. This chart never creates
+# Secrets: every credential, key and certificate comes from an existing Secret that OAN
+# operators create out of band.
+
+nameOverride: ""
+fullnameOverride: ""
+commonLabels: {}
+
+image:
+  # Placeholder registry; the image is built by MSG-08 (not yet available).
+  repository: registry.example.invalid/oan/oan-messaging
+  tag: "0.1.0-placeholder"
+  # Prefer an immutable digest ("sha256:..."); when set it overrides the tag.
+  digest: ""
+  pullPolicy: IfNotPresent
+  # Working directory inside the image (must contain migrations/alembic.ini). MSG-08.
+  workingDir: "/app"
+imagePullSecrets: []
+
+# Non-root identity. The MSG-08 image must contain this uid/gid and must not need root.
+podSecurity:
+  runAsUser: 10001
+  runAsGroup: 10001
+
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+podAnnotations: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# --------------------------------------------------------------------- PostgreSQL
+# External PostgreSQL only; this chart deploys no database (and no MariaDB or Redis).
+database:
+  # Existing Secret with the RUNTIME role URL (DML only), read as OAN_MSG_DATABASE_URL.
+  # Format required by the code: postgresql+psycopg://<role>:<password>@<host>:5432/<db>
+  # Use sslmode=verify-full with a CA the image trusts.
+  existingSecret: oan-messaging-database
+  urlKey: runtime-url
+  migration:
+    # Existing Secret with the MIGRATION (DDL/owner) role URL. Defaults to the runtime
+    # Secret above when empty; a separate owner role is recommended.
+    existingSecret: ""
+    urlKey: migration-url
+  # Optional connection budget for this release (integer >= 0; 0 = no check). When > 0,
+  # rendering fails if the UPGRADE/ROLLOUT ESTIMATE exceeds it: (2 x replicas + maxSurge)
+  # pods per Deployment (terminating pods still hold connections), each at
+  # pool.size + pool.maxOverflow (+ worker coordination), plus one cleanup pod and the
+  # migration hook's connection. Both the steady-state and rollout estimates are printed in
+  # NOTES. They are estimates from configured limits, not maxima enforced at runtime.
+  # Do NOT put transaction-mode PgBouncer in front of the workers: the rate limiter
+  # relies on PostgreSQL session advisory locks.
+  connectionBudget: 0
+
+# ----------------------------------------------------------- secrets (existing only)
+secrets:
+  core:
+    # Storage keys read by every runtime component (oan_messaging.storage.config).
+    existingSecret: oan-messaging-core
+    contentKeysKey: content-keys            # OAN_MSG_CONTENT_KEYS        v1:<b64 32 bytes>[,v0:...]
+    fingerprintKeysKey: fingerprint-keys    # OAN_MSG_FINGERPRINT_KEYS    k1:<b64 >=32 bytes>[,...]
+    credentialPepperKey: credential-pepper  # OAN_MSG_CREDENTIAL_PEPPER   <b64 >=32 bytes>
+  sms8028:
+    # Worker only. Gateway client secret (OAN_MSG_SMS8028_CLIENT_SECRET).
+    existingSecret: oan-messaging-sms8028
+    clientSecretKey: client-secret
+    # kubernetes.io/tls Secret with the 8028-issued CLIENT certificate (tls.crt, tls.key).
+    tlsSecret: oan-messaging-sms8028-client-tls
+    # Optional key in tlsSecret with a CA bundle for the 8028 server (OAN_MSG_SMS8028_CA_CERT).
+    caKey: ""
+  telegram:
+    # Worker only. Empty existingSecret disables Telegram tokens entirely.
+    existingSecret: ""
+    # bot key (lower-case, [a-z0-9_-]) -> key in existingSecret holding that bot's token.
+    # Rendered as OAN_MSG_TELEGRAM_BOT_TOKEN__<BOT KEY>.
+    bots: {}
+  receipts:
+    # Receipt ingress only. kubernetes.io/tls Secret with the SERVER certificate that
+    # 8028 sees when it connects (tls.crt, tls.key).
+    serverTlsSecret: oan-messaging-receipts-server-tls
+    # How 8028's callback client certificate is trusted. Set at least one of the two.
+    # (a) 8028's callback CA (8028 guide v1.1 supplies a CA): any certificate it issues is
+    #     accepted. Rendered as OAN_MSG_RECEIPTS_CLIENT_CA_CERTS.
+    clientCaSecret: ""
+    clientCaKeys: []
+    # (b) Pinned 8028 callback certificates (current and, during renewal, previous). With a
+    #     CA configured too, pins narrow it: only pinned certificates are accepted. For 8028
+    #     guide v1.1 with only the CA, set pinnedCertKeys: [].
+    pinnedCertsSecret: oan-messaging-8028-pins
+    pinnedCertKeys: [current.pem]
+    # Secret 8028 sends in every callback body (clientSecret, guide 8.1); required.
+    # previousKey: optional, for rotation (both are accepted while it is set).
+    callbackSecret:
+      existingSecret: oan-messaging-8028-callback
+      key: callback-secret
+      previousKey: ""
+
+# --------------------------------------------------------- shared non-secret config
+config:
+  contentKeyCurrent: v1        # OAN_MSG_CONTENT_KEY_CURRENT
+  fingerprintKeyCurrent: k1    # OAN_MSG_FINGERPRINT_KEY_CURRENT
+  maxBodyBytes: 16384          # OAN_MSG_MAX_BODY_BYTES
+  # SMS-03: accept and send the broadcast purpose (API, worker and caller command).
+  broadcastEnabled: false      # OAN_MSG_BROADCAST_ENABLED
+  # A message waiting this long is claimed ahead of newer non-OTP traffic (OTPs first).
+  broadcastMaxWaitSeconds: 180 # OAN_MSG_BROADCAST_MAX_WAIT_SECONDS
+  # SMS sent to 8028 per second across all workers (operator capacity 2-5/s; 8028 queues
+  # anything faster, outside our OTP-first order), and the slots of each second kept for OTP.
+  # Counted per SMS part: a 3-part SMS uses 3, a batch uses numbers x parts.
+  smsRatePerSecond: 4          # OAN_MSG_SMS_RATE_PER_SECOND
+  smsOtpReserve: 1             # OAN_MSG_SMS_OTP_RESERVE
+  # 8028 batching: broadcast/alert numbers with the same text in one request (1 = off,
+  # at most 100). It does not send a campaign faster (the pace counts every number), and
+  # an OTP can wait behind a batch for numbers x parts / smsRatePerSecond seconds.
+  smsBatchMaxRecipients: 1     # OAN_MSG_SMS_BATCH_MAX_RECIPIENTS
+  # How often the cleanup component rebuilds the statistics behind GET /api/v1/charts.
+  statsRefreshSeconds: 900     # OAN_MSG_STATS_REFRESH_SECONDS
+  # Empty = code default (https://8028.et:3400/sms-api/v1). OAN_MSG_SMS8028_BASE_URL.
+  sms8028BaseUrl: ""
+  # ServicePolicy overrides in seconds (all optional; must be identical for every
+  # component, which is why they live in one ConfigMap). Allowed keys:
+  # maxOtpTtl, maxExpiryHorizon, dedupWindow, receiptWindow, receiptEvidenceRetention,
+  # purgeSweepInterval, workerLease.  e.g. {dedupWindow: 2592000}
+  policy: {}
+
+# ------------------------------------------------------------------------ API
+api:
+  enabled: true
+  replicas: 2
+  # Same as the image's default command.
+  command:
+    - uvicorn
+    - --factory
+    - oan_messaging.runtime.api:create_app
+    - --host
+    - 0.0.0.0
+    - --port
+    - "8000"
+    - --timeout-graceful-shutdown
+    - "20"
+  containerPort: 8000
+  terminationGracePeriodSeconds: 30
+  # pool.size >= 1 and maxOverflow >= 0 (SQLAlchemy treats 0 / -1 as unlimited).
+  pool: {size: 5, maxOverflow: 5}
+  rollout: {maxSurge: 1}   # maxUnavailable is fixed at 0
+  resources:
+    requests: {cpu: 100m, memory: 192Mi}
+    limits: {cpu: "1", memory: 512Mi}
+  probes:
+    # /livez: process serves requests; /readyz: database answers (oan_messaging.runtime.api)
+    startup: {httpGet: {path: /livez, port: http}, periodSeconds: 2, failureThreshold: 30}
+    readiness: {httpGet: {path: /readyz, port: http}, periodSeconds: 10, failureThreshold: 3}
+    liveness: {httpGet: {path: /livez, port: http}, periodSeconds: 20, failureThreshold: 3}
+  service:
+    type: ClusterIP
+    port: 80
+    annotations: {}
+  # Optional networking.k8s.io/v1 Ingress for the API only (e.g. behind the cluster's
+  # gateway). APISIX deployments usually add their own ApisixRoute instead.
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+    host: oan-messaging.dev.example.invalid   # placeholder; no dev URL exists yet
+    tlsSecretName: ""
+  pdb: {enabled: true, minAvailable: 1}
+  extraEnv: []
+
+# --------------------------------------------------------------------- worker
+worker:
+  # Off by default; values-pilot.yaml sets command: [python, -m, oan_messaging.runtime, worker].
+  enabled: false
+  command: []
+  replicas: 2
+  # Must be >= the worker lease (ServicePolicy.worker_lease, default 120 s) so an
+  # in-flight provider call can finish and its claim be released.
+  terminationGracePeriodSeconds: 150
+  pool: {size: 5, maxOverflow: 5}
+  rollout: {maxSurge: 1}   # maxUnavailable is fixed at 1
+  # Budget input ONLY: the rate limiter's own NullPool coordination connections per worker
+  # pod. Nothing passes this to the runtime; keep it equal to the runtime's value
+  # (default 2). Integer >= 1.
+  coordinationConnections: 2
+  resources:
+    requests: {cpu: 100m, memory: 192Mi}
+    limits: {cpu: "1", memory: 512Mi}
+  # Channels this worker dispatches (OAN_MSG_WORKER_CHANNELS). Every enabled channel must be
+  # served by at least one worker; telegram also needs secrets.telegram.bots.
+  channels: [sms]
+  # Liveness: the worker loop touches a heartbeat file after every cycle (success or
+  # handled failure); a hung loop stops touching it and the pod is restarted.
+  probes:
+    liveness:
+      exec:
+        command: [python, -m, oan_messaging.runtime, check-heartbeat, --max-age, "90"]
+      initialDelaySeconds: 30
+      periodSeconds: 30
+      timeoutSeconds: 10
+      failureThreshold: 3
+  extraEnv: []
+
+# ------------------------------------------------------------ Telegram worker
+# A second worker Deployment that sends only Telegram (SMS-02 revised: Bot Services sends
+# the Telegram copy of DA broadcasts through OAN Messaging). Off by default. It holds only
+# the Telegram bot tokens (secrets.telegram.bots) and no 8028 secret or certificate, so a
+# missing or wrong bot token can never stop SMS. Keep worker.channels at [sms] when this
+# is on: rendering fails if both workers list telegram.
+workerTelegram:
+  # values for an environment: command: [python, -m, oan_messaging.runtime, worker]
+  enabled: false
+  command: []
+  replicas: 1
+  # Must be >= the worker lease (ServicePolicy.worker_lease, default 120 s).
+  terminationGracePeriodSeconds: 150
+  pool: {size: 3, maxOverflow: 2}
+  rollout: {maxSurge: 1}   # maxUnavailable is fixed at 1
+  # Budget input ONLY, as worker.coordinationConnections. Integer >= 1.
+  coordinationConnections: 2
+  # Telegram sends per second across all Telegram workers (TG-08: 20; refused above 30),
+  # and the slots of each second kept for OTP (no Telegram OTP caller today: 0).
+  ratePerSecond: 20        # OAN_MSG_TELEGRAM_RATE_PER_SECOND
+  otpReserve: 0            # OAN_MSG_TELEGRAM_OTP_RESERVE
+  # Empty = code default (https://api.telegram.org). https only. OAN_MSG_TELEGRAM_API_BASE_URL.
+  apiBaseUrl: ""
+  # Contract 3.4.0: accept (api) and send (this worker) the broadcast purpose on Telegram
+  # only. Set as an env value on the api and worker-telegram pods, never in the shared
+  # ConfigMap: SMS broadcast still follows config.broadcastEnabled alone, and the SMS
+  # worker is not restarted. Needs workerTelegram.enabled.
+  broadcastEnabled: false  # OAN_MSG_TELEGRAM_BROADCAST_ENABLED
+  resources:
+    requests: {cpu: 50m, memory: 160Mi}
+    limits: {cpu: 500m, memory: 384Mi}
+  probes:
+    liveness:
+      exec:
+        command: [python, -m, oan_messaging.runtime, check-heartbeat, --max-age, "90"]
+      initialDelaySeconds: 30
+      periodSeconds: 30
+      timeoutSeconds: 10
+      failureThreshold: 3
+  extraEnv: []
+
+# ------------------------------------------------------------- receipt ingress
+receipts:
+  # Off by default; values-pilot.yaml sets command: [python, -m, oan_messaging.runtime, receipts].
+  enabled: false
+  command: []
+  # Callback path registered with 8028 (guide v1.1: /sms-status-receiver/v1/update-status).
+  path: /sms-status-receiver/v1/update-status
+  replicas: 2
+  containerPort: 8443
+  terminationGracePeriodSeconds: 30
+  pool: {size: 2, maxOverflow: 2}
+  rollout: {maxSurge: 1}   # maxUnavailable is fixed at 0
+  resources:
+    requests: {cpu: 50m, memory: 128Mi}
+    limits: {cpu: 500m, memory: 256Mi}
+  # A plain TCP connect (no TLS handshake). Verify on the cluster that it does not
+  # flood logs with handshake errors; disable it if it does.
+  probes:
+    readiness: {tcpSocket: {port: receipts}, periodSeconds: 15, failureThreshold: 3}
+    liveness: {tcpSocket: {port: receipts}, periodSeconds: 30, failureThreshold: 3}
+  # 8028 connects here directly. The process itself terminates TLS and verifies the
+  # client certificate, so the Service must be an L4 (TCP) pass-through. Never an
+  # HTTP Ingress or a load balancer that terminates TLS: rendering fails if a TLS
+  # termination annotation is set.
+  service:
+    type: LoadBalancer
+    port: 443
+    # e.g. AWS NLB (TCP, IP targets, client IP preserved):
+    #   service.beta.kubernetes.io/aws-load-balancer-type: external
+    #   service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+    #   service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+    annotations: {}
+    externalTrafficPolicy: Local
+    # 8028 callback source CIDRs. 8028 gave 213.55.73.209 (20 Nov 2026): set
+    # [213.55.73.209/32] in the environment values.
+    loadBalancerSourceRanges: []
+  pdb: {enabled: true, minAvailable: 1}
+  extraEnv: []
+
+# ---------------------------------------------------------------------- cleanup
+cleanup:
+  # Off by default; values-pilot.yaml sets command: [python, -m, oan_messaging.runtime, cleanup].
+  enabled: false
+  # cronjob: one run_cleanup pass per schedule (concurrencyPolicy Forbid). It does not
+  #   rebuild statistics: statsRefresh does.
+  # deployment: one long-running loop (strategy Recreate) that sweeps every
+  #   purge_sweep_interval and also rebuilds statistics. The chart adds --forever to the
+  #   command in this mode (without it the process exits after one pass and the pod
+  #   restarts in a loop).
+  # Both are idempotent and would be safe to overlap; one pod keeps the budget at one pool.
+  mode: cronjob
+  command: []
+  # Default ServicePolicy.purge_sweep_interval is 5 minutes.
+  schedule: "*/5 * * * *"
+  activeDeadlineSeconds: 600
+  terminationGracePeriodSeconds: 30
+  pool: {size: 2, maxOverflow: 0}
+  resources:
+    requests: {cpu: 50m, memory: 128Mi}
+    limits: {cpu: 500m, memory: 256Mi}
+  extraEnv: []
+
+# ---------------------------------------------------------------- statistics
+# Rebuilds the statistics snapshot behind GET /api/v1/charts: one `stats-refresh` run per
+# schedule. A run that finds another one in progress does nothing (database lock).
+statsRefresh:
+  enabled: true
+  command: [python, -m, oan_messaging.runtime, stats-refresh]
+  schedule: "*/15 * * * *"
+  activeDeadlineSeconds: 600
+  pool: {size: 1, maxOverflow: 0}
+  resources:
+    requests: {cpu: 50m, memory: 128Mi}
+    limits: {cpu: 500m, memory: 256Mi}
+
+# -------------------------------------------------------------------- migration
+# Scheduled alert check (MSG-08): runs `status --fail-on-alert`, which exits 2 when any
+# alert is active (docs/runbook.md §3). A failed Job is the alert signal: route failed
+# Jobs of this CronJob to paging with the cluster's existing alerting.
+statusCheck:
+  enabled: false
+  command: [python, -m, oan_messaging.runtime, status, --fail-on-alert]
+  schedule: "*/5 * * * *"
+  activeDeadlineSeconds: 120
+  pool: {size: 1, maxOverflow: 0}
+  resources:
+    requests: {cpu: 20m, memory: 96Mi}
+    limits: {cpu: 250m, memory: 192Mi}
+
+migration:
+  # Helm pre-install/pre-upgrade hook Job: one pod, no parallelism. On install it runs
+  # before any workload exists; on UPGRADE the previous release's workloads keep running
+  # while it runs, so every migration must be backward compatible with the running
+  # version (expand first, contract in a later release). One Job per Helm release is not
+  # a database-wide lock: never point two releases (or a manual alembic run) at the same
+  # database concurrently. The command is the project's real Alembic configuration.
+  enabled: true
+  command: [alembic, -c, migrations/alembic.ini, upgrade, head]
+  backoffLimit: 0
+  activeDeadlineSeconds: 600
+  resources:
+    requests: {cpu: 50m, memory: 128Mi}
+    limits: {cpu: 500m, memory: 256Mi}
+  # How the migration hook reaches PostgreSQL. The chart's ordinary NetworkPolicies do not
+  # exist yet on first install and are the OLD ones during pre-upgrade, so they cannot
+  # serve the hook. Exactly one of:
+  #   hook           the chart creates a hook NetworkPolicy (DNS + networkPolicy.egress.postgres)
+  #                  ordered before the Job and deleted after it succeeds; requires
+  #                  networkPolicy.enabled and networkPolicy.egress.postgres.cidrs
+  #   preprovisioned an operator-managed policy already allows pods labelled
+  #                  app.kubernetes.io/component=migration to reach PostgreSQL; name it in
+  #                  preprovisionedPolicy (recorded on the Job, not verified by Helm)
+  #   unrestricted   the namespace has no egress restriction at all; refused when
+  #                  networkPolicy.egress.enabled is true
+  network:
+    mode: unrestricted
+    preprovisionedPolicy: ""
+
+# -------------------------------------------------------------- NetworkPolicy
+networkPolicy:
+  enabled: true
+  api:
+    # NetworkPolicyPeer list allowed to reach the API (e.g. the gateway namespace).
+    # Empty = no ingress to the API at all.
+    from: []
+  receipts:
+    # 8028 callback source CIDRs (8028: 213.55.73.209/32). Empty = no ingress to the receipt
+    # ingress at all.
+    fromCIDRs: []
+  egress:
+    # Off by default: the destinations below are not known yet. When on, only DNS and
+    # the listed destinations are reachable.
+    enabled: false
+    dns:
+      namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: kube-system}}
+      podSelector: {matchLabels: {k8s-app: kube-dns}}
+    postgres: {cidrs: [], port: 5432}
+    sms8028: {cidrs: [], port: 3400}      # worker only; 8028 allow-lists our egress IP
+    telegram: {cidrs: [], port: 443}      # worker and workerTelegram only

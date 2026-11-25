@@ -1,0 +1,135 @@
+{{- if .Values.migration.enabled }}
+{{- $c := dict "root" . "component" "migration" }}
+{{- include "oan.requireCommand" (dict "cmd" .Values.migration.command "name" "migration") }}
+{{- $secret := default .Values.database.existingSecret .Values.database.migration.existingSecret }}
+# Hook resources run before the chart's normal resources exist (install) or alongside the
+# previous release's resources (upgrade), so the migration has its own hook ServiceAccount
+# and NetworkPolicy, and reads only the migration database URL (no storage keys, no
+# ConfigMap, no runtime credentials).
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "oan.componentName" $c }}
+  labels:
+    {{- include "oan.labels" $c | nindent 4 }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "-10"
+    helm.sh/hook-delete-policy: before-hook-creation
+automountServiceAccountToken: false
+{{- if eq .Values.migration.network.mode "hook" }}
+{{- $e := .Values.networkPolicy.egress }}
+---
+# Hook-scoped network access for the migration pod, created before the Job (weight -5) so
+# it applies on first install and carries the NEW values on upgrade. Ingress: none.
+# Egress: DNS and PostgreSQL only. Deleted after the hook phase succeeds; kept on failure
+# for debugging (replaced on the next attempt).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "oan.componentName" $c }}-egress
+  labels:
+    {{- include "oan.labels" $c | nindent 4 }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "oan.selectorLabels" $c | nindent 6 }}
+  policyTypes: [Ingress, Egress]
+  ingress: []
+  egress:
+    - to:
+        - namespaceSelector:
+            {{- toYaml $e.dns.namespaceSelector | nindent 12 }}
+          podSelector:
+            {{- toYaml $e.dns.podSelector | nindent 12 }}
+      ports:
+        - {port: 53, protocol: UDP}
+        - {port: 53, protocol: TCP}
+    - to:
+        {{- range $e.postgres.cidrs }}
+        - ipBlock: {cidr: {{ . | quote }}}
+        {{- end }}
+      ports:
+        - {port: {{ $e.postgres.port }}, protocol: TCP}
+{{- end }}
+---
+# Serialized schema migration for THIS release: one Job, one pod, no parallelism, no
+# retries. On install it completes before Helm creates any workload. On upgrade the
+# previous release's workloads keep running during it, so migrations must be backward
+# compatible. Helm's release lock stops two operations on this release from running hooks
+# at once; it is NOT a database-wide lock (see docs/deployment/helm.md).
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "oan.componentName" $c }}
+  labels:
+    {{- include "oan.labels" $c | nindent 4 }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "0"
+    helm.sh/hook-delete-policy: before-hook-creation
+    oan.coss/migration-network-mode: {{ .Values.migration.network.mode | quote }}
+    {{- with .Values.migration.network.preprovisionedPolicy }}
+    oan.coss/migration-network-policy: {{ . | quote }}
+    {{- end }}
+spec:
+  parallelism: 1
+  completions: 1
+  backoffLimit: {{ .Values.migration.backoffLimit }}
+  activeDeadlineSeconds: {{ .Values.migration.activeDeadlineSeconds }}
+  template:
+    metadata:
+      labels:
+        {{- include "oan.labels" $c | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      serviceAccountName: {{ include "oan.componentName" $c }}
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      securityContext:
+        {{- include "oan.podSecurityContext" . | nindent 8 }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: migrate
+          image: {{ include "oan.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.image.workingDir }}
+          workingDir: {{ . }}
+          {{- end }}
+          command:
+            {{- toYaml .Values.migration.command | nindent 12 }}
+          env:
+            # Read by migrations/env.py.
+            - name: OAN_MSG_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ required "database.existingSecret is required" $secret }}
+                  key: {{ required "database.migration.urlKey is required" .Values.database.migration.urlKey }}
+            - name: PYTHONDONTWRITEBYTECODE
+              value: "1"
+          resources:
+            {{- toYaml .Values.migration.resources | nindent 12 }}
+          securityContext:
+            {{- include "oan.containerSecurityContext" . | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {sizeLimit: 64Mi}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
