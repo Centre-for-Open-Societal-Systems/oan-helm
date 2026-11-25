@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### openg2p-da-registry 1.0.0-develop.90 (develop)
+
+- Merge pull request #86 from simretyibeltal-commits/test/guard-tests (Centre-for-Open-Societal-Systems/da-registry@4db8e7dafe98)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-25
+
 ### openg2p-cropsown-registry 1.0.0-develop.315 (develop)
 
 - ci(crop): ruff lint and pytest coverage in validate.sh; ci/README.md (#320) (Centre-for-Open-Societal-Systems/cropsown-regsitry@188366fcf4d7)
