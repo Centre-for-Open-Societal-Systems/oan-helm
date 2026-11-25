@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### openg2p-cropsown-registry 1.0.0-develop.313 (develop)
+
+- Crop Sown: Land ID plain text, future Sowing and Observation dates, ODK 2026.11.20.2 (#317) (Centre-for-Open-Societal-Systems/cropsown-regsitry@16df3a162132)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-25
+
 ### oan-farmer-app-service 0.0.1-staging.1 (staging)
 
 - Merge pull request #8 from arnavam/ci/staging-qa-pipeline (Centre-for-Open-Societal-Systems/oan_farmer_app_service@794b5f133370)
