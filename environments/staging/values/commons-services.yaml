@@ -188,8 +188,8 @@ openg2p-consent-manager:
     image:
       pullPolicy: Always
       registry: ''
-      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/openg2p/commons/consent-manager-api
-      tag: dev-48e64c249056@sha256:cca3273868b8ed28d193642b346fc3369b450ad7feefd42d02e91e84cb074831
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-manager/consent-manager-api
+      tag: 1.1.0-develop.1@sha256:12fe280e3faed5dc497f0ffcaad747ea73b7b16593e009693b6034c87431d075
     istio:
       enabled: true
       virtualservice:
@@ -226,15 +226,28 @@ openg2p-consent-manager:
     consentManagerPartnerHostname: consent-manager-partner.qa.oanstaging.com
     consentManagerBeneHostname: ''
   consentManagerApi:
+    image:
+      pullPolicy: Always
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-manager/consent-manager-api
+      tag: 1.1.0-develop.1@sha256:12fe280e3faed5dc497f0ffcaad747ea73b7b16593e009693b6034c87431d075
     envVars:
       CONSENT_MANAGER_AWE_CALLBACK_URL: http://{{ .Release.Name }}-cm-api.{{ .Release.Namespace }}.svc.cluster.local/consent/v1/awe/webhooks/decision
     istio:
       virtualservice:
         gateway: istio-system/staging
   ui:
+    image:
+      pullPolicy: Always
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-manager/consent-manager-ui
+      tag: 1.1.0-develop.1@sha256:e8b4415628c36e2fe872296c840ab73fc7c911ab1fe5eb73314b934edc39e101
     istio:
       virtualservice:
         gateway: istio-system/staging
+  sanity:
+    image:
+      pullPolicy: Always
+      repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-manager/consent-manager-sanity
+      tag: 1.1.0-develop.1@sha256:16f3ac3f098ffaae538a8698386cfe690fc9aeb2746f587edcca36ef3c6b6870
 keymanager:
   istio:
     virtualservice:
