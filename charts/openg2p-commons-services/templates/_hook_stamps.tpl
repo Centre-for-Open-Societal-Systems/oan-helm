@@ -25,7 +25,7 @@
 
 {{- /* The hooks under stamps, in the order the writer records them. */ -}}
 {{- define "oan.hook.names" -}}
-aggregation-staff-client-secret aggregation-staff-grant consent-staff-portal-tile iam-bene-portal-api iam-login-provider-issuer-sync keycloak-public-client-urls mock-identities
+aggregation-staff-client-secret aggregation-staff-grant consent-staff-portal-tile esignet-client-onboarding iam-bene-portal-api iam-login-provider-issuer-sync keycloak-public-client-urls mock-identities
 {{- end -}}
 
 {{- /* sha256 of a hook file's rendered content, its volatile lines removed. Argument: (list root name). */ -}}
