@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### oan-grievance-ui 0.0.1-develop.63 (develop)
+
+- ci: use oan-helm's app_chart for the chart steps and register promote (#91) (Centre-for-Open-Societal-Systems/oan_grievance_ui@a0f5e1c445e2)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-25
+
 ### openg2p-da-registry 1.0.0-develop.89 (develop)
 
 - Merge pull request #85 from simretyibeltal-commits/ci/validate-runs-all-tests (Centre-for-Open-Societal-Systems/da-registry@41a30cd0157a)

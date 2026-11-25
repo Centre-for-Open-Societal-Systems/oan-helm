@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.63
+
+<!-- source-commit: a0f5e1c445e20305507d435cbb405191c4ad5946 version: 0.0.1-develop.63 -->
+Published 2026-11-25. Archive SHA-256 `ff83368d6ca7659222d4e2437e1727f144f8392b8ab7d9059979b1ba4ab17a83`.
+
+- Change: ci: use oan-helm's app_chart for the chart steps and register promote (#91)
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_ui@a0f5e1c445e2](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/commit/a0f5e1c445e20305507d435cbb405191c4ad5946)
+- Changes since 0.0.1-develop.62: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/compare/6e0e0e83fafdcf990692eb5767706de075127b95...a0f5e1c445e20305507d435cbb405191c4ad5946
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-ui/grievance-ui:0.0.1-develop.63@sha256:2ac6dd79cb2895a82fed33c43692d8e0d3c5c1c049f950aa7a3b4d71cfabbb46` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-ui-0.0.1-develop.63.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.62
 
 <!-- source-commit: 6e0e0e83fafdcf990692eb5767706de075127b95 version: 0.0.1-develop.62 -->
