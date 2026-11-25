@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### openg2p-da-registry 1.0.0-develop.91 (develop)
+
+- Merge pull request #87 from simretyibeltal-commits/ci/coverage-and-lint (Centre-for-Open-Societal-Systems/da-registry@490f2e20f673)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-25
+
 ### oan-a2c-service 0.0.1-develop.42 (develop)
 
 - Merge pull request #115 from anteneh1621/fix/team-invitation-email (Centre-for-Open-Societal-Systems/oan_a2c@4876b470b7f6)
