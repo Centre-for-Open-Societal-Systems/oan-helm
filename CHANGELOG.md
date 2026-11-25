@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### oan-farmer-app-service 0.0.1-staging.1 (staging)
+
+- Merge pull request #8 from arnavam/ci/staging-qa-pipeline (Centre-for-Open-Societal-Systems/oan_farmer_app_service@794b5f133370)
+- Images and rollback: [releases/history/staging/oan-farmer-app-service.md](releases/history/staging/oan-farmer-app-service.md)
+
+## 2026-11-25
+
 ### oan-frappe-service 0.0.1-develop.1
 
 First published version.
