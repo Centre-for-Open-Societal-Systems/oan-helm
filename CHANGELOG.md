@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### openg2p-farmer-registry 1.0.0-develop.230 (develop)
+
+- Merge pull request #351 from asmitonweb/ci/farmer-staging-scm-poll (Centre-for-Open-Societal-Systems/farmer-registry@c3862b131710)
+- Images and rollback: [releases/history/develop/openg2p-farmer-registry.md](releases/history/develop/openg2p-farmer-registry.md)
+
+## 2026-11-25
+
 ### openg2p-farmer-registry 1.0.0-staging.59 (staging)
 
 - fix: weight household address, not size, for duplicate detection (#349) (Centre-for-Open-Societal-Systems/farmer-registry@0136c449a9d3)
