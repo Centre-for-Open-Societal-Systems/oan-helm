@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### openg2p-farmer-registry 1.0.0-staging.63 (staging)
+
+- Staging: take the object-store host from oan-helm's farmer values (#353) (Centre-for-Open-Societal-Systems/farmer-registry@6c254db5ce0e)
+- Images and rollback: [releases/history/staging/openg2p-farmer-registry.md](releases/history/staging/openg2p-farmer-registry.md)
+
+## 2026-11-25
+
 ### openg2p-farmer-registry 1.0.0-develop.231 (develop)
 
 - Staging: take the object-store host from oan-helm's farmer values (#353) (Centre-for-Open-Societal-Systems/farmer-registry@6c254db5ce0e)
