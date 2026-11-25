@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-25
 
+### oan-a2c-gateway 0.0.1-staging.4 (staging)
+
+- Merge pull request #155 from Centre-for-Open-Societal-Systems/develop (Centre-for-Open-Societal-Systems/oan_a2c@f53c54d4a911)
+- Images and rollback: [releases/history/staging/oan-a2c-gateway.md](releases/history/staging/oan-a2c-gateway.md)
+
+### oan-a2c-service 0.0.1-staging.4 (staging)
+
+- Merge pull request #155 from Centre-for-Open-Societal-Systems/develop (Centre-for-Open-Societal-Systems/oan_a2c@f53c54d4a911)
+- Images and rollback: [releases/history/staging/oan-a2c-service.md](releases/history/staging/oan-a2c-service.md)
+
+## 2026-11-25
+
 ### openg2p-livestock-registry 1.0.0-develop.231 (develop)
 
 - Merge pull request #264 from simretyibeltal-commits/ci/validate-runs-all-tests (Centre-for-Open-Societal-Systems/livestock-registry@fc9d205a4099)
