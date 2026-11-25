@@ -523,3 +523,24 @@ keycloakPublicClientUrls:
     - 'https://iam-staff-ui.{{ .Values.global.baseDomain }}/*'
     webOrigins:
     - 'https://iam-staff-ui.{{ .Values.global.baseDomain }}'
+
+# Object store (Garage), MinIO to Garage cutover. Translated from the Dev equivalent with staging's own host and
+# gateway (istio-system/staging); Dev's literal hostnames are not used. MinIO stays installed and serving as the
+# rollback, so the compatibility Service (commons-minio:9000 -> Garage) is NOT enabled: that name is MinIO's own
+# Service on staging. Likewise the restore Job is off: the data was restored by a one-off Job already.
+#
+# route: the public S3 host for Garage, the registries' minioHost and CSP image source (staging values of the four
+#   registries). It is a new host, so MinIO's host minio-farmer.qa.oanstaging.com keeps pointing at MinIO.
+# credentialsSync: after every install and upgrade, copies the four keys of Secret commons-minio (now Garage's) into
+#   the Secret of the same name in each registry namespace, where the registries read them. Needs the Roles in
+#   environments/staging/rbac/object-store-credentials-rbac.yaml, applied once by hand beforehand.
+objectStore:
+  enabled: true
+  route:
+    enabled: true
+    hosts:
+    - garage.qa.oanstaging.com
+    gateway: istio-system/staging
+  credentialsSync:
+    enabled: true
+    namespaces: [farmer, crop, live, da-registry]

@@ -7,6 +7,9 @@ global:
   baseDomain: qa.oanstaging.com
   # Kafka UI signs in through the staff realm, so it needs a public host with a certificate (nginx on the box).
   kafkaUiHostname: kafka.qa.oanstaging.com
+  # New in 2.3.4, so --reuse-values does not supply it. Only used by the base chart's Garage route (gateway
+  # commons/internal), which carries no public traffic; the public S3 host is routed in commons-services.
+  garageHostname: garage.qa.oanstaging.com
 postgresql:
   primary:
     resources:
@@ -27,6 +30,8 @@ kafka:
       limits:
         memory: 3Gi
 minio:
+  # Stays enabled while Garage runs next to it: MinIO is the rollback until the cutover is accepted.
+  enabled: true
   istio:
     virtualservice:
       host: minio-console.qa.oanstaging.com
@@ -37,3 +42,24 @@ kafkaUi:
     virtualservice:
       # The public host only works through the staging gateway; the chart default is the internal one.
       gateway: istio-system/staging
+# 2.3.4 adds Garage as the Commons object store, translated from the Dev equivalent with staging's own host and
+# gateway (New Dev's literal hostnames are not used). Caution while both stores are enabled: the Garage init Job
+# writes its keys into Secret commons-minio, the same Secret the MinIO subchart owns and every consumer reads.
+# Snapshot that Secret before the upgrade; rolling back restores it.
+garage:
+  enabled: true
+  garage:
+    replicationFactor: "1"
+    s3:
+      api:
+        region: us-east-1
+  persistence:
+    enabled: true
+    data:
+      size: 16Gi
+    meta:
+      size: 1Gi
+  deployment:
+    replicaCount: 1
+novu:
+  enabled: false
