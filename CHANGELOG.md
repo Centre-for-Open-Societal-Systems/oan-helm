@@ -8,6 +8,18 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-26
+
+### oan-grievance-gateway 0.0.1-develop.120 (develop)
+
+- Merge pull request #158 from arnavam/oan-messaging (Centre-for-Open-Societal-Systems/oan_grievance_service@87d14cd768a7)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.120 (develop)
+
+- Merge pull request #158 from arnavam/oan-messaging (Centre-for-Open-Societal-Systems/oan_grievance_service@87d14cd768a7)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
 ## 2026-11-25
 
 ### openg2p-farmer-registry 1.0.0-staging.63 (staging)
