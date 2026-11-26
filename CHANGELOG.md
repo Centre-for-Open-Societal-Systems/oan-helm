@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-26
 
+### openg2p-cropsown-registry 1.0.0-develop.317 (develop)
+
+- Merge pull request #322 from rithikharavi-ai/develop (Centre-for-Open-Societal-Systems/cropsown-regsitry@8e3bb0e45ea6)
+- Images and rollback: [releases/history/develop/openg2p-cropsown-registry.md](releases/history/develop/openg2p-cropsown-registry.md)
+
+## 2026-11-26
+
 ### oan-farmer-app-gateway 0.0.1-develop.7 (develop)
 
 - Merge pull request #12 from arnavam/ci/staging-qa-pipeline (Centre-for-Open-Societal-Systems/oan_farmer_app_service@0d60d8a36322)
