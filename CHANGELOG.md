@@ -10,6 +10,15 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-26
 
+### openg2p-commons-services 1.0.0-dev.58
+
+Previous version: 1.0.0-dev.57.
+
+- chore(commons): seed Master Data code lists from openg2p-data build 1.0.1-develop.75 (dbad39b)
+- fix(commons-services): let the beneficiary login-provider seed work on a fresh IAM database (#280) (40c6241)
+
+## 2026-11-26
+
 ### oan-grievance-ui 0.0.1-develop.67 (develop)
 
 - Merge pull request #95 from apoorvanengineer-cpu/feature/officer-department-dropdown (Centre-for-Open-Societal-Systems/oan_grievance_ui@1e76c86e78a1)
