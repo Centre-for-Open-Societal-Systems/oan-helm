@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.11-develop.82
+
+<!-- source-commit: f46ba3cb76ef747cfcbc14d6c45b64ef308d67b6 version: 0.0.11-develop.82 -->
+Published 2026-11-26. Archive SHA-256 `9cbd31fa66b1ddfa938dc7ecdfc978ae756fe12c7b3e3be93177edd4234165c3`.
+
+- Change: Merge pull request #113 from VSV-Coders/feat/api_verify
+- Source: [Centre-for-Open-Societal-Systems/oan_da_app_services@f46ba3cb76ef](https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/commit/f46ba3cb76ef747cfcbc14d6c45b64ef308d67b6)
+- Changes since 0.0.10-develop.81: https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/compare/d64ae37d9005930fc1e51f380aefe687c996ab31...f46ba3cb76ef747cfcbc14d6c45b64ef308d67b6
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-da-services/da-services:0.0.11-develop.82` |
+
+Return to this version:
+
+```sh
+helm upgrade da-services https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-da-services-0.0.11-develop.82.tgz -n da-app --reset-values -f helm/environments/dev/oan-da-services.yaml --wait --timeout 15m
+```
+
 ## 0.0.10-develop.81
 
 <!-- source-commit: d64ae37d9005930fc1e51f380aefe687c996ab31 version: 0.0.10-develop.81 -->

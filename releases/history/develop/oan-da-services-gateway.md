@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.11-develop.82
+
+<!-- source-commit: f46ba3cb76ef747cfcbc14d6c45b64ef308d67b6 version: 0.0.11-develop.82 -->
+Published 2026-11-26. Archive SHA-256 `f0a9041fe332235b1fd227a68202f5fdc532ca7bde4babf87c92e51e02d42825`.
+
+- Change: Merge pull request #113 from VSV-Coders/feat/api_verify
+- Source: [Centre-for-Open-Societal-Systems/oan_da_app_services@f46ba3cb76ef](https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/commit/f46ba3cb76ef747cfcbc14d6c45b64ef308d67b6)
+- Changes since 0.0.10-develop.81: https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/compare/d64ae37d9005930fc1e51f380aefe687c996ab31...f46ba3cb76ef747cfcbc14d6c45b64ef308d67b6
+
+Return to this version:
+
+```sh
+helm upgrade da-services-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-da-services-gateway-0.0.11-develop.82.tgz -n da-app --reset-values -f helm/environments/dev/oan-da-services-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.10-develop.81
 
 <!-- source-commit: d64ae37d9005930fc1e51f380aefe687c996ab31 version: 0.0.10-develop.81 -->
