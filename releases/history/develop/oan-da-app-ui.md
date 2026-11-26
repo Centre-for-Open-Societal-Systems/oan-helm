@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.72
+
+<!-- source-commit: e1bffff190f58e027c0954babd62dfddaf2fa537 version: 0.0.1-develop.72 -->
+Published 2026-11-26. Archive SHA-256 `8ccf8c539d69ac37e27db9ee5d008f6878b74afed326dd7d0347c7cae7f86429`.
+
+- Change: Merge pull request #97 from meghamishra0708/dev-megha
+- Source: [Centre-for-Open-Societal-Systems/oan_da_app_ui@e1bffff190f5](https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_ui/commit/e1bffff190f58e027c0954babd62dfddaf2fa537)
+- Changes since 0.0.1-develop.71: https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_ui/compare/e4e711c7b0e2df205ebf441e4d65ac703a627681...e1bffff190f58e027c0954babd62dfddaf2fa537
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-da-app-ui/da-app-ui:0.0.1-develop.72` |
+
+Return to this version:
+
+```sh
+helm upgrade da-app-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-da-app-ui-0.0.1-develop.72.tgz -n da-app --reset-values -f helm/environments/dev/oan-da-app-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.71
 
 <!-- source-commit: e4e711c7b0e2df205ebf441e4d65ac703a627681 version: 0.0.1-develop.71 -->

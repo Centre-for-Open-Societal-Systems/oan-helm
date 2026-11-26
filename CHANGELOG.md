@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-26
 
+### oan-da-app-ui 0.0.1-develop.72 (develop)
+
+- Merge pull request #97 from meghamishra0708/dev-megha (Centre-for-Open-Societal-Systems/oan_da_app_ui@e1bffff190f5)
+- Images and rollback: [releases/history/develop/oan-da-app-ui.md](releases/history/develop/oan-da-app-ui.md)
+
+## 2026-11-26
+
 ### oan-farmer-app-service 0.0.1-staging.2 (staging)
 
 - Merge pull request #8 from arnavam/ci/staging-qa-pipeline (Centre-for-Open-Societal-Systems/oan_farmer_app_service@794b5f133370)
