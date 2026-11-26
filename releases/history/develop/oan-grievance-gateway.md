@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.122
+
+<!-- source-commit: 4a4997c704468f60bf32102512743a430eabe3ae version: 0.0.1-develop.122 -->
+Published 2026-11-26. Archive SHA-256 `a41e27e93c3b317a70265d30d2e029ff1679ed12ec47ebe88bfca9ab840a225f`.
+
+- Change: Merge pull request #160 from arnavam/chore/helm-install-oan-messaging-connector
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@4a4997c70446](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/4a4997c704468f60bf32102512743a430eabe3ae)
+- Changes since 0.0.1-develop.121: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/634cebba7dcb20e2452330182cd42dd8c736c1bb...4a4997c704468f60bf32102512743a430eabe3ae
+
+Return to this version:
+
+```sh
+helm upgrade grievance-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-gateway-0.0.1-develop.122.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.121
 
 <!-- source-commit: 634cebba7dcb20e2452330182cd42dd8c736c1bb version: 0.0.1-develop.121 -->
