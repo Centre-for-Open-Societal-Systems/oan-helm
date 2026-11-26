@@ -111,7 +111,12 @@ class CommonsJobsRunTheGateFirst(unittest.TestCase):
         for name in ("staging-commons", "dev-commons"):
             text = (ROOT / f"ci/jenkins/{name}.Jenkinsfile").read_text(encoding="utf-8")
             stages = re.findall(r"stage\('([^']+)'\)", text)
-            self.assertEqual(stages[0], "Checks green", name)
+            # The staging job first decides whether the push touched staging (no side effects) and wraps its deliveries
+            # in one parent stage; the gate is still the first real stage, before any delivery.
+            real = [s for s in stages if s not in ("Decide", "Deliver staging")]
+            self.assertEqual(real[0], "Checks green", name)
+            if name == "staging-commons":
+                self.assertEqual(stages[:3], ["Decide", "Deliver staging", "Checks green"])
             self.assertIn("sh 'bash scripts/ci/require_green_checks.sh Centre-for-Open-Societal-Systems/oan-helm HEAD'", text)
             self.assertIn("credentialsId: 'oan-helm-fork-token'", text)
 

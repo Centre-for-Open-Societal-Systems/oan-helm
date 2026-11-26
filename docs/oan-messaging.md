@@ -51,8 +51,18 @@ then shows the message and its callbacks.
 
 Staging runs the same release, delivered by `oan-helm-staging-commons` (last stage `Deliver OAN Messaging`,
 `scripts/ci/deliver_staging_oan_messaging.sh`, record ConfigMap `oan-messaging-delivery`) with
-`environments/staging/values/oan-messaging.yaml`. Nothing is rebuilt: the image pins there are the digests New Dev runs,
-and are moved by pull request after New Dev is verified. Console: `https://messaging.qa.oanstaging.com`, open to the same
+`environments/staging/values/oan-messaging.yaml`. Nothing is rebuilt: the image pins there are the digests New Dev runs.
+
+**Promotion to staging.** A person opens and merges the pull request "Promote <repository> develop to staging" in
+`oan_messaging_service` or `oan_messaging_ui`. After that nothing is manual: the repository's Jenkins job builds and
+tests its `staging` branch, and its last stage (`scripts/ci/pin_image_in_oan_helm.py staging <service|ui> <commit>`)
+copies New Dev's image of that repository into `environments/staging/values/oan-messaging.yaml` with one commit by
+`oan-image-pinner`, but only when the commit New Dev's image was built from (the trailing comment `built from <commit>`
+on its pin) has the same file tree as the staging commit, that is when staging holds exactly the code verified on New
+Dev. The commit starts `oan-helm-staging-commons`, whose `Decide` stage lets a push deliver only when it touched
+`environments/staging/` (a build started by a person always delivers), and the release is delivered. If New Dev's image
+was built from other code than staging holds (develop moved on), the stage pins nothing and says so; build develop
+again and the next staging build pins it. Console: `https://messaging.qa.oanstaging.com`, open to the same
 three users (they exist in the staging `staff` realm). The release still uses the fake 8028 gateway.
 
 **Before the console is reachable:** `*.qa.oanstaging.com` resolves to the APISIX gateway (13.127.77.101), which has one
