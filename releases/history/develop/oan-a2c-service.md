@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.46
+
+<!-- source-commit: b6701bd9a0df81695410b505a45387c9c5eb9ac2 version: 0.0.1-develop.46 -->
+Published 2026-11-26. Archive SHA-256 `a88356243be42363a84549dac7db816a6182be58436552c43e23425687dafc86`.
+
+- Change: Merge pull request #161 from arnavam/chore/helm-install-oan-messaging-connector
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@b6701bd9a0df](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/b6701bd9a0df81695410b505a45387c9c5eb9ac2)
+- Changes since 0.0.1-develop.45: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/2c57a2813669f7652e617e3f56a88f34b94f71ab...b6701bd9a0df81695410b505a45387c9c5eb9ac2
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-service/a2c-service:0.0.1-develop.46` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-service-0.0.1-develop.46.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.45
 
 <!-- source-commit: 2c57a2813669f7652e617e3f56a88f34b94f71ab version: 0.0.1-develop.45 -->
