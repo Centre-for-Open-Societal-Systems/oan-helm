@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-26
 
+### oan-identitygovernance-gateway 0.0.0-develop.8 (develop)
+
+- Merge pull request #7 from arnavam/feat/roles-live-from-keycloak (Centre-for-Open-Societal-Systems/oan_identitygovernance_service@9822f754df19)
+- Images and rollback: [releases/history/develop/oan-identitygovernance-gateway.md](releases/history/develop/oan-identitygovernance-gateway.md)
+
+### oan-identitygovernance-service 0.0.0-develop.8 (develop)
+
+- Merge pull request #7 from arnavam/feat/roles-live-from-keycloak (Centre-for-Open-Societal-Systems/oan_identitygovernance_service@9822f754df19)
+- Images and rollback: [releases/history/develop/oan-identitygovernance-service.md](releases/history/develop/oan-identitygovernance-service.md)
+
+## 2026-11-26
+
 ### oan-da-app-ui 0.0.1-develop.72 (develop)
 
 - Merge pull request #97 from meghamishra0708/dev-megha (Centre-for-Open-Societal-Systems/oan_da_app_ui@e1bffff190f5)
