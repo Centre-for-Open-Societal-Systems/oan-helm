@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-26
 
+### oan-farmer-app-service 0.0.1-staging.3 (staging)
+
+- Merge pull request #10 from arnavam/ci/staging-qa-pipeline (Centre-for-Open-Societal-Systems/oan_farmer_app_service@992170dc48ff)
+- Images and rollback: [releases/history/staging/oan-farmer-app-service.md](releases/history/staging/oan-farmer-app-service.md)
+
+## 2026-11-26
+
 ### oan-identitygovernance-gateway 0.0.0-develop.8 (develop)
 
 - Merge pull request #7 from arnavam/feat/roles-live-from-keycloak (Centre-for-Open-Societal-Systems/oan_identitygovernance_service@9822f754df19)
