@@ -46,3 +46,16 @@ The `console-smoke` caller (sms, purpose `transactional`) exists for test sends 
 Secret `oan-messaging-smoke-sender`. Send from inside the cluster to `http://oan-messaging-api`
 (`POST /api/v1/messages/sms`, header `Idempotency-Key`). The fake gateway answers and calls back; the console
 then shows the message and its callbacks.
+
+## Staging (qa.oanstaging.com)
+
+Staging runs the same release, delivered by `oan-helm-staging-commons` (last stage `Deliver OAN Messaging`,
+`scripts/ci/deliver_staging_oan_messaging.sh`, record ConfigMap `oan-messaging-delivery`) with
+`environments/staging/values/oan-messaging.yaml`. Nothing is rebuilt: the image pins there are the digests New Dev runs,
+and are moved by pull request after New Dev is verified. Console: `https://messaging.qa.oanstaging.com`, open to the same
+three users (they exist in the staging `staff` realm). The release still uses the fake 8028 gateway.
+
+**Before the console is reachable:** `*.qa.oanstaging.com` resolves to the APISIX gateway (13.127.77.101), which has one
+route per host and answers any host without a route with `404` (`Server: APISIX`). The new host
+`messaging.qa.oanstaging.com` needs a route to the staging Istio gateway like the existing QA hosts have. APISIX is
+managed outside this repository.
