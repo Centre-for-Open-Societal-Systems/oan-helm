@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-26
 
+### oan-da-app-ui 0.0.1-develop.68 (develop)
+
+- Merge pull request #95 from meghamishra0708/dev-megha (Centre-for-Open-Societal-Systems/oan_da_app_ui@94e7acda1cb1)
+- Images and rollback: [releases/history/develop/oan-da-app-ui.md](releases/history/develop/oan-da-app-ui.md)
+
+## 2026-11-26
+
 ### oan-a2c-service 0.0.1-develop.44 (develop)
 
 - Merge pull request #159 from arnavam/oan-messaging (Centre-for-Open-Societal-Systems/oan_a2c@eea3b1ace9f8)
