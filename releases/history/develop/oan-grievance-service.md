@@ -2,6 +2,26 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.124
+
+<!-- source-commit: 1810153fedf82b6945cbee93400faa31dacc13b7 version: 0.0.1-develop.124 -->
+Published 2026-11-26. Archive SHA-256 `281f34cc6d3912ed5d27bf1342262370c926a321a3a1907a91b49979e5136658`.
+
+- Change: Merge pull request #162 from dhruvbhatt701/STG-521-reopen-escalation-assign-senior-officer
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@1810153fedf8](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/1810153fedf82b6945cbee93400faa31dacc13b7)
+- Changes since 0.0.1-develop.123: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/08c341978b516b4ed01d40feb622d6371859a855...1810153fedf82b6945cbee93400faa31dacc13b7
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-service/grievance-service:0.0.1-develop.124` |
+| `clamav.image` | `clamav/clamav:stable` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-service-0.0.1-develop.124.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.123
 
 <!-- source-commit: 08c341978b516b4ed01d40feb622d6371859a855 version: 0.0.1-develop.123 -->

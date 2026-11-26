@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-26
 
+### oan-grievance-gateway 0.0.1-develop.124 (develop)
+
+- Merge pull request #162 from dhruvbhatt701/STG-521-reopen-escalation-assign-senior-officer (Centre-for-Open-Societal-Systems/oan_grievance_service@1810153fedf8)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.124 (develop)
+
+- Merge pull request #162 from dhruvbhatt701/STG-521-reopen-escalation-assign-senior-officer (Centre-for-Open-Societal-Systems/oan_grievance_service@1810153fedf8)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-26
+
 ### oan-da-services 0.0.11-develop.82 (develop)
 
 - Merge pull request #113 from VSV-Coders/feat/api_verify (Centre-for-Open-Societal-Systems/oan_da_app_services@f46ba3cb76ef)
