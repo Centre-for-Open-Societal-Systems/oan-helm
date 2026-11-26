@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-26
 
+### oan-da-services 0.0.10-develop.81 (develop)
+
+- Merge pull request #106 from pushkar-srivastava-oan/DA-431-attendance-list-api-for-check-in-team-attendance-punch-derived (Centre-for-Open-Societal-Systems/oan_da_app_services@d64ae37d9005)
+- Images and rollback: [releases/history/develop/oan-da-services.md](releases/history/develop/oan-da-services.md)
+
+### oan-da-services-gateway 0.0.10-develop.81 (develop)
+
+- Merge pull request #106 from pushkar-srivastava-oan/DA-431-attendance-list-api-for-check-in-team-attendance-punch-derived (Centre-for-Open-Societal-Systems/oan_da_app_services@d64ae37d9005)
+- Images and rollback: [releases/history/develop/oan-da-services-gateway.md](releases/history/develop/oan-da-services-gateway.md)
+
+## 2026-11-26
+
 ### oan-da-app-ui 0.0.1-develop.73 (develop)
 
 - Merge pull request #98 from rajujha-ptn/daSupervisor_responsive-26Nov2026 (Centre-for-Open-Societal-Systems/oan_da_app_ui@cdd1735a983e)

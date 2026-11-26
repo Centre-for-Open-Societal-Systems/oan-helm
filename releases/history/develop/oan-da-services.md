@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.10-develop.81
+
+<!-- source-commit: d64ae37d9005930fc1e51f380aefe687c996ab31 version: 0.0.10-develop.81 -->
+Published 2026-11-26. Archive SHA-256 `1efa17f5abe28ba0e75f5ba15c5897549165f3203a76b381c9517b9be15afcce`.
+
+- Change: Merge pull request #106 from pushkar-srivastava-oan/DA-431-attendance-list-api-for-check-in-team-attendance-punch-derived
+- Source: [Centre-for-Open-Societal-Systems/oan_da_app_services@d64ae37d9005](https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/commit/d64ae37d9005930fc1e51f380aefe687c996ab31)
+- Changes since 0.0.10-develop.80: https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/compare/e5846b7193c2e7536a2cfa67ee339baef17a5646...d64ae37d9005930fc1e51f380aefe687c996ab31
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-da-services/da-services:0.0.10-develop.81` |
+
+Return to this version:
+
+```sh
+helm upgrade da-services https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-da-services-0.0.10-develop.81.tgz -n da-app --reset-values -f helm/environments/dev/oan-da-services.yaml --wait --timeout 15m
+```
+
 ## 0.0.10-develop.80
 
 <!-- source-commit: e5846b7193c2e7536a2cfa67ee339baef17a5646 version: 0.0.10-develop.80 -->
