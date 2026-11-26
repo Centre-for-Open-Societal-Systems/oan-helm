@@ -30,6 +30,10 @@ imagePullSecrets:
 {{- .Values.ui.host | default (printf "messaging.%s" (trimPrefix "." .Values.cookieDomain)) -}}
 {{- end -}}
 
+{{- define "oanmsg.apiHost" -}}
+{{- .Values.api.host | default (printf "oan-messaging.%s" (trimPrefix "." .Values.cookieDomain)) -}}
+{{- end -}}
+
 {{- define "oanmsg.clientSecretName" -}}
 {{- printf "%s-ui-client" .Release.Name -}}
 {{- end -}}
