@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-26
 
+### oan-a2c-service 0.0.1-develop.45 (develop)
+
+- Merge pull request #160 from arnavam/oan-messaging (Centre-for-Open-Societal-Systems/oan_a2c@2c57a2813669)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-26
+
 ### oan-grievance-gateway 0.0.1-develop.121 (develop)
 
 - Merge pull request #159 from arnavam/fix/expose-external-area-code (Centre-for-Open-Societal-Systems/oan_grievance_service@634cebba7dcb)
