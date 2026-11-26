@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-26
 
+### oan-da-app-ui 0.0.1-develop.71 (develop)
+
+- Merge pull request #92 from pavanns/feat/staging-qa-only (Centre-for-Open-Societal-Systems/oan_da_app_ui@e4e711c7b0e2)
+- Images and rollback: [releases/history/develop/oan-da-app-ui.md](releases/history/develop/oan-da-app-ui.md)
+
+## 2026-11-26
+
 ### oan-da-app-ui 0.0.1-develop.70 (develop)
 
 - Merge pull request #90 from pavanns/fix/dev-deploy-timeout (Centre-for-Open-Societal-Systems/oan_da_app_ui@87166084f90a)
