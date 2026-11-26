@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-26
 
+### oan-grievance-gateway 0.0.1-develop.121 (develop)
+
+- Merge pull request #159 from arnavam/fix/expose-external-area-code (Centre-for-Open-Societal-Systems/oan_grievance_service@634cebba7dcb)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.121 (develop)
+
+- Merge pull request #159 from arnavam/fix/expose-external-area-code (Centre-for-Open-Societal-Systems/oan_grievance_service@634cebba7dcb)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-26
+
 ### oan-da-app-ui 0.0.1-develop.71 (develop)
 
 - Merge pull request #92 from pavanns/feat/staging-qa-only (Centre-for-Open-Societal-Systems/oan_da_app_ui@e4e711c7b0e2)
