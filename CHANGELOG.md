@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-26
 
+### oan-grievance-gateway 0.0.1-develop.123 (develop)
+
+- Merge pull request #161 from arnavam/chore/iam-application-grievance-service (Centre-for-Open-Societal-Systems/oan_grievance_service@08c341978b51)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.123 (develop)
+
+- Merge pull request #161 from arnavam/chore/iam-application-grievance-service (Centre-for-Open-Societal-Systems/oan_grievance_service@08c341978b51)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-26
+
 ### oan-a2c-service 0.0.1-develop.46 (develop)
 
 - Merge pull request #161 from arnavam/chore/helm-install-oan-messaging-connector (Centre-for-Open-Societal-Systems/oan_a2c@b6701bd9a0df)
