@@ -3,8 +3,8 @@
 # Run by ci/jenkins/dev-commons.Jenkinsfile after the Commons services (Keycloak, IAM, PostgreSQL are theirs): the
 # release brings the messaging service, its database on the shared PostgreSQL, the staff console, the Keycloak
 # client, role and staff-portal tile (addons/oan-messaging, values environments/dev/values/oan-messaging.yaml).
-# The image tags in those values are moved by the Jenkins jobs oan-messaging-service and oan-messaging-ui, which open
-# a pull request here after each develop build (scripts/ci/pin_image_in_oan_helm.py in those repositories).
+# The image tags in those values are moved by the Jenkins jobs oan-messaging-service and oan-messaging-ui, which commit
+# the new tag here after each develop build (scripts/ci/pin_image_in_oan_helm.py in those repositories).
 #
 # What New Dev runs is recorded in ConfigMap oan-messaging-delivery (sha256 of the chart directory and of the values).
 # If it matches this commit nothing is done, so a failed delivery is retried by the next build of oan-helm.
