@@ -505,11 +505,7 @@ iamBenePortalApi:
     host: bene-iam.qa.oanstaging.com
     gateway: istio-system/staging
   loginProvider:
-    # Off until the published chart contains the fix of PR #280. The 1.0.0-dev.57 archive's seed INSERT omits the
-    # NOT NULL column login_providers.active, so the post-upgrade seed Job fails (null value in column "active"),
-    # Helm's --wait times out and --atomic rolls the whole Commons services upgrade back (staging-commons build 296).
-    # The chart source has the fix but its version is still dev.57. Set true again with a chart that has it.
-    seed: false
+    seed: true
     id: 11
     providerName: e-Signet
     description: Sign in with e-Signet
@@ -520,6 +516,7 @@ iamBenePortalApi:
     issuer: https://esignet.qa.oanstaging.com
     serverMetadataUrl: https://esignet.qa.oanstaging.com/v1/esignet/oidc/.well-known/openid-configuration
     adapterName: esignet
+    jwtAssertionAud: https://esignet.qa.oanstaging.com/v1/esignet/oauth/v2/token
     scope: openid profile
     enablePkce: true
     extraAuthorizeParams: '{"claims":{"userinfo":{"individual_id":{"essential":true},"name":{"essential":false},"address":{"essential":false},"picture":{"essential":false}},"id_token":{}},"acr_values":"mosip:idp:acr:static-code"}'
