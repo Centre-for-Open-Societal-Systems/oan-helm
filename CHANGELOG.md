@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-26
 
+### oan-farmer-app-gateway 0.0.1-develop.6 (develop)
+
+- Merge pull request #10 from arnavam/ci/staging-qa-pipeline (Centre-for-Open-Societal-Systems/oan_farmer_app_service@992170dc48ff)
+- Images and rollback: [releases/history/develop/oan-farmer-app-gateway.md](releases/history/develop/oan-farmer-app-gateway.md)
+
+### oan-farmer-app-service 0.0.1-develop.6 (develop)
+
+- Merge pull request #10 from arnavam/ci/staging-qa-pipeline (Centre-for-Open-Societal-Systems/oan_farmer_app_service@992170dc48ff)
+- Images and rollback: [releases/history/develop/oan-farmer-app-service.md](releases/history/develop/oan-farmer-app-service.md)
+
+## 2026-11-26
+
 ### oan-grievance-gateway 0.0.1-develop.123 (develop)
 
 - Merge pull request #161 from arnavam/chore/iam-application-grievance-service (Centre-for-Open-Societal-Systems/oan_grievance_service@08c341978b51)
