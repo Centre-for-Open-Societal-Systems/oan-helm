@@ -19,7 +19,19 @@ service, its database, the staff console and the console's staff-portal integrat
 Pre-install/pre-upgrade, by weight: init-secrets (-20), db-init (-15), migration (0), grants (3), callers
 (8). Post: iam-setup (5), ui-smoke (10). Do not install with `--wait`: the hooks must run first.
 
-## Install or upgrade
+## Delivery (no hand-run Helm)
+
+1. A merge to `develop` of `oan_messaging_service` or `oan_messaging_ui` starts that repository's Jenkins job
+   (`oan-messaging-service`, `oan-messaging-ui`). It tests, builds and pushes the image to ECR.
+2. The same build then opens a pull request into this repository, from a branch on the pipeline account's fork
+   (`bot/oan-messaging-<service|ui>-<tag>`), that changes only the image `tag:` line in
+   `environments/dev/values/oan-messaging.yaml` to `<version>-develop.<build>@sha256:<digest>`. An older open pin PR
+   for the same image is closed.
+3. Merging that PR into oan-helm starts `oan-helm-dev-commons`, whose last stage `Deliver OAN Messaging` runs
+   `scripts/ci/deliver_dev_oan_messaging.sh`: server-side dry run, then `helm upgrade --install --reset-values
+   --atomic --wait`, then the record in ConfigMap `oan-messaging-delivery`. Unchanged chart and values: nothing runs.
+
+## Manual install or upgrade (recovery only)
 
 ```sh
 helm upgrade --install oan-messaging addons/oan-messaging -n commons \

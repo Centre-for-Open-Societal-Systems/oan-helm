@@ -56,13 +56,25 @@ class DeliverDevCommons(unittest.TestCase):
         self.assertLess(pipeline.index("sh 'bash scripts/ci/deliver_dev_commons.sh"),
                         pipeline.index("sh 'bash scripts/ci/deliver_dev_odk_bootstrap.sh'"))
 
+    def test_oan_messaging_delivery_comes_last_and_never_reuses_values(self):
+        script = read('scripts/ci/deliver_dev_oan_messaging.sh')
+        self.assertIn('record=oan-messaging-delivery', script)
+        self.assertIn('addons/oan-messaging', script)
+        self.assertIn('environments/dev/values/oan-messaging.yaml', script)
+        self.assertIn('--reset-values', script)
+        self.assertNotIn('--reuse-values', script)
+        self.assertLess(script.index('--atomic --wait'), script.index('kubectl create configmap'))
+        pipeline = PIPELINE.read_text(encoding='utf-8')
+        self.assertLess(pipeline.index("sh 'bash scripts/ci/deliver_dev_odk_bootstrap.sh'"),
+                        pipeline.index("sh 'bash scripts/ci/deliver_dev_oan_messaging.sh'"))
+
     def test_job_builds_main_only_with_the_dev_deployer(self):
         body = PIPELINE.read_text(encoding='utf-8').split('pipeline {', 1)[1]
         self.assertNotIn('parameters', body)
         self.assertNotIn('changeset', body)
         self.assertNotIn('staging', body)
-        self.assertEqual(body.count("credentialsId: 'dev-commons-deployer-kubeconfig'"), 2)
-        self.assertEqual(body.count("allOf { branch 'main'; not { changeRequest() } }"), 3)  # the gate and two deliveries
+        self.assertEqual(body.count("credentialsId: 'dev-commons-deployer-kubeconfig'"), 3)
+        self.assertEqual(body.count("allOf { branch 'main'; not { changeRequest() } }"), 4)  # the gate and three deliveries
         job = read('ci/jenkins/jobs/oan-helm-dev-commons.xml')
         self.assertIn('<scriptPath>ci/jenkins/dev-commons.Jenkinsfile</scriptPath>', job)
         self.assertIn('<includes>main</includes>', job)
@@ -78,6 +90,13 @@ class DeliverDevCommons(unittest.TestCase):
         # odk-bootstrap owns only kinds the Role already covers.
         owned = set(re.findall(r'^kind: (\S+)', read('addons/odk-bootstrap/templates/job.yaml'), re.M))
         self.assertEqual(owned, {'ServiceAccount', 'Role', 'RoleBinding', 'ConfigMap', 'Job'})
+        # oan-messaging owns only kinds the Role covers (the Role has no clusterwide rights).
+        covered = {'ServiceAccount', 'Role', 'RoleBinding', 'ConfigMap', 'Job', 'CronJob', 'Deployment', 'Service', 'Secret',
+                   'VirtualService', 'PodDisruptionBudget', 'NetworkPolicy'}
+        rendered = ''.join(read(str(p.relative_to(ROOT))) for p in (ROOT / 'addons/oan-messaging').rglob('*.yaml')
+                           if p.name != 'values.yaml' and 'values' not in p.name and p.parent.name == 'templates')
+        # The service chart's Ingress is off (api.ingress.enabled) and not in the Role: the API has no public route.
+        self.assertLessEqual(set(re.findall(r'^kind: (\S+)', rendered, re.M)) - {'Ingress'}, covered)
 
 
 if __name__ == '__main__':
