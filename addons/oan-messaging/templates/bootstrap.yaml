@@ -2,8 +2,8 @@
 Pre-install/pre-upgrade hooks, in order:
   -30 ServiceAccount, Role, scripts          -20 init-secrets (Secrets, once)
   -15 db-init (role + database on the shared PostgreSQL)
-  -10 the service chart's migration Job      -3  grants (after the migrations created the tables)
-    5 callers (console reader, test sender; tokens into Secrets)
+  0 the service chart's migration Job (its ServiceAccount is -10)   3 grants (after the migrations created the tables)
+    8 callers (console reader, test sender; tokens into Secrets)
 */ -}}
 {{- $pg := .Values.postgres }}
 {{- $img := include "oanmsg.serviceImage" . }}
@@ -154,7 +154,7 @@ kind: Job
 metadata:
   name: {{ .Release.Name }}-grants
   labels: {{- include "oanmsg.labels" . | nindent 4 }}
-  annotations: {{- include "oanmsg.hook" (dict "phase" "pre-install,pre-upgrade" "weight" -3) | nindent 4 }}
+  annotations: {{- include "oanmsg.hook" (dict "phase" "pre-install,pre-upgrade" "weight" 3) | nindent 4 }}
 spec:
   backoffLimit: 2
   activeDeadlineSeconds: 900
@@ -190,7 +190,7 @@ kind: Job
 metadata:
   name: {{ .Release.Name }}-callers
   labels: {{- include "oanmsg.labels" . | nindent 4 }}
-  annotations: {{- include "oanmsg.hook" (dict "phase" "pre-install,pre-upgrade" "weight" 5) | nindent 4 }}
+  annotations: {{- include "oanmsg.hook" (dict "phase" "pre-install,pre-upgrade" "weight" 8) | nindent 4 }}
 spec:
   backoffLimit: 1
   activeDeadlineSeconds: 300

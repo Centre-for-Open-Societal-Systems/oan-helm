@@ -16,8 +16,8 @@ service, its database, the staff console and the console's staff-portal integrat
 
 ## Hooks
 
-Pre-install/pre-upgrade, by weight: init-secrets (-20), db-init (-15), migration (-10), grants (-3), callers
-(5). Post: iam-setup (5), ui-smoke (10). Do not install with `--wait`: the hooks must run first.
+Pre-install/pre-upgrade, by weight: init-secrets (-20), db-init (-15), migration (0), grants (3), callers
+(8). Post: iam-setup (5), ui-smoke (10). Do not install with `--wait`: the hooks must run first.
 
 ## Install or upgrade
 
