@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-26
 
+### oan-da-app-ui 0.0.1-develop.70 (develop)
+
+- Merge pull request #90 from pavanns/fix/dev-deploy-timeout (Centre-for-Open-Societal-Systems/oan_da_app_ui@87166084f90a)
+- Images and rollback: [releases/history/develop/oan-da-app-ui.md](releases/history/develop/oan-da-app-ui.md)
+
+## 2026-11-26
+
 ### oan-da-app-ui 0.0.1-develop.69 (develop)
 
 - Merge pull request #94 from rajujha-ptn/daSupervisor_responsive-25Nov2026 (Centre-for-Open-Societal-Systems/oan_da_app_ui@0a2386d0341d)
