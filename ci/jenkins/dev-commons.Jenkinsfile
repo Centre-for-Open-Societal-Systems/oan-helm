@@ -2,7 +2,9 @@
 // scripts/ci/deliver_dev_commons.sh, which compares what New Dev runs (ConfigMap commons-services-delivery: pinned chart
 // environments/dev/commons-services.chart, sha256 of environments/dev/values/commons-services.yaml and of the secret
 // values) with this commit and delivers only when they differ (helm upgrade --reset-values --atomic), then
-// scripts/ci/deliver_dev_odk_bootstrap.sh (addons/odk-bootstrap, record odk-bootstrap-delivery). A failed delivery is
+// scripts/ci/deliver_dev_odk_bootstrap.sh (addons/odk-bootstrap, record odk-bootstrap-delivery) and
+// scripts/ci/deliver_dev_oan_messaging.sh (addons/oan-messaging, record oan-messaging-delivery; its image tags are moved by the
+// oan-messaging-service and oan-messaging-ui jobs through pull requests). A failed delivery is
 // therefore retried by the next build of main. No parameters, no click; pull requests never deliver.
 //
 // New Dev's Commons base release (commons) and oan-dashboards are not delivered here: they have no New Dev values in
@@ -47,6 +49,15 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'dev-commons-deployer-kubeconfig', variable: 'KUBECONFIG')]) {
                     sh 'bash scripts/ci/deliver_dev_odk_bootstrap.sh'
+                }
+            }
+        }
+        // OAN Messaging uses Commons Keycloak, IAM and PostgreSQL, so it comes last.
+        stage('Deliver OAN Messaging') {
+            when { allOf { branch 'main'; not { changeRequest() } } }
+            steps {
+                withCredentials([file(credentialsId: 'dev-commons-deployer-kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh 'bash scripts/ci/deliver_dev_oan_messaging.sh'
                 }
             }
         }
