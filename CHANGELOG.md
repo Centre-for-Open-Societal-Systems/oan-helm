@@ -10,6 +10,23 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-26
 
+### oan-farmer-app-gateway 0.0.1-develop.7 (develop)
+
+- Merge pull request #12 from arnavam/ci/staging-qa-pipeline (Centre-for-Open-Societal-Systems/oan_farmer_app_service@0d60d8a36322)
+- Images and rollback: [releases/history/develop/oan-farmer-app-gateway.md](releases/history/develop/oan-farmer-app-gateway.md)
+
+### oan-farmer-app-service 0.0.1-develop.7 (develop)
+
+- Merge pull request #12 from arnavam/ci/staging-qa-pipeline (Centre-for-Open-Societal-Systems/oan_farmer_app_service@0d60d8a36322)
+- Images and rollback: [releases/history/develop/oan-farmer-app-service.md](releases/history/develop/oan-farmer-app-service.md)
+
+### oan-da-services 0.0.10-develop.80 (develop)
+
+- Merge pull request #107 from snehaldeshpandeoas-rgb/feat/agents-my-team (Centre-for-Open-Societal-Systems/oan_da_app_services@e5846b7193c2)
+- Images and rollback: [releases/history/develop/oan-da-services.md](releases/history/develop/oan-da-services.md)
+
+## 2026-11-26
+
 ### openg2p-commons-services 1.0.0-dev.59
 
 Previous version: 1.0.0-dev.58.

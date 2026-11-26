@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.10-develop.80
+
+<!-- source-commit: e5846b7193c2e7536a2cfa67ee339baef17a5646 version: 0.0.10-develop.80 -->
+Published 2026-11-26. Archive SHA-256 `3994f571ea8e3da188353d5eb3e59ae9d8a528f583dc550bfc23e22ee539ae05`.
+
+- Change: Merge pull request #107 from snehaldeshpandeoas-rgb/feat/agents-my-team
+- Source: [Centre-for-Open-Societal-Systems/oan_da_app_services@e5846b7193c2](https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/commit/e5846b7193c2e7536a2cfa67ee339baef17a5646)
+- Changes since 0.0.10-develop.77: https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/compare/1ae13f195e2e5cadf8384cae64bda1da84279df3...e5846b7193c2e7536a2cfa67ee339baef17a5646
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-da-services/da-services:0.0.10-develop.80` |
+
+Return to this version:
+
+```sh
+helm upgrade da-services https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-da-services-0.0.10-develop.80.tgz -n da-app --reset-values -f helm/environments/dev/oan-da-services.yaml --wait --timeout 15m
+```
+
 ## 0.0.10-develop.77
 
 <!-- source-commit: 1ae13f195e2e5cadf8384cae64bda1da84279df3 version: 0.0.10-develop.77 -->
