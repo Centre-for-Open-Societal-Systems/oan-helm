@@ -1,0 +1,22 @@
+{{- $svc := include "oanmsg.svc" . -}}
+{{- $host := include "oanmsg.apiHost" . -}}
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: {{ $svc }}-api
+  labels: {{- include "oanmsg.labels" . | nindent 4 }}
+spec:
+  hosts: [{{ $host | quote }}]
+  gateways: [{{ .Values.api.gateway | quote }}]
+  http:
+    - headers:
+        request:
+          set:
+            x-forwarded-host: {{ $host | quote }}
+            x-forwarded-proto: https
+      match:
+        - uri: {prefix: /}
+      route:
+        - destination:
+            host: {{ $svc }}-api
+            port: {number: 80}

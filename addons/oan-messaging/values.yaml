@@ -50,6 +50,11 @@ ui:
     requests: {cpu: 100m, memory: 192Mi}
     limits: {memory: 512Mi}
 
+# External Istio route for oan-messaging-api (callers like A2C, Grievance, Auth).
+api:
+  host: ""                   # default oan-messaging.<cookie domain>
+  gateway: istio-system/development
+
 # Values of the vendored service chart.
 oan-messaging-service:
   fullnameOverride: oan-messaging
