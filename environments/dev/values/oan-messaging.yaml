@@ -1,0 +1,15 @@
+# New Dev: OAN Messaging in Commons (addons/oan-messaging), release oan-messaging, namespace commons.
+# Images are ECR tags built by the Jenkins jobs oan-messaging-service and oan-messaging-ui (develop).
+# The staff console is open to exactly the three users in ui.grantUsers.
+cookieDomain: .development.oanstaging.com
+
+ui:
+  image:
+    repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan_messaging_ui/oan-messaging-ui
+    tag: 1.0.0-develop.1
+  host: messaging.development.oanstaging.com
+  grantUsers: [admin, alex.carter, nina.patel]
+
+oan-messaging-service:
+  image:
+    tag: 1.0.0-develop.3

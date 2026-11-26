@@ -1,0 +1,186 @@
+{{- $ui := .Values.ui }}
+{{- $name := printf "%s-ui" .Release.Name }}
+{{- $host := include "oanmsg.uiHost" . }}
+{{- $secretName := include "oanmsg.clientSecretName" . }}
+{{- /* Client secret of the console's Keycloak client: generated once, kept across upgrades and uninstalls. */ -}}
+{{- $existing := lookup "v1" "Secret" .Release.Namespace $secretName }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ $secretName }}
+  labels: {{- include "oanmsg.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/resource-policy: keep
+type: Opaque
+data:
+  {{- if and $existing $existing.data (hasKey $existing.data "client_secret") }}
+  client_secret: {{ index $existing.data "client_secret" }}
+  {{- else }}
+  client_secret: {{ randAlphaNum 40 | b64enc }}
+  {{- end }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ $name }}
+  labels: {{- include "oanmsg.labels" . | nindent 4 }}
+automountServiceAccountToken: false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "oanmsg.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ui
+spec:
+  replicas: {{ $ui.replicas }}
+  selector:
+    matchLabels: {app.kubernetes.io/instance: {{ .Release.Name }}, app.kubernetes.io/component: ui}
+  template:
+    metadata:
+      labels:
+        {{- include "oanmsg.labels" . | nindent 8 }}
+        app.kubernetes.io/component: ui
+    spec:
+      serviceAccountName: {{ $name }}
+      automountServiceAccountToken: false
+      {{- include "oanmsg.pullSecrets" . | nindent 6 }}
+      securityContext: {runAsNonRoot: true, runAsUser: 1000, runAsGroup: 1000, fsGroup: 1000}
+      containers:
+        - name: ui
+          image: {{ include "oanmsg.uiImage" . | quote }}
+          imagePullPolicy: {{ $ui.image.pullPolicy }}
+          ports:
+            - {name: http, containerPort: 3000}
+          env:
+            - {name: AUTH_ENABLED, value: "true"}
+            - {name: PUBLIC_URL, value: {{ printf "https://%s" $host | quote }}}
+            - {name: IAM_URL, value: {{ $ui.iamUrl | quote }}}
+            - {name: COOKIE_DOMAIN, value: {{ .Values.cookieDomain | quote }}}
+            - {name: LOGIN_PROVIDER_ID, value: ""}
+            - {name: MESSAGING_CLIENT_ID, value: {{ $ui.clientId | quote }}}
+            - {name: MESSAGING_ROLE, value: {{ $ui.role | quote }}}
+            - {name: SESSION_CACHE_SECONDS, value: {{ $ui.sessionCacheSeconds | quote }}}
+            - {name: STAFF_PORTAL_URL, value: {{ $ui.staffPortalUrl | quote }}}
+            - {name: MESSAGING_API_URL, value: {{ printf "http://%s-api" (include "oanmsg.svc" .) | quote }}}
+            - name: MESSAGING_API_TOKEN
+              valueFrom: {secretKeyRef: {name: {{ .Values.callers.reader.secret }}, key: token}}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          volumeMounts:
+            - {name: next-cache, mountPath: /app/.next/cache}
+            - {name: tmp, mountPath: /tmp}
+          readinessProbe:
+            httpGet: {path: /api/health, port: http}
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet: {path: /api/health, port: http}
+            initialDelaySeconds: 20
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 5
+          resources: {{- toYaml $ui.resources | nindent 12 }}
+      volumes:
+        - {name: next-cache, emptyDir: {}}
+        - {name: tmp, emptyDir: {}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+  labels: {{- include "oanmsg.labels" . | nindent 4 }}
+spec:
+  selector: {app.kubernetes.io/instance: {{ .Release.Name }}, app.kubernetes.io/component: ui}
+  ports:
+    - {name: http, port: 80, targetPort: http}
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: {{ $name }}
+  labels: {{- include "oanmsg.labels" . | nindent 4 }}
+spec:
+  hosts: [{{ $host | quote }}]
+  gateways: [{{ $ui.gateway | quote }}]
+  http:
+    - headers:
+        request:
+          set:
+            x-forwarded-host: {{ $host | quote }}
+            x-forwarded-proto: https
+      match:
+        - uri: {prefix: /}
+      route:
+        - destination:
+            host: {{ $name }}
+            port: {number: 80}
+---
+{{- /* Keycloak client + role + grants, then the staff-portal tile (the image's iam/ scripts), after every upgrade. */}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-iam-setup
+  labels: {{- include "oanmsg.labels" . | nindent 4 }}
+  annotations: {{- include "oanmsg.hook" (dict "phase" "post-install,post-upgrade" "weight" 5 "delete" "before-hook-creation,hook-succeeded") | nindent 4 }}
+spec:
+  backoffLimit: 3
+  activeDeadlineSeconds: 900
+  template:
+    spec:
+      serviceAccountName: {{ $name }}
+      automountServiceAccountToken: false
+      restartPolicy: Never
+      {{- include "oanmsg.pullSecrets" . | nindent 6 }}
+      securityContext: {runAsNonRoot: true, runAsUser: 1000, runAsGroup: 1000}
+      containers:
+        - name: iam-setup
+          image: {{ include "oanmsg.uiImage" . | quote }}
+          command: ["/bin/sh", "-c", "node iam/keycloak-setup.mjs && node iam/register.mjs"]
+          env:
+            - {name: PUBLIC_URL, value: {{ printf "https://%s" $host | quote }}}
+            - {name: IAM_URL, value: {{ $ui.iamUrl | quote }}}
+            - {name: COOKIE_DOMAIN, value: {{ .Values.cookieDomain | quote }}}
+            - {name: LOGIN_PROVIDER_ID, value: ""}
+            - {name: MESSAGING_CLIENT_ID, value: {{ $ui.clientId | quote }}}
+            - {name: MESSAGING_ROLE, value: {{ $ui.role | quote }}}
+            - name: MESSAGING_CLIENT_SECRET
+              valueFrom: {secretKeyRef: {name: {{ $secretName }}, key: client_secret}}
+            - {name: KEYCLOAK_ADMIN, value: {{ $ui.keycloakAdmin.user | quote }}}
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom: {secretKeyRef: {name: {{ $ui.keycloakAdmin.secret.name }}, key: {{ $ui.keycloakAdmin.secret.key }}}}
+            - {name: GRANT_USERS, value: {{ join " " $ui.grantUsers | quote }}}
+            - {name: APP_DESCRIPTION, value: {{ $ui.tileDescription | quote }}}
+          securityContext: {allowPrivilegeEscalation: false, readOnlyRootFilesystem: true, capabilities: {drop: [ALL]}}
+          resources:
+            requests: {cpu: 20m, memory: 64Mi}
+            limits: {memory: 192Mi}
+---
+{{- /* The console's prerequisites from the same image: the reader token lists messages, no token and a bad token are refused. */}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-ui-smoke
+  labels: {{- include "oanmsg.labels" . | nindent 4 }}
+  annotations: {{- include "oanmsg.hook" (dict "phase" "post-install,post-upgrade" "weight" 10 "delete" "before-hook-creation,hook-succeeded") | nindent 4 }}
+spec:
+  backoffLimit: 1
+  activeDeadlineSeconds: 300
+  template:
+    spec:
+      automountServiceAccountToken: false
+      restartPolicy: Never
+      {{- include "oanmsg.pullSecrets" . | nindent 6 }}
+      securityContext: {runAsNonRoot: true, runAsUser: 1000, runAsGroup: 1000}
+      containers:
+        - name: smoke
+          image: {{ include "oanmsg.uiImage" . | quote }}
+          command: ["node", "iam/smoke.mjs"]
+          env:
+            - {name: MESSAGING_API_URL, value: {{ printf "http://%s-api" (include "oanmsg.svc" .) | quote }}}
+            - name: MESSAGING_API_TOKEN
+              valueFrom: {secretKeyRef: {name: {{ .Values.callers.reader.secret }}, key: token}}
+          securityContext: {allowPrivilegeEscalation: false, readOnlyRootFilesystem: true, capabilities: {drop: [ALL]}}

@@ -1,0 +1,30 @@
+OAN Messaging Service chart {{ .Chart.Version }} (draft for review).
+
+Rendered components:
+  api        {{ ternary "enabled" "disabled" .Values.api.enabled }}
+  migration  {{ ternary "enabled (pre-install/pre-upgrade hook)" "disabled" .Values.migration.enabled }}
+  worker     {{ ternary "enabled" "disabled (enable with values-pilot.yaml)" .Values.worker.enabled }}
+  receipts   {{ ternary "enabled" "disabled (enable with values-pilot.yaml)" .Values.receipts.enabled }}
+  cleanup    {{ ternary (printf "enabled (%s)" .Values.cleanup.mode) "disabled (enable with values-pilot.yaml)" .Values.cleanup.enabled }}
+  stats      {{ ternary (printf "enabled (stats-refresh, %s)" .Values.statsRefresh.schedule) "disabled" .Values.statsRefresh.enabled }}
+
+Estimated PostgreSQL connections from configured pool limits (not enforced at runtime):
+  steady state            {{ include "oan.connectionSteady" . }}
+  upgrade/rollout peak    {{ include "oan.connectionRollout" . }}  (surge + terminating pods + migration hook)
+{{- if gt (int .Values.database.connectionBudget) 0 }}
+  budget                  {{ .Values.database.connectionBudget }}
+{{- end }}
+{{- if and .Values.networkPolicy.enabled (not .Values.networkPolicy.api.from) .Values.api.enabled }}
+
+WARNING: networkPolicy.api.from is empty, so nothing can reach the API.
+{{- end }}
+{{- if and .Values.networkPolicy.enabled .Values.receipts.enabled (not .Values.networkPolicy.receipts.fromCIDRs) }}
+
+WARNING: networkPolicy.receipts.fromCIDRs is empty, so 8028 cannot reach the receipt ingress.
+{{- end }}
+{{- if not .Values.worker.enabled }}
+
+Without the worker, accepted messages are stored but never sent.
+{{- end }}
+
+See docs/deployment/helm.md for blockers, Secret formats and rotation.

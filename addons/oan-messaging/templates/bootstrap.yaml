@@ -1,0 +1,217 @@
+{{- /*
+Pre-install/pre-upgrade hooks, in order:
+  -30 ServiceAccount, Role, scripts          -20 init-secrets (Secrets, once)
+  -15 db-init (role + database on the shared PostgreSQL)
+  -10 the service chart's migration Job      -3  grants (after the migrations created the tables)
+    5 callers (console reader, test sender; tokens into Secrets)
+*/ -}}
+{{- $pg := .Values.postgres }}
+{{- $img := include "oanmsg.serviceImage" . }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}-bootstrap
+  labels: {{- include "oanmsg.labels" . | nindent 4 }}
+  annotations: {{- include "oanmsg.hook" (dict "phase" "pre-install,pre-upgrade" "weight" -30) | nindent 4 }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}-bootstrap
+  labels: {{- include "oanmsg.labels" . | nindent 4 }}
+  annotations: {{- include "oanmsg.hook" (dict "phase" "pre-install,pre-upgrade" "weight" -30) | nindent 4 }}
+rules:
+  # get only the Secrets these hooks manage (never the namespace's other Secrets); create cannot be name-scoped.
+  - apiGroups: [""]
+    resources: [secrets]
+    verbs: [get]
+    resourceNames:
+      - oan-messaging-database
+      - oan-messaging-core
+      - oan-messaging-sms8028
+      - oan-messaging-sms8028-client-tls
+      - oan-messaging-8028-callback
+      - oan-messaging-8028-callback-ca
+      - oan-messaging-receipts-server-tls
+      - oan-messaging-fake8028
+      - {{ .Values.callers.reader.secret }}
+      - {{ .Values.callers.sender.secret }}
+  - apiGroups: [""]
+    resources: [secrets]
+    verbs: [create]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Release.Name }}-bootstrap
+  labels: {{- include "oanmsg.labels" . | nindent 4 }}
+  annotations: {{- include "oanmsg.hook" (dict "phase" "pre-install,pre-upgrade" "weight" -30) | nindent 4 }}
+roleRef: {apiGroup: rbac.authorization.k8s.io, kind: Role, name: {{ .Release.Name }}-bootstrap}
+subjects:
+  - {kind: ServiceAccount, name: {{ .Release.Name }}-bootstrap}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-bootstrap-scripts
+  labels: {{- include "oanmsg.labels" . | nindent 4 }}
+  annotations: {{- include "oanmsg.hook" (dict "phase" "pre-install,pre-upgrade" "weight" -30) | nindent 4 }}
+data:
+  init_secrets.py: |-
+{{ .Files.Get "files/init_secrets.py" | indent 4 }}
+  gen_certs.py: |-
+{{ .Files.Get "files/gen_certs.py" | indent 4 }}
+  bootstrap_callers.py: |-
+{{ .Files.Get "files/bootstrap_callers.py" | indent 4 }}
+  grants.sql: |-
+{{ .Files.Get "files/grants.sql" | indent 4 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-init-secrets
+  labels: {{- include "oanmsg.labels" . | nindent 4 }}
+  annotations: {{- include "oanmsg.hook" (dict "phase" "pre-install,pre-upgrade" "weight" -20) | nindent 4 }}
+spec:
+  backoffLimit: 1
+  activeDeadlineSeconds: 300
+  template:
+    spec:
+      serviceAccountName: {{ .Release.Name }}-bootstrap
+      restartPolicy: Never
+      {{- include "oanmsg.pullSecrets" . | nindent 6 }}
+      securityContext: {{- include "oanmsg.hookSecurity" . | nindent 8 }}
+      containers:
+        - name: init
+          image: {{ $img | quote }}
+          command: [python, /scripts/init_secrets.py]
+          env:
+            - {name: DB_HOST, value: {{ $pg.host | quote }}}
+            - {name: DB_NAME, value: {{ $pg.database | quote }}}
+            - {name: DB_OWNER, value: {{ $pg.owner | quote }}}
+            - {name: DB_RUNTIME, value: {{ $pg.runtime | quote }}}
+            - {name: FAKE8028, value: {{ .Values.fake8028.enabled | quote }}}
+            - {name: RECEIPTS_HOST, value: {{ printf "%s-receipts" (include "oanmsg.svc" .) | quote }}}
+            - {name: FAKE8028_HOST, value: {{ printf "%s-fake-8028" (include "oanmsg.svc" .) | quote }}}
+          securityContext: {allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
+          volumeMounts:
+            - {name: scripts, mountPath: /scripts, readOnly: true}
+            - {name: tmp, mountPath: /tmp}
+      volumes:
+        - {name: scripts, configMap: {name: {{ .Release.Name }}-bootstrap-scripts}}
+        - {name: tmp, emptyDir: {}}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-db-init
+  labels: {{- include "oanmsg.labels" . | nindent 4 }}
+  annotations: {{- include "oanmsg.hook" (dict "phase" "pre-install,pre-upgrade" "weight" -15) | nindent 4 }}
+spec:
+  backoffLimit: 3
+  activeDeadlineSeconds: 300
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: db-init
+          image: {{ $pg.image | quote }}
+          env:
+            - {name: PGHOST, value: {{ $pg.host | quote }}}
+            - {name: PGUSER, value: postgres}
+            - {name: PGDATABASE, value: postgres}
+            - name: PGPASSWORD
+              valueFrom: {secretKeyRef: {name: {{ $pg.superuserSecret.name }}, key: {{ $pg.superuserSecret.key }}}}
+            - name: OWNER_PW
+              valueFrom: {secretKeyRef: {name: oan-messaging-database, key: owner-password}}
+            - name: RUNTIME_PW
+              valueFrom: {secretKeyRef: {name: oan-messaging-database, key: runtime-password}}
+          command:
+            - sh
+            - -c
+            - |
+              set -eu
+              # Idempotent: roles are created or have their password synced to the Secret; the database is
+              # created once; the owner owns schema public. Passwords are [A-Za-z0-9_-] (init-secrets).
+              psql -v ON_ERROR_STOP=1 <<SQL
+              DO \$do\$ BEGIN
+                IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname='{{ $pg.owner }}') THEN
+                  CREATE ROLE {{ $pg.owner }} LOGIN PASSWORD '$OWNER_PW';
+                ELSE ALTER ROLE {{ $pg.owner }} PASSWORD '$OWNER_PW'; END IF;
+                IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname='{{ $pg.runtime }}') THEN
+                  CREATE ROLE {{ $pg.runtime }} LOGIN PASSWORD '$RUNTIME_PW';
+                ELSE ALTER ROLE {{ $pg.runtime }} PASSWORD '$RUNTIME_PW'; END IF;
+              END \$do\$;
+              SQL
+              if [ "$(psql -tAc "select 1 from pg_database where datname='{{ $pg.database }}'")" != 1 ]; then
+                psql -v ON_ERROR_STOP=1 -c "CREATE DATABASE {{ $pg.database }} OWNER {{ $pg.owner }}"
+              fi
+              psql -v ON_ERROR_STOP=1 -d {{ $pg.database }} -c "ALTER SCHEMA public OWNER TO {{ $pg.owner }}"
+              echo "database {{ $pg.database }} ready"
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-grants
+  labels: {{- include "oanmsg.labels" . | nindent 4 }}
+  annotations: {{- include "oanmsg.hook" (dict "phase" "pre-install,pre-upgrade" "weight" -3) | nindent 4 }}
+spec:
+  backoffLimit: 2
+  activeDeadlineSeconds: 900
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: grants
+          image: {{ $pg.image | quote }}
+          env:
+            - {name: PGHOST, value: {{ $pg.host | quote }}}
+            - {name: PGUSER, value: {{ $pg.owner | quote }}}
+            - {name: PGDATABASE, value: {{ $pg.database | quote }}}
+            - name: PGPASSWORD
+              valueFrom: {secretKeyRef: {name: oan-messaging-database, key: owner-password}}
+          command:
+            - sh
+            - -c
+            - |
+              set -eu
+              psql -tAc "select to_regclass('public.stats_state') is not null" | grep -q t \
+                || { echo "migrations did not create stats_state"; exit 1; }
+              psql -v ON_ERROR_STOP=1 -v runtime_role={{ $pg.runtime }} -v owner_role={{ $pg.owner }} -f /sql/grants.sql
+              echo "grants applied"
+          volumeMounts:
+            - {name: scripts, mountPath: /sql, readOnly: true}
+      volumes:
+        - name: scripts
+          configMap: {name: {{ .Release.Name }}-bootstrap-scripts, items: [{key: grants.sql, path: grants.sql}]}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-callers
+  labels: {{- include "oanmsg.labels" . | nindent 4 }}
+  annotations: {{- include "oanmsg.hook" (dict "phase" "pre-install,pre-upgrade" "weight" 5) | nindent 4 }}
+spec:
+  backoffLimit: 1
+  activeDeadlineSeconds: 300
+  template:
+    spec:
+      serviceAccountName: {{ .Release.Name }}-bootstrap
+      restartPolicy: Never
+      {{- include "oanmsg.pullSecrets" . | nindent 6 }}
+      securityContext: {{- include "oanmsg.hookSecurity" . | nindent 8 }}
+      containers:
+        - name: callers
+          image: {{ $img | quote }}
+          command: [python, /scripts/bootstrap_callers.py]
+          env:
+            {{- include "oanmsg.runtimeEnv" . | nindent 12 }}
+            - name: CALLERS
+              value: {{ toJson (concat (list (dict "caller" .Values.callers.reader.name "secret" .Values.callers.reader.secret "kind" "messages-reader")) (ternary (list (dict "caller" .Values.callers.sender.name "secret" .Values.callers.sender.secret "kind" "sender" "channels" (list "sms") "purposes" (list "transactional"))) (list) .Values.callers.sender.enabled)) | quote }}
+          securityContext: {allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
+          volumeMounts:
+            - {name: scripts, mountPath: /scripts, readOnly: true}
+            - {name: tmp, mountPath: /tmp}
+      volumes:
+        - {name: scripts, configMap: {name: {{ .Release.Name }}-bootstrap-scripts}}
+        - {name: tmp, emptyDir: {}}

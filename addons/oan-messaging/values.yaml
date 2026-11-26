@@ -1,0 +1,96 @@
+# OAN Messaging for the Commons namespace. See docs/oan-messaging.md in the repository.
+#
+# The service itself is the vendored subchart charts/oan-messaging-service (the service repository's
+# deploy/helm/oan-messaging, see charts/oan-messaging-service/VENDORED.md); its values are under the key
+# `oan-messaging-service` below. This file adds what the service chart leaves to the operator.
+
+# Domain IAM scopes its session cookies to; the console is served under it.
+cookieDomain: .development.oanstaging.com
+imagePullSecrets:
+  - name: ecr-pull-secret
+
+# Database and role on the shared Commons PostgreSQL (no database of its own).
+postgres:
+  host: commons-postgresql
+  superuserSecret: {name: commons-postgresql, key: postgres-password}
+  database: oan_messaging
+  owner: oan_msg_owner      # runs the migrations
+  runtime: oan_msg_runtime  # the service's least-privilege role (grants.sql)
+  image: jbergknoff/postgresql-client:latest
+
+# 8028 is not reachable from New Dev: a fake gateway stands in (mTLS send endpoint, delivery callbacks).
+# Turn off, and supply the real 8028 Secrets, wherever the real gateway is used.
+fake8028:
+  enabled: true
+  mode: ok                   # ok | http503 | http401
+  callbackDelaySeconds: "1.0"
+
+# Callers the release registers. The reader belongs to the console; the sender is a test sender for
+# smoke sends on New Dev (set sender.enabled false elsewhere).
+callers:
+  reader: {name: staff-console, secret: oan-messaging-ui-reader}
+  sender: {enabled: true, name: console-smoke, secret: oan-messaging-smoke-sender}
+
+# The staff console.
+ui:
+  image: {repository: "", tag: "", pullPolicy: IfNotPresent}
+  host: ""                   # default messaging.<cookie domain>
+  replicas: 1
+  iamUrl: https://staff-iam.development.oanstaging.com
+  staffPortalUrl: https://staff-portal.development.oanstaging.com
+  gateway: istio-system/development
+  clientId: oan-messaging-ui         # Keycloak client = IAM application mnemonic
+  role: Messaging Viewer
+  tileDescription: OAN Messaging
+  # Existing Keycloak users granted the role on every deploy: exactly these, nobody else.
+  grantUsers: [admin, alex.carter, nina.patel]
+  keycloakAdmin: {user: admin, secret: {name: commons-keycloak, key: admin-password}}
+  sessionCacheSeconds: 60
+  resources:
+    requests: {cpu: 100m, memory: 192Mi}
+    limits: {memory: 512Mi}
+
+# Values of the vendored service chart.
+oan-messaging-service:
+  fullnameOverride: oan-messaging
+  image:
+    repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan_messaging_service/oan-messaging
+    tag: ""
+    pullPolicy: IfNotPresent
+  imagePullSecrets:
+    - name: ecr-pull-secret
+  database:
+    existingSecret: oan-messaging-database
+    migration: {existingSecret: oan-messaging-database}
+  secrets:
+    sms8028:
+      caKey: ca.crt
+    receipts:
+      clientCaSecret: oan-messaging-8028-callback-ca
+      clientCaKeys: [ca.crt]
+      pinnedCertsSecret: ""
+      pinnedCertKeys: []
+  config:
+    sms8028BaseUrl: https://oan-messaging-fake-8028:8443/sms-api/v1
+  api:
+    replicas: 1
+    pdb: {enabled: false}
+  worker:
+    enabled: true
+    command: [python, -m, oan_messaging.runtime, worker]
+    replicas: 1
+    channels: [sms]
+  receipts:
+    enabled: true
+    command: [python, -m, oan_messaging.runtime, receipts]
+    replicas: 1
+    pdb: {enabled: false}
+    service: {type: ClusterIP, port: 443}
+  cleanup:
+    enabled: true
+    mode: cronjob
+    command: [python, -m, oan_messaging.runtime, cleanup]
+  statsRefresh: {enabled: true}
+  statusCheck: {enabled: false}
+  # New Dev's namespace has no NetworkPolicies; the API stays ClusterIP and is never routed publicly.
+  networkPolicy: {enabled: false}

@@ -1,0 +1,215 @@
+{{- if .Values.receipts.enabled }}
+{{- $c := dict "root" . "component" "receipts" }}
+{{- include "oan.requireCommand" (dict "cmd" .Values.receipts.command "name" "receipts") }}
+{{- $s := .Values.secrets.receipts }}
+{{- $pins := list }}
+{{- range $s.pinnedCertKeys }}
+{{- $pins = append $pins (printf "/etc/oan-msg/receipts/pins/%s" .) }}
+{{- end }}
+{{- $cas := list }}
+{{- range $s.clientCaKeys }}
+{{- $cas = append $cas (printf "/etc/oan-msg/receipts/ca/%s" .) }}
+{{- end }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "oan.componentName" $c }}
+  labels:
+    {{- include "oan.labels" $c | nindent 4 }}
+spec:
+  replicas: {{ .Values.receipts.replicas }}
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      {{- include "oan.selectorLabels" $c | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: {maxUnavailable: 0, maxSurge: {{ .Values.receipts.rollout.maxSurge }}}
+  template:
+    metadata:
+      labels:
+        {{- include "oan.labels" $c | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "oan.serviceAccountName" . }}
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      terminationGracePeriodSeconds: {{ .Values.receipts.terminationGracePeriodSeconds }}
+      securityContext:
+        {{- include "oan.podSecurityContextWithKeys" . | nindent 8 }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- include "oan.tlsSnapshotInit" (dict "root" . "ca" false) | nindent 8 }}
+      containers:
+        - name: receipts
+          image: {{ include "oan.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.image.workingDir }}
+          workingDir: {{ . }}
+          {{- end }}
+          command:
+            {{- toYaml .Values.receipts.command | nindent 12 }}
+          # TLS (server certificate + required, pinned 8028 client certificate) is
+          # terminated by this process (receipts.ingress.build_server_ssl_context). It
+          # never reads a certificate from an HTTP header. Mounted files:
+          #   server certificate  /run/oan-msg/tls/current/tls.crt   (0600 snapshot)
+          #   server private key  /run/oan-msg/tls/current/tls.key   (0600 snapshot)
+          #   pinned 8028 certs   /etc/oan-msg/receipts/pins/<key>
+          # passed to the entrypoint through the OAN_MSG_RECEIPTS_* variables below.
+          ports:
+            - name: receipts
+              containerPort: {{ .Values.receipts.containerPort }}
+              protocol: TCP
+          envFrom:
+            {{- include "oan.envFromConfig" . | nindent 12 }}
+          env:
+            {{- include "oan.storageEnv" (dict "root" . "pool" .Values.receipts.pool) | nindent 12 }}
+            # Read by `python -m oan_messaging.runtime receipts` (MSG-08).
+            - name: OAN_MSG_RECEIPTS_SERVER_CERT
+              value: /run/oan-msg/tls/current/tls.crt
+            - name: OAN_MSG_RECEIPTS_SERVER_KEY
+              value: /run/oan-msg/tls/current/tls.key
+            - name: OAN_MSG_RECEIPTS_PINNED_CERTS
+              value: {{ $pins | join "," | quote }}
+            - name: OAN_MSG_RECEIPTS_CLIENT_CA_CERTS
+              value: {{ $cas | join "," | quote }}
+            - name: OAN_MSG_RECEIPTS_CALLBACK_SECRET
+              valueFrom:
+                secretKeyRef: {name: {{ $s.callbackSecret.existingSecret | quote }}, key: {{ $s.callbackSecret.key | quote }}}
+            {{- with $s.callbackSecret.previousKey }}
+            - name: OAN_MSG_RECEIPTS_CALLBACK_SECRET_PREVIOUS
+              valueFrom:
+                secretKeyRef: {name: {{ $s.callbackSecret.existingSecret | quote }}, key: {{ . | quote }}}
+            {{- end }}
+            - name: OAN_MSG_RECEIPTS_PATH
+              value: {{ .Values.receipts.path | quote }}
+            - name: OAN_MSG_RECEIPTS_PORT
+              value: {{ .Values.receipts.containerPort | quote }}
+            {{- with .Values.receipts.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- with .Values.receipts.probes.readiness }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.receipts.probes.liveness }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.receipts.resources | nindent 12 }}
+          securityContext:
+            {{- include "oan.containerSecurityContext" . | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: tls-snapshot
+              mountPath: /run/oan-msg/tls
+              readOnly: true
+            {{- if $pins }}
+            - name: pins
+              mountPath: /etc/oan-msg/receipts/pins
+              readOnly: true
+            {{- end }}
+            {{- if $cas }}
+            - name: callback-ca
+              mountPath: /etc/oan-msg/receipts/ca
+              readOnly: true
+            {{- end }}
+      volumes:
+        - name: tmp
+          emptyDir: {sizeLimit: 64Mi}
+        {{- if $pins }}
+        - name: pins
+          secret:
+            secretName: {{ $s.pinnedCertsSecret }}
+            defaultMode: 0444
+            items:
+              {{- range $s.pinnedCertKeys }}
+              - {key: {{ . | quote }}, path: {{ . | quote }}}
+              {{- end }}
+        {{- end }}
+        {{- if $cas }}
+        - name: callback-ca
+          secret:
+            secretName: {{ $s.clientCaSecret }}
+            defaultMode: 0444
+            items:
+              {{- range $s.clientCaKeys }}
+              - {key: {{ . | quote }}, path: {{ . | quote }}}
+              {{- end }}
+        {{- end }}
+        # Server certificate + key, mounted ONLY into the init container.
+        - name: tls-source
+          secret:
+            secretName: {{ $s.serverTlsSecret }}
+            defaultMode: 0440
+            items:
+              - {key: tls.crt, path: tls.crt}
+              - {key: tls.key, path: tls.key}
+        - name: tls-snapshot
+          emptyDir: {medium: Memory, sizeLimit: 1Mi}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+---
+# L4 TCP pass-through: the load balancer forwards raw TCP, so the TLS handshake and the
+# client-certificate check happen inside the receipts process.
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "oan.componentName" $c }}
+  labels:
+    {{- include "oan.labels" $c | nindent 4 }}
+  {{- with .Values.receipts.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.receipts.service.type }}
+  {{- if ne .Values.receipts.service.type "ClusterIP" }}
+  # Keeps the 8028 source IP visible to NetworkPolicy and the source-range filter.
+  externalTrafficPolicy: {{ .Values.receipts.service.externalTrafficPolicy }}
+  {{- end }}
+  {{- if and (eq .Values.receipts.service.type "LoadBalancer") .Values.receipts.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+    {{- toYaml .Values.receipts.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  selector:
+    {{- include "oan.selectorLabels" $c | nindent 4 }}
+  ports:
+    - name: receipts
+      port: {{ .Values.receipts.service.port }}
+      targetPort: receipts
+      protocol: TCP
+{{- if and .Values.receipts.pdb.enabled (gt (int .Values.receipts.replicas) 1) }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "oan.componentName" $c }}
+  labels:
+    {{- include "oan.labels" $c | nindent 4 }}
+spec:
+  minAvailable: {{ .Values.receipts.pdb.minAvailable }}
+  selector:
+    matchLabels:
+      {{- include "oan.selectorLabels" $c | nindent 6 }}
+{{- end }}
+{{- end }}

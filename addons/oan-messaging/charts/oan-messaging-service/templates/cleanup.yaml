@@ -1,0 +1,60 @@
+{{- if .Values.cleanup.enabled }}
+{{- $c := dict "root" . "component" "cleanup" }}
+{{- include "oan.requireCommand" (dict "cmd" .Values.cleanup.command "name" "cleanup") }}
+{{- if eq .Values.cleanup.mode "cronjob" }}
+# One run_cleanup pass per schedule (recover_stale, then purge_due in bounded batches).
+# Every step is conditional SQL, so overlap is harmless; Forbid just avoids pile-ups.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "oan.componentName" $c }}
+  labels:
+    {{- include "oan.labels" $c | nindent 4 }}
+spec:
+  schedule: {{ .Values.cleanup.schedule | quote }}
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 300
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    metadata:
+      labels:
+        {{- include "oan.labels" $c | nindent 8 }}
+    spec:
+      backoffLimit: 0
+      activeDeadlineSeconds: {{ .Values.cleanup.activeDeadlineSeconds }}
+      ttlSecondsAfterFinished: 3600
+      template:
+        metadata:
+          labels:
+            {{- include "oan.labels" $c | nindent 12 }}
+        spec:
+          restartPolicy: Never
+          {{- include "oan.cleanupPodSpec" . | nindent 10 }}
+{{- else }}
+# One long-running cleanup_forever loop (interval = purge_sweep_interval).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "oan.componentName" $c }}
+  labels:
+    {{- include "oan.labels" $c | nindent 4 }}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  # Recreate: the old loop stops before the new one starts (one pod, one pool).
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "oan.selectorLabels" $c | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "oan.labels" $c | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    spec:
+      {{- include "oan.cleanupPodSpec" . | nindent 6 }}
+{{- end }}
+{{- end }}

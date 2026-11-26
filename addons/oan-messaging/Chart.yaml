@@ -1,0 +1,19 @@
+apiVersion: v2
+name: oan-messaging
+description: >-
+  OAN Messaging in the Commons namespace: the messaging service (API, worker, receipt ingress, statistics),
+  its database and role on the shared Commons PostgreSQL, the staff console (UI and its backend-for-frontend),
+  and the console's Keycloak client, role, staff-portal tile and reader token. No cache and no queue.
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+sources:
+- https://github.com/Centre-for-Open-Societal-Systems/oan_messaging_service
+- https://github.com/Centre-for-Open-Societal-Systems/oan_messaging_ui
+- https://github.com/Centre-for-Open-Societal-Systems/oan-helm
+annotations:
+  oan.org/chart-owner: oan-helm
+dependencies:
+- name: oan-messaging-service
+  version: 0.1.0-draft.2
+  repository: ""

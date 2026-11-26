@@ -1,0 +1,114 @@
+{{- /* Telegram-only worker (SMS-02 revised). Off by default. It sends only Telegram
+messages and holds only the Telegram bot tokens: no 8028 secret or certificate is mounted,
+and the SMS worker above never gets a Telegram token unless worker.channels lists
+telegram. A missing or wrong bot token can therefore never stop SMS. */ -}}
+{{- if .Values.workerTelegram.enabled }}
+{{- $c := dict "root" . "component" "worker-telegram" }}
+{{- $wt := .Values.workerTelegram }}
+{{- include "oan.requireCommand" (dict "cmd" $wt.command "name" "workerTelegram") }}
+{{- $s := .Values.secrets }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "oan.componentName" $c }}
+  labels:
+    {{- include "oan.labels" $c | nindent 4 }}
+spec:
+  replicas: {{ $wt.replicas }}
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      {{- include "oan.selectorLabels" $c | nindent 6 }}
+  strategy:
+    # Same coordination as the SMS worker: PostgreSQL leases and the shared rate limiter.
+    type: RollingUpdate
+    rollingUpdate: {maxUnavailable: 1, maxSurge: {{ $wt.rollout.maxSurge }}}
+  template:
+    metadata:
+      labels:
+        {{- include "oan.labels" $c | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "oan.serviceAccountName" . }}
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      terminationGracePeriodSeconds: {{ $wt.terminationGracePeriodSeconds }}
+      securityContext:
+        {{- include "oan.podSecurityContext" . | nindent 8 }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: worker
+          image: {{ include "oan.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.image.workingDir }}
+          workingDir: {{ . }}
+          {{- end }}
+          command:
+            {{- toYaml $wt.command | nindent 12 }}
+          envFrom:
+            {{- include "oan.envFromConfig" . | nindent 12 }}
+          env:
+            {{- include "oan.storageEnv" (dict "root" . "pool" $wt.pool) | nindent 12 }}
+            {{- range $bot, $key := $s.telegram.bots }}
+            # Telegram bot "{{ $bot }}" (TelegramBotRegistry.from_environ)
+            - name: OAN_MSG_TELEGRAM_BOT_TOKEN__{{ $bot | upper }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $s.telegram.existingSecret }}
+                  key: {{ $key }}
+            {{- end }}
+            - name: OAN_MSG_WORKER_CHANNELS
+              value: telegram
+            # TG-08: Telegram pace across all Telegram workers (at most 30), and OTP slots.
+            - name: OAN_MSG_TELEGRAM_RATE_PER_SECOND
+              value: {{ $wt.ratePerSecond | int | quote }}
+            - name: OAN_MSG_TELEGRAM_OTP_RESERVE
+              value: {{ $wt.otpReserve | int | quote }}
+            {{- with $wt.apiBaseUrl }}
+            - name: OAN_MSG_TELEGRAM_API_BASE_URL
+              value: {{ . | quote }}
+            {{- end }}
+            {{- if $wt.broadcastEnabled }}
+            # Contract 3.4.0: claim Telegram broadcasts (this worker sends Telegram only).
+            - name: OAN_MSG_TELEGRAM_BROADCAST_ENABLED
+              value: "true"
+            {{- end }}
+            - name: OAN_MSG_WORKER_HEARTBEAT_FILE
+              value: /tmp/oan-msg-worker.alive
+            {{- with $wt.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- with $wt.probes.liveness }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml $wt.resources | nindent 12 }}
+          securityContext:
+            {{- include "oan.containerSecurityContext" . | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {sizeLimit: 64Mi}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

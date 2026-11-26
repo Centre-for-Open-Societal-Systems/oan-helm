@@ -38,6 +38,8 @@ publicHosts:
   # A2C backend: the gateway host, the Frappe site name and the A2C UI API_BASE_URL all use it.
   # The A2C charts and values live in oan_a2c (helm/) and oan_a2c_ui (helm/), not in this repository.
   a2c: a2c-service.development.oanstaging.com
+  # OAN Messaging staff console (addons/oan-messaging). The messaging API itself has no public host.
+  messaging: messaging.development.oanstaging.com
   consentPartnerPortal: consent-partner-portal.development.oanstaging.com
   farmerConnector: connector-farmer-registry.development.oanstaging.com
   cropsownConnector: connector-cropsown-registry.development.oanstaging.com

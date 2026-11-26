@@ -1,0 +1,178 @@
+{{- if .Values.networkPolicy.enabled }}
+{{- $np := .Values.networkPolicy }}
+{{- if .Values.api.enabled }}
+{{- $c := dict "root" . "component" "api" }}
+# API: ingress only from the configured peers (e.g. the gateway). Empty = none.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "oan.componentName" $c }}-ingress
+  labels:
+    {{- include "oan.labels" $c | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "oan.selectorLabels" $c | nindent 6 }}
+  policyTypes: [Ingress]
+  ingress:
+    {{- if $np.api.from }}
+    - from:
+        {{- toYaml $np.api.from | nindent 8 }}
+      ports:
+        - {port: http, protocol: TCP}
+    {{- else }} []
+    {{- end }}
+---
+{{- end }}
+{{- if .Values.receipts.enabled }}
+{{- $c := dict "root" . "component" "receipts" }}
+# Receipt ingress: ingress only from the 8028 callback CIDRs. Empty = none.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "oan.componentName" $c }}-ingress
+  labels:
+    {{- include "oan.labels" $c | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "oan.selectorLabels" $c | nindent 6 }}
+  policyTypes: [Ingress]
+  ingress:
+    {{- if $np.receipts.fromCIDRs }}
+    - from:
+        {{- range $np.receipts.fromCIDRs }}
+        - ipBlock: {cidr: {{ . | quote }}}
+        {{- end }}
+      ports:
+        - {port: receipts, protocol: TCP}
+    {{- else }} []
+    {{- end }}
+---
+{{- end }}
+{{- $c := dict "root" . "component" "internal" }}
+# Everything else in this release (worker, cleanup, migration, status check, statistics refresh): no ingress.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "oan.fullname" . }}-deny-ingress
+  labels:
+    {{- include "oan.labels" $c | nindent 4 }}
+spec:
+  podSelector:
+    matchExpressions:
+      - {key: app.kubernetes.io/instance, operator: In, values: [{{ .Release.Name | quote }}]}
+      - {key: app.kubernetes.io/component, operator: In, values: [worker, cleanup, migration, status-check, stats]}
+  policyTypes: [Ingress]
+  ingress: []
+{{- if .Values.workerTelegram.enabled }}
+{{- $wt := dict "root" . "component" "worker-telegram" }}
+---
+# Telegram worker: no ingress.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "oan.componentName" $wt }}-ingress
+  labels:
+    {{- include "oan.labels" $wt | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "oan.selectorLabels" $wt | nindent 6 }}
+  policyTypes: [Ingress]
+  ingress: []
+{{- end }}
+{{- if $np.egress.enabled }}
+{{- $e := $np.egress }}
+---
+# Egress allow-list for every pod of this release: DNS + PostgreSQL. Workers also get
+# 8028 and Telegram. Nothing else.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "oan.fullname" . }}-egress
+  labels:
+    {{- include "oan.labels" $c | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            {{- toYaml $e.dns.namespaceSelector | nindent 12 }}
+          podSelector:
+            {{- toYaml $e.dns.podSelector | nindent 12 }}
+      ports:
+        - {port: 53, protocol: UDP}
+        - {port: 53, protocol: TCP}
+    {{- if $e.postgres.cidrs }}
+    - to:
+        {{- range $e.postgres.cidrs }}
+        - ipBlock: {cidr: {{ . | quote }}}
+        {{- end }}
+      ports:
+        - {port: {{ $e.postgres.port }}, protocol: TCP}
+    {{- end }}
+{{- if .Values.worker.enabled }}
+{{- $w := dict "root" . "component" "worker" }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "oan.componentName" $w }}-providers-egress
+  labels:
+    {{- include "oan.labels" $w | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "oan.selectorLabels" $w | nindent 6 }}
+  policyTypes: [Egress]
+  egress:
+    {{- if $e.sms8028.cidrs }}
+    - to:
+        {{- range $e.sms8028.cidrs }}
+        - ipBlock: {cidr: {{ . | quote }}}
+        {{- end }}
+      ports:
+        - {port: {{ $e.sms8028.port }}, protocol: TCP}
+    {{- end }}
+    {{- if $e.telegram.cidrs }}
+    - to:
+        {{- range $e.telegram.cidrs }}
+        - ipBlock: {cidr: {{ . | quote }}}
+        {{- end }}
+      ports:
+        - {port: {{ $e.telegram.port }}, protocol: TCP}
+    {{- end }}
+    {{- if not (or $e.sms8028.cidrs $e.telegram.cidrs) }} []
+    {{- end }}
+{{- end }}
+{{- if .Values.workerTelegram.enabled }}
+{{- $wt := dict "root" . "component" "worker-telegram" }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "oan.componentName" $wt }}-egress
+  labels:
+    {{- include "oan.labels" $wt | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "oan.selectorLabels" $wt | nindent 6 }}
+  policyTypes: [Egress]
+  egress:
+    {{- if $e.telegram.cidrs }}
+    - to:
+        {{- range $e.telegram.cidrs }}
+        - ipBlock: {cidr: {{ . | quote }}}
+        {{- end }}
+      ports:
+        - {port: {{ $e.telegram.port }}, protocol: TCP}
+    {{- else }} []
+    {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
