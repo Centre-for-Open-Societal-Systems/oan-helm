@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.10-develop.77
+
+<!-- source-commit: 1ae13f195e2e5cadf8384cae64bda1da84279df3 version: 0.0.10-develop.77 -->
+Published 2026-11-26. Archive SHA-256 `a7f061c5690ddde1bc9446769f5507fe4b4016235fa67c01ed25f6f34f7d5aff`.
+
+- Change: Merge pull request #103 from yash7473/feat/my-profile-api
+- Source: [Centre-for-Open-Societal-Systems/oan_da_app_services@1ae13f195e2e](https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/commit/1ae13f195e2e5cadf8384cae64bda1da84279df3)
+- Changes since 0.0.10-develop.73: https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/compare/73094cd7d8873983a9da71e9d2e1a6081b268666...1ae13f195e2e5cadf8384cae64bda1da84279df3
+
+Return to this version:
+
+```sh
+helm upgrade da-services-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-da-services-gateway-0.0.10-develop.77.tgz -n da-app --reset-values -f helm/environments/dev/oan-da-services-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.10-develop.73
 
 <!-- source-commit: 73094cd7d8873983a9da71e9d2e1a6081b268666 version: 0.0.10-develop.73 -->
