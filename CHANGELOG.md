@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-26
 
+### oan-da-app-ui 0.0.1-develop.73 (develop)
+
+- Merge pull request #98 from rajujha-ptn/daSupervisor_responsive-26Nov2026 (Centre-for-Open-Societal-Systems/oan_da_app_ui@cdd1735a983e)
+- Images and rollback: [releases/history/develop/oan-da-app-ui.md](releases/history/develop/oan-da-app-ui.md)
+
+## 2026-11-26
+
 ### openg2p-cropsown-registry 1.0.0-develop.317 (develop)
 
 - Merge pull request #322 from rithikharavi-ai/develop (Centre-for-Open-Societal-Systems/cropsown-regsitry@8e3bb0e45ea6)
