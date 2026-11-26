@@ -27,7 +27,7 @@ Pre-install/pre-upgrade, by weight: init-secrets (-20), db-init (-15), migration
    (`bot/oan-messaging-<service|ui>-<tag>`), that changes only the image `tag:` line in
    `environments/dev/values/oan-messaging.yaml` to `<version>-develop.<build>@sha256:<digest>`. An older open pin PR
    for the same image is closed.
-3. Merging that PR into `main` starts `oan-helm-dev-commons`, whose last stage `Deliver OAN Messaging` runs
+3. Merging that PR into oan-helm starts `oan-helm-dev-commons`, whose last stage `Deliver OAN Messaging` runs
    `scripts/ci/deliver_dev_oan_messaging.sh`: server-side dry run, then `helm upgrade --install --reset-values
    --atomic --wait`, then the record in ConfigMap `oan-messaging-delivery`. Unchanged chart and values: nothing runs.
 

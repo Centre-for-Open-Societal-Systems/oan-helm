@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Deliver the oan-messaging release (namespace commons) to New Dev from this checkout of main.
+# Deliver the oan-messaging release (namespace commons) to New Dev from this checkout of oan-helm.
 # Run by ci/jenkins/dev-commons.Jenkinsfile after the Commons services (Keycloak, IAM, PostgreSQL are theirs): the
 # release brings the messaging service, its database on the shared PostgreSQL, the staff console, the Keycloak
 # client, role and staff-portal tile (addons/oan-messaging, values environments/dev/values/oan-messaging.yaml).
@@ -7,7 +7,7 @@
 # a pull request here after each develop build (scripts/ci/pin_image_in_oan_helm.py in those repositories).
 #
 # What New Dev runs is recorded in ConfigMap oan-messaging-delivery (sha256 of the chart directory and of the values).
-# If it matches this commit nothing is done, so a failed delivery is retried by the next build of main.
+# If it matches this commit nothing is done, so a failed delivery is retried by the next build of oan-helm.
 # helm upgrade --install --reset-values --atomic --wait: a failed upgrade is rolled back by Helm. Saved values are never reused.
 # Needs KUBECONFIG. HELM_TIMEOUT defaults to 20m (the hooks stop after 15 min each at most).
 set -euo pipefail
