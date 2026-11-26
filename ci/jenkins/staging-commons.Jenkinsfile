@@ -94,6 +94,16 @@ pipeline {
                 }
             }
         }
+        // OAN Messaging: service, database on the shared PostgreSQL, staff console, Keycloak client, role and tile
+        // (scripts/ci/deliver_staging_oan_messaging.sh, record oan-messaging-delivery).
+        stage('Deliver OAN Messaging') {
+            when { allOf { branch 'main'; not { changeRequest() } } }
+            steps {
+                withCredentials([file(credentialsId: 'staging-commons-deployer-kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh 'bash scripts/ci/deliver_staging_oan_messaging.sh'
+                }
+            }
+        }
     }
     post {
         failure {

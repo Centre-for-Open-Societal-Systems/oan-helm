@@ -141,12 +141,28 @@ class DeliverStagingCommons(unittest.TestCase):
     def test_commons_deliveries_use_their_own_deployer_in_commons_only(self):
         pipeline = (ROOT / 'ci/jenkins/staging-commons.Jenkinsfile').read_text(encoding='utf-8')
         self.assertNotIn('staging-rke2-kubeconfig', pipeline.split('pipeline {', 1)[1])
-        self.assertEqual(pipeline.count("credentialsId: 'staging-commons-deployer-kubeconfig'"), 7)
+        self.assertEqual(pipeline.count("credentialsId: 'staging-commons-deployer-kubeconfig'"), 8)
         rbac = (ROOT / 'environments/staging/rbac/commons-deployer-rbac.yaml').read_text(encoding='utf-8')
         body = '\n'.join(line for line in rbac.splitlines() if not line.startswith('#'))
         self.assertNotIn('ClusterRole', body)
         self.assertEqual(set(re.findall(r'namespace: (\S+)', body)), {'commons'})
         self.assertNotIn('"*"', body)
+
+    def test_oan_messaging_delivery_comes_last_with_staging_values_promoted_from_new_dev(self):
+        script = (ROOT / 'scripts/ci/deliver_staging_oan_messaging.sh').read_text(encoding='utf-8')
+        self.assertIn('record=oan-messaging-delivery', script)
+        self.assertIn('environments/staging/values/oan-messaging.yaml', script)
+        self.assertNotIn('environments/dev', script)
+        self.assertIn('--reset-values', script)
+        self.assertLess(script.index('--atomic --wait'), script.index('kubectl create configmap'))
+        pipeline = (ROOT / 'ci/jenkins/staging-commons.Jenkinsfile').read_text(encoding='utf-8')
+        self.assertLess(pipeline.index('deliver_staging_oan_dashboards.sh'), pipeline.index('deliver_staging_oan_messaging.sh'))
+        staging = (ROOT / 'environments/staging/values/oan-messaging.yaml').read_text(encoding='utf-8')
+        dev = (ROOT / 'environments/dev/values/oan-messaging.yaml').read_text(encoding='utf-8')
+        pins = lambda text: re.findall(r'tag: (\S+@sha256:[0-9a-f]{64})', text)
+        self.assertEqual(len(pins(staging)), 2)  # one digest pin per image, as on New Dev
+        self.assertIn('host: messaging.qa.oanstaging.com', staging)
+        self.assertIn('grantUsers: [admin, alex.carter, nina.patel]', staging)
 
     def test_the_rancher_repository_right_is_one_clusterrepo_and_no_delete(self):
         rbac = (ROOT / 'environments/staging/rbac/commons-deployer-rancher-repo-rbac.yaml').read_text(encoding='utf-8')
