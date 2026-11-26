@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-26
 
+### oan-grievance-ui 0.0.1-develop.67 (develop)
+
+- Merge pull request #95 from apoorvanengineer-cpu/feature/officer-department-dropdown (Centre-for-Open-Societal-Systems/oan_grievance_ui@1e76c86e78a1)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-26
+
 ### oan-farmer-app-service 0.0.1-staging.3 (staging)
 
 - Merge pull request #10 from arnavam/ci/staging-qa-pipeline (Centre-for-Open-Societal-Systems/oan_farmer_app_service@992170dc48ff)

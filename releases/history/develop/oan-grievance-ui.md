@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.67
+
+<!-- source-commit: 1e76c86e78a1d9db57ff3db4510b195dfb4a7247 version: 0.0.1-develop.67 -->
+Published 2026-11-26. Archive SHA-256 `ad73bc2e19b7a70b9dc760b3f4d2af3fd4169944b820432927af8731b6aa018f`.
+
+- Change: Merge pull request #95 from apoorvanengineer-cpu/feature/officer-department-dropdown
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_ui@1e76c86e78a1](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/commit/1e76c86e78a1d9db57ff3db4510b195dfb4a7247)
+- Changes since 0.0.1-develop.64: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/compare/b6f5a923acc59d9de4b1f2ef65f9b60f7a5b4665...1e76c86e78a1d9db57ff3db4510b195dfb4a7247
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-ui/grievance-ui:0.0.1-develop.67@sha256:fedc39326f3b9e0d22c4776109502dfd72cdf034bd27535c7970d1e2a35af01a` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-ui-0.0.1-develop.67.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.64
 
 <!-- source-commit: b6f5a923acc59d9de4b1f2ef65f9b60f7a5b4665 version: 0.0.1-develop.64 -->
