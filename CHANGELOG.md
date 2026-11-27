@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-27
 
+### openg2p-da-registry 1.0.1-develop.1 (develop)
+
+- chore: bump version before the recreated Jenkins job (#89) (Centre-for-Open-Societal-Systems/da-registry@1a734e4933ba)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-27
+
 ### frappe-common 0.0.0-develop.47 (develop)
 
 - No description recorded. (unknown source@unknown)
