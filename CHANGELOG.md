@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-27
 
+### oan-grievance-ui 0.0.1-develop.69 (develop)
+
+- Merge pull request #98 from dhruvbhatt701/feature/STG-522-upgrade-nextjs-16.4.6 (Centre-for-Open-Societal-Systems/oan_grievance_ui@d649fa76b120)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-27
+
 ### oan-grievance-gateway 0.0.1-develop.125 (develop)
 
 - Merge pull request #163 from dhruvbhatt701/feature/STG-518-guest-link-pin-access (Centre-for-Open-Societal-Systems/oan_grievance_service@05fc0c373c99)

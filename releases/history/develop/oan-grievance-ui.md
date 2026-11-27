@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.69
+
+<!-- source-commit: d649fa76b12031ca655dee55b411e8d8675b2491 version: 0.0.1-develop.69 -->
+Published 2026-11-27. Archive SHA-256 `fae79667d562c688f1e72a62f4ba4461d512878669741d51e041b291bbbd52f4`.
+
+- Change: Merge pull request #98 from dhruvbhatt701/feature/STG-522-upgrade-nextjs-16.4.6
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_ui@d649fa76b120](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/commit/d649fa76b12031ca655dee55b411e8d8675b2491)
+- Changes since 0.0.1-develop.68: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/compare/b90fe46bdbd503fc2cfb6907f54b75076400755b...d649fa76b12031ca655dee55b411e8d8675b2491
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-ui/grievance-ui:0.0.1-develop.69@sha256:e28166d8e5c4bafd9402e7b83d362684702e6ce4e5a10ca7150c39231b027cf8` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-ui-0.0.1-develop.69.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.68
 
 <!-- source-commit: b90fe46bdbd503fc2cfb6907f54b75076400755b version: 0.0.1-develop.68 -->
