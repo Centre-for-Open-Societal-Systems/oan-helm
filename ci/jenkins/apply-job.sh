@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Create or update a Jenkins job from its definition in ci/jenkins/jobs/<name>.xml, so jobs come from git and are never
 # put together in the UI.
+# The jobs live in the Jenkins folder Helm-and-Data ("OAN Helm & Data"), which must exist.
 #
 #   JENKINS_URL=https://jenkins.oanstaging.com JENKINS_USER=... JENKINS_TOKEN=... ci/jenkins/apply-job.sh <name> [credential-id ...]
 #
@@ -23,11 +24,14 @@ for id in "$@"; do
 done
 
 crumb=$(api "$JENKINS_URL/crumbIssuer/api/json" | python3 -c 'import json,sys; c=json.load(sys.stdin); print(c["crumbRequestField"]+":"+c["crumb"])')
-code=$(curl -sS -o /dev/null -w '%{http_code}' "${auth[@]}" "$JENKINS_URL/job/$name/config.xml")
-if [ "$code" = 200 ]; then
-  api -X POST -H "$crumb" -H 'Content-Type: application/xml' --data-binary @"$config" "$JENKINS_URL/job/$name/config.xml" > /dev/null
-  echo "updated job $name from $config"
-else
-  api -X POST -H "$crumb" -H 'Content-Type: application/xml' --data-binary @"$config" "$JENKINS_URL/createItem?name=$name" > /dev/null
-  echo "created job $name from $config"
-fi
+folder="$JENKINS_URL/job/Helm-and-Data"
+code=$(curl -sS -o /dev/null -w '%{http_code}' "${auth[@]}" "$folder/job/$name/config.xml")
+case $code in
+  200)
+    api -X POST -H "$crumb" -H 'Content-Type: application/xml' --data-binary @"$config" "$folder/job/$name/config.xml" > /dev/null
+    echo "updated job $name from $config" ;;
+  404)
+    api -X POST -H "$crumb" -H 'Content-Type: application/xml' --data-binary @"$config" "$folder/createItem?name=$name" > /dev/null
+    echo "created job $name from $config" ;;
+  *) echo "cannot tell whether job $name exists (HTTP $code): nothing changed" >&2; exit 1 ;;
+esac
