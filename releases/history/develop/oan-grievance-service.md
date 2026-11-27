@@ -2,6 +2,26 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.125
+
+<!-- source-commit: 05fc0c373c99e863845f602af2f27a5c217a3c3a version: 0.0.1-develop.125 -->
+Published 2026-11-27. Archive SHA-256 `8856f77f3cffdc8e07b85f82c9589e134b70a6f8860481dee52f75e9d9ae32ed`.
+
+- Change: Merge pull request #163 from dhruvbhatt701/feature/STG-518-guest-link-pin-access
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@05fc0c373c99](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/05fc0c373c99e863845f602af2f27a5c217a3c3a)
+- Changes since 0.0.1-develop.124: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/1810153fedf82b6945cbee93400faa31dacc13b7...05fc0c373c99e863845f602af2f27a5c217a3c3a
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-service/grievance-service:0.0.1-develop.125` |
+| `clamav.image` | `clamav/clamav:stable` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-service-0.0.1-develop.125.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.124
 
 <!-- source-commit: 1810153fedf82b6945cbee93400faa31dacc13b7 version: 0.0.1-develop.124 -->

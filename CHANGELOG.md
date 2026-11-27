@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-27
 
+### oan-grievance-gateway 0.0.1-develop.125 (develop)
+
+- Merge pull request #163 from dhruvbhatt701/feature/STG-518-guest-link-pin-access (Centre-for-Open-Societal-Systems/oan_grievance_service@05fc0c373c99)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.125 (develop)
+
+- Merge pull request #163 from dhruvbhatt701/feature/STG-518-guest-link-pin-access (Centre-for-Open-Societal-Systems/oan_grievance_service@05fc0c373c99)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
+## 2026-11-27
+
 ### oan-farmer-app-service 0.0.1-staging.4 (staging)
 
 - Merge pull request #12 from arnavam/ci/staging-qa-pipeline (Centre-for-Open-Societal-Systems/oan_farmer_app_service@0d60d8a36322)
