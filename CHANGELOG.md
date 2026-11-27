@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-27
 
+### oan-identitygovernance-gateway 0.0.0-develop.9 (develop)
+
+- Merge pull request #10 from arnavam/fix/delete-role-remove-rules-first (Centre-for-Open-Societal-Systems/oan_identitygovernance_service@35b335f5e146)
+- Images and rollback: [releases/history/develop/oan-identitygovernance-gateway.md](releases/history/develop/oan-identitygovernance-gateway.md)
+
+### oan-identitygovernance-service 0.0.0-develop.9 (develop)
+
+- Merge pull request #10 from arnavam/fix/delete-role-remove-rules-first (Centre-for-Open-Societal-Systems/oan_identitygovernance_service@35b335f5e146)
+- Images and rollback: [releases/history/develop/oan-identitygovernance-service.md](releases/history/develop/oan-identitygovernance-service.md)
+
+## 2026-11-27
+
 ### openg2p-da-registry 1.0.1-develop.3 (develop)
 
 - Merge pull request #90 from yash7473/feat/executive-officer-zone-location (Centre-for-Open-Societal-Systems/da-registry@16794c901ad5)

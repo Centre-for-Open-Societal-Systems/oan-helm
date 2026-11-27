@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.0-develop.9
+
+<!-- source-commit: 35b335f5e146a849b3786a5265347927382f6c5e version: 0.0.0-develop.9 -->
+Published 2026-11-27. Archive SHA-256 `93047fd49154cdbfcbaf1a774d57859bf2b4aa554864cfe7a67c179eb85f5416`.
+
+- Change: Merge pull request #10 from arnavam/fix/delete-role-remove-rules-first
+- Source: [Centre-for-Open-Societal-Systems/oan_identitygovernance_service@35b335f5e146](https://github.com/Centre-for-Open-Societal-Systems/oan_identitygovernance_service/commit/35b335f5e146a849b3786a5265347927382f6c5e)
+- Changes since 0.0.0-develop.8: https://github.com/Centre-for-Open-Societal-Systems/oan_identitygovernance_service/compare/9822f754df196dab4abf68441f9c6571152d1625...35b335f5e146a849b3786a5265347927382f6c5e
+
+Return to this version:
+
+```sh
+helm upgrade identitygovernance-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-identitygovernance-gateway-0.0.0-develop.9.tgz -n identitygovernance --reset-values -f helm/environments/dev/oan-identitygovernance-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.0-develop.8
 
 <!-- source-commit: 9822f754df196dab4abf68441f9c6571152d1625 version: 0.0.0-develop.8 -->
