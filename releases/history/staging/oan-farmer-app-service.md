@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-staging.4
+
+<!-- source-commit: 0d60d8a363221a1d79740e767adef93eb7e30447 version: 0.0.1-staging.4 -->
+Published 2026-11-27. Archive SHA-256 `f92c4ba2a047281ba5b2b21ea6990f4eb9446592b96e7850c15597289d5e04f1`.
+
+- Change: Merge pull request #12 from arnavam/ci/staging-qa-pipeline
+- Source: [Centre-for-Open-Societal-Systems/oan_farmer_app_service@0d60d8a36322](https://github.com/Centre-for-Open-Societal-Systems/oan_farmer_app_service/commit/0d60d8a363221a1d79740e767adef93eb7e30447)
+- Changes since 0.0.1-staging.3: https://github.com/Centre-for-Open-Societal-Systems/oan_farmer_app_service/compare/992170dc48ffc7a31611c3e281f0d340298e543f...0d60d8a363221a1d79740e767adef93eb7e30447
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-farmer-app-service/farmer-app-service:0.0.1-staging.4@sha256:dff745198ab0109db42feebfbf5dc9724fe64e246a3e1d0c04577b2c8dc0f27a` |
+
+Return to this version:
+
+```sh
+helm upgrade farmer-app https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/staging/oan-farmer-app-service-0.0.1-staging.4.tgz -n farmer-app --reset-values -f helm/environments/staging/oan-farmer-app-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-staging.3
 
 <!-- source-commit: 992170dc48ffc7a31611c3e281f0d340298e543f version: 0.0.1-staging.3 -->

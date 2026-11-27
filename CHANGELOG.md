@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-27
 
+### oan-farmer-app-service 0.0.1-staging.4 (staging)
+
+- Merge pull request #12 from arnavam/ci/staging-qa-pipeline (Centre-for-Open-Societal-Systems/oan_farmer_app_service@0d60d8a36322)
+- Images and rollback: [releases/history/staging/oan-farmer-app-service.md](releases/history/staging/oan-farmer-app-service.md)
+
+## 2026-11-27
+
 ### oan-grievance-ui 0.0.1-develop.68 (develop)
 
 - Merge pull request #96 from dhruvbhatt701/feature/STG-518-guest-link-pin-access (Centre-for-Open-Societal-Systems/oan_grievance_ui@b90fe46bdbd5)
