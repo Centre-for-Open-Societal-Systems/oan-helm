@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-27
 
+### oan-grievance-ui 0.0.1-develop.68 (develop)
+
+- Merge pull request #96 from dhruvbhatt701/feature/STG-518-guest-link-pin-access (Centre-for-Open-Societal-Systems/oan_grievance_ui@b90fe46bdbd5)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-27
+
 ### openg2p-da-registry 1.0.1-develop.1 (develop)
 
 - chore: bump version before the recreated Jenkins job (#89) (Centre-for-Open-Societal-Systems/da-registry@1a734e4933ba)

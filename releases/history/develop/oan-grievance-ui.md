@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.68
+
+<!-- source-commit: b90fe46bdbd503fc2cfb6907f54b75076400755b version: 0.0.1-develop.68 -->
+Published 2026-11-27. Archive SHA-256 `96f64af97e3a22dd24dc8cbc49e17e22cb3b47a12abffbb150fa634bacd1f00d`.
+
+- Change: Merge pull request #96 from dhruvbhatt701/feature/STG-518-guest-link-pin-access
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_ui@b90fe46bdbd5](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/commit/b90fe46bdbd503fc2cfb6907f54b75076400755b)
+- Changes since 0.0.1-develop.67: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/compare/1e76c86e78a1d9db57ff3db4510b195dfb4a7247...b90fe46bdbd503fc2cfb6907f54b75076400755b
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-ui/grievance-ui:0.0.1-develop.68@sha256:a0fe7bde5c140a82063e08c0f507deddbeed54367e21246ad00d195875f964bc` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-ui-0.0.1-develop.68.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.67
 
 <!-- source-commit: 1e76c86e78a1d9db57ff3db4510b195dfb4a7247 version: 0.0.1-develop.67 -->
