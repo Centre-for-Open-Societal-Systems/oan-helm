@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-27
 
+### openg2p-da-registry 1.0.1-develop.3 (develop)
+
+- Merge pull request #90 from yash7473/feat/executive-officer-zone-location (Centre-for-Open-Societal-Systems/da-registry@16794c901ad5)
+- Images and rollback: [releases/history/develop/openg2p-da-registry.md](releases/history/develop/openg2p-da-registry.md)
+
+## 2026-11-27
+
 ### oan-grievance-ui 0.0.1-develop.69 (develop)
 
 - Merge pull request #98 from dhruvbhatt701/feature/STG-522-upgrade-nextjs-16.4.6 (Centre-for-Open-Societal-Systems/oan_grievance_ui@d649fa76b120)
