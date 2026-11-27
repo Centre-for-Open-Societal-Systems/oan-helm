@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-27
 
+### oan-grievance-ui 0.0.1-develop.70 (develop)
+
+- Merge pull request #99 from dhruvbhatt701/fix/STG-518-guest-attachment-size (Centre-for-Open-Societal-Systems/oan_grievance_ui@f6c98e30e93e)
+- Images and rollback: [releases/history/develop/oan-grievance-ui.md](releases/history/develop/oan-grievance-ui.md)
+
+## 2026-11-27
+
 ### oan-identitygovernance-gateway 0.0.0-develop.9 (develop)
 
 - Merge pull request #10 from arnavam/fix/delete-role-remove-rules-first (Centre-for-Open-Societal-Systems/oan_identitygovernance_service@35b335f5e146)

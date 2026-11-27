@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.70
+
+<!-- source-commit: f6c98e30e93e7db8b5420a0818d0b25f6e714575 version: 0.0.1-develop.70 -->
+Published 2026-11-27. Archive SHA-256 `d78a823b319df7543b90c855ee241e8b2b3ed10b8200acc27a31130d70dd6d56`.
+
+- Change: Merge pull request #99 from dhruvbhatt701/fix/STG-518-guest-attachment-size
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_ui@f6c98e30e93e](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/commit/f6c98e30e93e7db8b5420a0818d0b25f6e714575)
+- Changes since 0.0.1-develop.69: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_ui/compare/d649fa76b12031ca655dee55b411e8d8675b2491...f6c98e30e93e7db8b5420a0818d0b25f6e714575
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-ui/grievance-ui:0.0.1-develop.70@sha256:9017223dd728db50be336f1a3d039f108d9bcb0bce05015597e75dd9eb48394e` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-ui-0.0.1-develop.70.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.69
 
 <!-- source-commit: d649fa76b12031ca655dee55b411e8d8675b2491 version: 0.0.1-develop.69 -->
