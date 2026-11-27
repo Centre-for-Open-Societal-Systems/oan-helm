@@ -8,6 +8,23 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-27
+
+### frappe-common 0.0.0-develop.47 (develop)
+
+- No description recorded. (unknown source@unknown)
+- Images and rollback: [releases/history/develop/frappe-common.md](releases/history/develop/frappe-common.md)
+
+### frappe-service 0.0.0-develop.47 (develop)
+
+- No description recorded. (unknown source@unknown)
+- Images and rollback: [releases/history/develop/frappe-service.md](releases/history/develop/frappe-service.md)
+
+### ui-service 0.0.0-develop.47 (develop)
+
+- No description recorded. (unknown source@unknown)
+- Images and rollback: [releases/history/develop/ui-service.md](releases/history/develop/ui-service.md)
+
 ## 2026-11-26
 
 ### oan-grievance-gateway 0.0.1-develop.124 (develop)
