@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-28
 
+### oan-apisix-gateway 0.0.1-develop.4
+
+Previous version: 0.0.1-develop.3.
+
+- feat(apisix): copy the A2C partner service credential into the gateway namespace (#302) (9a36459)
+
+## 2026-11-28
+
 ### oan-a2c-gateway 0.0.1-staging.8 (staging)
 
 - Merge pull request #165 from Centre-for-Open-Societal-Systems/develop (Centre-for-Open-Societal-Systems/oan_a2c@49ce59257583)
