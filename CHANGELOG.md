@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-28
 
+### oan-a2c-service 0.0.1-develop.50 (develop)
+
+- Merge pull request #167 from arnavam/feat/consent-aggregation-binding-only (Centre-for-Open-Societal-Systems/oan_a2c@e3dfcae03b79)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-28
+
 ### oan-da-services 0.0.11-develop.86 (develop)
 
 - Merge pull request #121 from pavanns/feat/staging-qa-only (Centre-for-Open-Societal-Systems/oan_da_app_services@51637c389d8c)
