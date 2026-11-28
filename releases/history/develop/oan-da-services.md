@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.11-develop.86
+
+<!-- source-commit: 51637c389d8c9044619d5d8672e42d846bbe2b73 version: 0.0.11-develop.86 -->
+Published 2026-11-28. Archive SHA-256 `d453dff296fef1720a8816a498cc89ebe67b74885a960aee5c9100675b21b720`.
+
+- Change: Merge pull request #121 from pavanns/feat/staging-qa-only
+- Source: [Centre-for-Open-Societal-Systems/oan_da_app_services@51637c389d8c](https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/commit/51637c389d8c9044619d5d8672e42d846bbe2b73)
+- Changes since 0.0.11-develop.85: https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/compare/8896ea225a8ea360c7d9df369332e8e4b71026ef...51637c389d8c9044619d5d8672e42d846bbe2b73
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-da-services/da-services:0.0.11-develop.86` |
+
+Return to this version:
+
+```sh
+helm upgrade da-services https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-da-services-0.0.11-develop.86.tgz -n da-app --reset-values -f helm/environments/dev/oan-da-services.yaml --wait --timeout 15m
+```
+
 ## 0.0.11-develop.85
 
 <!-- source-commit: 8896ea225a8ea360c7d9df369332e8e4b71026ef version: 0.0.11-develop.85 -->

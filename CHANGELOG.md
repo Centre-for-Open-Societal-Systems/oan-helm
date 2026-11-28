@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-28
 
+### oan-da-services 0.0.11-develop.86 (develop)
+
+- Merge pull request #121 from pavanns/feat/staging-qa-only (Centre-for-Open-Societal-Systems/oan_da_app_services@51637c389d8c)
+- Images and rollback: [releases/history/develop/oan-da-services.md](releases/history/develop/oan-da-services.md)
+
+## 2026-11-28
+
 ### oan-da-services 0.0.11-develop.85 (develop)
 
 - Merge pull request #120 from VSV-Coders/feat/api_verify (Centre-for-Open-Societal-Systems/oan_da_app_services@8896ea225a8e)
