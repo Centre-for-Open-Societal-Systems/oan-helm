@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.47
+
+<!-- source-commit: 728d83e193bc99863da70a8c99594732575c23e5 version: 0.0.1-develop.47 -->
+Published 2026-11-28. Archive SHA-256 `f7b5dc2c4af07a25159337bc0b8cc780feb668180b09b7253037828e1e0144b5`.
+
+- Change: Merge pull request #162 from arnavam/fix/lowercase-user-email-on-invite
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@728d83e193bc](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/728d83e193bc99863da70a8c99594732575c23e5)
+- Changes since 0.0.1-develop.46: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/b6701bd9a0df81695410b505a45387c9c5eb9ac2...728d83e193bc99863da70a8c99594732575c23e5
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-service/a2c-service:0.0.1-develop.47` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-service-0.0.1-develop.47.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.46
 
 <!-- source-commit: b6701bd9a0df81695410b505a45387c9c5eb9ac2 version: 0.0.1-develop.46 -->
