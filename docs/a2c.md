@@ -56,10 +56,13 @@ Created by hand, never in values files.
 | `oan-a2c-tls` | gateway | `a2c` | `tls.crt`, `tls.key` | Certificate APISIX serves for the host |
 | `a2c-openg2p-consent-webhook`, `a2c-oan-dashboards` | gateway | `a2c` | `key` | Partner and dashboard API keys, one Secret per consumer |
 | `oan-ivr-vendor` | gateway | `apisix` | `key` | Telco IVR vendor API key, shared with grievance. Read by the `oan-ivr-vendor` ApisixConsumer in `apisix.yaml` `extraDeploy` |
-| `a2c-frappe-service-credential` | gateway | `apisix` | `authorization` | `token <api_key>:<api_secret>` of the login-disabled Frappe service user. The partner routes put it in `Authorization`. |
+| `a2c-frappe-service-credential` | A2C, then gateway | `a2c`, then `apisix` | `authorization` | `token <api_key>:<api_secret>` of the login-disabled Frappe service user. The partner routes put it in `Authorization`. |
 
-The service user is a Frappe user on the A2C site with an API key and secret. Create it
-once the site exists, and store the credential in the secret manager.
+The service user, `a2c-partner-service@id.openagrinet.internal`, is created by the `oan_a2c`
+install and every migrate. The A2C chart generates the Secret in `a2c` and its
+`frappe.apiCredential` Job sets that value on the user. The APISIX chart then copies it to
+`api6-gateway` (`a2cCredentials`), so nothing is created by hand. With the gateway in
+another cluster, set `a2cCredentials.frappeCredential.create` to false and sync the Secret.
 
 ## 3. Install
 
@@ -84,9 +87,10 @@ In the A2C node's security group, allow TCP 30810 from the gateway cluster's add
 only.
 
 The gateway cluster: create namespace `a2c`, the certificate Secret and the four key
-Secrets of section 2. APISIX reads the service credential from its environment, so create
-`a2c-frappe-service-credential` in `apisix` first (the Pod starts without it, but the
-partner routes then send an invalid credential). Then, with the chart from the `oan_a2c`
+Secrets of section 2. APISIX reads the service credential from its environment, and the
+APISIX chart copies it from the `a2c` release's namespace, so install the A2C release first,
+then upgrade APISIX and restart it (the Pod starts without the Secret, but the partner
+routes then send an invalid credential). Then, with the chart from the `oan_a2c`
 checkout at the deployed commit:
 
 ```sh

@@ -340,7 +340,10 @@ A2C needs secrets that grievance does not, all provisioned outside Git:
 - `A2C_FRAPPE_SERVICE_AUTHORIZATION` (`token <api_key>:<api_secret>` of the Frappe service
   user) in the APISIX pods' environment, in the gateway cluster. Partner routes reference it as
   `$env://A2C_FRAPPE_SERVICE_AUTHORIZATION`. the chart's `values.yaml` reads it from the optional Secret
-  `a2c-frappe-service-credential` (key `authorization`) in namespace `api6-gateway`.
+  `a2c-frappe-service-credential` (key `authorization`) in namespace `api6-gateway`. The
+  A2C release generates that value and sets it on the service user, and this chart copies it
+  from namespace `a2c` (`a2cCredentials`), as it does for the grievance IVR credential.
+  Install the A2C release first, then upgrade this one and restart APISIX.
 
 ### Consumers shared by several apps
 
