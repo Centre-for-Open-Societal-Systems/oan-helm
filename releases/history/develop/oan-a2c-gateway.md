@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.49
+
+<!-- source-commit: 32722531be055189c9c1a9f6c967642213f6f52e version: 0.0.1-develop.49 -->
+Published 2026-11-28. Archive SHA-256 `a2b1ba84da5fa8b0d61facd81bdff68ce5b7a8336a1d9c3dc294c535eb1fe008`.
+
+- Change: Merge pull request #166 from arnavam/chore/open-partner-ip-allowlist-dev-staging
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@32722531be05](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/32722531be055189c9c1a9f6c967642213f6f52e)
+- Changes since 0.0.1-develop.39: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/032ebd39577b3942637a44d1879064f6d68ce495...32722531be055189c9c1a9f6c967642213f6f52e
+
+Return to this version:
+
+```sh
+helm upgrade a2c-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-gateway-0.0.1-develop.49.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.39
 
 <!-- source-commit: 032ebd39577b3942637a44d1879064f6d68ce495 version: 0.0.1-develop.39 -->

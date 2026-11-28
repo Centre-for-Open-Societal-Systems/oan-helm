@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.49
+
+<!-- source-commit: 32722531be055189c9c1a9f6c967642213f6f52e version: 0.0.1-develop.49 -->
+Published 2026-11-28. Archive SHA-256 `c2ec421854305ef2d86d6ad59fb77fe4fd49151242915f704bf3f2f3552833d1`.
+
+- Change: Merge pull request #166 from arnavam/chore/open-partner-ip-allowlist-dev-staging
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@32722531be05](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/32722531be055189c9c1a9f6c967642213f6f52e)
+- Changes since 0.0.1-develop.48: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/81954e65f944c59e80e0e644328259be75be3ba3...32722531be055189c9c1a9f6c967642213f6f52e
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-a2c-service/a2c-service:0.0.1-develop.49` |
+
+Return to this version:
+
+```sh
+helm upgrade a2c https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-a2c-service-0.0.1-develop.49.tgz -n a2c --reset-values -f helm/environments/dev/oan-a2c-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.48
 
 <!-- source-commit: 81954e65f944c59e80e0e644328259be75be3ba3 version: 0.0.1-develop.48 -->

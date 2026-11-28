@@ -10,6 +10,23 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-28
 
+### oan-a2c-gateway 0.0.1-develop.49 (develop)
+
+- Merge pull request #166 from arnavam/chore/open-partner-ip-allowlist-dev-staging (Centre-for-Open-Societal-Systems/oan_a2c@32722531be05)
+- Images and rollback: [releases/history/develop/oan-a2c-gateway.md](releases/history/develop/oan-a2c-gateway.md)
+
+### oan-a2c-service 0.0.1-develop.49 (develop)
+
+- Merge pull request #166 from arnavam/chore/open-partner-ip-allowlist-dev-staging (Centre-for-Open-Societal-Systems/oan_a2c@32722531be05)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+### oan-da-app-ui 0.0.1-develop.76 (develop)
+
+- Merge pull request #102 from snehaldeshpandeoas-rgb/feat/surveys-no-standard-questions (Centre-for-Open-Societal-Systems/oan_da_app_ui@5aeb5d8319a9)
+- Images and rollback: [releases/history/develop/oan-da-app-ui.md](releases/history/develop/oan-da-app-ui.md)
+
+## 2026-11-28
+
 ### oan-apisix-gateway 0.0.1-develop.4
 
 Previous version: 0.0.1-develop.3.

@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.76
+
+<!-- source-commit: 5aeb5d8319a9ca4489d670949e55be2c6daa3dd7 version: 0.0.1-develop.76 -->
+Published 2026-11-28. Archive SHA-256 `a4c32d118c8a006657ca8a0b54e37669585aa650762054219a073bee44c5c79a`.
+
+- Change: Merge pull request #102 from snehaldeshpandeoas-rgb/feat/surveys-no-standard-questions
+- Source: [Centre-for-Open-Societal-Systems/oan_da_app_ui@5aeb5d8319a9](https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_ui/commit/5aeb5d8319a9ca4489d670949e55be2c6daa3dd7)
+- Changes since 0.0.1-develop.75: https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_ui/compare/b347e7e7db54d7290b8e793fb37843ec1447aaa2...5aeb5d8319a9ca4489d670949e55be2c6daa3dd7
+
+| Values path | Image |
+| --- | --- |
+| `ui.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-da-app-ui/da-app-ui:0.0.1-develop.76` |
+
+Return to this version:
+
+```sh
+helm upgrade da-app-ui https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-da-app-ui-0.0.1-develop.76.tgz -n da-app --reset-values -f helm/environments/dev/oan-da-app-ui.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.75
 
 <!-- source-commit: b347e7e7db54d7290b8e793fb37843ec1447aaa2 version: 0.0.1-develop.75 -->
