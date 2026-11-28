@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-28
 
+### oan-grievance-gateway 0.0.1-staging.16 (staging)
+
+- Merge pull request #167 from Centre-for-Open-Societal-Systems/develop (Centre-for-Open-Societal-Systems/oan_grievance_service@1b285c9d5f72)
+- Images and rollback: [releases/history/staging/oan-grievance-gateway.md](releases/history/staging/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-staging.16 (staging)
+
+- Merge pull request #167 from Centre-for-Open-Societal-Systems/develop (Centre-for-Open-Societal-Systems/oan_grievance_service@1b285c9d5f72)
+- Images and rollback: [releases/history/staging/oan-grievance-service.md](releases/history/staging/oan-grievance-service.md)
+
+## 2026-11-28
+
 ### oan-cluster-access 0.0.1-develop.2
 
 Previous version: 0.0.1-develop.1.

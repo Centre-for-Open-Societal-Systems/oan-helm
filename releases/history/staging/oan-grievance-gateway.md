@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-staging.16
+
+<!-- source-commit: 1b285c9d5f729f392d22baadc8c2bc3c04c8d8d6 version: 0.0.1-staging.16 -->
+Published 2026-11-28. Archive SHA-256 `5bdc33cbf1754cc7a03001c7d35462e2599b3acced859be54aee8d987c557224`.
+
+- Change: Merge pull request #167 from Centre-for-Open-Societal-Systems/develop
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@1b285c9d5f72](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/1b285c9d5f729f392d22baadc8c2bc3c04c8d8d6)
+- Changes since 0.0.1-staging.15: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/711b081ebd710a9b868b9f07a1e96f16c89c5178...1b285c9d5f729f392d22baadc8c2bc3c04c8d8d6
+
+Return to this version:
+
+```sh
+helm upgrade grievance-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/staging/oan-grievance-gateway-0.0.1-staging.16.tgz -n grievance --reset-values -f helm/environments/staging/oan-grievance-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-staging.15
 
 <!-- source-commit: 711b081ebd710a9b868b9f07a1e96f16c89c5178 version: 0.0.1-staging.15 -->
