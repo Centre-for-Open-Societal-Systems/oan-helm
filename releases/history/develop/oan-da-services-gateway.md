@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.11-develop.84
+
+<!-- source-commit: e8ce914cc075c060372781c71ca15df02f83f98e version: 0.0.11-develop.84 -->
+Published 2026-11-28. Archive SHA-256 `77d44a8caf41bb198505ce72a05873c07dc692abd3adf0e83df9c0bf01713b4c`.
+
+- Change: Merge pull request #118 from snehaldeshpandeoas-rgb/feat/surveys-no-standard-questions
+- Source: [Centre-for-Open-Societal-Systems/oan_da_app_services@e8ce914cc075](https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/commit/e8ce914cc075c060372781c71ca15df02f83f98e)
+- Changes since 0.0.11-develop.82: https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/compare/f46ba3cb76ef747cfcbc14d6c45b64ef308d67b6...e8ce914cc075c060372781c71ca15df02f83f98e
+
+Return to this version:
+
+```sh
+helm upgrade da-services-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-da-services-gateway-0.0.11-develop.84.tgz -n da-app --reset-values -f helm/environments/dev/oan-da-services-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.11-develop.82
 
 <!-- source-commit: f46ba3cb76ef747cfcbc14d6c45b64ef308d67b6 version: 0.0.11-develop.82 -->

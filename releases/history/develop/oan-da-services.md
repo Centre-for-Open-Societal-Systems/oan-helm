@@ -2,6 +2,25 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.11-develop.84
+
+<!-- source-commit: e8ce914cc075c060372781c71ca15df02f83f98e version: 0.0.11-develop.84 -->
+Published 2026-11-28. Archive SHA-256 `69bcc5098867dcba89ddfcab8f983ccb56411e4de76d40d6547c105d1fa127e1`.
+
+- Change: Merge pull request #118 from snehaldeshpandeoas-rgb/feat/surveys-no-standard-questions
+- Source: [Centre-for-Open-Societal-Systems/oan_da_app_services@e8ce914cc075](https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/commit/e8ce914cc075c060372781c71ca15df02f83f98e)
+- Changes since 0.0.11-develop.82: https://github.com/Centre-for-Open-Societal-Systems/oan_da_app_services/compare/f46ba3cb76ef747cfcbc14d6c45b64ef308d67b6...e8ce914cc075c060372781c71ca15df02f83f98e
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-da-services/da-services:0.0.11-develop.84` |
+
+Return to this version:
+
+```sh
+helm upgrade da-services https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-da-services-0.0.11-develop.84.tgz -n da-app --reset-values -f helm/environments/dev/oan-da-services.yaml --wait --timeout 15m
+```
+
 ## 0.0.11-develop.82
 
 <!-- source-commit: f46ba3cb76ef747cfcbc14d6c45b64ef308d67b6 version: 0.0.11-develop.82 -->

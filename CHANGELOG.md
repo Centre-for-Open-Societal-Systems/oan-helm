@@ -10,6 +10,18 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-28
 
+### oan-da-services 0.0.11-develop.84 (develop)
+
+- Merge pull request #118 from snehaldeshpandeoas-rgb/feat/surveys-no-standard-questions (Centre-for-Open-Societal-Systems/oan_da_app_services@e8ce914cc075)
+- Images and rollback: [releases/history/develop/oan-da-services.md](releases/history/develop/oan-da-services.md)
+
+### oan-da-services-gateway 0.0.11-develop.84 (develop)
+
+- Merge pull request #118 from snehaldeshpandeoas-rgb/feat/surveys-no-standard-questions (Centre-for-Open-Societal-Systems/oan_da_app_services@e8ce914cc075)
+- Images and rollback: [releases/history/develop/oan-da-services-gateway.md](releases/history/develop/oan-da-services-gateway.md)
+
+## 2026-11-28
+
 ### oan-da-app-ui 0.0.1-staging.4 (staging)
 
 - Merge pull request #104 from Centre-for-Open-Societal-Systems/develop (Centre-for-Open-Societal-Systems/oan_da_app_ui@0db0f518ebca)
