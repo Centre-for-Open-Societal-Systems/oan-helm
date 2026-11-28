@@ -15,3 +15,11 @@ deployNamespaces:
 - farmer-app
 - leads
 - sandbox
+
+# Also the login frappe-common creates for leads-api (appDatabases in oan-frappe-common.yaml): the
+# leads-api chart reads its password at install time (secrets.datasourcePasswordFrom).
+readSecret:
+  namespace: frappe-common
+  name: oan-frappe-common-db
+  extraNames:
+  - oan-frappe-common-db-app-leads-db

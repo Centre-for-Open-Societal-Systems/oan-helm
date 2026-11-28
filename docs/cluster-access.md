@@ -7,7 +7,7 @@ everything that identity may do, so a new cluster gets the same access from Git:
 | Namespace | Access | Used for |
 | --- | --- | --- |
 | each of `deployNamespaces` | built-in `admin` role | the service's Helm release, Secrets, Jobs and APISIX routes |
-| `readSecret.namespace` (`frappe-common`) | `get` on Secret `oan-frappe-common-db` only | copy the shared PostgreSQL password |
+| `readSecret.namespace` (`frappe-common`) | `get` on Secret `oan-frappe-common-db` and `readSecret.extraNames` only | copy the shared PostgreSQL password; read an app login made by frappe-common `appDatabases` |
 | `gatewayNamespace` (`api6-gateway`) | get/list Services | find the APISIX release's Redis |
 
 `admin` covers the APISIX custom resources only because the gateway chart aggregates them into

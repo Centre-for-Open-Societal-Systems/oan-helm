@@ -9,3 +9,11 @@ frappe-common:
       persistence:
         # Named, so the volume does not move if the default StorageClass changes.
         storageClass: nfs-csi
+
+  # Databases for apps that are not Frappe sites. A post-install/post-upgrade Job creates each database and
+  # a LOGIN-only role that owns it; the login is in Secret oan-frappe-common-db-app-<name, _ as -> (keys
+  # username, password, jdbc-url, ...), which the Jenkins deployer may read (oan-cluster-access.yaml).
+  appDatabases:
+  # leads-api staging (leads-api helm/environments/staging/leads-api.yaml), namespace leads.
+  - name: leads_db
+    user: leads_api
