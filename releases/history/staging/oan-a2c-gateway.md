@@ -2,6 +2,21 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-staging.8
+
+<!-- source-commit: 49ce592575833fef73bd506529b950fccab80c22 version: 0.0.1-staging.8 -->
+Published 2026-11-28. Archive SHA-256 `9af958a098af9e30ab652b4d2a751d4cff0fd0e0696a213dffaf99567b4e304b`.
+
+- Change: Merge pull request #165 from Centre-for-Open-Societal-Systems/develop
+- Source: [Centre-for-Open-Societal-Systems/oan_a2c@49ce59257583](https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/commit/49ce592575833fef73bd506529b950fccab80c22)
+- Changes since 0.0.1-staging.6: https://github.com/Centre-for-Open-Societal-Systems/oan_a2c/compare/1d2250caad74908ee08b3f6dc689e71eb7aa93ce...49ce592575833fef73bd506529b950fccab80c22
+
+Return to this version:
+
+```sh
+helm upgrade a2c-gateway https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/staging/oan-a2c-gateway-0.0.1-staging.8.tgz -n a2c --reset-values -f helm/environments/staging/oan-a2c-gateway.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-staging.6
 
 <!-- source-commit: 1d2250caad74908ee08b3f6dc689e71eb7aa93ce version: 0.0.1-staging.6 -->
