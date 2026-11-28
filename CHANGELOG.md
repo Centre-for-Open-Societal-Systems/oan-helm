@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-28
 
+### oan-a2c-service 0.0.1-develop.48 (develop)
+
+- Merge pull request #164 from arnavam/feat/a2c-partner-service-credential (Centre-for-Open-Societal-Systems/oan_a2c@81954e65f944)
+- Images and rollback: [releases/history/develop/oan-a2c-service.md](releases/history/develop/oan-a2c-service.md)
+
+## 2026-11-28
+
 ### oan-grievance-gateway 0.0.1-staging.16 (staging)
 
 - Merge pull request #167 from Centre-for-Open-Societal-Systems/develop (Centre-for-Open-Societal-Systems/oan_grievance_service@1b285c9d5f72)
