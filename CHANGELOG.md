@@ -10,6 +10,14 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-28
 
+### oan-cluster-access 0.0.1-develop.2
+
+Previous version: 0.0.1-develop.1.
+
+- feat(qa): leads_db for leads-api staging (frappe-common appDatabases + access) (#301) (44bebb6)
+
+## 2026-11-28
+
 ### oan-grievance-gateway 0.0.1-develop.127 (develop)
 
 - Merge pull request #165 from arnavam/feat/sla-rule-cluster-endpoints (Centre-for-Open-Societal-Systems/oan_grievance_service@9b2877e5b40f)
