@@ -8,6 +8,18 @@ notes are under `releases/<version>.yaml`.
 
 <!-- Releases are inserted below this line by scripts/release.py. -->
 
+## 2026-11-28
+
+### oan-grievance-gateway 0.0.1-develop.126 (develop)
+
+- Merge pull request #165 from arnavam/feat/sla-rule-cluster-endpoints (Centre-for-Open-Societal-Systems/oan_grievance_service@9b2877e5b40f)
+- Images and rollback: [releases/history/develop/oan-grievance-gateway.md](releases/history/develop/oan-grievance-gateway.md)
+
+### oan-grievance-service 0.0.1-develop.126 (develop)
+
+- Merge pull request #165 from arnavam/feat/sla-rule-cluster-endpoints (Centre-for-Open-Societal-Systems/oan_grievance_service@9b2877e5b40f)
+- Images and rollback: [releases/history/develop/oan-grievance-service.md](releases/history/develop/oan-grievance-service.md)
+
 ## 2026-11-27
 
 ### oan-da-app-ui 0.0.1-develop.75 (develop)

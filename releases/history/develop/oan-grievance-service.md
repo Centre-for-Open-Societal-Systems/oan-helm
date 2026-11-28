@@ -2,6 +2,26 @@
 
 Newest first. Written by scripts/publish_channels.py. See docs/rollback.md before rolling back.
 
+## 0.0.1-develop.126
+
+<!-- source-commit: 9b2877e5b40fa65dc34c9a6449f3be5608977256 version: 0.0.1-develop.126 -->
+Published 2026-11-28. Archive SHA-256 `29f5ab21002cfe4e54f9ebd4f61e8478acf63cd3fefd433d60b49b527f784dd5`.
+
+- Change: Merge pull request #165 from arnavam/feat/sla-rule-cluster-endpoints
+- Source: [Centre-for-Open-Societal-Systems/oan_grievance_service@9b2877e5b40f](https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/commit/9b2877e5b40fa65dc34c9a6449f3be5608977256)
+- Changes since 0.0.1-develop.125: https://github.com/Centre-for-Open-Societal-Systems/oan_grievance_service/compare/05fc0c373c99e863845f602af2f27a5c217a3c3a...9b2877e5b40fa65dc34c9a6449f3be5608977256
+
+| Values path | Image |
+| --- | --- |
+| `frappe.image` | `379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/oan-grievance-service/grievance-service:0.0.1-develop.126` |
+| `clamav.image` | `clamav/clamav:stable` |
+
+Return to this version:
+
+```sh
+helm upgrade grievance https://raw.githubusercontent.com/Centre-for-Open-Societal-Systems/oan-helm/main/repository/develop/oan-grievance-service-0.0.1-develop.126.tgz -n grievance --reset-values -f helm/environments/dev/oan-grievance-service.yaml --wait --timeout 15m
+```
+
 ## 0.0.1-develop.125
 
 <!-- source-commit: 05fc0c373c99e863845f602af2f27a5c217a3c3a version: 0.0.1-develop.125 -->
