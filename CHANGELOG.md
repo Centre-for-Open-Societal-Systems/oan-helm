@@ -10,6 +10,13 @@ notes are under `releases/<version>.yaml`.
 
 ## 2026-11-28
 
+### oan-da-app-ui 0.0.1-staging.4 (staging)
+
+- Merge pull request #104 from Centre-for-Open-Societal-Systems/develop (Centre-for-Open-Societal-Systems/oan_da_app_ui@0db0f518ebca)
+- Images and rollback: [releases/history/staging/oan-da-app-ui.md](releases/history/staging/oan-da-app-ui.md)
+
+## 2026-11-28
+
 ### oan-da-app-ui 0.0.1-develop.77 (develop)
 
 - Merge pull request #101 from rajujha-ptn/daSupervisor_responsive-27Nov2026 (Centre-for-Open-Societal-Systems/oan_da_app_ui@8ee8e3c854a1)
