@@ -14,11 +14,13 @@ serviceAccount:
 # creates or deletes a namespace.
 deployNamespaces: []
 
-# `get` on this one Secret only: the create-site Job copies the shared PostgreSQL password
-# from it. Empty namespace skips the grant.
+# `get` on these Secrets only: the create-site Job copies the shared PostgreSQL password
+# from `name`; `extraNames` are per-app logins of frappe-common `appDatabases`
+# (<release>-app-<database>), read by apps that are not Frappe sites. Empty namespace skips the grant.
 readSecret:
   namespace: frappe-common
   name: oan-frappe-common-db
+  extraNames: []
 
 # get/list Services in the APISIX namespace: the gateway deploy finds the release's Redis
 # there. Empty skips the grant.
