@@ -206,7 +206,7 @@ openg2p-consent-manager:
     image:
       pullPolicy: Always
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-manager/consent-manager-api
-      tag: 1.1.0-develop.1@sha256:12fe280e3faed5dc497f0ffcaad747ea73b7b16593e009693b6034c87431d075
+      tag: 1.1.1-develop.3@sha256:617e748a343357c5c633d8a8b141c0eca645941ff5ca98c3df93b4073c700b79
   ui:
     istio:
       virtualservice:
@@ -214,7 +214,7 @@ openg2p-consent-manager:
     image:
       pullPolicy: Always
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-manager/consent-manager-ui
-      tag: 1.1.0-develop.1@sha256:e8b4415628c36e2fe872296c840ab73fc7c911ab1fe5eb73314b934edc39e101
+      tag: 1.1.1-develop.3@sha256:21b77ce212f20454b78ea327fbd45ffe089a4c245a29a8e65dcef9a5c818669f
   extraApis:
     - apiAudience: partner
       authEnabled: 'false'
@@ -224,7 +224,7 @@ openg2p-consent-manager:
         pullPolicy: Always
         registry: ''
         repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-manager/consent-manager-api
-        tag: 1.1.0-develop.1@sha256:12fe280e3faed5dc497f0ffcaad747ea73b7b16593e009693b6034c87431d075
+        tag: 1.1.1-develop.3@sha256:617e748a343357c5c633d8a8b141c0eca645941ff5ca98c3df93b4073c700b79
       istio:
         enabled: true
         gateway:
@@ -263,7 +263,7 @@ openg2p-consent-manager:
     image:
       pullPolicy: Always
       repository: 379220350808.dkr.ecr.ap-south-1.amazonaws.com/eoan/consent-manager/consent-manager-sanity
-      tag: 1.1.0-develop.1@sha256:16f3ac3f098ffaae538a8698386cfe690fc9aeb2746f587edcca36ef3c6b6870
+      tag: 1.1.1-develop.3@sha256:ef73abeae21afb6d66169f70728fc2292d73120375b57c7130f6cd58fc99edd9
 keymanager:
   istio:
     virtualservice:
